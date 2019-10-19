@@ -2620,7 +2620,7 @@
     <Value>Customer roles</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.AclCustomerRoles.Hint">
-    <Value>Choose one or several customer roles i.e. administrators, vendors, guests, who will be able to see this product in catalog. If you don't need this option just leave this field empty. In order to use this functionality, you have to disable the following setting: Configuration &gt; Catalog settings &gt; Ignore ACL rules (sitewide).</Value>
+    <Value>Choose one or several customer roles i.e. administrators, vendors, guests, who will be able to see this product in catalog. If you don't need this option just leave this field empty. In order to use this functionality, you have to disable the following setting: Configuration &gt; Settings &gt; Catalog &gt; Ignore ACL rules (sitewide).</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.AdditionalShippingCharge">
     <Value>Additional shipping charge</Value>
@@ -16911,6 +16911,9 @@
   <LocaleResource Name="PrivateMessages.Inbox.MarkAsUnread">
     <Value>Mark selected as unread</Value>
   </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Inbox.NoItems">
+    <Value>No inbox messages</Value>
+  </LocaleResource>
   <LocaleResource Name="PrivateMessages.Inbox.SubjectColumn">
     <Value>Subject</Value>
   </LocaleResource>
@@ -16952,6 +16955,9 @@
   </LocaleResource>
   <LocaleResource Name="PrivateMessages.Sent.DeleteSelected">
     <Value>Delete selected</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Sent.NoItems">
+    <Value>No sent messages</Value>
   </LocaleResource>
   <LocaleResource Name="PrivateMessages.Sent.SubjectColumn">
     <Value>Subject</Value>
@@ -17658,9 +17664,15 @@
   <LocaleResource Name="ShoppingCart.DiscountCouponCode.Button">
     <Value>Apply coupon</Value>
   </LocaleResource>
+  <LocaleResource Name="ShoppingCart.DiscountCouponCode.CannotBeFound">
+    <Value>The coupon code cannot be found</Value>
+  </LocaleResource>
   <LocaleResource Name="ShoppingCart.DiscountCouponCode.CurrentCode">
     <Value>Entered coupon code - {0}</Value>
   </LocaleResource>
+  <LocaleResource Name="ShoppingCart.DiscountCouponCode.Empty">
+    <Value>The coupon code is empty</Value>
+ </LocaleResource>
   <LocaleResource Name="ShoppingCart.DiscountCouponCode.Invalid">
     <Value>This coupon code ({0}) is invalid or no longer available.</Value>
   </LocaleResource>
