@@ -1,0 +1,11 @@
+﻿{
+  "Group": "ExternalAuth methods",
+  "FriendlyName": "LinkedIn External Authentication",
+  "SystemName": "FreemiumMedia.ExternalAuth.LinkedIn",
+  "Version": "2019.09.15",
+  "SupportedVersions": [ "4.10","4.20","4.30" ],
+  "Author": "FreemiumMedia.com",
+  "DisplayOrder": 2,
+  "FileName": "FreemiumMedia.Nop.Plugin.ExternalAuth.LinkedIn.dll",
+  "Description": "Plugin provides external login authentication for LinkedIn"
+}

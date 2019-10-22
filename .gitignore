@@ -162,6 +162,7 @@ $RECYCLE.BIN/
 #######################
 ## nopCommerce specific
 ###########
+dataSettings.local.json
 glob:*.user
 *.patch
 *.hg

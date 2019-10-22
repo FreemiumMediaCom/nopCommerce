@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "";
+}
+@model Meetup.NetStandard.Response.Events.Event[]
+
+<div class="page-title">
+    <h1>@T("Account.MyAccount") - @T("Account.CustomerInfo")</h1>
+</div>
+<div>
+
+    @foreach (var eventItem in Model)
+    {
+        @await Html.PartialAsync("~/Plugins/FreemiumMedia.Misc.Meetup/Views/EventSummary.cshtml", eventItem)
+    }
+</div>

@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Other",
+  "FriendlyName": "Meetups",
+  "SystemName": "FreemiumMedia.Misc.Meetup",
+  "Version": "2019.09.15",
+  "SupportedVersions": [ "4.20", "4.30" ],
+  "Author": "FreemiumMedia.com",
+  "DisplayOrder": 1,
+  "FileName": "FreemiumMedia.Nop.Plugin.Misc.Meetup.dll",
+  "Description": "This plugin enables Meetup Events to be displayed on your website."
+}
