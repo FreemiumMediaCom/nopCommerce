@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
@@ -33,11 +34,11 @@ namespace Nop.Web.Controllers
             _workContext = workContext;
         }
         
-        public virtual IActionResult Sample(int productId)
+        public virtual async Task<IActionResult> Sample(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             if (!product.HasSampleDownload)
                 return Content("Product doesn't have a sample download.");
@@ -57,11 +58,11 @@ namespace Nop.Web.Controllers
             return new FileContentResult(download.DownloadBinary, contentType) { FileDownloadName = fileName + download.Extension }; 
         }
 
-        public virtual IActionResult GetDownload(Guid orderItemId, bool agree = false)
+        public virtual async Task<IActionResult> GetDownload(Guid orderItemId, bool agree = false)
         {
             var orderItem = _orderService.GetOrderItemByGuid(orderItemId);
             if (orderItem == null)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             var order = orderItem.Order;
             var product = orderItem.Product;
@@ -112,11 +113,11 @@ namespace Nop.Web.Controllers
             return new FileContentResult(download.DownloadBinary, contentType) { FileDownloadName = fileName + download.Extension };  
         }
 
-        public virtual IActionResult GetLicense(Guid orderItemId)
+        public virtual async Task<IActionResult> GetLicense(Guid orderItemId)
         {
             var orderItem = _orderService.GetOrderItemByGuid(orderItemId);
             if (orderItem == null)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             var order = orderItem.Order;
             var product = orderItem.Product;
@@ -146,7 +147,7 @@ namespace Nop.Web.Controllers
             return new FileContentResult(download.DownloadBinary, contentType) { FileDownloadName = fileName + download.Extension };
         }
 
-        public virtual IActionResult GetFileUpload(Guid downloadId)
+        public virtual async Task<IActionResult> GetFileUpload(Guid downloadId)
         {
             var download = _downloadService.GetDownloadByGuid(downloadId);
             if (download == null)
@@ -165,11 +166,11 @@ namespace Nop.Web.Controllers
             return new FileContentResult(download.DownloadBinary, contentType) { FileDownloadName = fileName + download.Extension };
         }
 
-        public virtual IActionResult GetOrderNoteFile(int orderNoteId)
+        public virtual async Task<IActionResult> GetOrderNoteFile(int orderNoteId)
         {
             var orderNote = _orderService.GetOrderNoteById(orderNoteId);
             if (orderNote == null)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             var order = orderNote.Order;
 

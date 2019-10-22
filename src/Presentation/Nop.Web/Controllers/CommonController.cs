@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
@@ -98,7 +99,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         //page not found
-        public virtual IActionResult PageNotFound()
+        public virtual async Task<IActionResult> PageNotFound()
         {
             if (_commonSettings.Log404Errors)
             {
@@ -118,7 +119,7 @@ namespace Nop.Web.Controllers
         [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult SetLanguage(int langid, string returnUrl = "")
+        public virtual async Task<IActionResult> SetLanguage(int langid, string returnUrl = "")
         {
             var language = _languageService.GetLanguageById(langid);
             if (!language?.Published ?? false)
@@ -150,7 +151,7 @@ namespace Nop.Web.Controllers
 
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult SetCurrency(int customerCurrency, string returnUrl = "")
+        public virtual async Task<IActionResult> SetCurrency(int customerCurrency, string returnUrl = "")
         {
             var currency = _currencyService.GetCurrencyById(customerCurrency);
             if (currency != null)
@@ -169,7 +170,7 @@ namespace Nop.Web.Controllers
 
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult SetTaxType(int customerTaxType, string returnUrl = "")
+        public virtual async Task<IActionResult> SetTaxType(int customerTaxType, string returnUrl = "")
         {
             var taxDisplayType = (TaxDisplayType)Enum.ToObject(typeof(TaxDisplayType), customerTaxType);
             _workContext.TaxDisplayType = taxDisplayType;
@@ -189,7 +190,7 @@ namespace Nop.Web.Controllers
         [HttpsRequirement(SslRequirement.Yes)]
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
-        public virtual IActionResult ContactUs()
+        public virtual async Task<IActionResult> ContactUs()
         {
             var model = new ContactUsModel();
             model = _commonModelFactory.PrepareContactUsModel(model, false);
@@ -201,7 +202,7 @@ namespace Nop.Web.Controllers
         [ValidateCaptcha]
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
-        public virtual IActionResult ContactUsSend(ContactUsModel model, bool captchaValid)
+        public virtual async Task<IActionResult> ContactUsSend(ContactUsModel model, bool captchaValid)
         {
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnContactUsPage && !captchaValid)
@@ -234,7 +235,7 @@ namespace Nop.Web.Controllers
 
         //contact vendor page
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult ContactVendor(int vendorId)
+        public virtual async Task<IActionResult> ContactVendor(int vendorId)
         {
             if (!_vendorSettings.AllowCustomersToContactVendors)
                 return RedirectToRoute("Homepage");
@@ -251,7 +252,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("ContactVendor")]
         [PublicAntiForgery]
         [ValidateCaptcha]
-        public virtual IActionResult ContactVendorSend(ContactVendorModel model, bool captchaValid)
+        public virtual async Task<IActionResult> ContactVendorSend(ContactVendorModel model, bool captchaValid)
         {
             if (!_vendorSettings.AllowCustomersToContactVendors)
                 return RedirectToRoute("Homepage");
@@ -287,7 +288,7 @@ namespace Nop.Web.Controllers
 
         //sitemap page
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult Sitemap(SitemapPageModel pageModel)
+        public virtual async Task<IActionResult> Sitemap(SitemapPageModel pageModel)
         {
             if (!_sitemapSettings.SitemapEnabled)
                 return RedirectToRoute("Homepage");
@@ -300,7 +301,7 @@ namespace Nop.Web.Controllers
         [HttpsRequirement(SslRequirement.No)]
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
-        public virtual IActionResult SitemapXml(int? id)
+        public virtual async Task<IActionResult> SitemapXml(int? id)
         {
             var siteMap = _sitemapXmlSettings.SitemapXmlEnabled
                 ? _commonModelFactory.PrepareSitemapXml(id) : string.Empty;
@@ -308,7 +309,7 @@ namespace Nop.Web.Controllers
             return Content(siteMap, "text/xml");
         }
 
-        public virtual IActionResult SetStoreTheme(string themeName, string returnUrl = "")
+        public virtual async Task<IActionResult> SetStoreTheme(string themeName, string returnUrl = "")
         {
             _themeContext.WorkingThemeName = themeName;
 
@@ -328,7 +329,7 @@ namespace Nop.Web.Controllers
         [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult EuCookieLawAccept()
+        public virtual async Task<IActionResult> EuCookieLawAccept()
         {
             if (!_storeInformationSettings.DisplayEuCookieLawWarning)
                 //disabled
@@ -344,28 +345,28 @@ namespace Nop.Web.Controllers
         [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult RobotsTextFile()
+        public virtual async Task<IActionResult> RobotsTextFile()
         {
             var robotsFileContent = _commonModelFactory.PrepareRobotsTextFile();
             return Content(robotsFileContent, MimeTypes.TextPlain);
         }
 
-        public virtual IActionResult GenericUrl()
+        public virtual async Task<IActionResult> GenericUrl()
         {
             //seems that no entity was found
-            return InvokeHttp404();
+            return await InvokeHttp404();
         }
 
         //store is closed
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
-        public virtual IActionResult StoreClosed()
+        public virtual async Task<IActionResult> StoreClosed()
         {
             return View();
         }
 
         //helper method to redirect users. Workaround for GenericPathRoute class where we're not allowed to do it
-        public virtual IActionResult InternalRedirect(string url, bool permanentRedirect)
+        public virtual async Task<IActionResult> InternalRedirect(string url, bool permanentRedirect)
         {
             //ensure it's invoked from our GenericPathRoute class
             if (HttpContext.Items["nop.RedirectFromGenericPathRoute"] == null ||

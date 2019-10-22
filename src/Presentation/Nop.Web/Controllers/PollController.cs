@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
@@ -42,7 +43,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         [HttpPost]
-        public virtual IActionResult Vote(int pollAnswerId)
+        public virtual async Task<IActionResult> Vote(int pollAnswerId)
         {
             var pollAnswer = _pollService.GetPollAnswerById(pollAnswerId);
             if (pollAnswer == null)

@@ -27,6 +27,8 @@ namespace Nop.Web.Models.Catalog
         public bool DisplayForumsMenuItem { get; set; }
         public bool DisplayContactUsMenuItem { get; set; }
 
+        public bool DisplayMeetupsMenuItem { get; set; }
+
         public bool UseAjaxMenu { get; set; }
 
         public bool HasOnlyCategories
@@ -41,7 +43,8 @@ namespace Nop.Web.Models.Catalog
                        && !DisplayCustomerInfoMenuItem
                        && !(DisplayBlogMenuItem && BlogEnabled)
                        && !(DisplayForumsMenuItem && ForumEnabled)
-                       && !DisplayContactUsMenuItem;
+                       && !DisplayContactUsMenuItem
+                       && !DisplayMeetupsMenuItem;
             }
         }
 

@@ -1,0 +1,64 @@
+﻿@{
+    Layout = "";
+}
+@model Meetup.NetStandard.Response.Events.Event
+@if (Model != null)
+{
+<div class="page account-page customer-info-page">
+    <div class="page-body">
+        <div class="fieldset">
+            <div class="form-fields">
+                <div>
+                    <a asp-controller="Meetup"
+                       asp-action="Details"
+                       asp-route-id="@Model.Id">@Model.Name</a>
+                    
+                </div>
+            </div>
+            <div class="form-fields">
+                <div>
+                    @Html.Raw(Model.Name)
+                </div>
+            </div>
+            <div class="form-fields">
+                <div>
+                    @Html.Raw(Model.Name)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+
+@*<div>
+    <div class="buttons">test</div>
+
+
+    public DateTime Created { get; set; }
+
+    public long DurationMilliseconds { get; set; }
+
+    public EventStatus Status { get; set; }
+
+    public string LocalDate { get; set; }
+
+    public string LocalTime { get; set; }
+
+    public DateTime Updated { get; set; }
+
+    public int WaitlistCount { get; set; }
+
+    public EventVenue Venue { get; set; }
+
+    public EventGroup Group { get; set; }
+
+    public Uri Link { get; set; }
+
+    public string Description { get; set; }
+
+    public MeetupVisibility Visibility { get; set; }
+
+    public string HowToFindUs { get; set; }
+
+</div>*@

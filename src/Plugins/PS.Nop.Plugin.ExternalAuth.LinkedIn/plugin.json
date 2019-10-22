@@ -1,0 +1,11 @@
+﻿{
+  "Group": "ExternalAuth methods",
+  "FriendlyName": "LinkedIn authentication",
+  "SystemName": "PS.ExternalAuth.LinkedIn",
+  "Version": "1.1",
+  "SupportedVersions": [ "4.30" ],
+  "Author": "Fredrik Rudberg",
+  "DisplayOrder": 1,
+  "FileName": "PS.Nop.Plugin.ExternalAuth.LinkedIn.dll",
+  "Description": "This plugin enables you to login using LinkedIn"
+}

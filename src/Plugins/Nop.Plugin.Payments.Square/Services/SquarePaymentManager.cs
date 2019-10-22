@@ -50,18 +50,17 @@ namespace Nop.Plugin.Payments.Square.Services
         private Configuration CreateApiConfiguration()
         {
             //validate access token
-            if (_squarePaymentSettings.UseSandbox && string.IsNullOrEmpty(_squarePaymentSettings.AccessToken))
+            if (_squarePaymentSettings.UseSandbox &&
+                string.IsNullOrEmpty(_squarePaymentSettings.AccessToken))
+            {
                 throw new NopException("Sandbox access token should not be empty");
+            }
 
-            var config = new Configuration
+            return new Configuration
             {
                 AccessToken = _squarePaymentSettings.AccessToken,
                 UserAgent = SquarePaymentDefaults.UserAgent
             };
-            if (_squarePaymentSettings.UseSandbox)
-                config.setApiClientUsingDefault(new ApiClient(SquarePaymentDefaults.SandboxBaseUrl));
-
-            return config;
         }
 
         #endregion

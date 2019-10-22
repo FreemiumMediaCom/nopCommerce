@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Nop.Web.Controllers
 {
@@ -6,7 +7,7 @@ namespace Nop.Web.Controllers
     //they can create guest account(s), etc
     public partial class KeepAliveController : Controller
     {
-        public virtual IActionResult Index()
+        public virtual async Task<IActionResult> Index()
         {
             return Content("I am alive!");
         }

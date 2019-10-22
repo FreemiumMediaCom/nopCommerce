@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Factories;
 using Nop.Web.Framework.Components;
@@ -14,7 +15,7 @@ namespace Nop.Web.Components
             _widgetModelFactory = widgetModelFactory;
         }
 
-        public IViewComponentResult Invoke(string widgetZone, object additionalData = null)
+        public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData = null)
         {
             var model = _widgetModelFactory.PrepareRenderWidgetModel(widgetZone, additionalData);
 

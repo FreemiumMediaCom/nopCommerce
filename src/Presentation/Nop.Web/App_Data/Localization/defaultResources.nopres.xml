@@ -2620,7 +2620,7 @@
     <Value>Customer roles</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.AclCustomerRoles.Hint">
-    <Value>Choose one or several customer roles i.e. administrators, vendors, guests, who will be able to see this product in catalog. If you don't need this option just leave this field empty. In order to use this functionality, you have to disable the following setting: Configuration &gt; Settings &gt; Catalog &gt; Ignore ACL rules (sitewide).</Value>
+    <Value>Choose one or several customer roles i.e. administrators, vendors, guests, who will be able to see this product in catalog. If you don't need this option just leave this field empty. In order to use this functionality, you have to disable the following setting: Configuration &gt; Catalog settings &gt; Ignore ACL rules (sitewide).</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.AdditionalShippingCharge">
     <Value>Additional shipping charge</Value>
@@ -6697,10 +6697,10 @@
     <Value>Check if "Compare products list" menu item should be displayed in the footer. Compare products functionality should be also enabled in this case.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DisplayDefaultFooterItemSettingsModel.DisplayContactUsFooterItem">
-    <Value>Display "Contact us"</Value>
+    <Value>Display "Contact Us"</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DisplayDefaultFooterItemSettingsModel.DisplayContactUsFooterItem.Hint">
-    <Value>Check if "Contact us" menu item should be displayed in the footer.</Value>
+    <Value>Check if "Contact Us" menu item should be displayed in the footer.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DisplayDefaultFooterItemSettingsModel.DisplayCustomerAddressesFooterItem">
     <Value>Display "Addresses"</Value>
@@ -6775,10 +6775,10 @@
     <Value>Check if "Blog" menu item should be displayed in the top menu.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DisplayDefaultMenuItemSettings.DisplayContactUsMenuItem">
-    <Value>Display "Contact us"</Value>
+    <Value>Display "Contact Us"</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DisplayDefaultMenuItemSettings.DisplayContactUsMenuItem.Hint">
-    <Value>Check if "Contact us" menu item should be displayed in the top menu.</Value>
+    <Value>Check if "Contact Us" menu item should be displayed in the top menu.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DisplayDefaultMenuItemSettings.DisplayCustomerInfoMenuItem">
     <Value>Display "My account"</Value>
@@ -14974,7 +14974,7 @@
     <Value>Yes</Value>
   </LocaleResource>
   <LocaleResource Name="ContactUs">
-    <Value>Contact us</Value>
+    <Value>Contact Us</Value>
   </LocaleResource>
   <LocaleResource Name="ContactUs.Button">
     <Value>Submit</Value>
@@ -15598,10 +15598,10 @@
     <Value>or</Value>
   </LocaleResource>
   <LocaleResource Name="Footer.CustomerService">
-    <Value>Customer service</Value>
+    <Value>Customer Service</Value>
   </LocaleResource>
   <LocaleResource Name="Footer.FollowUs">
-    <Value>Follow us</Value>
+    <Value>Follow Us</Value>
   </LocaleResource>
   <LocaleResource Name="Footer.FollowUs.Facebook">
     <Value>Facebook</Value>
@@ -15955,7 +15955,7 @@
     <Value>Home page</Value>
   </LocaleResource>
   <LocaleResource Name="Homepage.Products">
-    <Value>Featured products</Value>
+    <Value>Featured</Value>
   </LocaleResource>
   <LocaleResource Name="Languages">
     <Value>Languages</Value>
@@ -16911,9 +16911,6 @@
   <LocaleResource Name="PrivateMessages.Inbox.MarkAsUnread">
     <Value>Mark selected as unread</Value>
   </LocaleResource>
-  <LocaleResource Name="PrivateMessages.Inbox.NoItems">
-    <Value>No inbox messages</Value>
-  </LocaleResource>
   <LocaleResource Name="PrivateMessages.Inbox.SubjectColumn">
     <Value>Subject</Value>
   </LocaleResource>
@@ -16955,9 +16952,6 @@
   </LocaleResource>
   <LocaleResource Name="PrivateMessages.Sent.DeleteSelected">
     <Value>Delete selected</Value>
-  </LocaleResource>
-  <LocaleResource Name="PrivateMessages.Sent.NoItems">
-    <Value>No sent messages</Value>
   </LocaleResource>
   <LocaleResource Name="PrivateMessages.Sent.SubjectColumn">
     <Value>Subject</Value>
@@ -17128,7 +17122,7 @@
     <Value>{0} excl tax</Value>
   </LocaleResource>
   <LocaleResource Name="Products.FeaturedProducts">
-    <Value>Featured products</Value>
+    <Value>Featured</Value>
   </LocaleResource>
   <LocaleResource Name="Products.FreeShipping">
     <Value>Free shipping</Value>
@@ -17167,7 +17161,7 @@
     <Value>This product has a minimum quantity of {0}</Value>
   </LocaleResource>
   <LocaleResource Name="Products.NewProducts">
-    <Value>New products</Value>
+    <Value>New Products</Value>
   </LocaleResource>
   <LocaleResource Name="Products.NewProducts.RSS">
     <Value>RSS</Value>
@@ -17664,15 +17658,9 @@
   <LocaleResource Name="ShoppingCart.DiscountCouponCode.Button">
     <Value>Apply coupon</Value>
   </LocaleResource>
-  <LocaleResource Name="ShoppingCart.DiscountCouponCode.CannotBeFound">
-    <Value>The coupon code cannot be found</Value>
-  </LocaleResource>
   <LocaleResource Name="ShoppingCart.DiscountCouponCode.CurrentCode">
     <Value>Entered coupon code - {0}</Value>
   </LocaleResource>
-  <LocaleResource Name="ShoppingCart.DiscountCouponCode.Empty">
-    <Value>The coupon code is empty</Value>
- </LocaleResource>
   <LocaleResource Name="ShoppingCart.DiscountCouponCode.Invalid">
     <Value>This coupon code ({0}) is invalid or no longer available.</Value>
   </LocaleResource>

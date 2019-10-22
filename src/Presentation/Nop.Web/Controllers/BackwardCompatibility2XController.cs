@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Nop.Services.Blogs;
 using Nop.Services.Catalog;
 using Nop.Services.News;
@@ -52,7 +53,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         //in versions 2.00-2.65 we had ID in product URLs
-        public virtual IActionResult RedirectProductById(int productId)
+        public virtual async Task<IActionResult> RedirectProductById(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null)
@@ -62,7 +63,7 @@ namespace Nop.Web.Controllers
         }
 
         //in versions 2.00-2.65 we had ID in category URLs
-        public virtual IActionResult RedirectCategoryById(int categoryId)
+        public virtual async Task<IActionResult> RedirectCategoryById(int categoryId)
         {
             var category = _categoryService.GetCategoryById(categoryId);
             if (category == null)
@@ -72,7 +73,7 @@ namespace Nop.Web.Controllers
         }
 
         //in versions 2.00-2.65 we had ID in manufacturer URLs
-        public virtual IActionResult RedirectManufacturerById(int manufacturerId)
+        public virtual async Task<IActionResult> RedirectManufacturerById(int manufacturerId)
         {
             var manufacturer = _manufacturerService.GetManufacturerById(manufacturerId);
             if (manufacturer == null)
@@ -82,7 +83,7 @@ namespace Nop.Web.Controllers
         }
 
         //in versions 2.00-2.70 we had ID in news URLs
-        public virtual IActionResult RedirectNewsItemById(int newsItemId)
+        public virtual async Task<IActionResult> RedirectNewsItemById(int newsItemId)
         {
             var newsItem = _newsService.GetNewsById(newsItemId);
             if (newsItem == null)
@@ -92,7 +93,7 @@ namespace Nop.Web.Controllers
         }
 
         //in versions 2.00-2.70 we had ID in blog URLs
-        public virtual IActionResult RedirectBlogPostById(int blogPostId)
+        public virtual async Task<IActionResult> RedirectBlogPostById(int blogPostId)
         {
             var blogPost = _blogService.GetBlogPostById(blogPostId);
             if (blogPost == null)
@@ -102,7 +103,7 @@ namespace Nop.Web.Controllers
         }
 
         //in versions 2.00-3.20 we had SystemName in topic URLs
-        public virtual IActionResult RedirectTopicBySystemName(string systemName)
+        public virtual async Task<IActionResult> RedirectTopicBySystemName(string systemName)
         {
             var topic = _topicService.GetTopicBySystemName(systemName);
             if (topic == null)
@@ -112,7 +113,7 @@ namespace Nop.Web.Controllers
         }
 
         //in versions 3.00-3.20 we had ID in vendor URLs
-        public virtual IActionResult RedirectVendorById(int vendorId)
+        public virtual async Task<IActionResult> RedirectVendorById(int vendorId)
         {
             var vendor = _vendorService.GetVendorById(vendorId);
             if (vendor == null)
@@ -122,7 +123,7 @@ namespace Nop.Web.Controllers
         }
 
         //in versions 3.00-4.00 we had ID in product tag URLs
-        public virtual IActionResult RedirectProductTagById(int productTagId)
+        public virtual async Task<IActionResult> RedirectProductTagById(int productTagId)
         {
             var productTag = _productTagService.GetProductTagById(productTagId);
             if (productTag == null)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -264,12 +265,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Customers
 
-        public virtual IActionResult Index()
+        public virtual async Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public virtual async Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -281,7 +282,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CustomerList(CustomerSearchModel searchModel)
+        public virtual async Task<IActionResult> CustomerList(CustomerSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -292,7 +293,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public virtual async Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -305,7 +306,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Create(CustomerModel model, bool continueEditing, IFormCollection form)
+        public virtual async Task<IActionResult> Create(CustomerModel model, bool continueEditing, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -499,7 +500,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public virtual async Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -517,7 +518,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(CustomerModel model, bool continueEditing, IFormCollection form)
+        public virtual async Task<IActionResult> Edit(CustomerModel model, bool continueEditing, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -767,7 +768,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("changepassword")]
-        public virtual IActionResult ChangePassword(CustomerModel model)
+        public virtual async Task<IActionResult> ChangePassword(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -801,7 +802,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("markVatNumberAsValid")]
-        public virtual IActionResult MarkVatNumberAsValid(CustomerModel model)
+        public virtual async Task<IActionResult> MarkVatNumberAsValid(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -820,7 +821,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("markVatNumberAsInvalid")]
-        public virtual IActionResult MarkVatNumberAsInvalid(CustomerModel model)
+        public virtual async Task<IActionResult> MarkVatNumberAsInvalid(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -839,7 +840,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("remove-affiliate")]
-        public virtual IActionResult RemoveAffiliate(CustomerModel model)
+        public virtual async Task<IActionResult> RemoveAffiliate(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -856,7 +857,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public virtual async Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -910,7 +911,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("impersonate")]
-        public virtual IActionResult Impersonate(int id)
+        public virtual async Task<IActionResult> Impersonate(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.AllowCustomerImpersonation))
                 return AccessDeniedView();
@@ -951,7 +952,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("send-welcome-message")]
-        public virtual IActionResult SendWelcomeMessage(CustomerModel model)
+        public virtual async Task<IActionResult> SendWelcomeMessage(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -970,7 +971,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("resend-activation-message")]
-        public virtual IActionResult ReSendActivationMessage(CustomerModel model)
+        public virtual async Task<IActionResult> ReSendActivationMessage(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -989,7 +990,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("Edit", new { id = customer.Id });
         }
 
-        public virtual IActionResult SendEmail(CustomerModel model)
+        public virtual async Task<IActionResult> SendEmail(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1041,7 +1042,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("Edit", new { id = customer.Id });
         }
 
-        public virtual IActionResult SendPm(CustomerModel model)
+        public virtual async Task<IActionResult> SendPm(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1092,7 +1093,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Reward points history
 
         [HttpPost]
-        public virtual IActionResult RewardPointsHistorySelect(CustomerRewardPointsSearchModel searchModel)
+        public virtual async Task<IActionResult> RewardPointsHistorySelect(CustomerRewardPointsSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1107,7 +1108,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult RewardPointsHistoryAdd(AddRewardPointsToCustomerModel model)
+        public virtual async Task<IActionResult> RewardPointsHistoryAdd(AddRewardPointsToCustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1147,7 +1148,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Addresses
 
         [HttpPost]
-        public virtual IActionResult AddressesSelect(CustomerAddressSearchModel searchModel)
+        public virtual async Task<IActionResult> AddressesSelect(CustomerAddressSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1163,7 +1164,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AddressDelete(int id, int customerId)
+        public virtual async Task<IActionResult> AddressDelete(int id, int customerId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1186,7 +1187,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult AddressCreate(int customerId)
+        public virtual async Task<IActionResult> AddressCreate(int customerId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1203,7 +1204,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AddressCreate(CustomerAddressModel model, IFormCollection form)
+        public virtual async Task<IActionResult> AddressCreate(CustomerAddressModel model, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1248,7 +1249,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult AddressEdit(int addressId, int customerId)
+        public virtual async Task<IActionResult> AddressEdit(int addressId, int customerId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1270,7 +1271,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AddressEdit(CustomerAddressModel model, IFormCollection form)
+        public virtual async Task<IActionResult> AddressEdit(CustomerAddressModel model, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1316,7 +1317,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Orders
 
         [HttpPost]
-        public virtual IActionResult OrderList(CustomerOrderSearchModel searchModel)
+        public virtual async Task<IActionResult> OrderList(CustomerOrderSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1335,7 +1336,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Customer
 
-        public virtual IActionResult LoadCustomerStatistics(string period)
+        public virtual async Task<IActionResult> LoadCustomerStatistics(string period)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return Content(string.Empty);
@@ -1424,7 +1425,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Current shopping cart/ wishlist
 
         [HttpPost]
-        public virtual IActionResult GetCartList(CustomerShoppingCartSearchModel searchModel)
+        public virtual async Task<IActionResult> GetCartList(CustomerShoppingCartSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1444,7 +1445,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Activity log
 
         [HttpPost]
-        public virtual IActionResult ListActivityLog(CustomerActivityLogSearchModel searchModel)
+        public virtual async Task<IActionResult> ListActivityLog(CustomerActivityLogSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1464,7 +1465,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Back in stock subscriptions
 
         [HttpPost]
-        public virtual IActionResult BackInStockSubscriptionList(CustomerBackInStockSubscriptionSearchModel searchModel)
+        public virtual async Task<IActionResult> BackInStockSubscriptionList(CustomerBackInStockSubscriptionSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1483,7 +1484,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region GDPR
 
-        public virtual IActionResult GdprLog()
+        public virtual async Task<IActionResult> GdprLog()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1495,7 +1496,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult GdprLogList(GdprLogSearchModel searchModel)
+        public virtual async Task<IActionResult> GdprLogList(GdprLogSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1507,7 +1508,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult GdprDelete(int id)
+        public virtual async Task<IActionResult> GdprDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1554,7 +1555,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
-        public virtual IActionResult GdprExport(int id)
+        public virtual async Task<IActionResult> GdprExport(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1586,7 +1587,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("exportexcel-all")]
-        public virtual IActionResult ExportExcelAll(CustomerSearchModel model)
+        public virtual async Task<IActionResult> ExportExcelAll(CustomerSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1615,7 +1616,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ExportExcelSelected(string selectedIds)
+        public virtual async Task<IActionResult> ExportExcelSelected(string selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1644,7 +1645,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("exportxml-all")]
-        public virtual IActionResult ExportXmlAll(CustomerSearchModel model)
+        public virtual async Task<IActionResult> ExportXmlAll(CustomerSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1673,7 +1674,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ExportXmlSelected(string selectedIds)
+        public virtual async Task<IActionResult> ExportXmlSelected(string selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();

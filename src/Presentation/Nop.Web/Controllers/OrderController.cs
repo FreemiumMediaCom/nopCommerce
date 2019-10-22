@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
@@ -63,7 +64,7 @@ namespace Nop.Web.Controllers
 
         //My account / Orders
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult CustomerOrders()
+        public virtual async Task<IActionResult> CustomerOrders()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -76,7 +77,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("CustomerOrders")]
         [PublicAntiForgery]
         [FormValueRequired(FormValueRequirement.StartsWith, "cancelRecurringPayment")]
-        public virtual IActionResult CancelRecurringPayment(IFormCollection form)
+        public virtual async Task<IActionResult> CancelRecurringPayment(IFormCollection form)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -110,7 +111,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("CustomerOrders")]
         [PublicAntiForgery]
         [FormValueRequired(FormValueRequirement.StartsWith, "retryLastPayment")]
-        public virtual IActionResult RetryLastRecurringPayment(IFormCollection form)
+        public virtual async Task<IActionResult> RetryLastRecurringPayment(IFormCollection form)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -139,7 +140,7 @@ namespace Nop.Web.Controllers
 
         //My account / Reward points
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult CustomerRewardPoints(int? pageNumber)
+        public virtual async Task<IActionResult> CustomerRewardPoints(int? pageNumber)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -153,7 +154,7 @@ namespace Nop.Web.Controllers
 
         //My account / Order details page
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult Details(int orderId)
+        public virtual async Task<IActionResult> Details(int orderId)
         {
             var order = _orderService.GetOrderById(orderId);
             if (order == null || order.Deleted || _workContext.CurrentCustomer.Id != order.CustomerId)
@@ -165,7 +166,7 @@ namespace Nop.Web.Controllers
 
         //My account / Order details page / Print
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult PrintOrderDetails(int orderId)
+        public virtual async Task<IActionResult> PrintOrderDetails(int orderId)
         {
             var order = _orderService.GetOrderById(orderId);
             if (order == null || order.Deleted || _workContext.CurrentCustomer.Id != order.CustomerId)
@@ -178,7 +179,7 @@ namespace Nop.Web.Controllers
         }
 
         //My account / Order details page / PDF invoice
-        public virtual IActionResult GetPdfInvoice(int orderId)
+        public virtual async Task<IActionResult> GetPdfInvoice(int orderId)
         {
             var order = _orderService.GetOrderById(orderId);
             if (order == null || order.Deleted || _workContext.CurrentCustomer.Id != order.CustomerId)
@@ -196,7 +197,7 @@ namespace Nop.Web.Controllers
         }
 
         //My account / Order details page / re-order
-        public virtual IActionResult ReOrder(int orderId)
+        public virtual async Task<IActionResult> ReOrder(int orderId)
         {
             var order = _orderService.GetOrderById(orderId);
             if (order == null || order.Deleted || _workContext.CurrentCustomer.Id != order.CustomerId)
@@ -210,7 +211,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("Details")]
         [PublicAntiForgery]
         [FormValueRequired("repost-payment")]
-        public virtual IActionResult RePostPayment(int orderId)
+        public virtual async Task<IActionResult> RePostPayment(int orderId)
         {
             var order = _orderService.GetOrderById(orderId);
             if (order == null || order.Deleted || _workContext.CurrentCustomer.Id != order.CustomerId)
@@ -238,7 +239,7 @@ namespace Nop.Web.Controllers
 
         //My account / Order details page / Shipment details page
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult ShipmentDetails(int shipmentId)
+        public virtual async Task<IActionResult> ShipmentDetails(int shipmentId)
         {
             var shipment = _shipmentService.GetShipmentById(shipmentId);
             if (shipment == null)

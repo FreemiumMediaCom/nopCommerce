@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -109,11 +110,11 @@ namespace Nop.Web.Controllers
         #region Product details page
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult ProductDetails(int productId, int updatecartitemid = 0)
+        public virtual async Task<IActionResult> ProductDetails(int productId, int updatecartitemid = 0)
         {
             var product = _productService.GetProductById(productId);
             if (product == null || product.Deleted)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             var notAvailable =
                 //published?
@@ -128,7 +129,7 @@ namespace Nop.Web.Controllers
             //We should allows him (her) to use "Preview" functionality
             var hasAdminAccess = _permissionService.Authorize(StandardPermissionProvider.AccessAdminPanel) && _permissionService.Authorize(StandardPermissionProvider.ManageProducts);
             if (notAvailable && !hasAdminAccess)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             //visible individually?
             if (!product.VisibleIndividually)
@@ -190,7 +191,7 @@ namespace Nop.Web.Controllers
         #region Recently viewed products
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult RecentlyViewedProducts()
+        public virtual async Task<IActionResult> RecentlyViewedProducts()
         {
             if (!_catalogSettings.RecentlyViewedProductsEnabled)
                 return Content("");
@@ -208,7 +209,7 @@ namespace Nop.Web.Controllers
         #region New (recently added) products page
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult NewProducts()
+        public virtual async Task<IActionResult> NewProducts()
         {
             if (!_catalogSettings.NewProductsEnabled)
                 return Content("");
@@ -226,7 +227,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult NewProductsRss()
+        public virtual async Task<IActionResult> NewProductsRss()
         {
             var feed = new RssFeed(
                 $"{_localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name)}: New products",
@@ -270,7 +271,7 @@ namespace Nop.Web.Controllers
         #region Product reviews
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult ProductReviews(int productId)
+        public virtual async Task<IActionResult> ProductReviews(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null || product.Deleted || !product.Published || !product.AllowCustomerReviews)
@@ -309,7 +310,7 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         [FormValueRequired("add-review")]
         [ValidateCaptcha]
-        public virtual IActionResult ProductReviewsAdd(int productId, ProductReviewsModel model, bool captchaValid)
+        public virtual async Task<IActionResult> ProductReviewsAdd(int productId, ProductReviewsModel model, bool captchaValid)
         {
             var product = _productService.GetProductById(productId);
             if (product == null || product.Deleted || !product.Published || !product.AllowCustomerReviews)
@@ -406,7 +407,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult SetProductReviewHelpfulness(int productReviewId, bool washelpful)
+        public virtual async Task<IActionResult> SetProductReviewHelpfulness(int productReviewId, bool washelpful)
         {
             var productReview = _productService.GetProductReviewById(productReviewId);
             if (productReview == null)
@@ -467,7 +468,7 @@ namespace Nop.Web.Controllers
             });
         }
 
-        public virtual IActionResult CustomerProductReviews(int? pageNumber)
+        public virtual async Task<IActionResult> CustomerProductReviews(int? pageNumber)
         {
             if (_workContext.CurrentCustomer.IsGuest())
                 return Challenge();
@@ -486,7 +487,7 @@ namespace Nop.Web.Controllers
         #region Email a friend
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult ProductEmailAFriend(int productId)
+        public virtual async Task<IActionResult> ProductEmailAFriend(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null || product.Deleted || !product.Published || !_catalogSettings.EmailAFriendEnabled)
@@ -501,7 +502,7 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         [FormValueRequired("send-email")]
         [ValidateCaptcha]
-        public virtual IActionResult ProductEmailAFriendSend(ProductEmailAFriendModel model, bool captchaValid)
+        public virtual async Task<IActionResult> ProductEmailAFriendSend(ProductEmailAFriendModel model, bool captchaValid)
         {
             var product = _productService.GetProductById(model.ProductId);
             if (product == null || product.Deleted || !product.Published || !_catalogSettings.EmailAFriendEnabled)
@@ -544,7 +545,7 @@ namespace Nop.Web.Controllers
         #region Comparing products
 
         [HttpPost]
-        public virtual IActionResult AddProductToCompareList(int productId)
+        public virtual async Task<IActionResult> AddProductToCompareList(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null || product.Deleted || !product.Published)
@@ -576,7 +577,7 @@ namespace Nop.Web.Controllers
             });
         }
 
-        public virtual IActionResult RemoveProductFromCompareList(int productId)
+        public virtual async Task<IActionResult> RemoveProductFromCompareList(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null)
@@ -591,7 +592,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult CompareProducts()
+        public virtual async Task<IActionResult> CompareProducts()
         {
             if (!_catalogSettings.CompareProductsEnabled)
                 return RedirectToRoute("Homepage");
@@ -616,7 +617,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ClearCompareList()
+        public virtual async Task<IActionResult> ClearCompareList()
         {
             if (!_catalogSettings.CompareProductsEnabled)
                 return RedirectToRoute("Homepage");

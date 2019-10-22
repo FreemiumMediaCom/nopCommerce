@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Vendors;
 using Nop.Web.Factories;
@@ -18,7 +19,7 @@ namespace Nop.Web.Components
             _vendorSettings = vendorSettings;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             if (_vendorSettings.VendorsBlockItemsToDisplay == 0)
                 return Content("");

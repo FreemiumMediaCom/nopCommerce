@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
@@ -146,7 +147,7 @@ namespace Nop.Web.Controllers
             //in order to avoid any possible limitations by payment gateway we reset GUID periodically
             var previousPaymentRequest = HttpContext.Session.Get<ProcessPaymentRequest>("OrderPaymentInfo");
             if (_paymentSettings.RegenerateOrderGuidInterval > 0 &&
-                previousPaymentRequest != null && 
+                previousPaymentRequest != null &&
                 previousPaymentRequest.OrderGuidGeneratedOnUtc.HasValue)
             {
                 var interval = DateTime.UtcNow - previousPaymentRequest.OrderGuidGeneratedOnUtc.Value;
@@ -168,7 +169,7 @@ namespace Nop.Web.Controllers
 
         #region Methods (common)
 
-        public virtual IActionResult Index()
+        public virtual async Task<IActionResult> Index()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -235,7 +236,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoute("CheckoutBillingAddress");
         }
 
-        public virtual IActionResult Completed(int? orderId)
+        public virtual async Task<IActionResult> Completed(int? orderId)
         {
             //validation
             if (_workContext.CurrentCustomer.IsGuest() && !_orderSettings.AnonymousCheckoutAllowed)
@@ -273,7 +274,7 @@ namespace Nop.Web.Controllers
 
         #region Methods (multistep checkout)
 
-        public virtual IActionResult BillingAddress(IFormCollection form)
+        public virtual async Task<IActionResult> BillingAddress(IFormCollection form)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -299,18 +300,18 @@ namespace Nop.Web.Controllers
                 if (model.ExistingAddresses.Any())
                 {
                     //choose the first one
-                    return SelectBillingAddress(model.ExistingAddresses.First().Id);
+                    return await SelectBillingAddress(model.ExistingAddresses.First().Id);
                 }
 
                 TryValidateModel(model);
                 TryValidateModel(model.BillingNewAddress);
-                return NewBillingAddress(model, form);
+                return await NewBillingAddress(model, form);
             }
 
             return View(model);
         }
 
-        public virtual IActionResult SelectBillingAddress(int addressId, bool shipToSameAddress = false)
+        public virtual async Task<IActionResult> SelectBillingAddress(int addressId, bool shipToSameAddress = false)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -344,7 +345,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("BillingAddress")]
         [FormValueRequired("nextstep")]
-        public virtual IActionResult NewBillingAddress(CheckoutBillingAddressModel model, IFormCollection form)
+        public virtual async Task<IActionResult> NewBillingAddress(CheckoutBillingAddressModel model, IFormCollection form)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -419,7 +420,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ShippingAddress()
+        public virtual async Task<IActionResult> ShippingAddress()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -448,7 +449,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult SelectShippingAddress(int addressId)
+        public virtual async Task<IActionResult> SelectShippingAddress(int addressId)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -472,7 +473,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("ShippingAddress")]
         [FormValueRequired("nextstep")]
-        public virtual IActionResult NewShippingAddress(CheckoutShippingAddressModel model, IFormCollection form)
+        public virtual async Task<IActionResult> NewShippingAddress(CheckoutShippingAddressModel model, IFormCollection form)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -575,7 +576,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ShippingMethod()
+        public virtual async Task<IActionResult> ShippingMethod()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -618,7 +619,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("ShippingMethod")]
         [FormValueRequired("nextstep")]
-        public virtual IActionResult SelectShippingMethod(string shippingoption)
+        public virtual async Task<IActionResult> SelectShippingMethod(string shippingoption)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -644,10 +645,10 @@ namespace Nop.Web.Controllers
 
             //parse selected method 
             if (string.IsNullOrEmpty(shippingoption))
-                return ShippingMethod();
+                return await ShippingMethod();
             var splittedOption = shippingoption.Split(new[] { "___" }, StringSplitOptions.RemoveEmptyEntries);
             if (splittedOption.Length != 2)
-                return ShippingMethod();
+                return await ShippingMethod();
             var selectedName = splittedOption[0];
             var shippingRateComputationMethodSystemName = splittedOption[1];
 
@@ -671,7 +672,7 @@ namespace Nop.Web.Controllers
             var shippingOption = shippingOptions
                 .Find(so => !string.IsNullOrEmpty(so.Name) && so.Name.Equals(selectedName, StringComparison.InvariantCultureIgnoreCase));
             if (shippingOption == null)
-                return ShippingMethod();
+                return await ShippingMethod();
 
             //save
             _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedShippingOptionAttribute, shippingOption, _storeContext.CurrentStore.Id);
@@ -679,7 +680,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoute("CheckoutPaymentMethod");
         }
 
-        public virtual IActionResult PaymentMethod()
+        public virtual async Task<IActionResult> PaymentMethod()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -736,7 +737,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("PaymentMethod")]
         [FormValueRequired("nextstep")]
-        public virtual IActionResult SelectPaymentMethod(string paymentmethod, CheckoutPaymentMethodModel model)
+        public virtual async Task<IActionResult> SelectPaymentMethod(string paymentmethod, CheckoutPaymentMethodModel model)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -771,10 +772,10 @@ namespace Nop.Web.Controllers
             }
             //payment method 
             if (string.IsNullOrEmpty(paymentmethod))
-                return PaymentMethod();
+                return await PaymentMethod();
 
             if (!_paymentPluginManager.IsPluginActive(paymentmethod, _workContext.CurrentCustomer, _storeContext.CurrentStore.Id))
-                return PaymentMethod();
+                return await PaymentMethod();
 
             //save
             _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer,
@@ -783,7 +784,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoute("CheckoutPaymentInfo");
         }
 
-        public virtual IActionResult PaymentInfo()
+        public virtual async Task<IActionResult> PaymentInfo()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -834,7 +835,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("PaymentInfo")]
         [FormValueRequired("nextstep")]
-        public virtual IActionResult EnterPaymentInfo(IFormCollection form)
+        public virtual async Task<IActionResult> EnterPaymentInfo(IFormCollection form)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -886,7 +887,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Confirm()
+        public virtual async Task<IActionResult> Confirm()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -909,7 +910,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost, ActionName("Confirm")]
-        public virtual IActionResult ConfirmOrder()
+        public virtual async Task<IActionResult> ConfirmOrder()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -986,7 +987,7 @@ namespace Nop.Web.Controllers
 
         #region Methods (one page checkout)
 
-        protected virtual JsonResult OpcLoadStepAfterShippingAddress(IList<ShoppingCartItem> cart)
+        protected virtual async Task<JsonResult> OpcLoadStepAfterShippingAddress(IList<ShoppingCartItem> cart)
         {
             var shippingMethodModel = _checkoutModelFactory.PrepareShippingMethodModel(cart, _workContext.CurrentCustomer.ShippingAddress);
             if (_shippingSettings.BypassShippingMethodSelectionIfOnlyOne &&
@@ -999,7 +1000,7 @@ namespace Nop.Web.Controllers
                     _storeContext.CurrentStore.Id);
 
                 //load next step
-                return OpcLoadStepAfterShippingMethod(cart);
+                return await OpcLoadStepAfterShippingMethod(cart);
             }
 
             return Json(new
@@ -1007,13 +1008,13 @@ namespace Nop.Web.Controllers
                 update_section = new UpdateSectionJsonModel
                 {
                     name = "shipping-method",
-                    html = RenderPartialViewToString("OpcShippingMethods", shippingMethodModel)
+                    html = await RenderPartialViewToString("OpcShippingMethods", shippingMethodModel)
                 },
                 goto_section = "shipping_method"
             });
         }
 
-        protected virtual JsonResult OpcLoadStepAfterShippingMethod(IList<ShoppingCartItem> cart)
+        protected virtual async Task<JsonResult> OpcLoadStepAfterShippingMethod(IList<ShoppingCartItem> cart)
         {
             //Check whether payment workflow is required
             //we ignore reward points during cart total calculation
@@ -1048,7 +1049,7 @@ namespace Nop.Web.Controllers
                     if (!_paymentPluginManager.IsPluginActive(paymentMethodInst))
                         throw new Exception("Selected payment method can't be parsed");
 
-                    return OpcLoadStepAfterPaymentMethod(paymentMethodInst, cart);
+                    return await OpcLoadStepAfterPaymentMethod(paymentMethodInst, cart);
                 }
 
                 //customer have to choose a payment method
@@ -1057,7 +1058,7 @@ namespace Nop.Web.Controllers
                     update_section = new UpdateSectionJsonModel
                     {
                         name = "payment-method",
-                        html = RenderPartialViewToString("OpcPaymentMethods", paymentMethodModel)
+                        html = await RenderPartialViewToString("OpcPaymentMethods", paymentMethodModel)
                     },
                     goto_section = "payment_method"
                 });
@@ -1073,13 +1074,13 @@ namespace Nop.Web.Controllers
                 update_section = new UpdateSectionJsonModel
                 {
                     name = "confirm-order",
-                    html = RenderPartialViewToString("OpcConfirmOrder", confirmOrderModel)
+                    html = await RenderPartialViewToString("OpcConfirmOrder", confirmOrderModel)
                 },
                 goto_section = "confirm_order"
             });
         }
 
-        protected virtual JsonResult OpcLoadStepAfterPaymentMethod(IPaymentMethod paymentMethod, IList<ShoppingCartItem> cart)
+        protected virtual async Task<JsonResult> OpcLoadStepAfterPaymentMethod(IPaymentMethod paymentMethod, IList<ShoppingCartItem> cart)
         {
             if (paymentMethod.SkipPaymentInfo ||
                 (paymentMethod.PaymentMethodType == PaymentMethodType.Redirection && _paymentSettings.SkipPaymentInfoStepForRedirectionPaymentMethods))
@@ -1096,7 +1097,7 @@ namespace Nop.Web.Controllers
                     update_section = new UpdateSectionJsonModel
                     {
                         name = "confirm-order",
-                        html = RenderPartialViewToString("OpcConfirmOrder", confirmOrderModel)
+                        html = await RenderPartialViewToString("OpcConfirmOrder", confirmOrderModel)
                     },
                     goto_section = "confirm_order"
                 });
@@ -1109,13 +1110,13 @@ namespace Nop.Web.Controllers
                 update_section = new UpdateSectionJsonModel
                 {
                     name = "payment-info",
-                    html = RenderPartialViewToString("OpcPaymentInfo", paymenInfoModel)
+                    html = await RenderPartialViewToString("OpcPaymentInfo", paymenInfoModel)
                 },
                 goto_section = "payment_info"
             });
         }
 
-        public virtual IActionResult OnePageCheckout()
+        public virtual async Task<IActionResult> OnePageCheckout()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -1136,7 +1137,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult OpcSaveBilling(CheckoutBillingAddressModel model, IFormCollection form)
+        public virtual async Task<IActionResult> OpcSaveBilling(CheckoutBillingAddressModel model, IFormCollection form)
         {
             try
             {
@@ -1192,7 +1193,7 @@ namespace Nop.Web.Controllers
                             update_section = new UpdateSectionJsonModel
                             {
                                 name = "billing",
-                                html = RenderPartialViewToString("OpcBillingAddress", billingAddressModel)
+                                html = await RenderPartialViewToString("OpcBillingAddress", billingAddressModel)
                             },
                             wrong_billing_address = true,
                         });
@@ -1243,7 +1244,7 @@ namespace Nop.Web.Controllers
                         _genericAttributeService.SaveAttribute<ShippingOption>(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedShippingOptionAttribute, null, _storeContext.CurrentStore.Id);
                         _genericAttributeService.SaveAttribute<PickupPoint>(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedPickupPointAttribute, null, _storeContext.CurrentStore.Id);
                         //limitation - "Ship to the same address" doesn't properly work in "pick up in store only" case (when no shipping plugins are available) 
-                        return OpcLoadStepAfterShippingAddress(cart);
+                        return await OpcLoadStepAfterShippingAddress(cart);
                     }
 
                     //do not ship to the same address
@@ -1254,7 +1255,7 @@ namespace Nop.Web.Controllers
                         update_section = new UpdateSectionJsonModel
                         {
                             name = "shipping",
-                            html = RenderPartialViewToString("OpcShippingAddress", shippingAddressModel)
+                            html = await RenderPartialViewToString("OpcShippingAddress", shippingAddressModel)
                         },
                         goto_section = "shipping"
                     });
@@ -1267,7 +1268,7 @@ namespace Nop.Web.Controllers
                 _genericAttributeService.SaveAttribute<ShippingOption>(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedShippingOptionAttribute, null, _storeContext.CurrentStore.Id);
 
                 //load next step
-                return OpcLoadStepAfterShippingMethod(cart);
+                return await OpcLoadStepAfterShippingMethod(cart);
             }
             catch (Exception exc)
             {
@@ -1276,7 +1277,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcSaveShipping(CheckoutShippingAddressModel model, IFormCollection form)
+        public virtual async Task<IActionResult> OpcSaveShipping(CheckoutShippingAddressModel model, IFormCollection form)
         {
             try
             {
@@ -1325,7 +1326,7 @@ namespace Nop.Web.Controllers
                         _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedPickupPointAttribute, selectedPoint, _storeContext.CurrentStore.Id);
 
                         //load next step
-                        return OpcLoadStepAfterShippingMethod(cart);
+                        return await OpcLoadStepAfterShippingMethod(cart);
                     }
 
                     //set value indicating that "pick up in store" option has not been chosen
@@ -1369,7 +1370,7 @@ namespace Nop.Web.Controllers
                             update_section = new UpdateSectionJsonModel
                             {
                                 name = "shipping",
-                                html = RenderPartialViewToString("OpcShippingAddress", shippingAddressModel)
+                                html = await RenderPartialViewToString("OpcShippingAddress", shippingAddressModel)
                             }
                         });
                     }
@@ -1407,7 +1408,7 @@ namespace Nop.Web.Controllers
                     _customerService.UpdateCustomer(_workContext.CurrentCustomer);
                 }
 
-                return OpcLoadStepAfterShippingAddress(cart);
+                return await OpcLoadStepAfterShippingAddress(cart);
             }
             catch (Exception exc)
             {
@@ -1416,7 +1417,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcSaveShippingMethod(string shippingoption)
+        public virtual async Task<IActionResult> OpcSaveShippingMethod(string shippingoption)
         {
             try
             {
@@ -1473,7 +1474,7 @@ namespace Nop.Web.Controllers
                 _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedShippingOptionAttribute, shippingOption, _storeContext.CurrentStore.Id);
 
                 //load next step
-                return OpcLoadStepAfterShippingMethod(cart);
+                return await OpcLoadStepAfterShippingMethod(cart);
             }
             catch (Exception exc)
             {
@@ -1482,7 +1483,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcSavePaymentMethod(string paymentmethod, CheckoutPaymentMethodModel model)
+        public virtual async Task<IActionResult> OpcSavePaymentMethod(string paymentmethod, CheckoutPaymentMethodModel model)
         {
             try
             {
@@ -1527,7 +1528,7 @@ namespace Nop.Web.Controllers
                         update_section = new UpdateSectionJsonModel
                         {
                             name = "confirm-order",
-                            html = RenderPartialViewToString("OpcConfirmOrder", confirmOrderModel)
+                            html = await RenderPartialViewToString("OpcConfirmOrder", confirmOrderModel)
                         },
                         goto_section = "confirm_order"
                     });
@@ -1542,7 +1543,7 @@ namespace Nop.Web.Controllers
                 _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer,
                     NopCustomerDefaults.SelectedPaymentMethodAttribute, paymentmethod, _storeContext.CurrentStore.Id);
 
-                return OpcLoadStepAfterPaymentMethod(paymentMethodInst, cart);
+                return await OpcLoadStepAfterPaymentMethod(paymentMethodInst, cart);
             }
             catch (Exception exc)
             {
@@ -1551,7 +1552,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcSavePaymentInfo(IFormCollection form)
+        public virtual async Task<IActionResult> OpcSavePaymentInfo(IFormCollection form)
         {
             try
             {
@@ -1594,7 +1595,7 @@ namespace Nop.Web.Controllers
                         update_section = new UpdateSectionJsonModel
                         {
                             name = "confirm-order",
-                            html = RenderPartialViewToString("OpcConfirmOrder", confirmOrderModel)
+                            html = await RenderPartialViewToString("OpcConfirmOrder", confirmOrderModel)
                         },
                         goto_section = "confirm_order"
                     });
@@ -1607,7 +1608,7 @@ namespace Nop.Web.Controllers
                     update_section = new UpdateSectionJsonModel
                     {
                         name = "payment-info",
-                        html = RenderPartialViewToString("OpcPaymentInfo", paymenInfoModel)
+                        html = await RenderPartialViewToString("OpcPaymentInfo", paymenInfoModel)
                     }
                 });
             }
@@ -1618,7 +1619,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcConfirmOrder()
+        public virtual async Task<IActionResult> OpcConfirmOrder()
         {
             try
             {
@@ -1701,7 +1702,7 @@ namespace Nop.Web.Controllers
                     update_section = new UpdateSectionJsonModel
                     {
                         name = "confirm-order",
-                        html = RenderPartialViewToString("OpcConfirmOrder", confirmOrderModel)
+                        html = await RenderPartialViewToString("OpcConfirmOrder", confirmOrderModel)
                     },
                     goto_section = "confirm_order"
                 });
@@ -1713,7 +1714,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcCompleteRedirectionPayment()
+        public virtual async Task<IActionResult> OpcCompleteRedirectionPayment()
         {
             try
             {

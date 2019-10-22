@@ -34,11 +34,11 @@
                         <div class="basic-search">
                             <div class="inputs">
                                 <label asp-for="q">@T("Search.SearchTerm"):</label>
-                                <input asp-for="q" class="search-text"/>
+                                <input asp-for="q" class="search-text" />
                             </div>
-                            @await Component.InvokeAsync("Widget", new {widgetZone = PublicWidgetZones.ProductSearchPageBasic})
+                            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ProductSearchPageBasic })
                             <div class="inputs reversed">
-                                <input asp-for="adv"/>
+                                <input asp-for="adv" />
                                 <label asp-for="adv">@T("Search.AdvancedSearch")</label>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                                     <select asp-for="cid" asp-items="Model.AvailableCategories"></select>
                                 </div>
                                 <div class="inputs reversed">
-                                    <input asp-for="isc"/>
+                                    <input asp-for="isc" />
                                     <label asp-for="isc">@T("Search.IncludeSubCategories")</label>
                                 </div>
                             }
@@ -81,12 +81,13 @@
                                 <input asp-for="sid" />
                                 <label asp-for="sid">@T("Search.SearchInDescriptions")</label>
                             </div>
-                            @await Component.InvokeAsync("Widget", new {widgetZone = PublicWidgetZones.ProductSearchPageAdvanced})
+                            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ProductSearchPageAdvanced })
                         </div>
+                        <div class="buttons">
+                            <input type="submit" class="button-1 search-button" value="@T("Search.Button")" />
+                        </div>
+
                     </div>
-                </div>
-                <div class="buttons">
-                    <input type="submit" class="button-1 search-button" value="@T("Search.Button")"/>
                 </div>
             </form>
         </div>

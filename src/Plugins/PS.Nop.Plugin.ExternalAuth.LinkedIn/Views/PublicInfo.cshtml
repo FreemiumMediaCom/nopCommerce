@@ -1,0 +1,9 @@
+﻿@{
+    Layout = "";
+    Html.AddCssFileParts("~/Plugins/PS.ExternalAuth.LinkedIn/Content/linkedinstyles.css");    
+}
+<div class="linkedin-login-block">
+    <div class="buttons">
+        <a asp-controller="pslinkedinauthentication" asp-action="login" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" class="linkedin-btn"></a>
+    </div>
+</div>

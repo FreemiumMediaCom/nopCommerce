@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Media;
@@ -38,7 +39,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult DownloadFile(Guid downloadGuid)
+        public virtual async Task<IActionResult> DownloadFile(Guid downloadGuid)
         {
             var download = _downloadService.GetDownloadByGuid(downloadGuid);
             if (download == null)
@@ -64,7 +65,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         [HttpPost]
         //do not validate request token (XSRF)
         [AdminAntiForgery(true)]
-        public virtual IActionResult SaveDownloadUrl(string downloadUrl)
+        public virtual async Task<IActionResult> SaveDownloadUrl(string downloadUrl)
         {
             //don't allow to save empty download object
             if (string.IsNullOrEmpty(downloadUrl))
@@ -92,7 +93,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         [HttpPost]
         //do not validate request token (XSRF)
         [AdminAntiForgery(true)]
-        public virtual IActionResult AsyncUpload()
+        public virtual async Task<IActionResult> AsyncUpload()
         {
             var httpPostedFile = Request.Form.Files.FirstOrDefault();
             if (httpPostedFile == null)

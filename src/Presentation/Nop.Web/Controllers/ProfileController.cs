@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Customers;
 using Nop.Services.Customers;
 using Nop.Services.Security;
@@ -28,7 +29,7 @@ namespace Nop.Web.Controllers
             _profileModelFactory = profileModelFactory;
         }
 
-        public virtual IActionResult Index(int? id, int? pageNumber)
+        public virtual async Task<IActionResult> Index(int? id, int? pageNumber)
         {
             if (!_customerSettings.AllowViewingProfiles)
             {

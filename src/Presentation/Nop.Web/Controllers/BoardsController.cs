@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
@@ -59,7 +60,7 @@ namespace Nop.Web.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public virtual async Task<IActionResult> Index()
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -68,7 +69,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ActiveDiscussions(int forumId = 0, int pageNumber = 1)
+        public virtual async Task<IActionResult> ActiveDiscussions(int forumId = 0, int pageNumber = 1)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -77,7 +78,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ActiveDiscussionsRss(int forumId = 0)
+        public virtual async Task<IActionResult> ActiveDiscussionsRss(int forumId = 0)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -115,7 +116,7 @@ namespace Nop.Web.Controllers
             return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
         }
 
-        public virtual IActionResult ForumGroup(int id)
+        public virtual async Task<IActionResult> ForumGroup(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -128,7 +129,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Forum(int id, int pageNumber = 1)
+        public virtual async Task<IActionResult> Forum(int id, int pageNumber = 1)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -141,7 +142,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ForumRss(int id)
+        public virtual async Task<IActionResult> ForumRss(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -191,7 +192,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ForumWatch(int id)
+        public virtual async Task<IActionResult> ForumWatch(int id)
         {
             var watchTopic = _localizationService.GetResource("Forum.WatchForum");
             var unwatchTopic = _localizationService.GetResource("Forum.UnwatchForum");
@@ -230,7 +231,7 @@ namespace Nop.Web.Controllers
             return Json(new { Subscribed = subscribed, Text = returnText, Error = false });
         }
 
-        public virtual IActionResult Topic(int id, int pageNumber = 1)
+        public virtual async Task<IActionResult> Topic(int id, int pageNumber = 1)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -252,7 +253,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult TopicWatch(int id)
+        public virtual async Task<IActionResult> TopicWatch(int id)
         {
             var watchTopic = _localizationService.GetResource("Forum.WatchTopic");
             var unwatchTopic = _localizationService.GetResource("Forum.UnwatchTopic");
@@ -291,7 +292,7 @@ namespace Nop.Web.Controllers
             return Json(new { Subscribed = subscribed, Text = returnText, Error = false });
         }
 
-        public virtual IActionResult TopicMove(int id)
+        public virtual async Task<IActionResult> TopicMove(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -306,7 +307,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult TopicMove(TopicMoveModel model)
+        public virtual async Task<IActionResult> TopicMove(TopicMoveModel model)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -327,7 +328,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult TopicDelete(int id)
+        public virtual async Task<IActionResult> TopicDelete(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return Json(new
@@ -358,7 +359,7 @@ namespace Nop.Web.Controllers
             });
         }
 
-        public virtual IActionResult TopicCreate(int id)
+        public virtual async Task<IActionResult> TopicCreate(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -378,7 +379,7 @@ namespace Nop.Web.Controllers
         [HttpPost]
         [PublicAntiForgery]
         [ValidateCaptcha]
-        public virtual IActionResult TopicCreate(EditForumTopicModel model, bool captchaValid)
+        public virtual async Task<IActionResult> TopicCreate(EditForumTopicModel model, bool captchaValid)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -483,7 +484,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult TopicEdit(int id)
+        public virtual async Task<IActionResult> TopicEdit(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -503,7 +504,7 @@ namespace Nop.Web.Controllers
         [HttpPost]
         [PublicAntiForgery]
         [ValidateCaptcha]
-        public virtual IActionResult TopicEdit(EditForumTopicModel model, bool captchaValid)
+        public virtual async Task<IActionResult> TopicEdit(EditForumTopicModel model, bool captchaValid)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -623,7 +624,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult PostDelete(int id)
+        public virtual async Task<IActionResult> PostDelete(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return Json(new
@@ -664,7 +665,7 @@ namespace Nop.Web.Controllers
             });
         }
 
-        public virtual IActionResult PostCreate(int id, int? quote)
+        public virtual async Task<IActionResult> PostCreate(int id, int? quote)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -683,7 +684,7 @@ namespace Nop.Web.Controllers
         [HttpPost]
         [PublicAntiForgery]
         [ValidateCaptcha]
-        public virtual IActionResult PostCreate(EditForumPostModel model, bool captchaValid)
+        public virtual async Task<IActionResult> PostCreate(EditForumPostModel model, bool captchaValid)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -776,7 +777,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult PostEdit(int id)
+        public virtual async Task<IActionResult> PostEdit(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -795,7 +796,7 @@ namespace Nop.Web.Controllers
         [HttpPost]
         [PublicAntiForgery]
         [ValidateCaptcha]
-        public virtual IActionResult PostEdit(EditForumPostModel model, bool captchaValid)
+        public virtual async Task<IActionResult> PostEdit(EditForumPostModel model, bool captchaValid)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -891,17 +892,17 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Search(string searchterms, bool? adv, string forumId,
-            string within, string limitDays, int pageNumber = 1)
+        public virtual async Task<IActionResult> Search(string searchterms, bool? adv, string forumId,
+            string within, string limitDays, int page = 1)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
 
-            var model = _forumModelFactory.PrepareSearchModel(searchterms, adv, forumId, within, limitDays, pageNumber);
+            var model = _forumModelFactory.PrepareSearchModel(searchterms, adv, forumId, within, limitDays, page);
             return View(model);
         }
 
-        public virtual IActionResult CustomerForumSubscriptions(int? pageNumber)
+        public virtual async Task<IActionResult> CustomerForumSubscriptions(int? pageNumber)
         {
             if (!_forumSettings.AllowCustomersToManageSubscriptions)
                 return RedirectToRoute("CustomerInfo");
@@ -911,7 +912,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost, ActionName("CustomerForumSubscriptions")]
-        public virtual IActionResult CustomerForumSubscriptionsPOST(IFormCollection formCollection)
+        public virtual async Task<IActionResult> CustomerForumSubscriptionsPOST(IFormCollection formCollection)
         {
             foreach (var key in formCollection.Keys)
             {
@@ -935,7 +936,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PostVote(int postId, bool isUp)
+        public virtual async Task<IActionResult> PostVote(int postId, bool isUp)
         {
             if (!_forumSettings.AllowPostVoting)
                 return new NullJsonResult();

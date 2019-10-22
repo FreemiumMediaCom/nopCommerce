@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Directory;
@@ -76,12 +77,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public virtual async Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public virtual async Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageGiftCards))
                 return AccessDeniedView();
@@ -93,7 +94,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult GiftCardList(GiftCardSearchModel searchModel)
+        public virtual async Task<IActionResult> GiftCardList(GiftCardSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageGiftCards))
                 return AccessDeniedDataTablesJson();
@@ -104,7 +105,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public virtual async Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageGiftCards))
                 return AccessDeniedView();
@@ -116,7 +117,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(GiftCardModel model, bool continueEditing)
+        public virtual async Task<IActionResult> Create(GiftCardModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageGiftCards))
                 return AccessDeniedView();
@@ -143,7 +144,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public virtual async Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageGiftCards))
                 return AccessDeniedView();
@@ -161,7 +162,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(GiftCardModel model, bool continueEditing)
+        public virtual async Task<IActionResult> Edit(GiftCardModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageGiftCards))
                 return AccessDeniedView();
@@ -203,14 +204,14 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult GenerateCouponCode()
+        public virtual async Task<IActionResult> GenerateCouponCode()
         {
             return Json(new { CouponCode = _giftCardService.GenerateGiftCardCode() });
         }
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("notifyRecipient")]
-        public virtual IActionResult NotifyRecipient(GiftCardModel model)
+        public virtual async Task<IActionResult> NotifyRecipient(GiftCardModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageGiftCards))
                 return AccessDeniedView();
@@ -263,7 +264,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public virtual async Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageGiftCards))
                 return AccessDeniedView();
@@ -285,7 +286,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult UsageHistoryList(GiftCardUsageHistorySearchModel searchModel)
+        public virtual async Task<IActionResult> UsageHistoryList(GiftCardUsageHistorySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageGiftCards))
                 return AccessDeniedDataTablesJson();

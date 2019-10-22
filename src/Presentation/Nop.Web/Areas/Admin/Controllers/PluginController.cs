@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
@@ -109,7 +110,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult List()
+        public virtual async Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
@@ -120,7 +121,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ListSelect(PluginSearchModel searchModel)
+        public virtual async Task<IActionResult> ListSelect(PluginSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedDataTablesJson();
@@ -131,7 +132,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult AdminNavigationPlugins()
+        public virtual async Task<IActionResult> AdminNavigationPlugins()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return Json(new List<string>());
@@ -150,7 +151,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult UploadPluginsAndThemes(IFormFile archivefile)
+        public virtual async Task<IActionResult> UploadPluginsAndThemes(IFormFile archivefile)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
@@ -203,7 +204,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired(FormValueRequirement.StartsWith, "install-plugin-link-")]
-        public virtual IActionResult Install(IFormCollection form)
+        public virtual async Task<IActionResult> Install(IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
@@ -239,7 +240,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired(FormValueRequirement.StartsWith, "uninstall-plugin-link-")]
-        public virtual IActionResult Uninstall(IFormCollection form)
+        public virtual async Task<IActionResult> Uninstall(IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
@@ -275,7 +276,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired(FormValueRequirement.StartsWith, "delete-plugin-link-")]
-        public virtual IActionResult Delete(IFormCollection form)
+        public virtual async Task<IActionResult> Delete(IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
@@ -308,7 +309,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("plugin-reload-grid")]
-        public virtual IActionResult ReloadList()
+        public virtual async Task<IActionResult> ReloadList()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
@@ -324,14 +325,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("plugin-apply-changes")]
-        public virtual IActionResult ApplyChanges()
+        public virtual async Task<IActionResult> ApplyChanges()
         {
-            return ReloadList();
+            return await ReloadList();
         }
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("plugin-discard-changes")]
-        public virtual IActionResult DiscardChanges()
+        public virtual async Task<IActionResult> DiscardChanges()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
@@ -341,7 +342,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult EditPopup(string systemName)
+        public virtual async Task<IActionResult> EditPopup(string systemName)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
@@ -358,7 +359,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult EditPopup(PluginModel model)
+        public virtual async Task<IActionResult> EditPopup(PluginModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
@@ -521,7 +522,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult OfficialFeed()
+        public virtual async Task<IActionResult> OfficialFeed()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedView();
@@ -533,7 +534,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult OfficialFeedSelect(OfficialFeedPluginSearchModel searchModel)
+        public virtual async Task<IActionResult> OfficialFeedSelect(OfficialFeedPluginSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
                 return AccessDeniedDataTablesJson();

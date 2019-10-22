@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.News;
 using Nop.Services.Events;
@@ -95,12 +96,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region News items
 
-        public virtual IActionResult Index()
+        public virtual async Task<IActionResult> Index()
         {
             return RedirectToAction("NewsItems");
         }
 
-        public virtual IActionResult NewsItems(int? filterByNewsItemId)
+        public virtual async Task<IActionResult> NewsItems(int? filterByNewsItemId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
@@ -112,7 +113,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(NewsItemSearchModel searchModel)
+        public virtual async Task<IActionResult> List(NewsItemSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedDataTablesJson();
@@ -123,7 +124,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult NewsItemCreate()
+        public virtual async Task<IActionResult> NewsItemCreate()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
@@ -135,7 +136,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult NewsItemCreate(NewsItemModel model, bool continueEditing)
+        public virtual async Task<IActionResult> NewsItemCreate(NewsItemModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
@@ -172,7 +173,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult NewsItemEdit(int id)
+        public virtual async Task<IActionResult> NewsItemEdit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
@@ -189,7 +190,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult NewsItemEdit(NewsItemModel model, bool continueEditing)
+        public virtual async Task<IActionResult> NewsItemEdit(NewsItemModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
@@ -231,7 +232,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public virtual async Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
@@ -256,7 +257,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Comments
 
-        public virtual IActionResult NewsComments(int? filterByNewsItemId)
+        public virtual async Task<IActionResult> NewsComments(int? filterByNewsItemId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
@@ -273,7 +274,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Comments(NewsCommentSearchModel searchModel)
+        public virtual async Task<IActionResult> Comments(NewsCommentSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedDataTablesJson();
@@ -285,7 +286,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CommentUpdate(NewsCommentModel model)
+        public virtual async Task<IActionResult> CommentUpdate(NewsCommentModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
@@ -312,7 +313,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CommentDelete(int id)
+        public virtual async Task<IActionResult> CommentDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
@@ -331,7 +332,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteSelectedComments(ICollection<int> selectedIds)
+        public virtual async Task<IActionResult> DeleteSelectedComments(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
@@ -354,7 +355,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ApproveSelected(ICollection<int> selectedIds)
+        public virtual async Task<IActionResult> ApproveSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
@@ -382,7 +383,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DisapproveSelected(ICollection<int> selectedIds)
+        public virtual async Task<IActionResult> DisapproveSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();

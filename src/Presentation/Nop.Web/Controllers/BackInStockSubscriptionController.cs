@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
@@ -53,7 +54,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         // Product details page > back in stock subscribe
-        public virtual IActionResult SubscribePopup(int productId)
+        public virtual async Task<IActionResult> SubscribePopup(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null || product.Deleted)
@@ -84,7 +85,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult SubscribePopupPOST(int productId)
+        public virtual async Task<IActionResult> SubscribePopupPOST(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null || product.Deleted)
@@ -144,7 +145,7 @@ namespace Nop.Web.Controllers
         }
 
         // My account / Back in stock subscriptions
-        public virtual IActionResult CustomerSubscriptions(int? pageNumber)
+        public virtual async Task<IActionResult> CustomerSubscriptions(int? pageNumber)
         {
             if (_customerSettings.HideBackInStockSubscriptionsTab)
             {
@@ -196,7 +197,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost, ActionName("CustomerSubscriptions")]
-        public virtual IActionResult CustomerSubscriptionsPOST(IFormCollection formCollection)
+        public virtual async Task<IActionResult> CustomerSubscriptionsPOST(IFormCollection formCollection)
         {
             foreach (var key in formCollection.Keys)
             {

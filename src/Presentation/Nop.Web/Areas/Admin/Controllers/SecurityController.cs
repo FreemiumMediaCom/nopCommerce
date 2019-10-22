@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -54,7 +55,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult AccessDenied(string pageUrl)
+        public virtual async Task<IActionResult> AccessDenied(string pageUrl)
         {
             var currentCustomer = _workContext.CurrentCustomer;
             if (currentCustomer == null || currentCustomer.IsGuest())
@@ -68,7 +69,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public virtual IActionResult Permissions()
+        public virtual async Task<IActionResult> Permissions()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
@@ -80,7 +81,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ActionName("Permissions")]
-        public virtual IActionResult PermissionsSave(PermissionMappingModel model, IFormCollection form)
+        public virtual async Task<IActionResult> PermissionsSave(PermissionMappingModel model, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();

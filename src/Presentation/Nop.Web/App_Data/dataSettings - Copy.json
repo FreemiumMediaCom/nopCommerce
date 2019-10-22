@@ -1,0 +1,6 @@
+﻿{
+  "BeanDaddy": "Data Source=SQL7005.site4now.net;Initial Catalog=DB_A4B19D_FMBeanDaddy;Integrated Security=False;Persist Security Info=False;User ID=DB_A4B19D_FMBeanDaddy_admin;Password=hosting2019!",
+  "FreemiumMedia": "Data Source=SQL7005.site4now.net;Initial Catalog=DB_A4B19D_FMFreemiumMedia;Integrated Security=False;Persist Security Info=False;User ID=DB_A4B19D_FMFreemiumMedia_admin;Password=hosting2019!",
+  "BeanMommy": "Data Source=SQL7005.site4now.net;Initial Catalog=DB_A4B19D_FMBeanMommy;Integrated Security=False;Persist Security Info=False;User ID=DB_A4B19D_FMBeanMommy_admin;Password=hosting2019!",
+  "RepairFaster": "Data Source=SQL7005.site4now.net;Initial Catalog=DB_A4B19D_FMRepair;Integrated Security=False;Persist Security Info=False;User ID=DB_A4B19D_FMRepair_admin;Password=hosting2019!",
+}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -369,7 +370,7 @@ namespace Nop.Web.Controllers
         [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult Login(bool? checkoutAsGuest)
+        public virtual async Task<IActionResult> Login(bool? checkoutAsGuest)
         {
             var model = _customerModelFactory.PrepareLoginModel(checkoutAsGuest);
             return View(model);
@@ -382,7 +383,7 @@ namespace Nop.Web.Controllers
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
         [PublicAntiForgery]
-        public virtual IActionResult Login(LoginModel model, string returnUrl, bool captchaValid)
+        public virtual async Task<IActionResult> Login(LoginModel model, string returnUrl, bool captchaValid)
         {
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnLoginPage && !captchaValid)
@@ -454,7 +455,7 @@ namespace Nop.Web.Controllers
         [CheckAccessClosedStore(true)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult Logout()
+        public virtual async Task<IActionResult> Logout()
         {
             if (_workContext.OriginalCustomerIfImpersonated != null)
             {
@@ -509,7 +510,7 @@ namespace Nop.Web.Controllers
         [HttpsRequirement(SslRequirement.Yes)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult PasswordRecovery()
+        public virtual async Task<IActionResult> PasswordRecovery()
         {
             var model = _customerModelFactory.PreparePasswordRecoveryModel();
             return View(model);
@@ -521,7 +522,7 @@ namespace Nop.Web.Controllers
         [FormValueRequired("send-email")]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult PasswordRecoverySend(PasswordRecoveryModel model, bool captchaValid)
+        public virtual async Task<IActionResult> PasswordRecoverySend(PasswordRecoveryModel model, bool captchaValid)
         {
             // validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnForgotPasswordPage && !captchaValid)
@@ -563,7 +564,7 @@ namespace Nop.Web.Controllers
         [HttpsRequirement(SslRequirement.Yes)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult PasswordRecoveryConfirm(string token, string email, Guid guid)
+        public virtual async Task<IActionResult> PasswordRecoveryConfirm(string token, string email, Guid guid)
         {
             //For backward compatibility with previous versions where email was used as a parameter in the URL
             var customer = _customerService.GetCustomerByEmail(email);
@@ -606,7 +607,7 @@ namespace Nop.Web.Controllers
         [FormValueRequired("set-password")]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult PasswordRecoveryConfirmPOST(string token, string email, Guid guid, PasswordRecoveryConfirmModel model)
+        public virtual async Task<IActionResult> PasswordRecoveryConfirmPOST(string token, string email, Guid guid, PasswordRecoveryConfirmModel model)
         {
             //For backward compatibility with previous versions where email was used as a parameter in the URL
             var customer = _customerService.GetCustomerByEmail(email);
@@ -662,7 +663,7 @@ namespace Nop.Web.Controllers
         [HttpsRequirement(SslRequirement.Yes)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult Register()
+        public virtual async Task<IActionResult> Register()
         {
             //check whether registration is allowed
             if (_customerSettings.UserRegistrationType == UserRegistrationType.Disabled)
@@ -680,7 +681,7 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult Register(RegisterModel model, string returnUrl, bool captchaValid, IFormCollection form)
+        public virtual async Task<IActionResult> Register(RegisterModel model, string returnUrl, bool captchaValid, IFormCollection form)
         {
             //check whether registration is allowed
             if (_customerSettings.UserRegistrationType == UserRegistrationType.Disabled)
@@ -955,7 +956,7 @@ namespace Nop.Web.Controllers
 
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult RegisterResult(int resultId)
+        public virtual async Task<IActionResult> RegisterResult(int resultId)
         {
             var model = _customerModelFactory.PrepareRegisterResultModel(resultId);
             return View(model);
@@ -964,7 +965,7 @@ namespace Nop.Web.Controllers
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
         [HttpPost]
-        public virtual IActionResult RegisterResult(string returnUrl)
+        public virtual async Task<IActionResult> RegisterResult(string returnUrl)
         {
             if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
                 return RedirectToRoute("Homepage");
@@ -976,7 +977,7 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult CheckUsernameAvailability(string username)
+        public virtual async Task<IActionResult> CheckUsernameAvailability(string username)
         {
             var usernameAvailable = false;
             var statusText = _localizationService.GetResource("Account.CheckUsernameAvailability.NotAvailable");
@@ -1010,7 +1011,7 @@ namespace Nop.Web.Controllers
         [HttpsRequirement(SslRequirement.Yes)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult AccountActivation(string token, string email, Guid guid)
+        public virtual async Task<IActionResult> AccountActivation(string token, string email, Guid guid)
         {
             //For backward compatibility with previous versions where email was used as a parameter in the URL
             var customer = _customerService.GetCustomerByEmail(email);
@@ -1050,7 +1051,7 @@ namespace Nop.Web.Controllers
         #region My account / Info
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult Info()
+        public virtual async Task<IActionResult> Info()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1063,7 +1064,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult Info(CustomerInfoModel model, IFormCollection form)
+        public virtual async Task<IActionResult> Info(CustomerInfoModel model, IFormCollection form)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1234,7 +1235,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult RemoveExternalAssociation(int id)
+        public virtual async Task<IActionResult> RemoveExternalAssociation(int id)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1261,7 +1262,7 @@ namespace Nop.Web.Controllers
         [HttpsRequirement(SslRequirement.Yes)]
         //available even when navigation is not allowed
         [CheckAccessPublicStore(true)]
-        public virtual IActionResult EmailRevalidation(string token, string email, Guid guid)
+        public virtual async Task<IActionResult> EmailRevalidation(string token, string email, Guid guid)
         {
             //For backward compatibility with previous versions where email was used as a parameter in the URL
             var customer = _customerService.GetCustomerByEmail(email);
@@ -1321,7 +1322,7 @@ namespace Nop.Web.Controllers
         #region My account / Addresses
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult Addresses()
+        public virtual async Task<IActionResult> Addresses()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1333,7 +1334,7 @@ namespace Nop.Web.Controllers
         [HttpPost]
         [PublicAntiForgery]
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult AddressDelete(int addressId)
+        public virtual async Task<IActionResult> AddressDelete(int addressId)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1358,7 +1359,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult AddressAdd()
+        public virtual async Task<IActionResult> AddressAdd()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1375,7 +1376,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult AddressAdd(CustomerAddressEditModel model, IFormCollection form)
+        public virtual async Task<IActionResult> AddressAdd(CustomerAddressEditModel model, IFormCollection form)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1419,7 +1420,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult AddressEdit(int addressId)
+        public virtual async Task<IActionResult> AddressEdit(int addressId)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1443,7 +1444,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult AddressEdit(CustomerAddressEditModel model, int addressId, IFormCollection form)
+        public virtual async Task<IActionResult> AddressEdit(CustomerAddressEditModel model, int addressId, IFormCollection form)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1487,7 +1488,7 @@ namespace Nop.Web.Controllers
         #region My account / Downloadable products
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult DownloadableProducts()
+        public virtual async Task<IActionResult> DownloadableProducts()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1499,7 +1500,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult UserAgreement(Guid orderItemId)
+        public virtual async Task<IActionResult> UserAgreement(Guid orderItemId)
         {
             var orderItem = _orderService.GetOrderItemByGuid(orderItemId);
             if (orderItem == null)
@@ -1518,7 +1519,7 @@ namespace Nop.Web.Controllers
         #region My account / Change password
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult ChangePassword()
+        public virtual async Task<IActionResult> ChangePassword()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1534,7 +1535,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult ChangePassword(ChangePasswordModel model)
+        public virtual async Task<IActionResult> ChangePassword(ChangePasswordModel model)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1566,7 +1567,7 @@ namespace Nop.Web.Controllers
         #region My account / Avatar
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult Avatar()
+        public virtual async Task<IActionResult> Avatar()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1582,7 +1583,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("Avatar")]
         [PublicAntiForgery]
         [FormValueRequired("upload-avatar")]
-        public virtual IActionResult UploadAvatar(CustomerAvatarModel model, IFormFile uploadedFile)
+        public virtual async Task<IActionResult> UploadAvatar(CustomerAvatarModel model, IFormFile uploadedFile)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1636,7 +1637,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("Avatar")]
         [PublicAntiForgery]
         [FormValueRequired("remove-avatar")]
-        public virtual IActionResult RemoveAvatar(CustomerAvatarModel model)
+        public virtual async Task<IActionResult> RemoveAvatar(CustomerAvatarModel model)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1659,7 +1660,7 @@ namespace Nop.Web.Controllers
         #region GDPR tools
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult GdprTools()
+        public virtual async Task<IActionResult> GdprTools()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1674,7 +1675,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("GdprTools")]
         [PublicAntiForgery]
         [FormValueRequired("export-data")]
-        public virtual IActionResult GdprToolsExport()
+        public virtual async Task<IActionResult> GdprToolsExport()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1694,7 +1695,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("GdprTools")]
         [PublicAntiForgery]
         [FormValueRequired("delete-account")]
-        public virtual IActionResult GdprToolsDelete()
+        public virtual async Task<IActionResult> GdprToolsDelete()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -1718,7 +1719,7 @@ namespace Nop.Web.Controllers
         [HttpsRequirement(SslRequirement.Yes)]
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
-        public virtual IActionResult CheckGiftCardBalance()
+        public virtual async Task<IActionResult> CheckGiftCardBalance()
         {
             if (!(_captchaSettings.Enabled && _customerSettings.AllowCustomersToCheckGiftCardBalance))
             {
@@ -1732,7 +1733,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("CheckGiftCardBalance")]
         [FormValueRequired("checkbalancegiftcard")]
         [ValidateCaptcha]
-        public virtual IActionResult CheckBalance(CheckGiftCardBalanceModel model, bool captchaValid)
+        public virtual async Task<IActionResult> CheckBalance(CheckGiftCardBalanceModel model, bool captchaValid)
         {
             //validate CAPTCHA
             if (_captchaSettings.Enabled && !captchaValid)

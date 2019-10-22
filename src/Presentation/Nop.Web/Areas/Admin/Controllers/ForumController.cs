@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Forums;
 using Nop.Services.Forums;
@@ -45,12 +46,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region List
 
-        public virtual IActionResult Index()
+        public virtual async Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public virtual async Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedView();
@@ -62,7 +63,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ForumGroupList(ForumGroupSearchModel searchModel)
+        public virtual async Task<IActionResult> ForumGroupList(ForumGroupSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedDataTablesJson();
@@ -74,7 +75,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ForumList(ForumSearchModel searchModel)
+        public virtual async Task<IActionResult> ForumList(ForumSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedDataTablesJson();
@@ -93,7 +94,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Create
 
-        public virtual IActionResult CreateForumGroup()
+        public virtual async Task<IActionResult> CreateForumGroup()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedView();
@@ -105,7 +106,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult CreateForumGroup(ForumGroupModel model, bool continueEditing)
+        public virtual async Task<IActionResult> CreateForumGroup(ForumGroupModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedView();
@@ -129,7 +130,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult CreateForum()
+        public virtual async Task<IActionResult> CreateForum()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedView();
@@ -141,7 +142,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult CreateForum(ForumModel model, bool continueEditing)
+        public virtual async Task<IActionResult> CreateForum(ForumModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedView();
@@ -169,7 +170,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Edit
 
-        public virtual IActionResult EditForumGroup(int id)
+        public virtual async Task<IActionResult> EditForumGroup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedView();
@@ -186,7 +187,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult EditForumGroup(ForumGroupModel model, bool continueEditing)
+        public virtual async Task<IActionResult> EditForumGroup(ForumGroupModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedView();
@@ -214,7 +215,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult EditForum(int id)
+        public virtual async Task<IActionResult> EditForum(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedView();
@@ -231,7 +232,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult EditForum(ForumModel model, bool continueEditing)
+        public virtual async Task<IActionResult> EditForum(ForumModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedView();
@@ -264,7 +265,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Delete
 
         [HttpPost]
-        public virtual IActionResult DeleteForumGroup(int id)
+        public virtual async Task<IActionResult> DeleteForumGroup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedView();
@@ -282,7 +283,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteForum(int id)
+        public virtual async Task<IActionResult> DeleteForum(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageForums))
                 return AccessDeniedView();

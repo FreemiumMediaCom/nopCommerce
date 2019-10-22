@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Factories;
 using Nop.Web.Framework.Components;
@@ -14,7 +15,7 @@ namespace Nop.Web.Components
             _forumModelFactory = forumModelFactory;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             var model = _forumModelFactory.PrepareActiveDiscussionsModel();
             if (!model.ForumTopics.Any())

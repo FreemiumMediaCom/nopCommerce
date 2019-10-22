@@ -38,7 +38,7 @@
                         <div class="basic-search">
                             <div class="inputs">
                                 <label>@T("Forum.Search.SearchKeyword")</label>
-                                <input type="text" name="searchterms" id="searchterms" class="forum-search-text" value="@Model.SearchTerms"/>
+                                <input type="text" name="searchterms" id="searchterms" class="forum-search-text" value="@Model.SearchTerms" />
                             </div>
                             <div class="inputs reversed">
                                 <input @(Model.ShowAdvancedSearch ? "checked=\"checked\"" : "") id="adv" name="adv" type="checkbox" value="true">
@@ -59,10 +59,11 @@
                                 <select name="limitDays" id="limitDays" asp-items="@(new SelectList(Model.LimitList, "Value", "Text", Model.LimitDaysSelected))"></select>
                             </div>
                         </div>
+                        <div class="buttons">
+                            <input type="submit" class="button-1 forum-search-button" value="@T("Forum.SearchButton")" />
+                        </div>
+
                     </div>
-                </div>
-                <div class="buttons">
-                    <input type="submit" class="button-1 forum-search-button" value="@T("Forum.SearchButton")" />
                 </div>
             </form>
         </div>

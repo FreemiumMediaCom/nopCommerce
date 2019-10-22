@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.News;
 using Nop.Web.Framework.Components;
 
@@ -13,7 +14,7 @@ namespace Nop.Web.Components
             _newsSettings = newsSettings;
         }
 
-        public IViewComponentResult Invoke(int currentCategoryId, int currentProductId)
+        public async Task<IViewComponentResult> InvokeAsync(int currentCategoryId, int currentProductId)
         {
             if (!_newsSettings.Enabled || !_newsSettings.ShowHeaderRssUrl)
                 return Content("");

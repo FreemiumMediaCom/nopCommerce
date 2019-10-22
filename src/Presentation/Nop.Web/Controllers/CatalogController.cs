@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -94,11 +95,11 @@ namespace Nop.Web.Controllers
         #region Categories
         
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult Category(int categoryId, CatalogPagingFilteringModel command)
+        public virtual async Task<IActionResult> Category(int categoryId, CatalogPagingFilteringModel command)
         {
             var category = _categoryService.GetCategoryById(categoryId);
             if (category == null || category.Deleted)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             var notAvailable =
                 //published?
@@ -111,7 +112,7 @@ namespace Nop.Web.Controllers
             //We should allows him (her) to use "Preview" functionality
             var hasAdminAccess = _permissionService.Authorize(StandardPermissionProvider.AccessAdminPanel) && _permissionService.Authorize(StandardPermissionProvider.ManageCategories);
             if (notAvailable && !hasAdminAccess)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             //'Continue shopping' URL
             _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, 
@@ -136,7 +137,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult GetCatalogRoot()
+        public virtual async Task<IActionResult> GetCatalogRoot()
         {
             var model = _catalogModelFactory.PrepareRootCategories();
 
@@ -144,7 +145,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult GetCatalogSubCategories(int id)
+        public virtual async Task<IActionResult> GetCatalogSubCategories(int id)
         {
             var model = _catalogModelFactory.PrepareSubCategories(id);
 
@@ -156,11 +157,11 @@ namespace Nop.Web.Controllers
         #region Manufacturers
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult Manufacturer(int manufacturerId, CatalogPagingFilteringModel command)
+        public virtual async Task<IActionResult> Manufacturer(int manufacturerId, CatalogPagingFilteringModel command)
         {
             var manufacturer = _manufacturerService.GetManufacturerById(manufacturerId);
             if (manufacturer == null || manufacturer.Deleted)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             var notAvailable =
                 //published?
@@ -173,7 +174,7 @@ namespace Nop.Web.Controllers
             //We should allows him (her) to use "Preview" functionality
             var hasAdminAccess = _permissionService.Authorize(StandardPermissionProvider.AccessAdminPanel) && _permissionService.Authorize(StandardPermissionProvider.ManageManufacturers);
             if (notAvailable && !hasAdminAccess)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             //'Continue shopping' URL
             _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, 
@@ -198,7 +199,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult ManufacturerAll()
+        public virtual async Task<IActionResult> ManufacturerAll()
         {
             var model = _catalogModelFactory.PrepareManufacturerAllModels();
             return View(model);
@@ -209,11 +210,11 @@ namespace Nop.Web.Controllers
         #region Vendors
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult Vendor(int vendorId, CatalogPagingFilteringModel command)
+        public virtual async Task<IActionResult> Vendor(int vendorId, CatalogPagingFilteringModel command)
         {
             var vendor = _vendorService.GetVendorById(vendorId);
             if (vendor == null || vendor.Deleted || !vendor.Active)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             //'Continue shopping' URL
             _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer,
@@ -232,7 +233,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult VendorAll()
+        public virtual async Task<IActionResult> VendorAll()
         {
             //we don't allow viewing of vendors if "vendors" block is hidden
             if (_vendorSettings.VendorsBlockItemsToDisplay == 0)
@@ -247,18 +248,18 @@ namespace Nop.Web.Controllers
         #region Product tags
         
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult ProductsByTag(int productTagId, CatalogPagingFilteringModel command)
+        public virtual async Task<IActionResult> ProductsByTag(int productTagId, CatalogPagingFilteringModel command)
         {
             var productTag = _productTagService.GetProductTagById(productTagId);
             if (productTag == null)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             var model = _catalogModelFactory.PrepareProductsByTagModel(productTag, command);
             return View(model);
         }
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult ProductTagsAll()
+        public virtual async Task<IActionResult> ProductTagsAll()
         {
             var model = _catalogModelFactory.PrepareProductTagsAllModel();
             return View(model);
@@ -269,7 +270,7 @@ namespace Nop.Web.Controllers
         #region Searching
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult Search(SearchModel model, CatalogPagingFilteringModel command)
+        public virtual async Task<IActionResult> Search(SearchModel model, CatalogPagingFilteringModel command)
         {
             //'Continue shopping' URL
             _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer,
@@ -284,7 +285,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult SearchTermAutoComplete(string term)
+        public virtual async Task<IActionResult> SearchTermAutoComplete(string term)
         {
             if (string.IsNullOrWhiteSpace(term) || term.Length < _catalogSettings.ProductSearchTermMinimumLength)
                 return Content("");
