@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
@@ -89,12 +88,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Discounts
 
-        public virtual async Task<IActionResult> Index()
+        public virtual IActionResult Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual async Task<IActionResult> List()
+        public virtual IActionResult List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -110,7 +109,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> List(DiscountSearchModel searchModel)
+        public virtual IActionResult List(DiscountSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedDataTablesJson();
@@ -121,7 +120,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual async Task<IActionResult> Create()
+        public virtual IActionResult Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -133,7 +132,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual async Task<IActionResult> Create(DiscountModel model, bool continueEditing)
+        public virtual IActionResult Create(DiscountModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -162,7 +161,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual async Task<IActionResult> Edit(int id)
+        public virtual IActionResult Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -179,7 +178,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual async Task<IActionResult> Edit(DiscountModel model, bool continueEditing)
+        public virtual IActionResult Edit(DiscountModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -243,7 +242,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> Delete(int id)
+        public virtual IActionResult Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -275,7 +274,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Discount requirements
 
-        public virtual async Task<IActionResult> GetDiscountRequirementConfigurationUrl(string systemName, int discountId, int? discountRequirementId)
+        public virtual IActionResult GetDiscountRequirementConfigurationUrl(string systemName, int discountId, int? discountRequirementId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -294,7 +293,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(new { url });
         }
 
-        public virtual async Task<IActionResult> GetDiscountRequirements(int discountId, int discountRequirementId,
+        public virtual IActionResult GetDiscountRequirements(int discountId, int discountRequirementId,
             int? parentId, int? interactionTypeId, bool deleteRequirement)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
@@ -377,7 +376,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(new { Requirements = requirements, AvailableGroups = availableRequirementGroups });
         }
 
-        public virtual async Task<IActionResult> AddNewGroup(int discountId, string name)
+        public virtual IActionResult AddNewGroup(int discountId, string name)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -425,7 +424,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Applied to products
 
         [HttpPost]
-        public virtual async Task<IActionResult> ProductList(DiscountProductSearchModel searchModel)
+        public virtual IActionResult ProductList(DiscountProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedDataTablesJson();
@@ -440,7 +439,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual async Task<IActionResult> ProductDelete(int discountId, int productId)
+        public virtual IActionResult ProductDelete(int discountId, int productId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -463,7 +462,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual async Task<IActionResult> ProductAddPopup(int discountId)
+        public virtual IActionResult ProductAddPopup(int discountId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -475,7 +474,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ProductAddPopupList(AddProductToDiscountSearchModel searchModel)
+        public virtual IActionResult ProductAddPopupList(AddProductToDiscountSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedDataTablesJson();
@@ -488,7 +487,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual async Task<IActionResult> ProductAddPopup(AddProductToDiscountModel model)
+        public virtual IActionResult ProductAddPopup(AddProductToDiscountModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -520,7 +519,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Applied to categories
 
         [HttpPost]
-        public virtual async Task<IActionResult> CategoryList(DiscountCategorySearchModel searchModel)
+        public virtual IActionResult CategoryList(DiscountCategorySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedDataTablesJson();
@@ -535,7 +534,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual async Task<IActionResult> CategoryDelete(int discountId, int categoryId)
+        public virtual IActionResult CategoryDelete(int discountId, int categoryId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -557,7 +556,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual async Task<IActionResult> CategoryAddPopup(int discountId)
+        public virtual IActionResult CategoryAddPopup(int discountId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -569,7 +568,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> CategoryAddPopupList(AddCategoryToDiscountSearchModel searchModel)
+        public virtual IActionResult CategoryAddPopupList(AddCategoryToDiscountSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedDataTablesJson();
@@ -582,7 +581,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual async Task<IActionResult> CategoryAddPopup(AddCategoryToDiscountModel model)
+        public virtual IActionResult CategoryAddPopup(AddCategoryToDiscountModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -613,7 +612,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Applied to manufacturers
 
         [HttpPost]
-        public virtual async Task<IActionResult> ManufacturerList(DiscountManufacturerSearchModel searchModel)
+        public virtual IActionResult ManufacturerList(DiscountManufacturerSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedDataTablesJson();
@@ -628,7 +627,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual async Task<IActionResult> ManufacturerDelete(int discountId, int manufacturerId)
+        public virtual IActionResult ManufacturerDelete(int discountId, int manufacturerId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -650,7 +649,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual async Task<IActionResult> ManufacturerAddPopup(int discountId)
+        public virtual IActionResult ManufacturerAddPopup(int discountId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -662,7 +661,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ManufacturerAddPopupList(AddManufacturerToDiscountSearchModel searchModel)
+        public virtual IActionResult ManufacturerAddPopupList(AddManufacturerToDiscountSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedDataTablesJson();
@@ -675,7 +674,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual async Task<IActionResult> ManufacturerAddPopup(AddManufacturerToDiscountModel model)
+        public virtual IActionResult ManufacturerAddPopup(AddManufacturerToDiscountModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();
@@ -706,7 +705,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Discount usage history
 
         [HttpPost]
-        public virtual async Task<IActionResult> UsageHistoryList(DiscountUsageHistorySearchModel searchModel)
+        public virtual IActionResult UsageHistoryList(DiscountUsageHistorySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedDataTablesJson();
@@ -722,7 +721,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> UsageHistoryDelete(int discountId, int id)
+        public virtual IActionResult UsageHistoryDelete(int discountId, int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return AccessDeniedView();

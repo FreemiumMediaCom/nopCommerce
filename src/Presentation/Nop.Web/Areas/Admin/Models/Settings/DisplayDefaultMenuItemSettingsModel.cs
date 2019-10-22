@@ -40,10 +40,6 @@ namespace Nop.Web.Areas.Admin.Models.Settings
         public bool DisplayContactUsMenuItem { get; set; }
         public bool DisplayContactUsMenuItem_OverrideForStore { get; set; }
 
-        [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.DisplayDefaultMenuItemSettings.DisplayMeetupsMenuItem")]
-        public bool DisplayMeetupsMenuItem { get; set; }
-        public bool DisplayMeetupsMenuItem_OverrideForStore { get; set; }
-
         #endregion
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Messages;
 using Nop.Services.Helpers;
@@ -50,12 +49,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual async Task<IActionResult> Index()
+        public virtual IActionResult Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual async Task<IActionResult> List()
+        public virtual IActionResult List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -67,7 +66,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> QueuedEmailList(QueuedEmailSearchModel searchModel)
+        public virtual IActionResult QueuedEmailList(QueuedEmailSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedDataTablesJson();
@@ -80,17 +79,17 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("go-to-email-by-number")]
-        public virtual async Task<IActionResult> GoToEmailByNumber(QueuedEmailSearchModel model)
+        public virtual IActionResult GoToEmailByNumber(QueuedEmailSearchModel model)
         {
             //try to get a queued email with the specified id
             var queuedEmail = _queuedEmailService.GetQueuedEmailById(model.GoDirectlyToNumber);
             if (queuedEmail == null)
-                return await List();
+                return List();
 
             return RedirectToAction("Edit", "QueuedEmail", new { id = queuedEmail.Id });
         }
 
-        public virtual async Task<IActionResult> Edit(int id)
+        public virtual IActionResult Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -109,7 +108,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         [HttpPost, ActionName("Edit")]
         [ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual async Task<IActionResult> Edit(QueuedEmailModel model, bool continueEditing)
+        public virtual IActionResult Edit(QueuedEmailModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -139,7 +138,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ActionName("Edit"), FormValueRequired("requeue")]
-        public virtual async Task<IActionResult> Requeue(QueuedEmailModel queuedEmailModel)
+        public virtual IActionResult Requeue(QueuedEmailModel queuedEmailModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -178,7 +177,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> Delete(int id)
+        public virtual IActionResult Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -196,7 +195,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+        public virtual IActionResult DeleteSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -209,7 +208,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("delete-all")]
-        public virtual async Task<IActionResult> DeleteAll()
+        public virtual IActionResult DeleteAll()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();

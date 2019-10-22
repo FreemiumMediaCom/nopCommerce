@@ -1,9 +1,0 @@
-﻿@{
-    Layout = "";
-    Html.AddCssFileParts("~/Plugins/FreemiumMedia.ExternalAuth.LinkedIn/Content/linkedinstyles.css");    
-}
-<div class="linkedin-login-block">
-    <div class="buttons">
-        <a asp-controller="linkedinauthentication" asp-action="login" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" class="linkedin-btn"></a>
-    </div>
-</div>

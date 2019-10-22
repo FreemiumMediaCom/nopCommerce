@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Common;
 using Nop.Services.Configuration;
@@ -49,7 +48,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual async Task<IActionResult> Index()
+        public virtual IActionResult Index()
         {
             //display a warning to a store owner if there are some error
             if (_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
@@ -72,7 +71,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> NopCommerceNewsHideAdv()
+        public virtual IActionResult NopCommerceNewsHideAdv()
         {
             _adminAreaSettings.HideAdvertisementsOnAdminArea = !_adminAreaSettings.HideAdvertisementsOnAdminArea;
             _settingService.SaveSetting(_adminAreaSettings);

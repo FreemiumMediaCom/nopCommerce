@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -39,7 +38,7 @@ namespace Nop.Web.Framework.Controllers
         /// <param name="componentName">Component name</param>
         /// <param name="arguments">Arguments</param>
         /// <returns>Result</returns>
-        protected virtual async Task<string> RenderViewComponentToString(string componentName, object arguments = null)
+        protected virtual string RenderViewComponentToString(string componentName, object arguments = null)
         {
             //original implementation: https://github.com/aspnet/Mvc/blob/dev/src/Microsoft.AspNetCore.Mvc.ViewFeatures/Internal/ViewComponentResultExecutor.cs
             //we customized it to allow running from controllers
@@ -97,9 +96,9 @@ namespace Nop.Web.Framework.Controllers
         /// Render partial view to string
         /// </summary>
         /// <returns>Result</returns>
-        protected virtual async Task<string> RenderPartialViewToString()
+        protected virtual string RenderPartialViewToString()
         {
-            return await RenderPartialViewToString(null, null);
+            return RenderPartialViewToString(null, null);
         }
 
         /// <summary>
@@ -107,9 +106,9 @@ namespace Nop.Web.Framework.Controllers
         /// </summary>
         /// <param name="viewName">View name</param>
         /// <returns>Result</returns>
-        protected virtual async Task<string> RenderPartialViewToString(string viewName)
+        protected virtual string RenderPartialViewToString(string viewName)
         {
-            return await RenderPartialViewToString(viewName, null);
+            return RenderPartialViewToString(viewName, null);
         }
 
         /// <summary>
@@ -117,9 +116,9 @@ namespace Nop.Web.Framework.Controllers
         /// </summary>
         /// <param name="model">Model</param>
         /// <returns>Result</returns>
-        protected virtual async Task<string> RenderPartialViewToString(object model)
+        protected virtual string RenderPartialViewToString(object model)
         {
-            return await RenderPartialViewToString(null, model);
+            return RenderPartialViewToString(null, model);
         }
 
         /// <summary>
@@ -128,7 +127,7 @@ namespace Nop.Web.Framework.Controllers
         /// <param name="viewName">View name</param>
         /// <param name="model">Model</param>
         /// <returns>Result</returns>
-        protected virtual async Task<string> RenderPartialViewToString(string viewName, object model)
+        protected virtual string RenderPartialViewToString(string viewName, object model)
         {
             //get Razor view engine
             var razorViewEngine = EngineContext.Current.Resolve<IRazorViewEngine>();
@@ -156,7 +155,8 @@ namespace Nop.Web.Framework.Controllers
             {
                 var viewContext = new ViewContext(actionContext, viewResult.View, ViewData, TempData, stringWriter, new HtmlHelperOptions());
 
-                await viewResult.View.RenderAsync(viewContext);
+                var t = viewResult.View.RenderAsync(viewContext);
+                t.Wait();
                 return stringWriter.GetStringBuilder().ToString();
             }
         }
@@ -211,10 +211,10 @@ namespace Nop.Web.Framework.Controllers
         /// <typeparam name="TLocalizedModelLocal">Localizable model</typeparam>
         /// <param name="languageService">Language service</param>
         /// <param name="locales">Locales</param>
-        protected virtual async Task AddLocales<TLocalizedModelLocal>(ILanguageService languageService, 
+        protected virtual void AddLocales<TLocalizedModelLocal>(ILanguageService languageService, 
             IList<TLocalizedModelLocal> locales) where TLocalizedModelLocal : ILocalizedLocaleModel
         {
-            await AddLocales(languageService, locales, null);
+            AddLocales(languageService, locales, null);
         }
 
         /// <summary>
@@ -224,10 +224,9 @@ namespace Nop.Web.Framework.Controllers
         /// <param name="languageService">Language service</param>
         /// <param name="locales">Locales</param>
         /// <param name="configure">Configure action</param>
-        protected virtual async Task AddLocales<TLocalizedModelLocal>(ILanguageService languageService, 
+        protected virtual void AddLocales<TLocalizedModelLocal>(ILanguageService languageService, 
             IList<TLocalizedModelLocal> locales, Action<TLocalizedModelLocal, int> configure) where TLocalizedModelLocal : ILocalizedLocaleModel
         {
-            //SHOULD BE ASYNC
             foreach (var language in languageService.GetAllLanguages(true))
             {
                 var locale = Activator.CreateInstance<TLocalizedModelLocal>();

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Factories;
 using Nop.Web.Framework.Components;
 
@@ -14,7 +13,7 @@ namespace Nop.Web.Components
             _pollModelFactory = pollModelFactory;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string systemKeyword)
+        public IViewComponentResult Invoke(string systemKeyword)
         {
 
             if (string.IsNullOrWhiteSpace(systemKeyword))

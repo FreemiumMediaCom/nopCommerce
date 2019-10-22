@@ -8,52 +8,11 @@
     Html.AppendPageCssClassParts("html-contact-page");
 }
 <div class="page contact-page">
-    @*<div class="page-title">
-            <h1>@T("PageTitle.ContactUs")</h1>
-        </div>*@
+    <div class="page-title">
+        <h1>@T("PageTitle.ContactUs")</h1>
+    </div>
     <div class="page-body">
-        <!-- Contact Info -->
-
-        <div class="contact_info">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-10 offset-lg-1">
-                        <div class="contact_info_container d-flex flex-lg-row flex-column justify-content-between align-items-between">
-
-                            <!-- Contact Item -->
-                            <div class="contact_info_item d-flex flex-row align-items-center justify-content-start">
-                                <div class="contact_info_image"><img src="images/contact_1.png" alt=""></div>
-                                <div class="contact_info_content">
-                                    <div class="contact_info_title">Phone</div>
-                                    <div class="contact_info_text">248.731.7682</div>
-                                </div>
-                            </div>
-
-                            <!-- Contact Item -->
-                            <div class="contact_info_item d-flex flex-row align-items-center justify-content-start">
-                                <div class="contact_info_image"><img src="images/contact_2.png" alt=""></div>
-                                <div class="contact_info_content">
-                                    <div class="contact_info_title">Email</div>
-                                    <div class="contact_info_text">service@beandaddy.com</div>
-                                </div>
-                            </div>
-
-                            <!-- Contact Item -->
-                            <div class="contact_info_item d-flex flex-row align-items-center justify-content-start">
-                                <div class="contact_info_image"><img src="images/contact_3.png" alt=""></div>
-                                <div class="contact_info_content">
-                                    <div class="contact_info_title">Address</div>
-                                    <div class="contact_info_text">1787 W Big Beaver, Troy, MI 48084</div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        @*@await Component.InvokeAsync("TopicBlock", new { systemName = "ContactUs" })*@
+        @await Component.InvokeAsync("TopicBlock", new { systemName = "ContactUs" })
         @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContactUsTop })
         @if (Model.SuccessfullySent)
         {
@@ -100,17 +59,13 @@
                                 <nop-captcha />
                             </div>
                         }
-                        <div class="buttons">
-                            <input type="submit" name="send-email" class="button-1 contact-us-button" value="@T("ContactUs.Button")" />
-                        </div>
                     </div>
+                </div>
+                <div class="buttons">
+                    <input type="submit" name="send-email" class="button-1 contact-us-button" value="@T("ContactUs.Button")" />
                 </div>
             </form>
         }
         @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContactUsBottom })
-
-        <div class="mapouter">
-            <div class="gmap_canvas"><iframe class="mapouter" id="gmap_canvas" src="//maps.google.com/maps?q=1787%20W%20Big%20Beaver%2C%20Troy%2C%20MI%20&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe></div>
-        </div>
     </div>
 </div>

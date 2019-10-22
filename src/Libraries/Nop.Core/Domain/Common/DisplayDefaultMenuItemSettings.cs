@@ -1,4 +1,4 @@
-﻿using Nop.Core.Configuration;
+using Nop.Core.Configuration;
 
 namespace Nop.Core.Domain.Common
 {
@@ -41,10 +41,5 @@ namespace Nop.Core.Domain.Common
         /// Gets or sets a value indicating whether to display "contact us" menu item
         /// </summary>
         public bool DisplayContactUsMenuItem { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to display "Meet Ups" menu item
-        /// </summary>
-        public bool DisplayMeetupsMenuItem { get; set; }
     }
 }

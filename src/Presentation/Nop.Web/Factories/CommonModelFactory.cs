@@ -250,12 +250,6 @@ namespace Nop.Web.Factories
             return model;
         }
 
-
-        public virtual ContactInformationModel PrepareContactInformationModel() {
-
-            return new ContactInformationModel();
-        }
-
         /// <summary>
         /// Prepare the language selector model
         /// </summary>
@@ -430,9 +424,6 @@ namespace Nop.Web.Factories
         /// <returns>Footer model</returns>
         public virtual FooterModel PrepareFooterModel()
         {
-            //Is the user a Vendor?
-            var isVendor = _workContext.CurrentCustomer.IsVendor();
-
             //footer topics
             var topicCacheKey = string.Format(NopModelCacheDefaults.TopicFooterModelKey,
                 _workContext.WorkingLanguage.Id,
@@ -486,7 +477,7 @@ namespace Nop.Web.Factories
                 DisplayCustomerAddressesFooterItem = _displayDefaultFooterItemSettings.DisplayCustomerAddressesFooterItem,
                 DisplayShoppingCartFooterItem = _displayDefaultFooterItemSettings.DisplayShoppingCartFooterItem,
                 DisplayWishlistFooterItem = _displayDefaultFooterItemSettings.DisplayWishlistFooterItem,
-                DisplayApplyVendorAccountFooterItem = isVendor?false : _displayDefaultFooterItemSettings.DisplayApplyVendorAccountFooterItem
+                DisplayApplyVendorAccountFooterItem = _displayDefaultFooterItemSettings.DisplayApplyVendorAccountFooterItem
             };
 
             return model;

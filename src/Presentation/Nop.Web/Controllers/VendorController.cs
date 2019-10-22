@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -180,7 +179,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual async Task<IActionResult> ApplyVendor()
+        public virtual IActionResult ApplyVendor()
         {
             if (!_vendorSettings.AllowCustomersToApplyForVendorAccount)
                 return RedirectToRoute("Homepage");
@@ -196,7 +195,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("ApplyVendor")]
         [PublicAntiForgery]
         [ValidateCaptcha]
-        public virtual async Task<IActionResult> ApplyVendorSubmit(ApplyVendorModel model, bool captchaValid, IFormFile uploadedFile, IFormCollection form)
+        public virtual IActionResult ApplyVendorSubmit(ApplyVendorModel model, bool captchaValid, IFormFile uploadedFile, IFormCollection form)
         {
             if (!_vendorSettings.AllowCustomersToApplyForVendorAccount)
                 return RedirectToRoute("Homepage");
@@ -281,7 +280,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual async Task<IActionResult> Info()
+        public virtual IActionResult Info()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -297,7 +296,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("Info")]
         [PublicAntiForgery]
         [FormValueRequired("save-info-button")]
-        public virtual async Task<IActionResult> Info(VendorInfoModel model, IFormFile uploadedFile, IFormCollection form)
+        public virtual IActionResult Info(VendorInfoModel model, IFormFile uploadedFile, IFormCollection form)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -368,7 +367,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("Info")]
         [PublicAntiForgery]
         [FormValueRequired("remove-picture")]
-        public virtual async Task<IActionResult> RemovePicture()
+        public virtual IActionResult RemovePicture()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();

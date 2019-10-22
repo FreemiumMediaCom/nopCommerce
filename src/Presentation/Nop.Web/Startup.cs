@@ -42,17 +42,8 @@ namespace Nop.Web
         /// Configure the application HTTP request pipeline
         /// </summary>
         /// <param name="application">Builder for configuring an application's request pipeline</param>
-        public void Configure(IApplicationBuilder application, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder application)
         {
-            if (env.IsDevelopment())
-            {
-                application.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                application.UseExceptionHandler("/Error");
-                application.UseHsts();
-            }
             application.ConfigureRequestPipeline();
         }
     }

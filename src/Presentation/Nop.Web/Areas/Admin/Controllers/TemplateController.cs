@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Topics;
@@ -48,7 +47,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual async Task<IActionResult> List()
+        public virtual IActionResult List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -62,7 +61,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Category templates        
 
         [HttpPost]
-        public virtual async Task<IActionResult> CategoryTemplates(CategoryTemplateSearchModel searchModel)
+        public virtual IActionResult CategoryTemplates(CategoryTemplateSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedDataTablesJson();
@@ -74,7 +73,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> CategoryTemplateUpdate(CategoryTemplateModel model)
+        public virtual IActionResult CategoryTemplateUpdate(CategoryTemplateModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -93,7 +92,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> CategoryTemplateAdd(CategoryTemplateModel model)
+        public virtual IActionResult CategoryTemplateAdd(CategoryTemplateModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -109,7 +108,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> CategoryTemplateDelete(int id)
+        public virtual IActionResult CategoryTemplateDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -128,7 +127,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Manufacturer templates        
 
         [HttpPost]
-        public virtual async Task<IActionResult> ManufacturerTemplates(ManufacturerTemplateSearchModel searchModel)
+        public virtual IActionResult ManufacturerTemplates(ManufacturerTemplateSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedDataTablesJson();
@@ -140,7 +139,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ManufacturerTemplateUpdate(ManufacturerTemplateModel model)
+        public virtual IActionResult ManufacturerTemplateUpdate(ManufacturerTemplateModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -159,7 +158,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ManufacturerTemplateAdd(ManufacturerTemplateModel model)
+        public virtual IActionResult ManufacturerTemplateAdd(ManufacturerTemplateModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -175,7 +174,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ManufacturerTemplateDelete(int id)
+        public virtual IActionResult ManufacturerTemplateDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -194,7 +193,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Product templates
                 
         [HttpPost]
-        public virtual async Task<IActionResult> ProductTemplates(ProductTemplateSearchModel searchModel)
+        public virtual IActionResult ProductTemplates(ProductTemplateSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedDataTablesJson();
@@ -206,7 +205,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ProductTemplateUpdate(ProductTemplateModel model)
+        public virtual IActionResult ProductTemplateUpdate(ProductTemplateModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -225,7 +224,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ProductTemplateAdd(ProductTemplateModel model)
+        public virtual IActionResult ProductTemplateAdd(ProductTemplateModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -241,7 +240,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ProductTemplateDelete(int id)
+        public virtual IActionResult ProductTemplateDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -260,7 +259,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Topic templates
         
         [HttpPost]
-        public virtual async Task<IActionResult> TopicTemplates(TopicTemplateSearchModel searchModel)
+        public virtual IActionResult TopicTemplates(TopicTemplateSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedDataTablesJson();
@@ -272,7 +271,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> TopicTemplateUpdate(TopicTemplateModel model)
+        public virtual IActionResult TopicTemplateUpdate(TopicTemplateModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -291,7 +290,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> TopicTemplateAdd(TopicTemplateModel model)
+        public virtual IActionResult TopicTemplateAdd(TopicTemplateModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -307,7 +306,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> TopicTemplateDelete(int id)
+        public virtual IActionResult TopicTemplateDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();

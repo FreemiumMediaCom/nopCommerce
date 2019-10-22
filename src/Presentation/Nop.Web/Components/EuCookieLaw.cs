@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain;
@@ -28,7 +27,7 @@ namespace Nop.Web.Components
             _storeInformationSettings = storeInformationSettings;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
             if (!_storeInformationSettings.DisplayEuCookieLawWarning)
                 //disabled

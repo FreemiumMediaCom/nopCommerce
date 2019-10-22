@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Nop.Web.Controllers
@@ -8,7 +7,7 @@ namespace Nop.Web.Controllers
     //they can create guest account(s), etc
     public partial class ErrorController : Controller
     {
-        public virtual async Task<IActionResult> Error()
+        public virtual IActionResult Error()
         {
             Response.StatusCode = StatusCodes.Status500InternalServerError;
             return File("errorpage.htm", "text/html");

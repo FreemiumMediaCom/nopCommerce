@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
@@ -58,7 +57,7 @@ namespace Nop.Web.Controllers
         
         #region Methods
 
-        public virtual async Task<IActionResult> Index(int? pageNumber, string tab)
+        public virtual IActionResult Index(int? pageNumber, string tab)
         {
             if (!_forumSettings.AllowPrivateMessages)
             {
@@ -76,7 +75,7 @@ namespace Nop.Web.Controllers
         
         [HttpPost, FormValueRequired("delete-inbox"), ActionName("InboxUpdate")]
         [PublicAntiForgery]
-        public virtual async Task<IActionResult> DeleteInboxPM(IFormCollection formCollection)
+        public virtual IActionResult DeleteInboxPM(IFormCollection formCollection)
         {
             foreach (var key in formCollection.Keys)
             {
@@ -104,7 +103,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, FormValueRequired("mark-unread"), ActionName("InboxUpdate")]
         [PublicAntiForgery]
-        public virtual async Task<IActionResult> MarkUnread(IFormCollection formCollection)
+        public virtual IActionResult MarkUnread(IFormCollection formCollection)
         {
             foreach (var key in formCollection.Keys)
             {
@@ -133,7 +132,7 @@ namespace Nop.Web.Controllers
         //updates sent items (deletes PrivateMessages)
         [HttpPost, FormValueRequired("delete-sent"), ActionName("SentUpdate")]
         [PublicAntiForgery]
-        public virtual async Task<IActionResult> DeleteSentPM(IFormCollection formCollection)
+        public virtual IActionResult DeleteSentPM(IFormCollection formCollection)
         {
             foreach (var key in formCollection.Keys)
             {
@@ -159,7 +158,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoute("PrivateMessages", new {tab = "sent"});
         }
 
-        public virtual async Task<IActionResult> SendPM(int toCustomerId, int? replyToMessageId)
+        public virtual IActionResult SendPM(int toCustomerId, int? replyToMessageId)
         {
             if (!_forumSettings.AllowPrivateMessages)
                 return RedirectToRoute("Homepage");
@@ -184,7 +183,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual async Task<IActionResult> SendPM(SendPrivateMessageModel model)
+        public virtual IActionResult SendPM(SendPrivateMessageModel model)
         {
             if (!_forumSettings.AllowPrivateMessages)
             {
@@ -273,7 +272,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual async Task<IActionResult> ViewPM(int privateMessageId)
+        public virtual IActionResult ViewPM(int privateMessageId)
         {
             if (!_forumSettings.AllowPrivateMessages)
             {
@@ -308,7 +307,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual async Task<IActionResult> DeletePM(int privateMessageId)
+        public virtual IActionResult DeletePM(int privateMessageId)
         {
             if (!_forumSettings.AllowPrivateMessages)
             {

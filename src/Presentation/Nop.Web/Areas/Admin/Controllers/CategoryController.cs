@@ -23,7 +23,6 @@ using Nop.Web.Areas.Admin.Models.Catalog;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc;
 using Nop.Web.Framework.Mvc.Filters;
-using System.Threading.Tasks;
 
 namespace Nop.Web.Areas.Admin.Controllers
 {
@@ -191,12 +190,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region List
 
-        public virtual async Task<IActionResult> Index()
+        public virtual IActionResult Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual async Task<IActionResult> List()
+        public virtual IActionResult List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -208,7 +207,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> List(CategorySearchModel searchModel)
+        public virtual IActionResult List(CategorySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedDataTablesJson();
@@ -223,7 +222,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Create / Edit / Delete
 
-        public virtual async Task<IActionResult> Create()
+        public virtual IActionResult Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -235,7 +234,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual async Task<IActionResult> Create(CategoryModel model, bool continueEditing)
+        public virtual IActionResult Create(CategoryModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -293,7 +292,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual async Task<IActionResult> Edit(int id)
+        public virtual IActionResult Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -310,7 +309,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual async Task<IActionResult> Edit(CategoryModel model, bool continueEditing)
+        public virtual IActionResult Edit(CategoryModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -393,7 +392,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> Delete(int id)
+        public virtual IActionResult Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -418,7 +417,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Export / Import
 
-        public virtual async Task<IActionResult> ExportXml()
+        public virtual IActionResult ExportXml()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -436,7 +435,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
-        public virtual async Task<IActionResult> ExportXlsx()
+        public virtual IActionResult ExportXlsx()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -456,7 +455,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ImportFromXlsx(IFormFile importexcelfile)
+        public virtual IActionResult ImportFromXlsx(IFormFile importexcelfile)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -493,7 +492,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Products
 
         [HttpPost]
-        public virtual async Task<IActionResult> ProductList(CategoryProductSearchModel searchModel)
+        public virtual IActionResult ProductList(CategoryProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedDataTablesJson();
@@ -508,7 +507,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual async Task<IActionResult> ProductUpdate(CategoryProductModel model)
+        public virtual IActionResult ProductUpdate(CategoryProductModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -524,7 +523,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual async Task<IActionResult> ProductDelete(int id)
+        public virtual IActionResult ProductDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -538,7 +537,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual async Task<IActionResult> ProductAddPopup(int categoryId)
+        public virtual IActionResult ProductAddPopup(int categoryId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();
@@ -550,7 +549,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ProductAddPopupList(AddProductToCategorySearchModel searchModel)
+        public virtual IActionResult ProductAddPopupList(AddProductToCategorySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedDataTablesJson();
@@ -563,7 +562,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual async Task<IActionResult> ProductAddPopup(AddProductToCategoryModel model)
+        public virtual IActionResult ProductAddPopup(AddProductToCategoryModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCategories))
                 return AccessDeniedView();

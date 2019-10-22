@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -100,12 +99,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Languages
 
-        public virtual async Task<IActionResult> Index()
+        public virtual IActionResult Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual async Task<IActionResult> List()
+        public virtual IActionResult List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -117,7 +116,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> List(LanguageSearchModel searchModel)
+        public virtual IActionResult List(LanguageSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedDataTablesJson();
@@ -128,7 +127,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual async Task<IActionResult> Create()
+        public virtual IActionResult Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -140,7 +139,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual async Task<IActionResult> Create(LanguageModel model, bool continueEditing)
+        public virtual IActionResult Create(LanguageModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -172,7 +171,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual async Task<IActionResult> Edit(int id)
+        public virtual IActionResult Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -189,7 +188,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual async Task<IActionResult> Edit(LanguageModel model, bool continueEditing)
+        public virtual IActionResult Edit(LanguageModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -237,7 +236,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> Delete(int id)
+        public virtual IActionResult Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -293,7 +292,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Resources
 
         [HttpPost]
-        public virtual async Task<IActionResult> Resources(LocaleResourceSearchModel searchModel)
+        public virtual IActionResult Resources(LocaleResourceSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedDataTablesJson();
@@ -311,7 +310,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         //ValidateAttribute is used to force model validation
         [HttpPost]
-        public virtual async Task<IActionResult> ResourceUpdate([Validate] LocaleResourceModel model)
+        public virtual IActionResult ResourceUpdate([Validate] LocaleResourceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -347,7 +346,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         //ValidateAttribute is used to force model validation
         [HttpPost]
-        public virtual async Task<IActionResult> ResourceAdd(int languageId, [Validate] LocaleResourceModel model)
+        public virtual IActionResult ResourceAdd(int languageId, [Validate] LocaleResourceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -381,7 +380,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ResourceDelete(int id)
+        public virtual IActionResult ResourceDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -399,7 +398,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Export / Import
 
-        public virtual async Task<IActionResult> ExportXml(int id)
+        public virtual IActionResult ExportXml(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -422,7 +421,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ImportXml(int id, IFormFile importxmlfile)
+        public virtual IActionResult ImportXml(int id, IFormFile importxmlfile)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();

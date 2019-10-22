@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Orders;
@@ -42,7 +41,7 @@ namespace Nop.Web.Components
             _shoppingCartSettings = shoppingCartSettings;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int? productThumbPictureSize)
+        public IViewComponentResult Invoke(int? productThumbPictureSize)
         {
             var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
 

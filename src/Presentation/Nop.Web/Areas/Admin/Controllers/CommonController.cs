@@ -17,7 +17,6 @@ using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Areas.Admin.Models.Common;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework;
-using System.Threading.Tasks;
 
 namespace Nop.Web.Areas.Admin.Controllers
 {
@@ -85,7 +84,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual async Task<IActionResult> SystemInfo()
+        public virtual IActionResult SystemInfo()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -96,7 +95,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual async Task<IActionResult> Warnings()
+        public virtual IActionResult Warnings()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -107,7 +106,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual async Task<IActionResult> Maintenance()
+        public virtual IActionResult Maintenance()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -120,7 +119,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("delete-guests")]
-        public virtual async Task<IActionResult> MaintenanceDeleteGuests(MaintenanceModel model)
+        public virtual IActionResult MaintenanceDeleteGuests(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -138,7 +137,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("delete-abondoned-carts")]
-        public virtual async Task<IActionResult> MaintenanceDeleteAbandonedCarts(MaintenanceModel model)
+        public virtual IActionResult MaintenanceDeleteAbandonedCarts(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -151,7 +150,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("delete-exported-files")]
-        public virtual async Task<IActionResult> MaintenanceDeleteFiles(MaintenanceModel model)
+        public virtual IActionResult MaintenanceDeleteFiles(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -191,7 +190,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> BackupFiles(BackupFileSearchModel searchModel)
+        public virtual IActionResult BackupFiles(BackupFileSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedDataTablesJson();
@@ -204,7 +203,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("backup-database")]
-        public virtual async Task<IActionResult> BackupDatabase(MaintenanceModel model)
+        public virtual IActionResult BackupDatabase(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -227,7 +226,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("re-index")]
-        public virtual async Task<IActionResult> ReIndexTables(MaintenanceModel model)
+        public virtual IActionResult ReIndexTables(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -247,7 +246,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("backupFileName", "action")]
-        public virtual async Task<IActionResult> BackupAction(MaintenanceModel model)
+        public virtual IActionResult BackupAction(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -286,7 +285,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual async Task<IActionResult> SetLanguage(int langid, string returnUrl = "")
+        public virtual IActionResult SetLanguage(int langid, string returnUrl = "")
         {
             var language = _languageService.GetLanguageById(langid);
             if (language != null)
@@ -304,7 +303,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ClearCache(string returnUrl = "")
+        public virtual IActionResult ClearCache(string returnUrl = "")
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -323,7 +322,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> RestartApplication(string returnUrl = "")
+        public virtual IActionResult RestartApplication(string returnUrl = "")
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -342,7 +341,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Redirect(returnUrl);
         }
 
-        public virtual async Task<IActionResult> SeNames()
+        public virtual IActionResult SeNames()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -354,7 +353,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> SeNames(UrlRecordSearchModel searchModel)
+        public virtual IActionResult SeNames(UrlRecordSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedDataTablesJson();
@@ -366,7 +365,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> DeleteSelectedSeNames(ICollection<int> selectedIds)
+        public virtual IActionResult DeleteSelectedSeNames(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -378,7 +377,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> PopularSearchTermsReport(PopularSearchTermSearchModel searchModel)
+        public virtual IActionResult PopularSearchTermsReport(PopularSearchTermSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -390,7 +389,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         //action displaying notification (warning) to a store owner that entered SE URL already exists
-        public virtual async Task<IActionResult> UrlReservedWarning(string entityId, string entityName, string seName)
+        public virtual IActionResult UrlReservedWarning(string entityId, string entityName, string seName)
         {
             if (string.IsNullOrEmpty(seName))
                 return Json(new { Result = string.Empty });

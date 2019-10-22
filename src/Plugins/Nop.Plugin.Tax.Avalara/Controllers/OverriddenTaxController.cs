@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Avalara.AvaTax.RestClient;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -72,14 +71,14 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
 
         #region Methods
 
-        public override async Task<IActionResult> Categories()
+        public override IActionResult Categories()
         {
             //ensure that Avalara tax provider is active
             if (!_taxPluginManager.IsPluginActive(AvalaraTaxDefaults.SystemName))
             {
                 //if isn't active return base action result
                 RouteData.Values["controller"] = "Tax";
-                return await base.Categories();
+                return base.Categories();
             }
 
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
@@ -97,9 +96,9 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> TaxCategoryUpdate(Models.Tax.TaxCategoryModel model)
+        public IActionResult TaxCategoryUpdate(Models.Tax.TaxCategoryModel model)
         {
-            return await base.CategoryUpdate(model);
+            return base.CategoryUpdate(model);
         }
 
         [HttpPost]
@@ -127,7 +126,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
         }
 
         [HttpPost]
-        public override async Task<IActionResult> CategoryDelete(int id)
+        public override IActionResult CategoryDelete(int id)
         {
             //ensure that Avalara tax provider is active
             if (!_taxPluginManager.IsPluginActive(AvalaraTaxDefaults.SystemName))
@@ -152,11 +151,11 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
 
         [HttpPost, ActionName("Categories")]
         [FormValueRequired("importTaxCodes")]
-        public async Task<IActionResult> ImportTaxCodes()
+        public IActionResult ImportTaxCodes()
         {
             //ensure that Avalara tax provider is active
             if (!_taxPluginManager.IsPluginActive(AvalaraTaxDefaults.SystemName))
-                return await Categories();
+                return Categories();
 
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();
@@ -166,7 +165,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
             if (!systemTaxCodes?.Any() ?? true)
             {
                 _notificationService.ErrorNotification(_localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Import.Error"));
-                return await Categories();
+                return Categories();
             }
 
             //get existing tax categories
@@ -198,16 +197,16 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
             var successMessage = _localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Import.Success");
             _notificationService.SuccessNotification(string.Format(successMessage, importedTaxCodesNumber));
 
-            return await Categories();
+            return Categories();
         }
 
         [HttpPost, ActionName("Categories")]
         [FormValueRequired("exportTaxCodes")]
-        public async Task<IActionResult> ExportTaxCodes()
+        public IActionResult ExportTaxCodes()
         {
             //ensure that Avalara tax provider is active
             if (!_taxPluginManager.IsPluginActive(AvalaraTaxDefaults.SystemName))
-                return await Categories();
+                return Categories();
 
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();
@@ -248,16 +247,16 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
             else
                 _notificationService.SuccessNotification(_localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Export.AlreadyExported"));
 
-            return await Categories();
+            return Categories();
         }
 
         [HttpPost, ActionName("Categories")]
         [FormValueRequired("deleteTaxCodes")]
-        public async Task<IActionResult> DeleteSystemTaxCodes()
+        public IActionResult DeleteSystemTaxCodes()
         {
             //ensure that Avalara tax provider is active
             if (!_taxPluginManager.IsPluginActive(AvalaraTaxDefaults.SystemName))
-                return await Categories();
+                return Categories();
 
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();
@@ -267,7 +266,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
             if (!systemTaxCodes?.Any() ?? true)
             {
                 _notificationService.ErrorNotification(_localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Delete.Error"));
-                return await Categories();
+                return Categories();
             }
 
             //prepare tax categories to delete
@@ -286,7 +285,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
 
             _notificationService.SuccessNotification(_localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Delete.Success"));
 
-            return await Categories();
+            return Categories();
         }
         #endregion
     }

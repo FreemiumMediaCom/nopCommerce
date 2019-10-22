@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Messages;
@@ -37,7 +36,7 @@ namespace Nop.Web.Controllers
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
         [HttpPost]
-        public virtual async Task<IActionResult> SubscribeNewsletter(string email, bool subscribe)
+        public virtual IActionResult SubscribeNewsletter(string email, bool subscribe)
         {
             string result;
             var success = false;
@@ -101,7 +100,7 @@ namespace Nop.Web.Controllers
 
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
-        public virtual async Task<IActionResult> SubscriptionActivation(Guid token, bool active)
+        public virtual IActionResult SubscriptionActivation(Guid token, bool active)
         {
             var subscription = _newsLetterSubscriptionService.GetNewsLetterSubscriptionByGuid(token);
             if (subscription == null)

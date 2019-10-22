@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Services.Localization;
 using Nop.Services.Security;
 using Nop.Services.Stores;
@@ -46,14 +45,14 @@ namespace Nop.Web.Controllers
         #region Methods
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual async Task<IActionResult> TopicDetails(int topicId)
+        public virtual IActionResult TopicDetails(int topicId)
         {
             //allow administrators to preview any topic
             var hasAdminAccess = _permissionService.Authorize(StandardPermissionProvider.AccessAdminPanel) && _permissionService.Authorize(StandardPermissionProvider.ManageTopics);
 
             var model = _topicModelFactory.PrepareTopicModelById(topicId, hasAdminAccess);
             if (model == null)
-                return await InvokeHttp404();
+                return InvokeHttp404();
 
             //display "edit" (manage) link
             if (hasAdminAccess)
@@ -64,11 +63,11 @@ namespace Nop.Web.Controllers
             return View(templateViewPath, model);
         }
 
-        public virtual async Task<IActionResult> TopicDetailsPopup(string systemName)
+        public virtual IActionResult TopicDetailsPopup(string systemName)
         {
             var model = _topicModelFactory.PrepareTopicModelBySystemName(systemName);
             if (model == null)
-                return await InvokeHttp404();
+                return InvokeHttp404();
 
             ViewBag.IsPopup = true;
 
@@ -79,7 +78,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual async Task<IActionResult> Authenticate(int id, string password)
+        public virtual IActionResult Authenticate(int id, string password)
         {
             var authResult = false;
             var title = string.Empty;

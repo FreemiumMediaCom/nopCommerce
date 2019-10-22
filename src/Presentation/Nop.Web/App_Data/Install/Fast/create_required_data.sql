@@ -555,7 +555,7 @@ You gift card code is %GiftCard.CouponCode%
 %GiftCard.Message%
 </p>
 ', 1, NULL, 0, 0, 1, 0)
-INSERT [MessageTemplate] ([Id], [Name], [BccEmailAddresses], [Subject], [Body], [IsActive], [DelayBeforeSend], [DelayPeriodId], [AttachedDownloadId], [EmailAccountId], [LimitedToStores]) VALUES (34, N'Service.ContactUs', NULL, N'%Store.Name%. Contact Us', N'<p>
+INSERT [MessageTemplate] ([Id], [Name], [BccEmailAddresses], [Subject], [Body], [IsActive], [DelayBeforeSend], [DelayPeriodId], [AttachedDownloadId], [EmailAccountId], [LimitedToStores]) VALUES (34, N'Service.ContactUs', NULL, N'%Store.Name%. Contact us', N'<p>
 %ContactUs.Body%
 </p>
 ', 1, NULL, 0, 0, 1, 0)
@@ -840,7 +840,7 @@ Customer comments:
 %ReturnRequest.CustomerComment%
 </p>
 ', 1, NULL, 0, 0, 1, 0)
-INSERT [MessageTemplate] ([Id], [Name], [BccEmailAddresses], [Subject], [Body], [IsActive], [DelayBeforeSend], [DelayPeriodId], [AttachedDownloadId], [EmailAccountId], [LimitedToStores]) VALUES (46, N'Service.ContactVendor', NULL, N'%Store.Name%. Contact Us', N'<p>
+INSERT [MessageTemplate] ([Id], [Name], [BccEmailAddresses], [Subject], [Body], [IsActive], [DelayBeforeSend], [DelayPeriodId], [AttachedDownloadId], [EmailAccountId], [LimitedToStores]) VALUES (46, N'Service.ContactVendor', NULL, N'%Store.Name%. Contact us', N'<p>
 %ContactUs.Body%
 </p>
 ', 1, NULL, 0, 0, 1, 0)
@@ -1462,7 +1462,7 @@ INSERT [Setting] ([Id], [Name], [Value], [StoreId]) VALUES (40, N'commonsettings
 INSERT [Setting] ([Id], [Name], [Value], [StoreId]) VALUES (41, N'commonsettings.supportpreviousnopcommerceversions', N'True', 0)
 INSERT [Setting] ([Id], [Name], [Value], [StoreId]) VALUES (42, N'commonsettings.useresponsecompression', N'True', 0)
 INSERT [Setting] ([Id], [Name], [Value], [StoreId]) VALUES (43, N'commonsettings.staticfilescachecontrol', N'public,max-age=604800', 0)
-INSERT [Setting] ([Id], [Name], [Value], [StoreId]) VALUES (44, N'commonsettings.faviconandappiconsheadcode', N'<link rel="apple-touch-icon" sizes="180x180" href="/icons/icons_0/apple-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/icons/icons_0/favicon-32x32.png"><link rel="icon" type="image/png" sizes="192x192" href="/icons/icons_0/android-icon-192x192.png"><link rel="icon" type="image/png" sizes="16x16" href="/icons/icons_0/favicon-16x16.png"><link rel="manifest" href="/icons/icons_0/site.webmanifest"><link rel="mask-icon" href="/icons/icons_0/safari-pinned-tab.svg" color="#5bbad5"><link rel="shortcut icon" href="/icons/icons_0/favicon.ico"><meta name="msapplication-TileColor" content="#2d89ef"><meta name="msapplication-TileImage" content="/icons/icons_0/ms-icon-144x144.png"><meta name="msapplication-config" content="/icons/icons_0/browserconfig.xml"><meta name="theme-color" content="#ffffff">', 0)
+INSERT [Setting] ([Id], [Name], [Value], [StoreId]) VALUES (44, N'commonsettings.faviconandappiconsheadcode', N'<link rel="apple-touch-icon" sizes="180x180" href="/icons/icons_0/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/icons/icons_0/favicon-32x32.png"><link rel="icon" type="image/png" sizes="192x192" href="/icons/icons_0/android-chrome-192x192.png"><link rel="icon" type="image/png" sizes="16x16" href="/icons/icons_0/favicon-16x16.png"><link rel="manifest" href="/icons/icons_0/site.webmanifest"><link rel="mask-icon" href="/icons/icons_0/safari-pinned-tab.svg" color="#5bbad5"><link rel="shortcut icon" href="/icons/icons_0/favicon.ico"><meta name="msapplication-TileColor" content="#2d89ef"><meta name="msapplication-TileImage" content="/icons/icons_0/mstile-144x144.png"><meta name="msapplication-config" content="/icons/icons_0/browserconfig.xml"><meta name="theme-color" content="#ffffff">', 0)
 INSERT [Setting] ([Id], [Name], [Value], [StoreId]) VALUES (45, N'commonsettings.enablehtmlminification', N'True', 0)
 INSERT [Setting] ([Id], [Name], [Value], [StoreId]) VALUES (46, N'commonsettings.enablejsbundling', N'False', 0)
 INSERT [Setting] ([Id], [Name], [Value], [StoreId]) VALUES (47, N'commonsettings.enablecssbundling', N'False', 0)

@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Caching;
@@ -36,7 +35,7 @@ namespace Nop.Web.Components
             _storeMappingService = storeMappingService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int productId, int? productThumbPictureSize)
+        public IViewComponentResult Invoke(int productId, int? productThumbPictureSize)
         {
             //load and cache report
             var productIds = _cacheManager.Get(string.Format(NopModelCacheDefaults.ProductsRelatedIdsKey, productId, _storeContext.CurrentStore.Id),

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
@@ -178,7 +177,7 @@ namespace Nop.Web.Controllers
 
         #region Methods
 
-        public virtual async Task<IActionResult> Index()
+        public virtual IActionResult Index()
         {
             if (DataSettingsManager.DatabaseIsInstalled)
                 return RedirectToRoute("Homepage");
@@ -211,7 +210,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> Index(InstallModel model)
+        public virtual IActionResult Index(InstallModel model)
         {
             if (DataSettingsManager.DatabaseIsInstalled)
                 return RedirectToRoute("Homepage");
@@ -416,7 +415,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual async Task<IActionResult> ChangeLanguage(string language)
+        public virtual IActionResult ChangeLanguage(string language)
         {
             if (DataSettingsManager.DatabaseIsInstalled)
                 return RedirectToRoute("Homepage");
@@ -428,7 +427,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> RestartInstall()
+        public virtual IActionResult RestartInstall()
         {
             if (DataSettingsManager.DatabaseIsInstalled)
                 return RedirectToRoute("Homepage");

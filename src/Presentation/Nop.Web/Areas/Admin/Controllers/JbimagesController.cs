@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Infrastructure;
 using Nop.Services.Security;
@@ -45,7 +44,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> Upload()
+        public virtual IActionResult Upload()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.HtmlEditorManagePictures))
             {

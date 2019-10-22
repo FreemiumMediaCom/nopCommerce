@@ -589,7 +589,6 @@ namespace Nop.Web.Factories
                 DisplayCustomerInfoMenuItem = _displayDefaultMenuItemSettings.DisplayCustomerInfoMenuItem,
                 DisplayBlogMenuItem = _displayDefaultMenuItemSettings.DisplayBlogMenuItem,
                 DisplayForumsMenuItem = _displayDefaultMenuItemSettings.DisplayForumsMenuItem,
-                DisplayMeetupsMenuItem = _displayDefaultMenuItemSettings.DisplayMeetupsMenuItem,
                 DisplayContactUsMenuItem = _displayDefaultMenuItemSettings.DisplayContactUsMenuItem,
                 UseAjaxMenu = _catalogSettings.UseAjaxLoadMenu
             };

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Factories;
 using Nop.Web.Framework.Components;
 
@@ -14,7 +13,7 @@ namespace Nop.Web.Components
             _privateMessagesModelFactory = privateMessagesModelFactory;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int pageNumber, string tab)
+        public IViewComponentResult Invoke(int pageNumber, string tab)
         {
             var model = _privateMessagesModelFactory.PrepareInboxModel(pageNumber, tab);
             return View(model);

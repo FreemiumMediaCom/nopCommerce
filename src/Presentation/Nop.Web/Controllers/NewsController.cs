@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
@@ -89,7 +88,7 @@ namespace Nop.Web.Controllers
 
         #region Methods
 
-        public virtual async Task<IActionResult> List(NewsPagingFilteringModel command)
+        public virtual IActionResult List(NewsPagingFilteringModel command)
         {
             if (!_newsSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -98,7 +97,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual async Task<IActionResult> ListRss(int languageId)
+        public virtual IActionResult ListRss(int languageId)
         {
             var feed = new RssFeed(
                 $"{_localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name)}: News",
@@ -120,14 +119,14 @@ namespace Nop.Web.Controllers
             return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
         }
 
-        public virtual async Task<IActionResult> NewsItem(int newsItemId)
+        public virtual IActionResult NewsItem(int newsItemId)
         {
             if (!_newsSettings.Enabled)
                 return RedirectToRoute("Homepage");
 
             var newsItem = _newsService.GetNewsById(newsItemId);
             if (newsItem == null)
-                return await InvokeHttp404();
+                return InvokeHttp404();
 
             var notAvailable =
                 //published?
@@ -140,7 +139,7 @@ namespace Nop.Web.Controllers
             //We should allows him (her) to use "Preview" functionality
             var hasAdminAccess = _permissionService.Authorize(StandardPermissionProvider.AccessAdminPanel) && _permissionService.Authorize(StandardPermissionProvider.ManageNews);
             if (notAvailable && !hasAdminAccess)
-                return await InvokeHttp404();
+                return InvokeHttp404();
 
             var model = new NewsItemModel();
             model = _newsModelFactory.PrepareNewsItemModel(model, newsItem, true);
@@ -156,7 +155,7 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         [FormValueRequired("add-comment")]
         [ValidateCaptcha]
-        public virtual async Task<IActionResult> NewsCommentAdd(int newsItemId, NewsItemModel model, bool captchaValid)
+        public virtual IActionResult NewsCommentAdd(int newsItemId, NewsItemModel model, bool captchaValid)
         {
             if (!_newsSettings.Enabled)
                 return RedirectToRoute("Homepage");

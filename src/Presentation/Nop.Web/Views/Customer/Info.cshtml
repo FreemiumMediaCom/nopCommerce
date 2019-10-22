@@ -24,10 +24,10 @@
         <form asp-route="CustomerInfo" method="post">
             <div asp-validation-summary="ModelOnly" class="message-error"></div>
             <div class="fieldset">
+                <div class="title">
+                    <strong>@T("Account.YourPersonalDetails")</strong>
+                </div>
                 <div class="form-fields">
-                    <div class="title">
-                        <strong>@T("Account.YourPersonalDetails")</strong>
-                    </div>
                     @if (Model.GenderEnabled)
                     {
                         <div class="inputs">
@@ -121,10 +121,10 @@
             @if (Model.CompanyEnabled || Model.DisplayVatNumber)
             {
                 <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.CompanyDetails")</strong>
+                    </div>
                     <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.CompanyDetails")</strong>
-                        </div>
                         @if (Model.CompanyEnabled)
                         {
                             <div class="inputs">
@@ -152,17 +152,17 @@
                 </div>
             }
             @if (Model.StreetAddressEnabled ||
-     Model.StreetAddress2Enabled ||
-     Model.ZipPostalCodeEnabled ||
-     Model.CityEnabled ||
-     Model.CountyEnabled ||
-     Model.CountryEnabled)
+        Model.StreetAddress2Enabled ||
+        Model.ZipPostalCodeEnabled ||
+        Model.CityEnabled ||
+        Model.CountyEnabled ||
+        Model.CountryEnabled)
             {
                 <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.YourAddress")</strong>
+                    </div>
                     <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.YourAddress")</strong>
-                        </div>
                         @if (Model.StreetAddressEnabled)
                         {
                             <div class="inputs">
@@ -258,10 +258,10 @@
             @if (Model.PhoneEnabled || Model.FaxEnabled)
             {
                 <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.YourContactInformation")</strong>
+                    </div>
                     <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.YourContactInformation")</strong>
-                        </div>
                         @if (Model.PhoneEnabled)
                         {
                             <div class="inputs">
@@ -292,10 +292,10 @@
             @if (Model.NewsletterEnabled || Model.CustomerAttributes.Count > 0)
             {
                 <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.Options")</strong>
+                    </div>
                     <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.Options")</strong>
-                        </div>
                         @if (Model.NewsletterEnabled)
                         {
                             <div class="inputs">
@@ -314,10 +314,10 @@
             @if (Model.AllowCustomersToSetTimeZone || Model.SignatureEnabled)
             {
                 <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.Preferences")</strong>
+                    </div>
                     <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.Preferences")</strong>
-                        </div>
                         @if (Model.AllowCustomersToSetTimeZone)
                         {
                             <div class="inputs">
@@ -339,85 +339,82 @@
             @if (Model.NumberOfExternalAuthenticationProviders > 0)
             {
                 <div class="fieldset">
-                    <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.AssociatedExternalAuth")</strong>
-                        </div>
-                        @if (Model.AssociatedExternalAuthRecords.Count > 0)
-                        {
-                            //existing associated external records
-                            <div class="table-wrapper">
-                                <table class="data-table">
-                                    <colgroup>
-                                        <col />
-                                        <col />
-                                        <col />
-                                    </colgroup>
-                                    <thead>
+                    <div class="title">
+                        <strong>@T("Account.AssociatedExternalAuth")</strong>
+                    </div>
+                    @if (Model.AssociatedExternalAuthRecords.Count > 0)
+                    {
+                        //existing associated external records
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <colgroup>
+                                    <col />
+                                    <col />
+                                    <col />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th class="auth-method-name">
+                                            @T("Account.AssociatedExternalAuth.AuthMethodName")
+                                        </th>
+                                        <th class="email">
+                                            @T("Account.AssociatedExternalAuth.Email")
+                                        </th>
+                                        <th class="external-id">
+                                            @T("Account.AssociatedExternalAuth.ExternalIdentifier")
+                                        </th>
+                                        @if (Model.AllowCustomersToRemoveAssociations)
+                                        {
+                                            <th class="remove">
+                                                @T("Account.AssociatedExternalAuth.Remove")
+                                            </th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.AssociatedExternalAuthRecords)
+                                    {
                                         <tr>
-                                            <th class="auth-method-name">
-                                                @T("Account.AssociatedExternalAuth.AuthMethodName")
-                                            </th>
-                                            <th class="email">
-                                                @T("Account.AssociatedExternalAuth.Email")
-                                            </th>
-                                            <th class="external-id">
-                                                @T("Account.AssociatedExternalAuth.ExternalIdentifier")
-                                            </th>
+                                            <td class="auth-method-name">
+                                                @item.AuthMethodName
+                                            </td>
+                                            <td class="email">
+                                                @item.Email
+                                            </td>
+                                            <td class="external-id">
+                                                @CommonHelper.EnsureMaximumLength(item.ExternalIdentifier, 40, "...")
+                                            </td>
                                             @if (Model.AllowCustomersToRemoveAssociations)
                                             {
-                                                <th class="remove">
-                                                    @T("Account.AssociatedExternalAuth.Remove")
-                                                </th>
+                                                <td class="remove">
+                                                    <a href="#" onclick="return removeexternalassociation(@item.Id)">@T("Account.AssociatedExternalAuth.Remove")</a>
+                                                </td>
                                             }
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.AssociatedExternalAuthRecords)
-                                        {
-                                            <tr>
-                                                <td class="auth-method-name">
-                                                    @item.AuthMethodName
-                                                </td>
-                                                <td class="email">
-                                                    @item.Email
-                                                </td>
-                                                <td class="external-id">
-                                                    @CommonHelper.EnsureMaximumLength(item.ExternalIdentifier, 40, "...")
-                                                </td>
-                                                @if (Model.AllowCustomersToRemoveAssociations)
-                                                {
-                                                    <td class="remove">
-                                                        <a href="#" onclick="return removeexternalassociation(@item.Id)">@T("Account.AssociatedExternalAuth.Remove")</a>
-                                                    </td>
-                                                }
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                        @if (Model.NumberOfExternalAuthenticationProviders > Model.AssociatedExternalAuthRecords.Count)
-                        {
-                            //we can add more external records
-                            var loginUrl = Url.RouteUrl("Login", null, webHelper.CurrentRequestProtocol);
-                            <div class="form-fields add-more-external-records">
-                                @T("Account.AssociatedExternalAuth.AddMoreRecords")
-                                <a href="@loginUrl">@loginUrl</a>
-                            </div>
-                        }
-
-                    </div>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    @if (Model.NumberOfExternalAuthenticationProviders > Model.AssociatedExternalAuthRecords.Count)
+                    {
+                        //we can add more external records
+                        var loginUrl = Url.RouteUrl("Login", null, webHelper.CurrentRequestProtocol);
+                        <div class="form-fields add-more-external-records">
+                            @T("Account.AssociatedExternalAuth.AddMoreRecords")
+                            <a href="@loginUrl">@loginUrl</a>
+                        </div>
+                    }
                 </div>
             }
 
             @if (Model.GdprConsents.Count > 0)
             {
                 <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.UserAgreement")</strong>
+                    </div>
                     <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.UserAgreement")</strong>
-                        </div>
                         @foreach (var consent in Model.GdprConsents)
                         {
                             if (consent.IsRequired)
@@ -448,7 +445,6 @@
             <div class="buttons">
                 <input type="submit" id="save-info-button" value="@T("Common.Save")" name="save-info-button" class="button-1 save-customer-info-button" />
             </div>
-
         </form>
     </div>
 </div>

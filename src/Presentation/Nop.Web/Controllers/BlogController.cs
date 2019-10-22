@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Blogs;
@@ -89,7 +88,7 @@ namespace Nop.Web.Controllers
 
         #region Methods
 
-        public virtual async Task<IActionResult> List(BlogPagingFilteringModel command)
+        public virtual IActionResult List(BlogPagingFilteringModel command)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -98,7 +97,7 @@ namespace Nop.Web.Controllers
             return View("List", model);
         }
 
-        public virtual async Task<IActionResult> BlogByTag(BlogPagingFilteringModel command)
+        public virtual IActionResult BlogByTag(BlogPagingFilteringModel command)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -107,7 +106,7 @@ namespace Nop.Web.Controllers
             return View("List", model);
         }
 
-        public virtual async Task<IActionResult> BlogByMonth(BlogPagingFilteringModel command)
+        public virtual IActionResult BlogByMonth(BlogPagingFilteringModel command)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -116,7 +115,7 @@ namespace Nop.Web.Controllers
             return View("List", model);
         }
 
-        public virtual async Task<IActionResult> ListRss(int languageId)
+        public virtual IActionResult ListRss(int languageId)
         {
             var feed = new RssFeed(
                 $"{_localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name)}: Blog",
@@ -139,14 +138,14 @@ namespace Nop.Web.Controllers
             return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
         }
 
-        public virtual async Task<IActionResult> BlogPost(int blogPostId)
+        public virtual IActionResult BlogPost(int blogPostId)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
 
             var blogPost = _blogService.GetBlogPostById(blogPostId);
             if (blogPost == null)
-                return await InvokeHttp404();
+                return InvokeHttp404();
 
             var notAvailable =
                 //availability dates
@@ -157,7 +156,7 @@ namespace Nop.Web.Controllers
             //We should allows him (her) to use "Preview" functionality
             var hasAdminAccess = _permissionService.Authorize(StandardPermissionProvider.AccessAdminPanel) && _permissionService.Authorize(StandardPermissionProvider.ManageBlog);
             if (notAvailable && !hasAdminAccess)
-                return await InvokeHttp404();
+                return InvokeHttp404();
 
             //display "edit" (manage) link
             if (hasAdminAccess)
@@ -173,7 +172,7 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         [FormValueRequired("add-comment")]
         [ValidateCaptcha]
-        public virtual async Task<IActionResult> BlogCommentAdd(int blogPostId, BlogPostModel model, bool captchaValid)
+        public virtual IActionResult BlogCommentAdd(int blogPostId, BlogPostModel model, bool captchaValid)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");

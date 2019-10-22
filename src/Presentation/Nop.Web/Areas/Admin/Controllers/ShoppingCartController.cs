@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Services.Catalog;
@@ -46,7 +45,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         
         #region Methods
         
-        public virtual async Task<IActionResult> CurrentCarts()
+        public virtual IActionResult CurrentCarts()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrentCarts))
                 return AccessDeniedView();
@@ -58,7 +57,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> CurrentCarts(ShoppingCartSearchModel searchModel)
+        public virtual IActionResult CurrentCarts(ShoppingCartSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrentCarts))
                 return AccessDeniedDataTablesJson();
@@ -69,7 +68,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual async Task<IActionResult> ProductSearchAutoComplete(string term)
+        public virtual IActionResult ProductSearchAutoComplete(string term)
         {
             const int searchTermMinimumLength = 3;
             if (string.IsNullOrWhiteSpace(term) || term.Length < searchTermMinimumLength)
@@ -100,7 +99,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> GetCartDetails(ShoppingCartItemSearchModel searchModel)
+        public virtual IActionResult GetCartDetails(ShoppingCartItemSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrentCarts))
                 return AccessDeniedDataTablesJson();
@@ -116,7 +115,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
         
         [HttpPost]
-        public virtual async Task<IActionResult> DeleteItem(int id)
+        public virtual IActionResult DeleteItem(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrentCarts))
                 return AccessDeniedDataTablesJson();

@@ -16,10 +16,10 @@
         <form asp-route="Register" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post">
             <div asp-validation-summary="ModelOnly" class="message-error"></div>
             <div class="fieldset">
+                <div class="title">
+                    <strong>@T("Account.YourPersonalDetails")</strong>
+                </div>
                 <div class="form-fields">
-                    <div class="title">
-                        <strong>@T("Account.YourPersonalDetails")</strong>
-                    </div>
                     @if (Model.GenderEnabled)
                     {
                         <div class="inputs">
@@ -103,10 +103,10 @@
             @if (Model.CompanyEnabled || Model.DisplayVatNumber)
             {
                 <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.CompanyDetails")</strong>
+                    </div>
                     <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.CompanyDetails")</strong>
-                        </div>
                         @if (Model.CompanyEnabled)
                         {
                             <div class="inputs">
@@ -131,17 +131,17 @@
                 </div>
             }
             @if (Model.StreetAddressEnabled ||
-             Model.StreetAddress2Enabled ||
-             Model.ZipPostalCodeEnabled ||
-             Model.CityEnabled ||
-             Model.CountyEnabled ||
-             Model.CountryEnabled)
+              Model.StreetAddress2Enabled ||
+              Model.ZipPostalCodeEnabled ||
+              Model.CityEnabled ||
+              Model.CountyEnabled ||
+              Model.CountryEnabled)
             {
                 <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.YourAddress")</strong>
+                    </div>
                     <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.YourAddress")</strong>
-                        </div>
                         @if (Model.StreetAddressEnabled)
                         {
                             <div class="inputs">
@@ -237,10 +237,10 @@
             @if (Model.PhoneEnabled || Model.FaxEnabled)
             {
                 <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.YourContactInformation")</strong>
+                    </div>
                     <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.YourContactInformation")</strong>
-                        </div>
                         @if (Model.PhoneEnabled)
                         {
                             <div class="inputs">
@@ -271,10 +271,10 @@
             @if (Model.NewsletterEnabled || Model.CustomerAttributes.Count > 0)
             {
                 <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.Options")</strong>
+                    </div>
                     <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.Options")</strong>
-                        </div>
                         @if (Model.NewsletterEnabled)
                         {
                             <div class="inputs">
@@ -293,10 +293,10 @@
             @if (Model.AllowCustomersToSetTimeZone)
             {
                 <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.Preferences")</strong>
+                    </div>
                     <div class="form-fields">
-                        <div class="title">
-                            <strong>@T("Account.Preferences")</strong>
-                        </div>
                         <div class="inputs">
                             <label asp-for="TimeZoneId" asp-postfix=":"></label>
                             <select asp-for="TimeZoneId" asp-items="Model.AvailableTimeZones"></select>
@@ -306,10 +306,10 @@
                 </div>
             }
             <div class="fieldset">
+                <div class="title">
+                    <strong>@T("Account.YourPassword")</strong>
+                </div>
                 <div class="form-fields">
-                    <div class="title">
-                        <strong>@T("Account.YourPassword")</strong>
-                    </div>
                     <div class="inputs">
                         <label asp-for="Password" asp-postfix=":"></label>
                         <input asp-for="Password" />
@@ -332,8 +332,16 @@
                     {
                         @Html.Raw(Html.GenerateHoneypotInput())
                     }
-                    @if (Model.AcceptPrivacyPolicyEnabled || Model.GdprConsents.Count > 0)
-                    {
+                </div>
+            </div>
+
+            @if (Model.AcceptPrivacyPolicyEnabled || Model.GdprConsents.Count > 0)
+            {
+                <div class="fieldset">
+                    <div class="title">
+                        <strong>@T("Account.UserAgreement")</strong>
+                    </div>
+                    <div class="form-fields">
                         @if (Model.AcceptPrivacyPolicyEnabled)
                         {
                             <script asp-location="Footer">
@@ -402,15 +410,16 @@
                             }
 
                         }
-                    }
-                    <div class="buttons">
-                        <input type="submit" id="register-button" class="button-1 register-next-step-button" value="@T("Account.Register.Button")" name="register-button" />
                     </div>
-
                 </div>
+            }
+
+            <div class="buttons">
+                <input type="submit" id="register-button" class="button-1 register-next-step-button" value="@T("Account.Register.Button")" name="register-button" />
             </div>
-
-
         </form>
+        <div class="external-authentication">
+            @await Component.InvokeAsync("ExternalMethods", "ExternalAuthentication")
+        </div>
     </div>
 </div>

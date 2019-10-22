@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Services.Media;
 using Nop.Web.Framework.Mvc.Filters;
@@ -28,7 +27,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         [HttpPost]
         //do not validate request token (XSRF)
         [AdminAntiForgery(true)]
-        public virtual async Task<IActionResult> AsyncUpload()
+        public virtual IActionResult AsyncUpload()
         {
             //if (!_permissionService.Authorize(StandardPermissionProvider.UploadPictures))
             //    return Json(new { success = false, error = "You do not have required permissions" }, "text/plain");

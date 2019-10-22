@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -64,12 +63,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods  
 
-        public virtual async Task<IActionResult> PaymentMethods()
+        public virtual IActionResult PaymentMethods()
         {
             return RedirectToAction("Methods");
         }
 
-        public virtual async Task<IActionResult> Methods()
+        public virtual IActionResult Methods()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -81,7 +80,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> Methods(PaymentMethodSearchModel searchModel)
+        public virtual IActionResult Methods(PaymentMethodSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedDataTablesJson();
@@ -93,7 +92,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> MethodUpdate(PaymentMethodModel model)
+        public virtual IActionResult MethodUpdate(PaymentMethodModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -131,7 +130,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual async Task<IActionResult> MethodRestrictions()
+        public virtual IActionResult MethodRestrictions()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -147,7 +146,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         //we use 2048 value because in some cases default value (1024) is too small for this action
         [RequestFormLimits(ValueCountLimit = 2048)]
         [HttpPost, ActionName("MethodRestrictions")]
-        public virtual async Task<IActionResult> MethodRestrictionsSave(PaymentMethodsModel model, IFormCollection form)
+        public virtual IActionResult MethodRestrictionsSave(PaymentMethodsModel model, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
