@@ -5,19 +5,19 @@ using Nop.Web.Framework.Components;
 
 namespace Nop.Web.Components
 {
-    public class ContactInformationViewComponent : NopViewComponent
+    public class FreemiumMedia_ContactInformationViewComponent : NopViewComponent
     {
         private readonly ICommonModelFactory _commonModelFactory;
 
-        public ContactInformationViewComponent(ICommonModelFactory commonModelFactory)
+        public FreemiumMedia_ContactInformationViewComponent(ICommonModelFactory commonModelFactory)
         {
             _commonModelFactory = commonModelFactory;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            //var model = _commonModelFactory.PrepareContactInformationModel();
-            return View();// model);
+            var model = _commonModelFactory.PrepareContactInformationModel();
+            return View(model);
         }
     }
 }

@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -130,7 +131,7 @@ namespace Nop.Data.Extensions
         /// </summary>
         /// <param name="context">Database context</param>
         /// <param name="tableName">Table name</param>
-        public static void DropPluginTable(this IDbContext context, string tableName)
+        public static async Task DropPluginTable(this IDbContext context, string tableName)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -140,7 +141,7 @@ namespace Nop.Data.Extensions
 
             //drop the table
             var dbScript = $"IF OBJECT_ID('{tableName}', 'U') IS NOT NULL DROP TABLE [{tableName}]";
-            context.ExecuteSqlCommand(dbScript);
+            await context.ExecuteSqlCommand(dbScript);
             context.SaveChanges();
         }
 
@@ -277,14 +278,14 @@ namespace Nop.Data.Extensions
         /// </summary>
         /// <param name="context">Database context</param>
         /// <param name="sql">SQL script</param>
-        public static void ExecuteSqlScript(this IDbContext context, string sql)
+        public static async Task ExecuteSqlScript(this IDbContext context, string sql)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
             var sqlCommands = GetCommandsFromScript(sql);
             foreach (var command in sqlCommands)
-                context.ExecuteSqlCommand(command);
+                await context.ExecuteSqlCommand(command);
         }
 
         /// <summary>
@@ -292,7 +293,7 @@ namespace Nop.Data.Extensions
         /// </summary>
         /// <param name="context">Database context</param>
         /// <param name="filePath">Path to the file</param>
-        public static void ExecuteSqlScriptFromFile(this IDbContext context, string filePath)
+        public static async Task ExecuteSqlScriptFromFile(this IDbContext context, string filePath)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
@@ -300,7 +301,7 @@ namespace Nop.Data.Extensions
             if (!File.Exists(filePath))
                 return;
 
-            context.ExecuteSqlScript(File.ReadAllText(filePath));
+            await context.ExecuteSqlScript(File.ReadAllText(filePath));
         }
 
         #endregion

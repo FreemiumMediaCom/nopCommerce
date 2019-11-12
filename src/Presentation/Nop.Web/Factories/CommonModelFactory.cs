@@ -250,6 +250,14 @@ namespace Nop.Web.Factories
             return model;
         }
 
+        public virtual ContactInformationModel PrepareContactInformationModel()
+        {
+
+            return new ContactInformationModel();
+        }
+
+
+
         /// <summary>
         /// Prepare the language selector model
         /// </summary>

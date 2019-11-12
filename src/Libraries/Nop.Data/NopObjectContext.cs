@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Data.Mapping;
@@ -124,7 +125,7 @@ namespace Nop.Data
         /// <param name="timeout">The timeout to use for command. Note that the command timeout is distinct from the connection timeout, which is commonly set on the database connection string</param>
         /// <param name="parameters">Parameters to use with the SQL</param>
         /// <returns>The number of rows affected</returns>
-        public virtual int ExecuteSqlCommand(RawSqlString sql, bool doNotEnsureTransaction = false, int? timeout = null, params object[] parameters)
+        public virtual async Task<int> ExecuteSqlCommand(RawSqlString sql, bool doNotEnsureTransaction = false, int? timeout = null, params object[] parameters)
         {
             //set specific command timeout
             var previousTimeout = Database.GetCommandTimeout();
@@ -136,12 +137,12 @@ namespace Nop.Data
                 //use with transaction
                 using (var transaction = Database.BeginTransaction())
                 {
-                    result = Database.ExecuteSqlCommand(sql, parameters);
+                    result = await Database.ExecuteSqlCommandAsync(sql, parameters);
                     transaction.Commit();
                 }
             }
             else
-                result = Database.ExecuteSqlCommand(sql, parameters);
+                result = await Database.ExecuteSqlCommandAsync(sql, parameters);
             
             //return previous timeout back
             Database.SetCommandTimeout(previousTimeout);

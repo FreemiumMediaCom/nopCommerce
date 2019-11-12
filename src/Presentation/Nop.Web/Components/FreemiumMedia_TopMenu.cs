@@ -5,11 +5,11 @@ using Nop.Web.Framework.Components;
 
 namespace Nop.Web.Components
 {
-    public class TopMenuCustomViewComponent : NopViewComponent
+    public class FreemiumMedia_TopMenuViewComponent : NopViewComponent
     {
         private readonly ICatalogModelFactory _catalogModelFactory;
 
-        public TopMenuCustomViewComponent(ICatalogModelFactory catalogModelFactory)
+        public FreemiumMedia_TopMenuViewComponent(ICatalogModelFactory catalogModelFactory)
         {
             _catalogModelFactory = catalogModelFactory;
         }

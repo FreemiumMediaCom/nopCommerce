@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Data;
@@ -88,11 +89,11 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Data
         /// <param name="timeout">The timeout to use for command. Note that the command timeout is distinct from the connection timeout, which is commonly set on the database connection string</param>
         /// <param name="parameters">Parameters to use with the SQL</param>
         /// <returns>The number of rows affected</returns>
-        public virtual int ExecuteSqlCommand(RawSqlString sql, bool doNotEnsureTransaction = false, int? timeout = null, params object[] parameters)
+        public virtual async Task<int> ExecuteSqlCommand(RawSqlString sql, bool doNotEnsureTransaction = false, int? timeout = null, params object[] parameters)
         {
             using (var transaction = Database.BeginTransaction())
             {
-                var result = Database.ExecuteSqlCommand(sql, parameters);
+                var result = await Database.ExecuteSqlCommandAsync(sql, parameters);
                 transaction.Commit();
 
                 return result;
@@ -112,19 +113,19 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Data
         /// <summary>
         /// Install object context
         /// </summary>
-        public void Install()
+        public async Task Install()
         {
             //create tables
-            this.ExecuteSqlScript(GenerateCreateScript());
+            await this.ExecuteSqlScript(GenerateCreateScript());
         }
 
         /// <summary>
         /// Uninstall object context
         /// </summary>
-        public void Uninstall()
+        public async Task Uninstall()
         {
             //drop the table
-            this.DropPluginTable(nameof(TaxRate));
+            await this.DropPluginTable(nameof(TaxRate));
         }
 
         #endregion

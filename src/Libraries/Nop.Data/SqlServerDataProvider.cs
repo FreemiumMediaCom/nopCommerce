@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Data;
 using Nop.Core.Domain.Common;
 using Nop.Core.Infrastructure;
@@ -20,15 +22,15 @@ namespace Nop.Data
         /// <summary>
         /// Initialize database
         /// </summary>
-        public virtual void InitializeDatabase()
+        public virtual async Task InitializeDatabase()
         {
             var context = EngineContext.Current.Resolve<IDbContext>();
 
             //check some of table names to ensure that we have nopCommerce 2.00+ installed
             var tableNamesToValidate = new List<string> { "Customer", "Discount", "Order", "Product", "ShoppingCartItem" };
-            var existingTableNames = context
+            var existingTableNames = await context
                 .QueryFromSql<StringQueryType>("SELECT table_name AS Value FROM INFORMATION_SCHEMA.TABLES WHERE table_type = 'BASE TABLE'")
-                .Select(stringValue => stringValue.Value).ToList();
+                .Select(stringValue => stringValue.Value).ToListAsync();
             var createTables = !existingTableNames.Intersect(tableNamesToValidate, StringComparer.InvariantCultureIgnoreCase).Any();
             if (!createTables)
                 return;
@@ -38,13 +40,13 @@ namespace Nop.Data
             //create tables
             //EngineContext.Current.Resolve<IRelationalDatabaseCreator>().CreateTables();
             //(context as DbContext).Database.EnsureCreated();
-            context.ExecuteSqlScript(context.GenerateCreateScript());
+           await context.ExecuteSqlScript(context.GenerateCreateScript());
 
             //create indexes
-            context.ExecuteSqlScriptFromFile(fileProvider.MapPath(NopDataDefaults.SqlServerIndexesFilePath));
+            await context.ExecuteSqlScriptFromFile(fileProvider.MapPath(NopDataDefaults.SqlServerIndexesFilePath));
 
             //create stored procedures 
-            context.ExecuteSqlScriptFromFile(fileProvider.MapPath(NopDataDefaults.SqlServerStoredProceduresFilePath));
+            await context.ExecuteSqlScriptFromFile(fileProvider.MapPath(NopDataDefaults.SqlServerStoredProceduresFilePath));
         }
 
         /// <summary>

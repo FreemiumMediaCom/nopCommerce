@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace Nop.Core.Data
 {
@@ -12,7 +13,7 @@ namespace Nop.Core.Data
         /// <summary>
         /// Initialize database
         /// </summary>
-        void InitializeDatabase();
+        Task InitializeDatabase();
 
         /// <summary>
         /// Get a support database parameter object (used by stored procedures)

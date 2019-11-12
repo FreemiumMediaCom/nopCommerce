@@ -20,6 +20,8 @@ namespace Nop.Web.Factories
         /// <returns>Language selector model</returns>
         LanguageSelectorModel PrepareLanguageSelectorModel();
 
+        ContactInformationModel PrepareContactInformationModel();
+
         /// <summary>
         /// Prepare the currency selector model
         /// </summary>
