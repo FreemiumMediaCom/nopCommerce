@@ -146,7 +146,7 @@ namespace Nop.Web.Factories
         /// </summary>
         /// <param name="pagingFilteringModel">Catalog paging filtering model</param>
         /// <param name="command">Catalog paging filtering command</param>
-        public virtual void PrepareSortingOptions(CatalogPagingFilteringModel pagingFilteringModel, CatalogPagingFilteringModel command)
+        public async virtual Task PrepareSortingOptions(CatalogPagingFilteringModel pagingFilteringModel, CatalogPagingFilteringModel command)
         {
             if (pagingFilteringModel == null)
                 throw new ArgumentNullException(nameof(pagingFilteringModel));
@@ -182,7 +182,7 @@ namespace Nop.Web.Factories
             {
                 pagingFilteringModel.AvailableSortOptions.Add(new SelectListItem
                 {
-                    Text = _localizationService.GetLocalizedEnum((ProductSortingEnum)option.Id),
+                    Text = await _localizationService.GetLocalizedEnum((ProductSortingEnum)option.Id),
                     Value = _webHelper.ModifyQueryString(currentPageUrl, "orderby", option.Id.ToString()),
                     Selected = option.Id == command.OrderBy
                 });
@@ -194,7 +194,7 @@ namespace Nop.Web.Factories
         /// </summary>
         /// <param name="pagingFilteringModel">Catalog paging filtering model</param>
         /// <param name="command">Catalog paging filtering command</param>
-        public virtual void PrepareViewModes(CatalogPagingFilteringModel pagingFilteringModel, CatalogPagingFilteringModel command)
+        public async virtual Task PrepareViewModes(CatalogPagingFilteringModel pagingFilteringModel, CatalogPagingFilteringModel command)
         {
             if (pagingFilteringModel == null)
                 throw new ArgumentNullException(nameof(pagingFilteringModel));
@@ -214,14 +214,14 @@ namespace Nop.Web.Factories
                 //grid
                 pagingFilteringModel.AvailableViewModes.Add(new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Catalog.ViewMode.Grid"),
+                    Text = await _localizationService.GetResource("Catalog.ViewMode.Grid"),
                     Value = _webHelper.ModifyQueryString(currentPageUrl, "viewmode", "grid"),
                     Selected = viewMode == "grid"
                 });
                 //list
                 pagingFilteringModel.AvailableViewModes.Add(new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Catalog.ViewMode.List"),
+                    Text = await _localizationService.GetResource("Catalog.ViewMode.List"),
                     Value = _webHelper.ModifyQueryString(currentPageUrl, "viewmode", "list"),
                     Selected = viewMode == "list"
                 });
@@ -236,7 +236,7 @@ namespace Nop.Web.Factories
         /// <param name="allowCustomersToSelectPageSize">Are customers allowed to select page size?</param>
         /// <param name="pageSizeOptions">Page size options</param>
         /// <param name="fixedPageSize">Fixed page size</param>
-        public virtual void PreparePageSizeOptions(CatalogPagingFilteringModel pagingFilteringModel, CatalogPagingFilteringModel command,
+        public async virtual Task PreparePageSizeOptions(CatalogPagingFilteringModel pagingFilteringModel, CatalogPagingFilteringModel command,
             bool allowCustomersToSelectPageSize, string pageSizeOptions, int fixedPageSize)
         {
             if (pagingFilteringModel == null)
@@ -333,11 +333,11 @@ namespace Nop.Web.Factories
             var model = new CategoryModel
             {
                 Id = category.Id,
-                Name = _localizationService.GetLocalized(category, x => x.Name),
-                Description = _localizationService.GetLocalized(category, x => x.Description),
-                MetaKeywords = _localizationService.GetLocalized(category, x => x.MetaKeywords),
-                MetaDescription = _localizationService.GetLocalized(category, x => x.MetaDescription),
-                MetaTitle = _localizationService.GetLocalized(category, x => x.MetaTitle),
+                Name = await _localizationService.GetLocalized(category, x => x.Name),
+                Description = await _localizationService.GetLocalized(category, x => x.Description),
+                MetaKeywords = await _localizationService.GetLocalized(category, x => x.MetaKeywords),
+                MetaDescription = await _localizationService.GetLocalized(category, x => x.MetaDescription),
+                MetaTitle = await _localizationService.GetLocalized(category, x => x.MetaTitle),
                 SeName = _urlRecordService.GetSeName(category),
             };
 
@@ -379,7 +379,7 @@ namespace Nop.Web.Factories
                     _categoryService.GetCategoryBreadCrumb(category).Select(catBr => new CategoryModel
                     {
                         Id = catBr.Id,
-                        Name = _localizationService.GetLocalized(catBr, x => x.Name),
+                        Name = await _localizationService.GetLocalized(catBr, x => x.Name),
                         SeName = _urlRecordService.GetSeName(catBr)
                     })
                     .ToList()
@@ -403,9 +403,9 @@ namespace Nop.Web.Factories
                     var subCatModel = new CategoryModel.SubCategoryModel
                     {
                         Id = x.Id,
-                        Name = _localizationService.GetLocalized(x, y => y.Name),
+                        Name = await _localizationService.GetLocalized(x, y => y.Name),
                         SeName = _urlRecordService.GetSeName(x),
-                        Description = _localizationService.GetLocalized(x, y => y.Description)
+                        Description = await _localizationService.GetLocalized(x, y => y.Description)
                     };
 
                     //prepare picture model
@@ -417,8 +417,8 @@ namespace Nop.Web.Factories
                         {
                             FullSizeImageUrl = _pictureService.GetPictureUrl(picture),
                             ImageUrl = _pictureService.GetPictureUrl(picture, pictureSize),
-                            Title = string.Format(_localizationService.GetResource("Media.Category.ImageLinkTitleFormat"), subCatModel.Name),
-                            AlternateText = string.Format(_localizationService.GetResource("Media.Category.ImageAlternateTextFormat"), subCatModel.Name)
+                            Title = string.Format(await _localizationService.GetResource("Media.Category.ImageLinkTitleFormat"), subCatModel.Name),
+                            AlternateText = string.Format(await _localizationService.GetResource("Media.Category.ImageAlternateTextFormat"), subCatModel.Name)
                         };
                         return pictureModel;
                     });
@@ -500,7 +500,7 @@ namespace Nop.Web.Factories
         /// </summary>
         /// <param name="templateId">Template identifier</param>
         /// <returns>Category template view path</returns>
-        public virtual string PrepareCategoryTemplateViewPath(int templateId)
+        public async virtual Task<string> PrepareCategoryTemplateViewPath(int templateId)
         {
             var templateCacheKey = string.Format(NopModelCacheDefaults.CategoryTemplateModelKey, templateId);
             var templateViewPath = _cacheManager.Get(templateCacheKey, () =>
@@ -571,7 +571,7 @@ namespace Nop.Web.Factories
                 .Select(t => new TopMenuModel.TopicModel
                 {
                     Id = t.Id,
-                    Name = _localizationService.GetLocalized(t, x => x.Title),
+                    Name = await _localizationService.GetLocalized(t, x => x.Title),
                     SeName = _urlRecordService.GetSeName(t)
                 })
                 .ToList()
@@ -617,11 +617,11 @@ namespace Nop.Web.Factories
                     var catModel = new CategoryModel
                     {
                         Id = category.Id,
-                        Name = _localizationService.GetLocalized(category, x => x.Name),
-                        Description = _localizationService.GetLocalized(category, x => x.Description),
-                        MetaKeywords = _localizationService.GetLocalized(category, x => x.MetaKeywords),
-                        MetaDescription = _localizationService.GetLocalized(category, x => x.MetaDescription),
-                        MetaTitle = _localizationService.GetLocalized(category, x => x.MetaTitle),
+                        Name = await _localizationService.GetLocalized(category, x => x.Name),
+                        Description = await _localizationService.GetLocalized(category, x => x.Description),
+                        MetaKeywords = await _localizationService.GetLocalized(category, x => x.MetaKeywords),
+                        MetaDescription = await _localizationService.GetLocalized(category, x => x.MetaDescription),
+                        MetaTitle = await _localizationService.GetLocalized(category, x => x.MetaTitle),
                         SeName = _urlRecordService.GetSeName(category),
                     };
 
@@ -634,8 +634,8 @@ namespace Nop.Web.Factories
                         {
                             FullSizeImageUrl = _pictureService.GetPictureUrl(picture),
                             ImageUrl = _pictureService.GetPictureUrl(picture, pictureSize),
-                            Title = string.Format(_localizationService.GetResource("Media.Category.ImageLinkTitleFormat"), catModel.Name),
-                            AlternateText = string.Format(_localizationService.GetResource("Media.Category.ImageAlternateTextFormat"), catModel.Name)
+                            Title = string.Format(await _localizationService.GetResource("Media.Category.ImageLinkTitleFormat"), catModel.Name),
+                            AlternateText = string.Format(await _localizationService.GetResource("Media.Category.ImageAlternateTextFormat"), catModel.Name)
                         };
                         return pictureModel;
                     });
@@ -684,7 +684,7 @@ namespace Nop.Web.Factories
                 var categoryModel = new CategorySimpleModel
                 {
                     Id = category.Id,
-                    Name = _localizationService.GetLocalized(category, x => x.Name),
+                    Name = await _localizationService.GetLocalized(category, x => x.Name),
                     SeName = _urlRecordService.GetSeName(category),
                     IncludeInTopMenu = category.IncludeInTopMenu
                 };
@@ -803,11 +803,11 @@ namespace Nop.Web.Factories
             var model = new ManufacturerModel
             {
                 Id = manufacturer.Id,
-                Name = _localizationService.GetLocalized(manufacturer, x => x.Name),
-                Description = _localizationService.GetLocalized(manufacturer, x => x.Description),
-                MetaKeywords = _localizationService.GetLocalized(manufacturer, x => x.MetaKeywords),
-                MetaDescription = _localizationService.GetLocalized(manufacturer, x => x.MetaDescription),
-                MetaTitle = _localizationService.GetLocalized(manufacturer, x => x.MetaTitle),
+                Name = await _localizationService.GetLocalized(manufacturer, x => x.Name),
+                Description = await _localizationService.GetLocalized(manufacturer, x => x.Description),
+                MetaKeywords = await _localizationService.GetLocalized(manufacturer, x => x.MetaKeywords),
+                MetaDescription = await _localizationService.GetLocalized(manufacturer, x => x.MetaDescription),
+                MetaTitle = await _localizationService.GetLocalized(manufacturer, x => x.MetaTitle),
                 SeName = _urlRecordService.GetSeName(manufacturer),
             };
 
@@ -895,7 +895,7 @@ namespace Nop.Web.Factories
         /// </summary>
         /// <param name="templateId">Template identifier</param>
         /// <returns>Manufacturer template view path</returns>
-        public virtual string PrepareManufacturerTemplateViewPath(int templateId)
+        public async virtual Task<string> PrepareManufacturerTemplateViewPath(int templateId)
         {
             var templateCacheKey = string.Format(NopModelCacheDefaults.ManufacturerTemplateModelKey, templateId);
             var templateViewPath = _cacheManager.Get(templateCacheKey, () =>
@@ -924,11 +924,11 @@ namespace Nop.Web.Factories
                 var modelMan = new ManufacturerModel
                 {
                     Id = manufacturer.Id,
-                    Name = _localizationService.GetLocalized(manufacturer, x => x.Name),
-                    Description = _localizationService.GetLocalized(manufacturer, x => x.Description),
-                    MetaKeywords = _localizationService.GetLocalized(manufacturer, x => x.MetaKeywords),
-                    MetaDescription = _localizationService.GetLocalized(manufacturer, x => x.MetaDescription),
-                    MetaTitle = _localizationService.GetLocalized(manufacturer, x => x.MetaTitle),
+                    Name = await _localizationService.GetLocalized(manufacturer, x => x.Name),
+                    Description = await _localizationService.GetLocalized(manufacturer, x => x.Description),
+                    MetaKeywords = await _localizationService.GetLocalized(manufacturer, x => x.MetaKeywords),
+                    MetaDescription = await _localizationService.GetLocalized(manufacturer, x => x.MetaDescription),
+                    MetaTitle = await _localizationService.GetLocalized(manufacturer, x => x.MetaTitle),
                     SeName = _urlRecordService.GetSeName(manufacturer),
                 };
 
@@ -942,8 +942,8 @@ namespace Nop.Web.Factories
                     {
                         FullSizeImageUrl = _pictureService.GetPictureUrl(picture),
                         ImageUrl = _pictureService.GetPictureUrl(picture, pictureSize),
-                        Title = string.Format(_localizationService.GetResource("Media.Manufacturer.ImageLinkTitleFormat"), modelMan.Name),
-                        AlternateText = string.Format(_localizationService.GetResource("Media.Manufacturer.ImageAlternateTextFormat"), modelMan.Name)
+                        Title = string.Format(await _localizationService.GetResource("Media.Manufacturer.ImageLinkTitleFormat"), modelMan.Name),
+                        AlternateText = string.Format(await _localizationService.GetResource("Media.Manufacturer.ImageAlternateTextFormat"), modelMan.Name)
                     };
                     return pictureModel;
                 });
@@ -981,7 +981,7 @@ namespace Nop.Web.Factories
                     var modelMan = new ManufacturerBriefInfoModel
                     {
                         Id = manufacturer.Id,
-                        Name = _localizationService.GetLocalized(manufacturer, x => x.Name),
+                        Name = await _localizationService.GetLocalized(manufacturer, x => x.Name),
                         SeName = _urlRecordService.GetSeName(manufacturer),
                         IsActive = currentManufacturer != null && currentManufacturer.Id == manufacturer.Id,
                     };
@@ -1011,11 +1011,11 @@ namespace Nop.Web.Factories
             var model = new VendorModel
             {
                 Id = vendor.Id,
-                Name = _localizationService.GetLocalized(vendor, x => x.Name),
-                Description = _localizationService.GetLocalized(vendor, x => x.Description),
-                MetaKeywords = _localizationService.GetLocalized(vendor, x => x.MetaKeywords),
-                MetaDescription = _localizationService.GetLocalized(vendor, x => x.MetaDescription),
-                MetaTitle = _localizationService.GetLocalized(vendor, x => x.MetaTitle),
+                Name = await _localizationService.GetLocalized(vendor, x => x.Name),
+                Description = await _localizationService.GetLocalized(vendor, x => x.Description),
+                MetaKeywords = await _localizationService.GetLocalized(vendor, x => x.MetaKeywords),
+                MetaDescription = await _localizationService.GetLocalized(vendor, x => x.MetaDescription),
+                MetaTitle = await _localizationService.GetLocalized(vendor, x => x.MetaTitle),
                 SeName = _urlRecordService.GetSeName(vendor),
                 AllowCustomersToContactVendors = _vendorSettings.AllowCustomersToContactVendors
             };
@@ -1059,11 +1059,11 @@ namespace Nop.Web.Factories
                 var vendorModel = new VendorModel
                 {
                     Id = vendor.Id,
-                    Name = _localizationService.GetLocalized(vendor, x => x.Name),
-                    Description = _localizationService.GetLocalized(vendor, x => x.Description),
-                    MetaKeywords = _localizationService.GetLocalized(vendor, x => x.MetaKeywords),
-                    MetaDescription = _localizationService.GetLocalized(vendor, x => x.MetaDescription),
-                    MetaTitle = _localizationService.GetLocalized(vendor, x => x.MetaTitle),
+                    Name = await _localizationService.GetLocalized(vendor, x => x.Name),
+                    Description = await _localizationService.GetLocalized(vendor, x => x.Description),
+                    MetaKeywords = await _localizationService.GetLocalized(vendor, x => x.MetaKeywords),
+                    MetaDescription = await _localizationService.GetLocalized(vendor, x => x.MetaDescription),
+                    MetaTitle = await _localizationService.GetLocalized(vendor, x => x.MetaTitle),
                     SeName = _urlRecordService.GetSeName(vendor),
                     AllowCustomersToContactVendors = _vendorSettings.AllowCustomersToContactVendors
                 };
@@ -1078,8 +1078,8 @@ namespace Nop.Web.Factories
                     {
                         FullSizeImageUrl = _pictureService.GetPictureUrl(picture),
                         ImageUrl = _pictureService.GetPictureUrl(picture, pictureSize),
-                        Title = string.Format(_localizationService.GetResource("Media.Vendor.ImageLinkTitleFormat"), vendorModel.Name),
-                        AlternateText = string.Format(_localizationService.GetResource("Media.Vendor.ImageAlternateTextFormat"), vendorModel.Name)
+                        Title = string.Format(await _localizationService.GetResource("Media.Vendor.ImageLinkTitleFormat"), vendorModel.Name),
+                        AlternateText = string.Format(await _localizationService.GetResource("Media.Vendor.ImageAlternateTextFormat"), vendorModel.Name)
                     };
                     return pictureModel;
                 });
@@ -1109,7 +1109,7 @@ namespace Nop.Web.Factories
                     model.Vendors.Add(new VendorBriefInfoModel
                     {
                         Id = vendor.Id,
-                        Name = _localizationService.GetLocalized(vendor, x => x.Name),
+                        Name = await _localizationService.GetLocalized(vendor, x => x.Name),
                         SeName = _urlRecordService.GetSeName(vendor),
                     });
                 }
@@ -1155,7 +1155,7 @@ namespace Nop.Web.Factories
                     model.Tags.Add(new ProductTagModel
                     {
                         Id = tag.Id,
-                        Name = _localizationService.GetLocalized(tag, y => y.Name),
+                        Name = await _localizationService.GetLocalized(tag, y => y.Name),
                         SeName = _urlRecordService.GetSeName(tag),
                         ProductCount = _productTagService.GetProductCount(tag.Id, _storeContext.CurrentStore.Id)
                     });
@@ -1179,7 +1179,7 @@ namespace Nop.Web.Factories
             var model = new ProductsByTagModel
             {
                 Id = productTag.Id,
-                TagName = _localizationService.GetLocalized(productTag, y => y.Name),
+                TagName = await _localizationService.GetLocalized(productTag, y => y.Name),
                 TagSeName = _urlRecordService.GetSeName(productTag)
             };
 
@@ -1226,7 +1226,7 @@ namespace Nop.Web.Factories
                     var ptModel = new ProductTagModel
                     {
                         Id = x.Id,
-                        Name = _localizationService.GetLocalized(x, y => y.Name),
+                        Name = await _localizationService.GetLocalized(x, y => y.Name),
                         SeName = _urlRecordService.GetSeName(x),
                         ProductCount = _productTagService.GetProductCount(x.Id, _storeContext.CurrentStore.Id)
                     };
@@ -1283,7 +1283,7 @@ namespace Nop.Web.Factories
                     var breadcrumb = _categoryService.GetCategoryBreadCrumb(c, allCategories);
                     for (var i = 0; i <= breadcrumb.Count - 1; i++)
                     {
-                        categoryBreadcrumb += _localizationService.GetLocalized(breadcrumb[i], x => x.Name);
+                        categoryBreadcrumb += await _localizationService.GetLocalized(breadcrumb[i], x => x.Name);
                         if (i != breadcrumb.Count - 1)
                             categoryBreadcrumb += " >> ";
                     }
@@ -1301,7 +1301,7 @@ namespace Nop.Web.Factories
                 model.AvailableCategories.Add(new SelectListItem
                 {
                     Value = "0",
-                    Text = _localizationService.GetResource("Common.All")
+                    Text = await _localizationService.GetResource("Common.All")
                 });
                 //all other categories
                 foreach (var c in categories)
@@ -1321,13 +1321,13 @@ namespace Nop.Web.Factories
                 model.AvailableManufacturers.Add(new SelectListItem
                 {
                     Value = "0",
-                    Text = _localizationService.GetResource("Common.All")
+                    Text = await _localizationService.GetResource("Common.All")
                 });
                 foreach (var m in manufacturers)
                     model.AvailableManufacturers.Add(new SelectListItem
                     {
                         Value = m.Id.ToString(),
-                        Text = _localizationService.GetLocalized(m, x => x.Name),
+                        Text = await _localizationService.GetLocalized(m, x => x.Name),
                         Selected = model.mid == m.Id
                     });
             }
@@ -1341,13 +1341,13 @@ namespace Nop.Web.Factories
                     model.AvailableVendors.Add(new SelectListItem
                     {
                         Value = "0",
-                        Text = _localizationService.GetResource("Common.All")
+                        Text = await _localizationService.GetResource("Common.All")
                     });
                     foreach (var vendor in vendors)
                         model.AvailableVendors.Add(new SelectListItem
                         {
                             Value = vendor.Id.ToString(),
-                            Text = _localizationService.GetLocalized(vendor, x => x.Name),
+                            Text = await _localizationService.GetLocalized(vendor, x => x.Name),
                             Selected = model.vid == vendor.Id
                         });
                 }
@@ -1361,7 +1361,7 @@ namespace Nop.Web.Factories
             {
                 if (searchTerms.Length < _catalogSettings.ProductSearchTermMinimumLength)
                 {
-                    model.Warning = string.Format(_localizationService.GetResource("Search.SearchTermMinimumLengthIsNCharacters"), _catalogSettings.ProductSearchTermMinimumLength);
+                    model.Warning = string.Format(await _localizationService.GetResource("Search.SearchTermMinimumLengthIsNCharacters"), _catalogSettings.ProductSearchTermMinimumLength);
                 }
                 else
                 {

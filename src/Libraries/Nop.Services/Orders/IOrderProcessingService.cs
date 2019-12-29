@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
@@ -15,26 +16,26 @@ namespace Nop.Services.Orders
         /// Checks order status
         /// </summary>
         /// <param name="order">Order</param>
-        void CheckOrderStatus(Order order);
+        Task CheckOrderStatus(Order order);
 
         /// <summary>
         /// Places an order
         /// </summary>
         /// <param name="processPaymentRequest">Process payment request</param>
         /// <returns>Place order result</returns>
-        PlaceOrderResult PlaceOrder(ProcessPaymentRequest processPaymentRequest);
+        Task<PlaceOrderResult> PlaceOrder(ProcessPaymentRequest processPaymentRequest);
 
         /// <summary>
         /// Update order totals
         /// </summary>
         /// <param name="updateOrderParameters">Parameters for the updating order</param>
-        void UpdateOrderTotals(UpdateOrderParameters updateOrderParameters);
+        Task UpdateOrderTotals(UpdateOrderParameters updateOrderParameters);
 
         /// <summary>
         /// Deletes an order
         /// </summary>
         /// <param name="order">The order</param>
-        void DeleteOrder(Order order);
+        Task DeleteOrder(Order order);
 
         /// <summary>
         /// Process next recurring payment
@@ -42,13 +43,13 @@ namespace Nop.Services.Orders
         /// <param name="recurringPayment">Recurring payment</param>
         /// <param name="paymentResult">Process payment result (info about last payment for automatic recurring payments)</param>
         /// <returns>Collection of errors</returns>
-        IEnumerable<string> ProcessNextRecurringPayment(RecurringPayment recurringPayment, ProcessPaymentResult paymentResult = null);
+        Task<IEnumerable<string>> ProcessNextRecurringPayment(RecurringPayment recurringPayment, ProcessPaymentResult paymentResult = null);
 
         /// <summary>
         /// Cancels a recurring payment
         /// </summary>
         /// <param name="recurringPayment">Recurring payment</param>
-        IList<string> CancelRecurringPayment(RecurringPayment recurringPayment);
+        Task<IList<string>> CancelRecurringPayment(RecurringPayment recurringPayment);
 
         /// <summary>
         /// Gets a value indicating whether a customer can cancel recurring payment
@@ -71,14 +72,14 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="shipment">Shipment</param>
         /// <param name="notifyCustomer">True to notify customer</param>
-        void Ship(Shipment shipment, bool notifyCustomer);
-        
+        Task Ship(Shipment shipment, bool notifyCustomer);
+
         /// <summary>
         /// Marks a shipment as delivered
         /// </summary>
         /// <param name="shipment">Shipment</param>
         /// <param name="notifyCustomer">True to notify customer</param>
-        void Deliver(Shipment shipment, bool notifyCustomer);
+        Task Deliver(Shipment shipment, bool notifyCustomer);
 
         /// <summary>
         /// Gets a value indicating whether cancel is allowed
@@ -92,7 +93,7 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="order">Order</param>
         /// <param name="notifyCustomer">True to notify customer</param>
-        void CancelOrder(Order order, bool notifyCustomer);
+        Task CancelOrder(Order order, bool notifyCustomer);
 
         /// <summary>
         /// Gets a value indicating whether order can be marked as authorized
@@ -105,7 +106,7 @@ namespace Nop.Services.Orders
         /// Marks order as authorized
         /// </summary>
         /// <param name="order">Order</param>
-        void MarkAsAuthorized(Order order);
+        Task MarkAsAuthorized(Order order);
 
         /// <summary>
         /// Gets a value indicating whether capture from admin panel is allowed
@@ -119,7 +120,7 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="order">Order</param>
         /// <returns>A list of errors; empty list if no errors</returns>
-        IList<string> Capture(Order order);
+        Task<IList<string>> Capture(Order order);
 
         /// <summary>
         /// Gets a value indicating whether order can be marked as paid
@@ -132,7 +133,7 @@ namespace Nop.Services.Orders
         /// Marks order as paid
         /// </summary>
         /// <param name="order">Order</param>
-        void MarkOrderAsPaid(Order order);
+        Task MarkOrderAsPaid(Order order);
 
         /// <summary>
         /// Gets a value indicating whether refund from admin panel is allowed
@@ -146,7 +147,7 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="order">Order</param>
         /// <returns>A list of errors; empty list if no errors</returns>
-        IList<string> Refund(Order order);
+        Task<IList<string>> Refund(Order order);
 
         /// <summary>
         /// Gets a value indicating whether order can be marked as refunded
@@ -159,7 +160,7 @@ namespace Nop.Services.Orders
         /// Refunds an order (offline)
         /// </summary>
         /// <param name="order">Order</param>
-        void RefundOffline(Order order);
+        Task RefundOffline(Order order);
 
         /// <summary>
         /// Gets a value indicating whether partial refund from admin panel is allowed
@@ -175,7 +176,7 @@ namespace Nop.Services.Orders
         /// <param name="order">Order</param>
         /// <param name="amountToRefund">Amount to refund</param>
         /// <returns>A list of errors; empty list if no errors</returns>
-        IList<string> PartiallyRefund(Order order, decimal amountToRefund);
+        Task<IList<string>> PartiallyRefund(Order order, decimal amountToRefund);
 
         /// <summary>
         /// Gets a value indicating whether order can be marked as partially refunded
@@ -190,7 +191,7 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="order">Order</param>
         /// <param name="amountToRefund">Amount to refund</param>
-        void PartiallyRefundOffline(Order order, decimal amountToRefund);
+        Task PartiallyRefundOffline(Order order, decimal amountToRefund);
 
         /// <summary>
         /// Gets a value indicating whether void from admin panel is allowed
@@ -204,7 +205,7 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="order">Order</param>
         /// <returns>Voided order</returns>
-        IList<string> Void(Order order);
+        Task<IList<string>> Void(Order order);
 
         /// <summary>
         /// Gets a value indicating whether order can be marked as voided
@@ -217,14 +218,14 @@ namespace Nop.Services.Orders
         /// Voids order (offline)
         /// </summary>
         /// <param name="order">Order</param>
-        void VoidOffline(Order order);
+        Task VoidOffline(Order order);
 
         /// <summary>
         /// Place order items in current user shopping cart.
         /// </summary>
         /// <param name="order">The order</param>
-        void ReOrder(Order order);
-        
+        Task ReOrder(Order order);
+
         /// <summary>
         /// Check whether return request is allowed
         /// </summary>

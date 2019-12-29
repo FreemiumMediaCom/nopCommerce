@@ -48,7 +48,7 @@ namespace Nop.Plugin.Payments.Qualpay.Components
         /// <param name="widgetZone">Widget zone name</param>
         /// <param name="additionalData">Additional data</param>
         /// <returns>View component result</returns>
-        public IViewComponentResult Invoke(string widgetZone, object additionalData)
+        public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
             if (!widgetZone?.Equals(AdminWidgetZones.CustomerDetailsBlock, StringComparison.InvariantCultureIgnoreCase) ?? true)
                 return Content(string.Empty);

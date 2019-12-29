@@ -46,7 +46,7 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Controllers
 
         #region Methods
         
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageWidgets))
                 return AccessDeniedView();
@@ -80,7 +80,7 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Controllers
         }
 
         [HttpPost]
-        public IActionResult Configure(ConfigurationModel model)
+        public async Task<IActionResult> Configure(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageWidgets))
                 return AccessDeniedView();
@@ -109,7 +109,7 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Controllers
             //now clear settings cache
             _settingService.ClearCache();
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
         }

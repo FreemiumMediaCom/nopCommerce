@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Common;
@@ -43,12 +45,12 @@ namespace Nop.Services.Common
         /// Deletes an address attribute
         /// </summary>
         /// <param name="addressAttribute">Address attribute</param>
-        public virtual void DeleteAddressAttribute(AddressAttribute addressAttribute)
+        public async virtual Task DeleteAddressAttribute(AddressAttribute addressAttribute)
         {
             if (addressAttribute == null)
                 throw new ArgumentNullException(nameof(addressAttribute));
 
-            _addressAttributeRepository.Delete(addressAttribute);
+            await _addressAttributeRepository.Delete(addressAttribute);
 
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributeValuesPrefixCacheKey);
@@ -61,14 +63,14 @@ namespace Nop.Services.Common
         /// Gets all address attributes
         /// </summary>
         /// <returns>Address attributes</returns>
-        public virtual IList<AddressAttribute> GetAllAddressAttributes()
+        public async virtual Task<IList<AddressAttribute>> GetAllAddressAttributes()
         {
-            return _cacheManager.Get(NopCommonDefaults.AddressAttributesAllCacheKey, () =>
+            return await _cacheManager.Get(NopCommonDefaults.AddressAttributesAllCacheKey, async () =>
             {
                 var query = from aa in _addressAttributeRepository.Table
                             orderby aa.DisplayOrder, aa.Id
                             select aa;
-                return query.ToList();
+                return await query.ToListAsync();
             });
         }
 
@@ -77,25 +79,25 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="addressAttributeId">Address attribute identifier</param>
         /// <returns>Address attribute</returns>
-        public virtual AddressAttribute GetAddressAttributeById(int addressAttributeId)
+        public async virtual Task<AddressAttribute> GetAddressAttributeById(int addressAttributeId)
         {
             if (addressAttributeId == 0)
                 return null;
 
             var key = string.Format(NopCommonDefaults.AddressAttributesByIdCacheKey, addressAttributeId);
-            return _cacheManager.Get(key, () => _addressAttributeRepository.GetById(addressAttributeId));
+            return await _cacheManager.Get(key, async() => await _addressAttributeRepository.GetById(addressAttributeId));
         }
 
         /// <summary>
         /// Inserts an address attribute
         /// </summary>
         /// <param name="addressAttribute">Address attribute</param>
-        public virtual void InsertAddressAttribute(AddressAttribute addressAttribute)
+        public async virtual Task InsertAddressAttribute(AddressAttribute addressAttribute)
         {
             if (addressAttribute == null)
                 throw new ArgumentNullException(nameof(addressAttribute));
 
-            _addressAttributeRepository.Insert(addressAttribute);
+            await _addressAttributeRepository.Insert(addressAttribute);
 
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributeValuesPrefixCacheKey);
@@ -108,12 +110,12 @@ namespace Nop.Services.Common
         /// Updates the address attribute
         /// </summary>
         /// <param name="addressAttribute">Address attribute</param>
-        public virtual void UpdateAddressAttribute(AddressAttribute addressAttribute)
+        public async virtual Task UpdateAddressAttribute(AddressAttribute addressAttribute)
         {
             if (addressAttribute == null)
                 throw new ArgumentNullException(nameof(addressAttribute));
 
-            _addressAttributeRepository.Update(addressAttribute);
+            await _addressAttributeRepository.Update(addressAttribute);
 
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributeValuesPrefixCacheKey);
@@ -126,12 +128,12 @@ namespace Nop.Services.Common
         /// Deletes an address attribute value
         /// </summary>
         /// <param name="addressAttributeValue">Address attribute value</param>
-        public virtual void DeleteAddressAttributeValue(AddressAttributeValue addressAttributeValue)
+        public async virtual Task DeleteAddressAttributeValue(AddressAttributeValue addressAttributeValue)
         {
             if (addressAttributeValue == null)
                 throw new ArgumentNullException(nameof(addressAttributeValue));
 
-            _addressAttributeValueRepository.Delete(addressAttributeValue);
+            await _addressAttributeValueRepository.Delete(addressAttributeValue);
 
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributeValuesPrefixCacheKey);
@@ -145,16 +147,16 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="addressAttributeId">The address attribute identifier</param>
         /// <returns>Address attribute values</returns>
-        public virtual IList<AddressAttributeValue> GetAddressAttributeValues(int addressAttributeId)
+        public async virtual Task<IList<AddressAttributeValue>> GetAddressAttributeValues(int addressAttributeId)
         {
             var key = string.Format(NopCommonDefaults.AddressAttributeValuesAllCacheKey, addressAttributeId);
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async() =>
             {
                 var query = from aav in _addressAttributeValueRepository.Table
                             orderby aav.DisplayOrder, aav.Id
                             where aav.AddressAttributeId == addressAttributeId
                             select aav;
-                var addressAttributeValues = query.ToList();
+                var addressAttributeValues = await query.ToListAsync();
                 return addressAttributeValues;
             });
         }
@@ -164,25 +166,25 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="addressAttributeValueId">Address attribute value identifier</param>
         /// <returns>Address attribute value</returns>
-        public virtual AddressAttributeValue GetAddressAttributeValueById(int addressAttributeValueId)
+        public async virtual Task<AddressAttributeValue> GetAddressAttributeValueById(int addressAttributeValueId)
         {
             if (addressAttributeValueId == 0)
                 return null;
 
             var key = string.Format(NopCommonDefaults.AddressAttributeValuesByIdCacheKey, addressAttributeValueId);
-            return _cacheManager.Get(key, () => _addressAttributeValueRepository.GetById(addressAttributeValueId));
+            return await _cacheManager.Get(key, async () => await _addressAttributeValueRepository.GetById(addressAttributeValueId));
         }
 
         /// <summary>
         /// Inserts an address attribute value
         /// </summary>
         /// <param name="addressAttributeValue">Address attribute value</param>
-        public virtual void InsertAddressAttributeValue(AddressAttributeValue addressAttributeValue)
+        public async virtual Task InsertAddressAttributeValue(AddressAttributeValue addressAttributeValue)
         {
             if (addressAttributeValue == null)
                 throw new ArgumentNullException(nameof(addressAttributeValue));
 
-            _addressAttributeValueRepository.Insert(addressAttributeValue);
+            await _addressAttributeValueRepository.Insert(addressAttributeValue);
 
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributeValuesPrefixCacheKey);
@@ -195,12 +197,12 @@ namespace Nop.Services.Common
         /// Updates the address attribute value
         /// </summary>
         /// <param name="addressAttributeValue">Address attribute value</param>
-        public virtual void UpdateAddressAttributeValue(AddressAttributeValue addressAttributeValue)
+        public async virtual Task UpdateAddressAttributeValue(AddressAttributeValue addressAttributeValue)
         {
             if (addressAttributeValue == null)
                 throw new ArgumentNullException(nameof(addressAttributeValue));
 
-            _addressAttributeValueRepository.Update(addressAttributeValue);
+            await _addressAttributeValueRepository.Update(addressAttributeValue);
 
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressAttributeValuesPrefixCacheKey);

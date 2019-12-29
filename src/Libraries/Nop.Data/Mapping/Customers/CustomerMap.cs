@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Customers;
 
 namespace Nop.Data.Mapping.Customers

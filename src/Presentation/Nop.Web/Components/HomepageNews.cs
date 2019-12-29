@@ -16,7 +16,7 @@ namespace Nop.Web.Components
             _newsSettings = newsSettings;
         }
 
-        public IViewComponentResult Invoke()
+public async Task<IViewComponentResult> InvokeAsync()
         {
             if (!_newsSettings.Enabled || !_newsSettings.ShowNewsOnMainPage)
                 return Content("");

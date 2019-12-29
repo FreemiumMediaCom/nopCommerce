@@ -57,12 +57,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNewsletterSubscribers))
                 return AccessDeniedView();
@@ -74,7 +74,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult SubscriptionList(NewsletterSubscriptionSearchModel searchModel)
+        public async virtual Task<IActionResult> SubscriptionList(NewsletterSubscriptionSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNewsletterSubscribers))
                 return AccessDeniedDataTablesJson();
@@ -86,7 +86,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult SubscriptionUpdate(NewsletterSubscriptionModel model)
+        public async virtual Task<IActionResult> SubscriptionUpdate(NewsletterSubscriptionModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNewsletterSubscribers))
                 return AccessDeniedView();
@@ -104,7 +104,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult SubscriptionDelete(int id)
+        public async virtual Task<IActionResult> SubscriptionDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNewsletterSubscribers))
                 return AccessDeniedView();
@@ -119,7 +119,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("exportcsv")]
-        public virtual IActionResult ExportCsv(NewsletterSubscriptionSearchModel model)
+        public async virtual Task<IActionResult> ExportCsv(NewsletterSubscriptionSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNewsletterSubscribers))
                 return AccessDeniedView();
@@ -146,7 +146,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ImportCsv(IFormFile importcsvfile)
+        public async virtual Task<IActionResult> ImportCsv(IFormFile importcsvfile)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNewsletterSubscribers))
                 return AccessDeniedView();
@@ -157,12 +157,12 @@ namespace Nop.Web.Areas.Admin.Controllers
                 {
                     var count = _importManager.ImportNewsletterSubscribersFromTxt(importcsvfile.OpenReadStream());
 
-                    _notificationService.SuccessNotification(string.Format(_localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.ImportEmailsSuccess"), count));
+                    _notificationService.SuccessNotification(string.Format(await _localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.ImportEmailsSuccess"), count));
 
                     return RedirectToAction("List");
                 }
 
-                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Common.UploadFile"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Common.UploadFile"));
                 return RedirectToAction("List");
             }
             catch (Exception exc)

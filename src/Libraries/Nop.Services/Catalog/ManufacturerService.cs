@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -65,13 +67,13 @@ namespace Nop.Services.Catalog
         /// Deletes a manufacturer
         /// </summary>
         /// <param name="manufacturer">Manufacturer</param>
-        public virtual void DeleteManufacturer(Manufacturer manufacturer)
+        public async virtual Task DeleteManufacturer(Manufacturer manufacturer)
         {
             if (manufacturer == null)
                 throw new ArgumentNullException(nameof(manufacturer));
 
             manufacturer.Deleted = true;
-            UpdateManufacturer(manufacturer);
+            await UpdateManufacturer(manufacturer);
 
             //event notification
             _eventPublisher.EntityDeleted(manufacturer);
@@ -136,25 +138,25 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="manufacturerId">Manufacturer identifier</param>
         /// <returns>Manufacturer</returns>
-        public virtual Manufacturer GetManufacturerById(int manufacturerId)
+        public async virtual Task<Manufacturer> GetManufacturerById(int manufacturerId)
         {
             if (manufacturerId == 0)
                 return null;
 
             var key = string.Format(NopCatalogDefaults.ManufacturersByIdCacheKey, manufacturerId);
-            return _cacheManager.Get(key, () => _manufacturerRepository.GetById(manufacturerId));
+            return await _cacheManager.Get(key, async () => await _manufacturerRepository.GetById(manufacturerId));
         }
 
         /// <summary>
         /// Inserts a manufacturer
         /// </summary>
         /// <param name="manufacturer">Manufacturer</param>
-        public virtual void InsertManufacturer(Manufacturer manufacturer)
+        public async virtual Task InsertManufacturer(Manufacturer manufacturer)
         {
             if (manufacturer == null)
                 throw new ArgumentNullException(nameof(manufacturer));
 
-            _manufacturerRepository.Insert(manufacturer);
+            await _manufacturerRepository.Insert(manufacturer);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ManufacturersPrefixCacheKey);
@@ -168,12 +170,12 @@ namespace Nop.Services.Catalog
         /// Updates the manufacturer
         /// </summary>
         /// <param name="manufacturer">Manufacturer</param>
-        public virtual void UpdateManufacturer(Manufacturer manufacturer)
+        public async virtual Task UpdateManufacturer(Manufacturer manufacturer)
         {
             if (manufacturer == null)
                 throw new ArgumentNullException(nameof(manufacturer));
 
-            _manufacturerRepository.Update(manufacturer);
+            await _manufacturerRepository.Update(manufacturer);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ManufacturersPrefixCacheKey);
@@ -187,12 +189,12 @@ namespace Nop.Services.Catalog
         /// Deletes a product manufacturer mapping
         /// </summary>
         /// <param name="productManufacturer">Product manufacturer mapping</param>
-        public virtual void DeleteProductManufacturer(ProductManufacturer productManufacturer)
+        public async virtual Task DeleteProductManufacturer(ProductManufacturer productManufacturer)
         {
             if (productManufacturer == null)
                 throw new ArgumentNullException(nameof(productManufacturer));
 
-            _productManufacturerRepository.Delete(productManufacturer);
+            await _productManufacturerRepository.Delete(productManufacturer);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ManufacturersPrefixCacheKey);
@@ -269,13 +271,13 @@ namespace Nop.Services.Catalog
         /// <param name="productId">Product identifier</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Product manufacturer mapping collection</returns>
-        public virtual IList<ProductManufacturer> GetProductManufacturersByProductId(int productId, bool showHidden = false)
+        public async virtual Task<IList<ProductManufacturer>> GetProductManufacturersByProductId(int productId, bool showHidden = false)
         {
             if (productId == 0)
                 return new List<ProductManufacturer>();
 
             var key = string.Format(NopCatalogDefaults.ProductManufacturersAllByProductIdCacheKey, showHidden, productId, _workContext.CurrentCustomer.Id, _storeContext.CurrentStore.Id);
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async () =>
             {
                 var query = from pm in _productManufacturerRepository.Table
                             join m in _manufacturerRepository.Table on pm.ManufacturerId equals m.Id
@@ -316,7 +318,7 @@ namespace Nop.Services.Catalog
                     query = query.Distinct().OrderBy(pm => pm.DisplayOrder).ThenBy(pm => pm.Id);
                 }
 
-                var productManufacturers = query.ToList();
+                var productManufacturers = await query.ToListAsync();
                 return productManufacturers;
             });
         }
@@ -326,24 +328,24 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productManufacturerId">Product manufacturer mapping identifier</param>
         /// <returns>Product manufacturer mapping</returns>
-        public virtual ProductManufacturer GetProductManufacturerById(int productManufacturerId)
+        public async virtual Task<ProductManufacturer> GetProductManufacturerById(int productManufacturerId)
         {
             if (productManufacturerId == 0)
                 return null;
 
-            return _productManufacturerRepository.GetById(productManufacturerId);
+            return await _productManufacturerRepository.GetById(productManufacturerId);
         }
 
         /// <summary>
         /// Inserts a product manufacturer mapping
         /// </summary>
         /// <param name="productManufacturer">Product manufacturer mapping</param>
-        public virtual void InsertProductManufacturer(ProductManufacturer productManufacturer)
+        public async virtual Task InsertProductManufacturer(ProductManufacturer productManufacturer)
         {
             if (productManufacturer == null)
                 throw new ArgumentNullException(nameof(productManufacturer));
 
-            _productManufacturerRepository.Insert(productManufacturer);
+            await _productManufacturerRepository.Insert(productManufacturer);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ManufacturersPrefixCacheKey);
@@ -357,12 +359,12 @@ namespace Nop.Services.Catalog
         /// Updates the product manufacturer mapping
         /// </summary>
         /// <param name="productManufacturer">Product manufacturer mapping</param>
-        public virtual void UpdateProductManufacturer(ProductManufacturer productManufacturer)
+        public async virtual Task UpdateProductManufacturer(ProductManufacturer productManufacturer)
         {
             if (productManufacturer == null)
                 throw new ArgumentNullException(nameof(productManufacturer));
 
-            _productManufacturerRepository.Update(productManufacturer);
+            await _productManufacturerRepository.Update(productManufacturer);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ManufacturersPrefixCacheKey);
@@ -392,7 +394,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="manufacturerIdsNames">The names and/or IDs of the manufacturers to check</param>
         /// <returns>List of names and/or IDs not existing manufacturers</returns>
-        public virtual string[] GetNotExistingManufacturers(string[] manufacturerIdsNames)
+        public async virtual Task<string[]> GetNotExistingManufacturers(string[] manufacturerIdsNames)
         {
             if (manufacturerIdsNames == null)
                 throw new ArgumentNullException(nameof(manufacturerIdsNames));
@@ -408,7 +410,7 @@ namespace Nop.Services.Catalog
                 return queryFilter.ToArray();
 
             //filtering by IDs
-            filter = query.Select(c => c.Id.ToString()).Where(c => queryFilter.Contains(c)).ToList();
+            filter = await query.Select(c => c.Id.ToString()).Where(c => queryFilter.Contains(c)).ToListAsync();
             queryFilter = queryFilter.Except(filter).ToArray();
 
             return queryFilter.ToArray();

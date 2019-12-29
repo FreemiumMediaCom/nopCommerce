@@ -78,9 +78,9 @@ namespace Nop.Web.Factories
                 IsPasswordProtected = topic.IsPasswordProtected,
                 Title = topic.IsPasswordProtected ? "" : _localizationService.GetLocalized(topic, x => x.Title),
                 Body = topic.IsPasswordProtected ? "" : _localizationService.GetLocalized(topic, x => x.Body),
-                MetaKeywords = _localizationService.GetLocalized(topic, x => x.MetaKeywords),
-                MetaDescription = _localizationService.GetLocalized(topic, x => x.MetaDescription),
-                MetaTitle = _localizationService.GetLocalized(topic, x => x.MetaTitle),
+                MetaKeywords = await _localizationService.GetLocalized(topic, x => x.MetaKeywords),
+                MetaDescription = await _localizationService.GetLocalized(topic, x => x.MetaDescription),
+                MetaTitle = await _localizationService.GetLocalized(topic, x => x.MetaTitle),
                 SeName = _urlRecordService.GetSeName(topic),
                 TopicTemplateId = topic.TopicTemplateId
             };
@@ -156,7 +156,7 @@ namespace Nop.Web.Factories
         /// </summary>
         /// <param name="topicTemplateId">Topic template identifier</param>
         /// <returns>View path</returns>
-        public virtual string PrepareTemplateViewPath(int topicTemplateId)
+        public async virtual Task<string> PrepareTemplateViewPath(int topicTemplateId)
         {
             var templateCacheKey = string.Format(NopModelCacheDefaults.TopicTemplateModelKey, topicTemplateId);
             var templateViewPath = _cacheManager.Get(templateCacheKey, () =>

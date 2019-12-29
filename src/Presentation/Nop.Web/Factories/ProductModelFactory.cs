@@ -268,7 +268,7 @@ namespace Nop.Web.Factories
                 {
                     //call for price
                     priceModel.OldPrice = null;
-                    priceModel.Price = _localizationService.GetResource("Products.CallForPrice");
+                    priceModel.Price = await _localizationService.GetResource("Products.CallForPrice");
                 }
                 else
                 {
@@ -308,7 +308,7 @@ namespace Nop.Web.Factories
                     if (displayFromMessage)
                     {
                         priceModel.OldPrice = null;
-                        priceModel.Price = string.Format(_localizationService.GetResource("Products.PriceRangeFrom"), _priceFormatter.FormatPrice(finalPriceWithDiscount));
+                        priceModel.Price = string.Format(await _localizationService.GetResource("Products.PriceRangeFrom"), _priceFormatter.FormatPrice(finalPriceWithDiscount));
                         priceModel.PriceValue = finalPriceWithDiscount;
                     }
                     else
@@ -404,7 +404,7 @@ namespace Nop.Web.Factories
                      _workContext.OriginalCustomerIfImpersonated == null))
                 {
                     priceModel.OldPrice = null;
-                    priceModel.Price = _localizationService.GetResource("Products.CallForPrice");
+                    priceModel.Price = await _localizationService.GetResource("Products.CallForPrice");
                 }
                 else
                 {
@@ -413,7 +413,7 @@ namespace Nop.Web.Factories
                     var finalPrice = _currencyService.ConvertFromPrimaryStoreCurrency(finalPriceBase, _workContext.WorkingCurrency);
 
                     priceModel.OldPrice = null;
-                    priceModel.Price = string.Format(_localizationService.GetResource("Products.PriceRangeFrom"),_priceFormatter.FormatPrice(finalPrice));
+                    priceModel.Price = string.Format(await _localizationService.GetResource("Products.PriceRangeFrom"),_priceFormatter.FormatPrice(finalPrice));
                     priceModel.PriceValue = finalPrice;
 
                     //PAngV default baseprice (used in Germany)
@@ -439,7 +439,7 @@ namespace Nop.Web.Factories
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
 
-            var productName = _localizationService.GetLocalized(product, x => x.Name);
+            var productName = await _localizationService.GetLocalized(product, x => x.Name);
             //If a size has been set in the view, we use it in priority
             var pictureSize = productThumbPictureSize ?? _mediaSettings.ProductThumbPictureSize;
 
@@ -458,12 +458,12 @@ namespace Nop.Web.Factories
                     //"title" attribute
                     Title = (picture != null && !string.IsNullOrEmpty(picture.TitleAttribute))
                         ? picture.TitleAttribute
-                        : string.Format(_localizationService.GetResource("Media.Product.ImageLinkTitleFormat"),
+                        : string.Format(await _localizationService.GetResource("Media.Product.ImageLinkTitleFormat"),
                             productName),
                     //"alt" attribute
                     AlternateText = (picture != null && !string.IsNullOrEmpty(picture.AltAttribute))
                         ? picture.AltAttribute
-                        : string.Format(_localizationService.GetResource("Media.Product.ImageAlternateTextFormat"),
+                        : string.Format(await _localizationService.GetResource("Media.Product.ImageAlternateTextFormat"),
                             productName)
                 };
 
@@ -494,7 +494,7 @@ namespace Nop.Web.Factories
                 {
                     Enabled = _catalogSettings.CategoryBreadcrumbEnabled,
                     ProductId = product.Id,
-                    ProductName = _localizationService.GetLocalized(product, x => x.Name),
+                    ProductName = await _localizationService.GetLocalized(product, x => x.Name),
                     ProductSeName = _urlRecordService.GetSeName(product)
                 };
                 var productCategories = _categoryService.GetProductCategoriesByProductId(product.Id);
@@ -510,7 +510,7 @@ namespace Nop.Web.Factories
                     breadcrumbModel.CategoryBreadcrumb.Add(new CategorySimpleModel
                     {
                         Id = catBr.Id,
-                        Name = _localizationService.GetLocalized(catBr, x => x.Name),
+                        Name = await _localizationService.GetLocalized(catBr, x => x.Name),
                         SeName = _urlRecordService.GetSeName(catBr),
                         IncludeInTopMenu = catBr.IncludeInTopMenu
                     });
@@ -543,7 +543,7 @@ namespace Nop.Web.Factories
                 .Select(x => new ProductTagModel
                 {
                     Id = x.Id,
-                    Name = _localizationService.GetLocalized(x, y => y.Name),
+                    Name = await _localizationService.GetLocalized(x, y => y.Name),
                     SeName = _urlRecordService.GetSeName(x),
                     ProductCount = _productTagService.GetProductCount(x.Id, _storeContext.CurrentStore.Id)
                 })
@@ -672,7 +672,7 @@ namespace Nop.Web.Factories
             //minimum quantity notification
             if (product.OrderMinimumQuantity > 1)
             {
-                model.MinimumQuantityNotification = string.Format(_localizationService.GetResource("Products.MinimumQuantityNotification"), product.OrderMinimumQuantity);
+                model.MinimumQuantityNotification = string.Format(await _localizationService.GetResource("Products.MinimumQuantityNotification"), product.OrderMinimumQuantity);
             }
 
             //'add to cart', 'add to wishlist' buttons
@@ -708,7 +708,7 @@ namespace Nop.Web.Factories
             var maximumCustomerEnteredPrice = _currencyService.ConvertFromPrimaryStoreCurrency(product.MaximumCustomerEnteredPrice, _workContext.WorkingCurrency);
 
             model.CustomerEnteredPrice = updatecartitem != null ? updatecartitem.CustomerEnteredPrice : minimumCustomerEnteredPrice;
-            model.CustomerEnteredPriceRange = string.Format(_localizationService.GetResource("Products.EnterProductPrice.Range"),
+            model.CustomerEnteredPriceRange = string.Format(await _localizationService.GetResource("Products.EnterProductPrice.Range"),
                 _priceFormatter.FormatPrice(minimumCustomerEnteredPrice, false, false),
                 _priceFormatter.FormatPrice(maximumCustomerEnteredPrice, false, false));
 
@@ -736,9 +736,9 @@ namespace Nop.Web.Factories
                     Id = attribute.Id,
                     ProductId = product.Id,
                     ProductAttributeId = attribute.ProductAttributeId,
-                    Name = _localizationService.GetLocalized(attribute.ProductAttribute, x => x.Name),
-                    Description = _localizationService.GetLocalized(attribute.ProductAttribute, x => x.Description),
-                    TextPrompt = _localizationService.GetLocalized(attribute, x => x.TextPrompt),
+                    Name = await _localizationService.GetLocalized(attribute.ProductAttribute, x => x.Name),
+                    Description = await _localizationService.GetLocalized(attribute.ProductAttribute, x => x.Description),
+                    TextPrompt = await _localizationService.GetLocalized(attribute, x => x.TextPrompt),
                     IsRequired = attribute.IsRequired,
                     AttributeControlType = attribute.AttributeControlType,
                     DefaultValue = updatecartitem != null ? null : _localizationService.GetLocalized(attribute, x => x.DefaultValue),
@@ -760,7 +760,7 @@ namespace Nop.Web.Factories
                         var valueModel = new ProductDetailsModel.ProductAttributeValueModel
                         {
                             Id = attributeValue.Id,
-                            Name = _localizationService.GetLocalized(attributeValue, x => x.Name),
+                            Name = await _localizationService.GetLocalized(attributeValue, x => x.Name),
                             ColorSquaresRgb = attributeValue.ColorSquaresRgb, //used with "Color squares" attribute type
                             IsPreSelected = attributeValue.IsPreSelected,
                             CustomerEntersQty = attributeValue.CustomerEntersQty,
@@ -974,7 +974,7 @@ namespace Nop.Web.Factories
                         var modelMan = new ManufacturerBriefInfoModel
                         {
                             Id = manufacturer.Id,
-                            Name = _localizationService.GetLocalized(manufacturer, x => x.Name),
+                            Name = await _localizationService.GetLocalized(manufacturer, x => x.Name),
                             SeName = _urlRecordService.GetSeName(manufacturer)
                         };
                         return modelMan;
@@ -1006,7 +1006,7 @@ namespace Nop.Web.Factories
             var productPicturesCacheKey = string.Format(NopModelCacheDefaults.ProductDetailsPicturesModelKey, product.Id, defaultPictureSize, isAssociatedProduct, _workContext.WorkingLanguage.Id, _webHelper.IsCurrentConnectionSecured(), _storeContext.CurrentStore.Id);
             var cachedPictures = _cacheManager.Get(productPicturesCacheKey, () =>
             {
-                var productName = _localizationService.GetLocalized(product, x => x.Name);
+                var productName = await _localizationService.GetLocalized(product, x => x.Name);
 
                 var pictures = _pictureService.GetPicturesByProductId(product.Id);
                 var defaultPicture = pictures.FirstOrDefault();
@@ -1018,11 +1018,11 @@ namespace Nop.Web.Factories
                 //"title" attribute
                 defaultPictureModel.Title = (defaultPicture != null && !string.IsNullOrEmpty(defaultPicture.TitleAttribute)) ?
                     defaultPicture.TitleAttribute :
-                    string.Format(_localizationService.GetResource("Media.Product.ImageLinkTitleFormat.Details"), productName);
+                    string.Format(await _localizationService.GetResource("Media.Product.ImageLinkTitleFormat.Details"), productName);
                 //"alt" attribute
                 defaultPictureModel.AlternateText = (defaultPicture != null && !string.IsNullOrEmpty(defaultPicture.AltAttribute)) ?
                     defaultPicture.AltAttribute :
-                    string.Format(_localizationService.GetResource("Media.Product.ImageAlternateTextFormat.Details"), productName);
+                    string.Format(await _localizationService.GetResource("Media.Product.ImageAlternateTextFormat.Details"), productName);
 
                 //all pictures
                 var pictureModels = new List<PictureModel>();
@@ -1033,17 +1033,17 @@ namespace Nop.Web.Factories
                         ImageUrl = _pictureService.GetPictureUrl(picture, defaultPictureSize, !isAssociatedProduct),
                         ThumbImageUrl = _pictureService.GetPictureUrl(picture, _mediaSettings.ProductThumbPictureSizeOnProductDetailsPage),
                         FullSizeImageUrl = _pictureService.GetPictureUrl(picture),
-                        Title = string.Format(_localizationService.GetResource("Media.Product.ImageLinkTitleFormat.Details"), productName),
-                        AlternateText = string.Format(_localizationService.GetResource("Media.Product.ImageAlternateTextFormat.Details"), productName),
+                        Title = string.Format(await _localizationService.GetResource("Media.Product.ImageLinkTitleFormat.Details"), productName),
+                        AlternateText = string.Format(await _localizationService.GetResource("Media.Product.ImageAlternateTextFormat.Details"), productName),
                     };
                     //"title" attribute
                     pictureModel.Title = !string.IsNullOrEmpty(picture.TitleAttribute) ?
                         picture.TitleAttribute :
-                        string.Format(_localizationService.GetResource("Media.Product.ImageLinkTitleFormat.Details"), productName);
+                        string.Format(await _localizationService.GetResource("Media.Product.ImageLinkTitleFormat.Details"), productName);
                     //"alt" attribute
                     pictureModel.AlternateText = !string.IsNullOrEmpty(picture.AltAttribute) ?
                         picture.AltAttribute :
-                        string.Format(_localizationService.GetResource("Media.Product.ImageAlternateTextFormat.Details"), productName);
+                        string.Format(await _localizationService.GetResource("Media.Product.ImageAlternateTextFormat.Details"), productName);
 
                     pictureModels.Add(pictureModel);
                 }
@@ -1064,7 +1064,7 @@ namespace Nop.Web.Factories
         /// </summary>
         /// <param name="product">Product</param>
         /// <returns>View path</returns>
-        public virtual string PrepareProductTemplateViewPath(Product product)
+        public async virtual Task<string> PrepareProductTemplateViewPath(Product product)
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
@@ -1107,9 +1107,9 @@ namespace Nop.Web.Factories
                 var model = new ProductOverviewModel
                 {
                     Id = product.Id,
-                    Name = _localizationService.GetLocalized(product, x => x.Name),
-                    ShortDescription = _localizationService.GetLocalized(product, x => x.ShortDescription),
-                    FullDescription = _localizationService.GetLocalized(product, x => x.FullDescription),
+                    Name = await _localizationService.GetLocalized(product, x => x.Name),
+                    ShortDescription = await _localizationService.GetLocalized(product, x => x.ShortDescription),
+                    FullDescription = await _localizationService.GetLocalized(product, x => x.FullDescription),
                     SeName = _urlRecordService.GetSeName(product),
                     Sku = product.Sku,
                     ProductType = product.ProductType,
@@ -1161,12 +1161,12 @@ namespace Nop.Web.Factories
             var model = new ProductDetailsModel
             {
                 Id = product.Id,
-                Name = _localizationService.GetLocalized(product, x => x.Name),
-                ShortDescription = _localizationService.GetLocalized(product, x => x.ShortDescription),
-                FullDescription = _localizationService.GetLocalized(product, x => x.FullDescription),
-                MetaKeywords = _localizationService.GetLocalized(product, x => x.MetaKeywords),
-                MetaDescription = _localizationService.GetLocalized(product, x => x.MetaDescription),
-                MetaTitle = _localizationService.GetLocalized(product, x => x.MetaTitle),
+                Name = await _localizationService.GetLocalized(product, x => x.Name),
+                ShortDescription = await _localizationService.GetLocalized(product, x => x.ShortDescription),
+                FullDescription = await _localizationService.GetLocalized(product, x => x.FullDescription),
+                MetaKeywords = await _localizationService.GetLocalized(product, x => x.MetaKeywords),
+                MetaDescription = await _localizationService.GetLocalized(product, x => x.MetaDescription),
+                MetaTitle = await _localizationService.GetLocalized(product, x => x.MetaTitle),
                 SeName = _urlRecordService.GetSeName(product),
                 ProductType = product.ProductType,
                 ShowSku = _catalogSettings.ShowSkuOnProductDetailsPage,
@@ -1198,7 +1198,7 @@ namespace Nop.Web.Factories
                 var deliveryDate = _dateRangeService.GetDeliveryDateById(product.DeliveryDateId);
                 if (deliveryDate != null)
                 {
-                    model.DeliveryDate = _localizationService.GetLocalized(deliveryDate, dd => dd.Name);
+                    model.DeliveryDate = await _localizationService.GetLocalized(deliveryDate, dd => dd.Name);
                 }
             }
 
@@ -1207,7 +1207,7 @@ namespace Nop.Web.Factories
             //compare products
             model.CompareProductsEnabled = _catalogSettings.CompareProductsEnabled;
             //store name
-            model.CurrentStoreName = _localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name);
+            model.CurrentStoreName = await _localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name);
 
             //vendor details
             if (_vendorSettings.ShowVendorOnProductDetailsPage)
@@ -1220,7 +1220,7 @@ namespace Nop.Web.Factories
                     model.VendorModel = new VendorBriefInfoModel
                     {
                         Id = vendor.Id,
-                        Name = _localizationService.GetLocalized(vendor, x => x.Name),
+                        Name = await _localizationService.GetLocalized(vendor, x => x.Name),
                         SeName = _urlRecordService.GetSeName(vendor),
                     };
                 }
@@ -1366,7 +1366,7 @@ namespace Nop.Web.Factories
                 throw new ArgumentNullException(nameof(product));
 
             model.ProductId = product.Id;
-            model.ProductName = _localizationService.GetLocalized(product, x => x.Name);
+            model.ProductName = await _localizationService.GetLocalized(product, x => x.Name);
             model.ProductSeName = _urlRecordService.GetSeName(product);
 
             var productReviews = _catalogSettings.ShowProductReviewsPerStore
@@ -1383,8 +1383,8 @@ namespace Nop.Web.Factories
                 model.ReviewTypeList.Add(new ReviewTypeModel
                 {
                     Id = reviewType.Id,
-                    Name = _localizationService.GetLocalized(reviewType, entity => entity.Name),
-                    Description = _localizationService.GetLocalized(reviewType, entity => entity.Description),
+                    Name = await _localizationService.GetLocalized(reviewType, entity => entity.Name),
+                    Description = await _localizationService.GetLocalized(reviewType, entity => entity.Description),
                     VisibleToAllCustomers = reviewType.VisibleToAllCustomers,
                     DisplayOrder = reviewType.DisplayOrder,
                     IsRequired = reviewType.IsRequired,
@@ -1421,7 +1421,7 @@ namespace Nop.Web.Factories
                         ReviewTypeId = q.ReviewTypeId,
                         ProductReviewId = pr.Id,
                         Rating = q.Rating,
-                        Name = _localizationService.GetLocalized(q.ReviewType, x => x.Name),
+                        Name = await _localizationService.GetLocalized(q.ReviewType, x => x.Name),
                         VisibleToAllCustomers = q.ReviewType.VisibleToAllCustomers || _workContext.CurrentCustomer.Id == pr.CustomerId,
                     });
                 }
@@ -1436,8 +1436,8 @@ namespace Nop.Web.Factories
                 var reviewTypeMappingModel = new AddProductReviewReviewTypeMappingModel
                 {
                     ReviewTypeId = rt.Id,
-                    Name = _localizationService.GetLocalized(reviewType, entity => entity.Name),
-                    Description = _localizationService.GetLocalized(reviewType, entity => entity.Description),
+                    Name = await _localizationService.GetLocalized(reviewType, entity => entity.Name),
+                    Description = await _localizationService.GetLocalized(reviewType, entity => entity.Description),
                     DisplayOrder = rt.DisplayOrder,
                     IsRequired = rt.IsRequired,
                 };
@@ -1498,7 +1498,7 @@ namespace Nop.Web.Factories
                 {
                     Title = review.Title,
                     ProductId = product.Id,
-                    ProductName = _localizationService.GetLocalized(product, p => p.Name),
+                    ProductName = await _localizationService.GetLocalized(product, p => p.Name),
                     ProductSeName = _urlRecordService.GetSeName(product),
                     Rating = review.Rating,
                     ReviewText = review.ReviewText,
@@ -1520,7 +1520,7 @@ namespace Nop.Web.Factories
                         ReviewTypeId = q.ReviewTypeId,
                         ProductReviewId = review.Id,
                         Rating = q.Rating,
-                        Name = _localizationService.GetLocalized(q.ReviewType, x => x.Name),
+                        Name = await _localizationService.GetLocalized(q.ReviewType, x => x.Name),
                     });
                 }
 
@@ -1563,7 +1563,7 @@ namespace Nop.Web.Factories
                 throw new ArgumentNullException(nameof(product));
 
             model.ProductId = product.Id;
-            model.ProductName = _localizationService.GetLocalized(product, x => x.Name);
+            model.ProductName = await _localizationService.GetLocalized(product, x => x.Name);
             model.ProductSeName = _urlRecordService.GetSeName(product);
             model.DisplayCaptcha = _captchaSettings.Enabled && _captchaSettings.ShowOnEmailProductToFriendPage;
             if (!excludeProperties)
@@ -1592,7 +1592,7 @@ namespace Nop.Web.Factories
                     var m = new ProductSpecificationModel
                     {
                         SpecificationAttributeId = psa.SpecificationAttributeOption.SpecificationAttributeId,
-                        SpecificationAttributeName = _localizationService.GetLocalized(psa.SpecificationAttributeOption.SpecificationAttribute, x => x.Name),
+                        SpecificationAttributeName = await _localizationService.GetLocalized(psa.SpecificationAttributeOption.SpecificationAttribute, x => x.Name),
                         ColorSquaresRgb = psa.SpecificationAttributeOption.ColorSquaresRgb,
                         AttributeTypeId = psa.AttributeTypeId
                     };
@@ -1600,13 +1600,13 @@ namespace Nop.Web.Factories
                     switch (psa.AttributeType)
                     {
                         case SpecificationAttributeType.Option:
-                            m.ValueRaw = WebUtility.HtmlEncode(_localizationService.GetLocalized(psa.SpecificationAttributeOption, x => x.Name));
+                            m.ValueRaw = WebUtility.HtmlEncode(await _localizationService.GetLocalized(psa.SpecificationAttributeOption, x => x.Name));
                             break;
                         case SpecificationAttributeType.CustomText:
-                            m.ValueRaw = WebUtility.HtmlEncode(_localizationService.GetLocalized(psa, x => x.CustomValue));
+                            m.ValueRaw = WebUtility.HtmlEncode(await _localizationService.GetLocalized(psa, x => x.CustomValue));
                             break;
                         case SpecificationAttributeType.CustomHtmlText:
-                            m.ValueRaw = _localizationService.GetLocalized(psa, x => x.CustomValue);
+                            m.ValueRaw = await _localizationService.GetLocalized(psa, x => x.CustomValue);
                             break;
                         case SpecificationAttributeType.Hyperlink:
                             m.ValueRaw = $"<a href='{psa.CustomValue}' target='_blank'>{psa.CustomValue}</a>";

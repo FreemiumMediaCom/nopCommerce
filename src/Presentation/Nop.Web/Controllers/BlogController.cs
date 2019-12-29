@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Blogs;
@@ -88,7 +89,7 @@ namespace Nop.Web.Controllers
 
         #region Methods
 
-        public virtual IActionResult List(BlogPagingFilteringModel command)
+        public async virtual Task<IActionResult> List(BlogPagingFilteringModel command)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -97,7 +98,7 @@ namespace Nop.Web.Controllers
             return View("List", model);
         }
 
-        public virtual IActionResult BlogByTag(BlogPagingFilteringModel command)
+        public async virtual Task<IActionResult> BlogByTag(BlogPagingFilteringModel command)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -106,7 +107,7 @@ namespace Nop.Web.Controllers
             return View("List", model);
         }
 
-        public virtual IActionResult BlogByMonth(BlogPagingFilteringModel command)
+        public async virtual Task<IActionResult> BlogByMonth(BlogPagingFilteringModel command)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -115,7 +116,7 @@ namespace Nop.Web.Controllers
             return View("List", model);
         }
 
-        public virtual IActionResult ListRss(int languageId)
+        public async virtual Task<IActionResult> ListRss(int languageId)
         {
             var feed = new RssFeed(
                 $"{_localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name)}: Blog",
@@ -138,14 +139,14 @@ namespace Nop.Web.Controllers
             return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
         }
 
-        public virtual IActionResult BlogPost(int blogPostId)
+        public async virtual Task<IActionResult> BlogPost(int blogPostId)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
 
             var blogPost = _blogService.GetBlogPostById(blogPostId);
             if (blogPost == null)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             var notAvailable =
                 //availability dates
@@ -156,7 +157,7 @@ namespace Nop.Web.Controllers
             //We should allows him (her) to use "Preview" functionality
             var hasAdminAccess = _permissionService.Authorize(StandardPermissionProvider.AccessAdminPanel) && _permissionService.Authorize(StandardPermissionProvider.ManageBlog);
             if (notAvailable && !hasAdminAccess)
-                return InvokeHttp404();
+                return await InvokeHttp404();
 
             //display "edit" (manage) link
             if (hasAdminAccess)
@@ -172,7 +173,7 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         [FormValueRequired("add-comment")]
         [ValidateCaptcha]
-        public virtual IActionResult BlogCommentAdd(int blogPostId, BlogPostModel model, bool captchaValid)
+        public async virtual Task<IActionResult> BlogCommentAdd(int blogPostId, BlogPostModel model, bool captchaValid)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -183,13 +184,13 @@ namespace Nop.Web.Controllers
 
             if (_workContext.CurrentCustomer.IsGuest() && !_blogSettings.AllowNotRegisteredUsersToLeaveComments)
             {
-                ModelState.AddModelError("", _localizationService.GetResource("Blog.Comments.OnlyRegisteredUsersLeaveComments"));
+                ModelState.AddModelError("", await _localizationService.GetResource("Blog.Comments.OnlyRegisteredUsersLeaveComments"));
             }
 
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnBlogCommentPage && !captchaValid)
             {
-                ModelState.AddModelError("", _localizationService.GetResource("Common.WrongCaptchaMessage"));
+                ModelState.AddModelError("", await _localizationService.GetResource("Common.WrongCaptchaMessage"));
             }
 
             if (ModelState.IsValid)

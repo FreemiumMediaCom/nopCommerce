@@ -304,18 +304,18 @@ namespace Nop.Plugin.Payments.Qualpay
             //pass custom values to payment processor
             var cardId = form[nameof(PaymentInfoModel.BillingCardId)];
             if (!StringValues.IsNullOrEmpty(cardId) && !cardId.FirstOrDefault().Equals(Guid.Empty.ToString()))
-                paymentRequest.CustomValues.Add(_localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card"), cardId.FirstOrDefault());
+                paymentRequest.CustomValues.Add(await _localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card"), cardId.FirstOrDefault());
 
             var saveCardDetails = form[nameof(PaymentInfoModel.SaveCardDetails)];
             if (!StringValues.IsNullOrEmpty(saveCardDetails) && bool.TryParse(saveCardDetails.FirstOrDefault(), out var saveCard) && saveCard)
-                paymentRequest.CustomValues.Add(_localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card.Save"), true);
+                paymentRequest.CustomValues.Add(await _localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card.Save"), true);
 
             if (_qualpaySettings.UseEmbeddedFields)
             {
                 //card details is already validated and tokenized by Qualpay
                 var tokenizedCardId = form[nameof(PaymentInfoModel.TokenizedCardId)];
                 if (!StringValues.IsNullOrEmpty(tokenizedCardId))
-                    paymentRequest.CustomValues.Add(_localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card.Token"), tokenizedCardId.FirstOrDefault());
+                    paymentRequest.CustomValues.Add(await _localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card.Token"), tokenizedCardId.FirstOrDefault());
             }
             else
             {

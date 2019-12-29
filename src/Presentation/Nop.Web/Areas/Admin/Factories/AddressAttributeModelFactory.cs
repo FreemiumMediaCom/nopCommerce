@@ -96,7 +96,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(searchModel));
 
             //get address attributes
-            var addressAttributes = _addressAttributeService.GetAllAddressAttributes().ToPagedList(searchModel);
+            var addressAttributes = await _addressAttributeService.GetAllAddressAttributes().ToPagedList(searchModel);
 
             //prepare grid model
             var model = new AddressAttributeListModel().PrepareToGrid(searchModel, addressAttributes, () =>
@@ -140,7 +140,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(addressAttribute, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(addressAttribute, entity => entity.Name, languageId, false, false);
                 };
             }
 
@@ -203,7 +203,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(addressAttributeValue, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(addressAttributeValue, entity => entity.Name, languageId, false, false);
                 };
             }
 
@@ -221,12 +221,12 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </summary>
         /// <param name="models">List of address attribute models</param>
         /// <param name="address">Address</param>
-        public virtual void PrepareCustomAddressAttributes(IList<AddressModel.AddressAttributeModel> models, Address address)
+        public async virtual Task PrepareCustomAddressAttributes(IList<AddressModel.AddressAttributeModel> models, Address address)
         {
             if (models == null)
                 throw new ArgumentNullException(nameof(models));
 
-            var attributes = _addressAttributeService.GetAllAddressAttributes();
+            var attributes = await _addressAttributeService.GetAllAddressAttributes();
             foreach (var attribute in attributes)
             {
                 var attributeModel = new AddressModel.AddressAttributeModel

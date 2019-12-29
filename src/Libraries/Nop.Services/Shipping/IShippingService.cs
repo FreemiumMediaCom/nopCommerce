@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
@@ -19,33 +20,33 @@ namespace Nop.Services.Shipping
         /// Deletes a shipping method
         /// </summary>
         /// <param name="shippingMethod">The shipping method</param>
-        void DeleteShippingMethod(ShippingMethod shippingMethod);
+        Task DeleteShippingMethod(ShippingMethod shippingMethod);
 
         /// <summary>
         /// Gets a shipping method
         /// </summary>
         /// <param name="shippingMethodId">The shipping method identifier</param>
         /// <returns>Shipping method</returns>
-        ShippingMethod GetShippingMethodById(int shippingMethodId);
+        Task<ShippingMethod> GetShippingMethodById(int shippingMethodId);
 
         /// <summary>
         /// Gets all shipping methods
         /// </summary>
         /// <param name="filterByCountryId">The country identifier to filter by</param>
         /// <returns>Shipping methods</returns>
-        IList<ShippingMethod> GetAllShippingMethods(int? filterByCountryId = null);
+        Task<IList<ShippingMethod>> GetAllShippingMethods(int? filterByCountryId = null);
 
         /// <summary>
         /// Inserts a shipping method
         /// </summary>
         /// <param name="shippingMethod">Shipping method</param>
-        void InsertShippingMethod(ShippingMethod shippingMethod);
+        Task InsertShippingMethod(ShippingMethod shippingMethod);
 
         /// <summary>
         /// Updates the shipping method
         /// </summary>
         /// <param name="shippingMethod">Shipping method</param>
-        void UpdateShippingMethod(ShippingMethod shippingMethod);
+        Task UpdateShippingMethod(ShippingMethod shippingMethod);
 
         /// <summary>
         /// Does country restriction exist
@@ -63,32 +64,32 @@ namespace Nop.Services.Shipping
         /// Deletes a warehouse
         /// </summary>
         /// <param name="warehouse">The warehouse</param>
-        void DeleteWarehouse(Warehouse warehouse);
+        Task DeleteWarehouse(Warehouse warehouse);
 
         /// <summary>
         /// Gets a warehouse
         /// </summary>
         /// <param name="warehouseId">The warehouse identifier</param>
         /// <returns>Warehouse</returns>
-        Warehouse GetWarehouseById(int warehouseId);
+        Task<Warehouse> GetWarehouseById(int warehouseId);
 
         /// <summary>
         /// Gets all warehouses
         /// </summary>
         /// <returns>Warehouses</returns>
-        IList<Warehouse> GetAllWarehouses();
+        Task<IList<Warehouse>> GetAllWarehouses();
 
         /// <summary>
         /// Inserts a warehouse
         /// </summary>
         /// <param name="warehouse">Warehouse</param>
-        void InsertWarehouse(Warehouse warehouse);
+        Task InsertWarehouse(Warehouse warehouse);
 
         /// <summary>
         /// Updates the warehouse
         /// </summary>
         /// <param name="warehouse">Warehouse</param>
-        void UpdateWarehouse(Warehouse warehouse);
+        Task UpdateWarehouse(Warehouse warehouse);
 
         #endregion
         
@@ -100,7 +101,7 @@ namespace Nop.Services.Shipping
         /// <param name="shoppingCartItem">Shopping cart item</param>
         /// <param name="ignoreFreeShippedItems">Whether to ignore the weight of the products marked as "Free shipping"</param>
         /// <returns>Shopping cart item weight</returns>
-        decimal GetShoppingCartItemWeight(ShoppingCartItem shoppingCartItem, bool ignoreFreeShippedItems = false);
+        Task<decimal> GetShoppingCartItemWeight(ShoppingCartItem shoppingCartItem, bool ignoreFreeShippedItems = false);
 
         /// <summary>
         /// Gets product item weight (of one item)
@@ -109,7 +110,7 @@ namespace Nop.Services.Shipping
         /// <param name="attributesXml">Selected product attributes in XML</param>
         /// <param name="ignoreFreeShippedItems">Whether to ignore the weight of the products marked as "Free shipping"</param>
         /// <returns>Item weight</returns>
-        decimal GetShoppingCartItemWeight(Product product, string attributesXml, bool ignoreFreeShippedItems = false);
+        Task<decimal> GetShoppingCartItemWeight(Product product, string attributesXml, bool ignoreFreeShippedItems = false);
 
         /// <summary>
         /// Gets shopping cart weight
@@ -118,7 +119,7 @@ namespace Nop.Services.Shipping
         /// <param name="includeCheckoutAttributes">A value indicating whether we should calculate weights of selected checkout attributes</param>
         /// <param name="ignoreFreeShippedItems">Whether to ignore the weight of the products marked as "Free shipping"</param>
         /// <returns>Total weight</returns>
-        decimal GetTotalWeight(GetShippingOptionRequest request, bool includeCheckoutAttributes = true, bool ignoreFreeShippedItems = false);
+        Task<decimal> GetTotalWeight(GetShippingOptionRequest request, bool includeCheckoutAttributes = true, bool ignoreFreeShippedItems = false);
 
         /// <summary>
         /// Get dimensions of associated products (for quantity 1)
@@ -148,7 +149,7 @@ namespace Nop.Services.Shipping
         /// <param name="address">Address</param>
         /// <param name="warehouses">List of warehouses, if null all warehouses are used.</param>
         /// <returns></returns>
-        Warehouse GetNearestWarehouse(Address address, IList<Warehouse> warehouses = null);
+        Task<Warehouse> GetNearestWarehouse(Address address, IList<Warehouse> warehouses = null);
 
         /// <summary>
         /// Create shipment packages (requests) from shopping cart
@@ -170,7 +171,7 @@ namespace Nop.Services.Shipping
         /// <param name="allowedShippingRateComputationMethodSystemName">Filter by shipping rate computation method identifier; null to load shipping options of all shipping rate computation methods</param>
         /// <param name="storeId">Load records allowed only in a specified store; pass 0 to load all records</param>
         /// <returns>Shipping options</returns>
-        GetShippingOptionResponse GetShippingOptions(IList<ShoppingCartItem> cart, Address shippingAddress,
+        Task<GetShippingOptionResponse> GetShippingOptions(IList<ShoppingCartItem> cart, Address shippingAddress,
             Customer customer = null, string allowedShippingRateComputationMethodSystemName = "", int storeId = 0);
 
         /// <summary>
@@ -188,21 +189,21 @@ namespace Nop.Services.Shipping
         /// </summary>
         /// <param name="shoppingCartItem">Shopping cart item</param>
         /// <returns>True if the shopping cart item requires shipping; otherwise false</returns>
-        bool IsShipEnabled(ShoppingCartItem shoppingCartItem);
+        Task<bool> IsShipEnabled(ShoppingCartItem shoppingCartItem);
 
         /// <summary>
         /// Whether the shopping cart item is free shipping
         /// </summary>
         /// <param name="shoppingCartItem">Shopping cart item</param>
         /// <returns>True if the shopping cart item is free shipping; otherwise false</returns>
-        bool IsFreeShipping(ShoppingCartItem shoppingCartItem);
+        Task<bool> IsFreeShipping(ShoppingCartItem shoppingCartItem);
 
         /// <summary>
         /// Get the additional shipping charge
         /// </summary> 
         /// <param name="shoppingCartItem">Shopping cart item</param>
         /// <returns>The additional shipping charge of the shopping cart item</returns>
-        decimal GetAdditionalShippingCharge(ShoppingCartItem shoppingCartItem);
+        Task<decimal> GetAdditionalShippingCharge(ShoppingCartItem shoppingCartItem);
 
         #endregion
     }

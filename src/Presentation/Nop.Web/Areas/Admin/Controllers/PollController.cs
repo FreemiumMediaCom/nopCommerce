@@ -80,12 +80,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Polls
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePolls))
                 return AccessDeniedView();
@@ -97,7 +97,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(PollSearchModel searchModel)
+        public async virtual Task<IActionResult> List(PollSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePolls))
                 return AccessDeniedDataTablesJson();
@@ -108,7 +108,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePolls))
                 return AccessDeniedView();
@@ -120,7 +120,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(PollModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(PollModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePolls))
                 return AccessDeniedView();
@@ -133,7 +133,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //save store mappings
                 SaveStoreMappings(poll, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.Polls.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.Polls.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -148,7 +148,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePolls))
                 return AccessDeniedView();
@@ -165,7 +165,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(PollModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(PollModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePolls))
                 return AccessDeniedView();
@@ -183,7 +183,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //save store mappings
                 SaveStoreMappings(poll, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.Polls.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.Polls.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -199,7 +199,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePolls))
                 return AccessDeniedView();
@@ -211,7 +211,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             _pollService.DeletePoll(poll);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.Polls.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.Polls.Deleted"));
 
             return RedirectToAction("List");
         }
@@ -221,7 +221,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Poll answer
 
         [HttpPost]
-        public virtual IActionResult PollAnswers(PollAnswerSearchModel searchModel)
+        public async virtual Task<IActionResult> PollAnswers(PollAnswerSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePolls))
                 return AccessDeniedDataTablesJson();
@@ -238,7 +238,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         //ValidateAttribute is used to force model validation
         [HttpPost]
-        public virtual IActionResult PollAnswerUpdate([Validate] PollAnswerModel model)
+        public async virtual Task<IActionResult> PollAnswerUpdate([Validate] PollAnswerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePolls))
                 return AccessDeniedView();
@@ -258,7 +258,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         //ValidateAttribute is used to force model validation
         [HttpPost]
-        public virtual IActionResult PollAnswerAdd(int pollId, [Validate] PollAnswerModel model)
+        public async virtual Task<IActionResult> PollAnswerAdd(int pollId, [Validate] PollAnswerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePolls))
                 return AccessDeniedView();
@@ -278,7 +278,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PollAnswerDelete(int id)
+        public async virtual Task<IActionResult> PollAnswerDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePolls))
                 return AccessDeniedView();

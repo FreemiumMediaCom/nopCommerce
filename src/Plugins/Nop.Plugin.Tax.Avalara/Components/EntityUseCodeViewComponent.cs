@@ -76,7 +76,7 @@ namespace Nop.Plugin.Tax.Avalara.Components
         /// <param name="widgetZone">Widget zone</param>
         /// <param name="additionalData">Additional parameters</param>
         /// <returns>View component result</returns>
-        public IViewComponentResult Invoke(string widgetZone, object additionalData)
+        public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
             //ensure that model is passed
             if (!(additionalData is BaseNopEntityModel entityModel))
@@ -111,7 +111,7 @@ namespace Nop.Plugin.Tax.Avalara.Components
             entityUseCodes.Insert(0, new SelectListItem
             {
                 Value = defaultValue,
-                Text = _localizationService.GetResource("Plugins.Tax.Avalara.Fields.EntityUseCode.None")
+                Text = await _localizationService.GetResource("Plugins.Tax.Avalara.Fields.EntityUseCode.None")
             });
 
             //prepare model

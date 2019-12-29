@@ -36,7 +36,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
         #region Methods
 
         [HttpPost]
-        public IActionResult UseValidatedAddress(int addressId, bool isNewAddress)
+        public async Task<IActionResult> UseValidatedAddress(int addressId, bool isNewAddress)
         {
             //try to get an address by the passed identifier
             var address = _addressService.GetAddressById(addressId);

@@ -170,7 +170,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(model));
 
             model.Id = product.Id;
-            model.Name = string.Format(_localizationService.GetResource("Admin.Catalog.Products.Copy.Name.New"), product.Name);
+            model.Name = string.Format(await _localizationService.GetResource("Admin.Catalog.Products.Copy.Name.New"), product.Name);
             model.Published = true;
             model.CopyImages = true;
 
@@ -650,17 +650,17 @@ namespace Nop.Web.Areas.Admin.Factories
             searchModel.AvailablePublishedOptions.Add(new SelectListItem
             {
                 Value = "0",
-                Text = _localizationService.GetResource("Admin.Catalog.Products.List.SearchPublished.All")
+                Text = await _localizationService.GetResource("Admin.Catalog.Products.List.SearchPublished.All")
             });
             searchModel.AvailablePublishedOptions.Add(new SelectListItem
             {
                 Value = "1",
-                Text = _localizationService.GetResource("Admin.Catalog.Products.List.SearchPublished.PublishedOnly")
+                Text = await _localizationService.GetResource("Admin.Catalog.Products.List.SearchPublished.PublishedOnly")
             });
             searchModel.AvailablePublishedOptions.Add(new SelectListItem
             {
                 Value = "2",
-                Text = _localizationService.GetResource("Admin.Catalog.Products.List.SearchPublished.UnpublishedOnly")
+                Text = await _localizationService.GetResource("Admin.Catalog.Products.List.SearchPublished.UnpublishedOnly")
             });
 
             //prepare grid
@@ -717,7 +717,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     productModel.SeName = _urlRecordService.GetSeName(product, 0, true, false);
                     var defaultProductPicture = _pictureService.GetPicturesByProductId(product.Id, 1).FirstOrDefault();
                     productModel.PictureThumbnailUrl = _pictureService.GetPictureUrl(defaultProductPicture, 75);
-                    productModel.ProductTypeName = _localizationService.GetLocalizedEnum(product.ProductType);
+                    productModel.ProductTypeName = await _localizationService.GetLocalizedEnum(product.ProductType);
                     if (product.ProductType == ProductType.SimpleProduct && product.ManageInventoryMethod == ManageInventoryMethod.ManageStock)
                         productModel.StockQuantityStr = _productService.GetTotalStockQuantity(product).ToString();
 
@@ -785,12 +785,12 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(product, entity => entity.Name, languageId, false, false);
-                    locale.FullDescription = _localizationService.GetLocalized(product, entity => entity.FullDescription, languageId, false, false);
-                    locale.ShortDescription = _localizationService.GetLocalized(product, entity => entity.ShortDescription, languageId, false, false);
-                    locale.MetaKeywords = _localizationService.GetLocalized(product, entity => entity.MetaKeywords, languageId, false, false);
-                    locale.MetaDescription = _localizationService.GetLocalized(product, entity => entity.MetaDescription, languageId, false, false);
-                    locale.MetaTitle = _localizationService.GetLocalized(product, entity => entity.MetaTitle, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(product, entity => entity.Name, languageId, false, false);
+                    locale.FullDescription = await _localizationService.GetLocalized(product, entity => entity.FullDescription, languageId, false, false);
+                    locale.ShortDescription = await _localizationService.GetLocalized(product, entity => entity.ShortDescription, languageId, false, false);
+                    locale.MetaKeywords = await _localizationService.GetLocalized(product, entity => entity.MetaKeywords, languageId, false, false);
+                    locale.MetaDescription = await _localizationService.GetLocalized(product, entity => entity.MetaDescription, languageId, false, false);
+                    locale.MetaTitle = await _localizationService.GetLocalized(product, entity => entity.MetaTitle, languageId, false, false);
                     locale.SeName = _urlRecordService.GetSeName(product, languageId, false, false);
                 };
             }
@@ -1384,7 +1384,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     var productSpecificationAttributeModel = attribute.ToModel<ProductSpecificationAttributeModel>();
 
                     //fill in additional values (not existing in the entity)
-                    productSpecificationAttributeModel.AttributeTypeName = _localizationService.GetLocalizedEnum(attribute.AttributeType);
+                    productSpecificationAttributeModel.AttributeTypeName = await _localizationService.GetLocalizedEnum(attribute.AttributeType);
                     productSpecificationAttributeModel.AttributeId = attribute.SpecificationAttributeOption.SpecificationAttribute.Id;
                     productSpecificationAttributeModel.AttributeName = attribute.SpecificationAttributeOption.SpecificationAttribute.Name;
 
@@ -1395,10 +1395,10 @@ namespace Nop.Web.Areas.Admin.Factories
                             productSpecificationAttributeModel.SpecificationAttributeOptionId = attribute.SpecificationAttributeOptionId;
                             break;
                         case SpecificationAttributeType.CustomText:
-                            productSpecificationAttributeModel.ValueRaw = WebUtility.HtmlEncode(_localizationService.GetLocalized(attribute, x => x.CustomValue, _workContext.WorkingLanguage.Id));
+                            productSpecificationAttributeModel.ValueRaw = WebUtility.HtmlEncode(await _localizationService.GetLocalized(attribute, x => x.CustomValue, _workContext.WorkingLanguage.Id));
                             break;
                         case SpecificationAttributeType.CustomHtmlText:
-                            productSpecificationAttributeModel.ValueRaw = _localizationService.GetLocalized(attribute, x => x.CustomValue, _workContext.WorkingLanguage.Id);
+                            productSpecificationAttributeModel.ValueRaw = await _localizationService.GetLocalized(attribute, x => x.CustomValue, _workContext.WorkingLanguage.Id);
                             break;
                         case SpecificationAttributeType.Hyperlink:
                             productSpecificationAttributeModel.ValueRaw = attribute.CustomValue;
@@ -1452,7 +1452,7 @@ namespace Nop.Web.Areas.Admin.Factories
             var model = attribute.ToModel<AddSpecificationAttributeModel>();
             model.SpecificationId = attribute.Id;
             model.AttributeId = attribute.SpecificationAttributeOption.SpecificationAttribute.Id;
-            model.AttributeTypeName = _localizationService.GetLocalizedEnum(attribute.AttributeType);
+            model.AttributeTypeName = await _localizationService.GetLocalizedEnum(attribute.AttributeType);
             model.AttributeName = attribute.SpecificationAttributeOption.SpecificationAttribute.Name;
 
             model.AvailableAttributes = _cacheManager.Get(NopModelCacheDefaults.SpecAttributesModelKey, () =>
@@ -1491,10 +1491,10 @@ namespace Nop.Web.Areas.Admin.Factories
                 switch (attribute.AttributeType)
                 {
                     case SpecificationAttributeType.CustomHtmlText:
-                        locale.ValueRaw = _localizationService.GetLocalized(attribute, entity => entity.CustomValue, languageId, false, false);
+                        locale.ValueRaw = await _localizationService.GetLocalized(attribute, entity => entity.CustomValue, languageId, false, false);
                         break;
                     case SpecificationAttributeType.CustomText:
-                        locale.Value = _localizationService.GetLocalized(attribute, entity => entity.CustomValue, languageId, false, false);
+                        locale.Value = await _localizationService.GetLocalized(attribute, entity => entity.CustomValue, languageId, false, false);
                         break;
                     case SpecificationAttributeType.Option:
                         break;
@@ -1583,7 +1583,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(productTag, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(productTag, entity => entity.Name, languageId, false, false);
                 };
             }
 
@@ -1609,7 +1609,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(product));
 
             //get orders
-            var orders = _orderService.SearchOrders(productId: searchModel.ProductId,
+            var orders = await _orderService.SearchOrders(productId: searchModel.ProductId,
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
             //prepare grid model
@@ -1630,9 +1630,9 @@ namespace Nop.Web.Areas.Admin.Factories
 
                     //fill in additional values (not existing in the entity)
                     orderModel.StoreName = _storeService.GetStoreById(order.StoreId)?.Name ?? "Deleted";
-                    orderModel.OrderStatus = _localizationService.GetLocalizedEnum(order.OrderStatus);
-                    orderModel.PaymentStatus = _localizationService.GetLocalizedEnum(order.PaymentStatus);
-                    orderModel.ShippingStatus = _localizationService.GetLocalizedEnum(order.ShippingStatus);
+                    orderModel.OrderStatus = await _localizationService.GetLocalizedEnum(order.OrderStatus);
+                    orderModel.PaymentStatus = await _localizationService.GetLocalizedEnum(order.PaymentStatus);
+                    orderModel.ShippingStatus = await _localizationService.GetLocalizedEnum(order.ShippingStatus);
 
                     return orderModel;
                 });
@@ -1800,7 +1800,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     productAttributeMappingModel.ValidationRulesString = PrepareProductAttributeMappingValidationRulesString(attributeMapping);
                     productAttributeMappingModel.ProductAttribute = _productAttributeService
                         .GetProductAttributeById(attributeMapping.ProductAttributeId)?.Name;
-                    productAttributeMappingModel.AttributeControlType = _localizationService.GetLocalizedEnum(attributeMapping.AttributeControlType);
+                    productAttributeMappingModel.AttributeControlType = await _localizationService.GetLocalizedEnum(attributeMapping.AttributeControlType);
                     var conditionAttribute = _productAttributeParser
                         .ParseProductAttributeMappings(attributeMapping.ConditionAttributeXml).FirstOrDefault();
                     if (conditionAttribute == null)
@@ -1845,7 +1845,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 };
 
                 model.ProductAttribute = _productAttributeService.GetProductAttributeById(productAttributeMapping.ProductAttributeId).Name;
-                model.AttributeControlType = _localizationService.GetLocalizedEnum(productAttributeMapping.AttributeControlType);
+                model.AttributeControlType = await _localizationService.GetLocalizedEnum(productAttributeMapping.AttributeControlType);
 
                 if (!excludeProperties)
                 {
@@ -1868,8 +1868,8 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.TextPrompt = _localizationService.GetLocalized(productAttributeMapping, entity => entity.TextPrompt, languageId, false, false);
-                    locale.DefaultValue = _localizationService.GetLocalized(productAttributeMapping, entity => entity.DefaultValue, languageId, false, false);
+                    locale.TextPrompt = await _localizationService.GetLocalized(productAttributeMapping, entity => entity.TextPrompt, languageId, false, false);
+                    locale.DefaultValue = await _localizationService.GetLocalized(productAttributeMapping, entity => entity.DefaultValue, languageId, false, false);
                 };
 
                 //prepare nested search model
@@ -1920,7 +1920,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     var productAttributeValueModel = value.ToModel<ProductAttributeValueModel>();
 
                     //fill in additional values (not existing in the entity)
-                    productAttributeValueModel.AttributeValueTypeName = _localizationService.GetLocalizedEnum(value.AttributeValueType);
+                    productAttributeValueModel.AttributeValueTypeName = await _localizationService.GetLocalizedEnum(value.AttributeValueType);
                     productAttributeValueModel.Name = value.ProductAttributeMapping.AttributeControlType != AttributeControlType.ColorSquares
                         ? value.Name : $"{value.Name} - {value.ColorSquaresRgb}";
                     if (value.AttributeValueType == AttributeValueType.Simple)
@@ -1973,7 +1973,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 {
                     ProductAttributeMappingId = productAttributeValue.ProductAttributeMappingId,
                     AttributeValueTypeId = productAttributeValue.AttributeValueTypeId,
-                    AttributeValueTypeName = _localizationService.GetLocalizedEnum(productAttributeValue.AttributeValueType),
+                    AttributeValueTypeName = await _localizationService.GetLocalizedEnum(productAttributeValue.AttributeValueType),
                     AssociatedProductId = productAttributeValue.AssociatedProductId,
                     Name = productAttributeValue.Name,
                     ColorSquaresRgb = productAttributeValue.ColorSquaresRgb,
@@ -1998,7 +1998,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(productAttributeValue, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(productAttributeValue, entity => entity.Name, languageId, false, false);
                 };
             }
 

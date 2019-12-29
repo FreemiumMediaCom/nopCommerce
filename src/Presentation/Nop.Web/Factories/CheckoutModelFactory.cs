@@ -221,8 +221,8 @@ namespace Nop.Web.Factories
                                 Address = point.Address,
                                 City = point.City,
                                 County = point.County,
-                                StateName = state != null ? _localizationService.GetLocalized(state, x => x.Name, languageId) : string.Empty,
-                                CountryName = country != null ? _localizationService.GetLocalized(country, x => x.Name, languageId) : string.Empty,
+                                StateName = state != null ? await _localizationService.GetLocalized(state, x => x.Name, languageId) : string.Empty,
+                                CountryName = country != null ? await _localizationService.GetLocalized(country, x => x.Name, languageId) : string.Empty,
                                 ZipPostalCode = point.ZipPostalCode,
                                 Latitude = point.Latitude,
                                 Longitude = point.Longitude,
@@ -248,8 +248,8 @@ namespace Nop.Web.Factories
                 {
                     if (!pickupPointProviders.Any())
                     {
-                        model.Warnings.Add(_localizationService.GetResource("Checkout.ShippingIsNotAllowed"));
-                        model.Warnings.Add(_localizationService.GetResource("Checkout.PickupPoints.NotAvailable"));
+                        model.Warnings.Add(await _localizationService.GetResource("Checkout.ShippingIsNotAllowed"));
+                        model.Warnings.Add(await _localizationService.GetResource("Checkout.PickupPoints.NotAvailable"));
                     }
                     model.PickupInStoreOnly = true;
                     model.PickupInStore = true;
@@ -340,7 +340,7 @@ namespace Nop.Web.Factories
                 }
 
                 //find a selected (previously) shipping method
-                var selectedShippingOption = _genericAttributeService.GetAttribute<ShippingOption>(_workContext.CurrentCustomer,
+                var selectedShippingOption = await _genericAttributeService.GetAttribute<ShippingOption>(_workContext.CurrentCustomer,
                         NopCustomerDefaults.SelectedShippingOptionAttribute, _storeContext.CurrentStore.Id);
                 if (selectedShippingOption != null)
                 {
@@ -423,7 +423,7 @@ namespace Nop.Web.Factories
 
                 var pmModel = new CheckoutPaymentMethodModel.PaymentMethodModel
                 {
-                    Name = _localizationService.GetLocalizedFriendlyName(pm, _workContext.WorkingLanguage.Id),
+                    Name = await _localizationService.GetLocalizedFriendlyName(pm, _workContext.WorkingLanguage.Id),
                     Description = _paymentSettings.ShowPaymentMethodDescriptions ? pm.PaymentMethodDescription : string.Empty,
                     PaymentMethodSystemName = pm.PluginDescriptor.SystemName,
                     LogoUrl = _paymentPluginManager.GetPluginLogoUrl(pm)
@@ -439,7 +439,7 @@ namespace Nop.Web.Factories
             }
 
             //find a selected (previously) payment method
-            var selectedPaymentMethodSystemName = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
+            var selectedPaymentMethodSystemName = await _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
                 NopCustomerDefaults.SelectedPaymentMethodAttribute, _storeContext.CurrentStore.Id);
             if (!string.IsNullOrEmpty(selectedPaymentMethodSystemName))
             {
@@ -491,7 +491,7 @@ namespace Nop.Web.Factories
             if (!minOrderTotalAmountOk)
             {
                 var minOrderTotalAmount = _currencyService.ConvertFromPrimaryStoreCurrency(_orderSettings.MinOrderTotalAmount, _workContext.WorkingCurrency);
-                model.MinOrderTotalWarning = string.Format(_localizationService.GetResource("Checkout.MinOrderTotalAmount"), _priceFormatter.FormatPrice(minOrderTotalAmount, true, false));
+                model.MinOrderTotalWarning = string.Format(await _localizationService.GetResource("Checkout.MinOrderTotalAmount"), _priceFormatter.FormatPrice(minOrderTotalAmount, true, false));
             }
             return model;
         }

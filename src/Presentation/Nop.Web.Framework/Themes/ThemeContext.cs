@@ -67,7 +67,7 @@ namespace Nop.Web.Framework.Themes
                 //whether customers are allowed to select a theme
                 if (_storeInformationSettings.AllowCustomerToSelectTheme && _workContext.CurrentCustomer != null)
                 {
-                    themeName = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
+                    themeName = await _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
                         NopCustomerDefaults.WorkingThemeNameAttribute, _storeContext.CurrentStore.Id);
                 }
 

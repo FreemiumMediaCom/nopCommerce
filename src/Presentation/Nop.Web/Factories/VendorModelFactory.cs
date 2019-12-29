@@ -79,7 +79,7 @@ namespace Nop.Web.Factories
                 var attributeModel = new VendorAttributeModel
                 {
                     Id = attribute.Id,
-                    Name = _localizationService.GetLocalized(attribute, x => x.Name),
+                    Name = await _localizationService.GetLocalized(attribute, x => x.Name),
                     IsRequired = attribute.IsRequired,
                     AttributeControlType = attribute.AttributeControlType,
                 };
@@ -93,7 +93,7 @@ namespace Nop.Web.Factories
                         var valueModel = new VendorAttributeValueModel
                         {
                             Id = attributeValue.Id,
-                            Name = _localizationService.GetLocalized(attributeValue, x => x.Name),
+                            Name = await _localizationService.GetLocalized(attributeValue, x => x.Name),
                             IsPreSelected = attributeValue.IsPreSelected
                         };
                         attributeModel.Values.Add(valueModel);
@@ -175,7 +175,7 @@ namespace Nop.Web.Factories
             {
                 //already applied for vendor account
                 model.DisableFormInput = true;
-                model.Result = _localizationService.GetResource("Vendors.ApplyAccount.AlreadyApplied");
+                model.Result = await _localizationService.GetResource("Vendors.ApplyAccount.AlreadyApplied");
             }
 
             model.DisplayCaptcha = _captchaSettings.Enabled && _captchaSettings.ShowOnApplyVendorPage;
@@ -220,7 +220,7 @@ namespace Nop.Web.Factories
 
             //vendor attributes
             if (string.IsNullOrEmpty(overriddenVendorAttributesXml))
-                overriddenVendorAttributesXml = _genericAttributeService.GetAttribute<string>(vendor, NopVendorDefaults.VendorAttributes);
+                overriddenVendorAttributesXml = await _genericAttributeService.GetAttribute<string>(vendor, NopVendorDefaults.VendorAttributes);
             model.VendorAttributes = PrepareVendorAttributes(overriddenVendorAttributesXml);
 
             return model;

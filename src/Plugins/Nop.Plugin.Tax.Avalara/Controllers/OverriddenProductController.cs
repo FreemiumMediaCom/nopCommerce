@@ -124,7 +124,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
         #region Methods
 
         [HttpPost]
-        public IActionResult ExportProducts(string selectedIds)
+        public async Task<IActionResult> ExportProducts(string selectedIds)
         {
             //ensure that Avalara tax provider is active
             if (!_taxPluginManager.IsPluginActive(AvalaraTaxDefaults.SystemName))
@@ -187,12 +187,12 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
 
                 //display results
                 if (result.HasValue && result > 0)
-                    _notificationService.SuccessNotification(string.Format(_localizationService.GetResource("Plugins.Tax.Avalara.Items.Export.Success"), result));
+                    _notificationService.SuccessNotification(string.Format(await _localizationService.GetResource("Plugins.Tax.Avalara.Items.Export.Success"), result));
                 else
-                    _notificationService.ErrorNotification(_localizationService.GetResource("PPlugins.Tax.Avalara.Items.Export.Error"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("PPlugins.Tax.Avalara.Items.Export.Error"));
             }
             else
-                _notificationService.SuccessNotification(_localizationService.GetResource("Plugins.Tax.Avalara.Items.Export.AlreadyExported"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Plugins.Tax.Avalara.Items.Export.AlreadyExported"));
 
             return RedirectToAction("List", "Product");
         }

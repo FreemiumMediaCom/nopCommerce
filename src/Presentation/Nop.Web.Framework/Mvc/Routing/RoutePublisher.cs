@@ -38,7 +38,7 @@ namespace Nop.Web.Framework.Mvc.Routing
         /// Register routes
         /// </summary>
         /// <param name="routeBuilder">Route builder</param>
-        public virtual void RegisterRoutes(IRouteBuilder routeBuilder)
+        public async virtual Task RegisterRoutes(IRouteBuilder routeBuilder)
         {
             //find route providers provided by other assemblies
             var routeProviders = _typeFinder.FindClassesOfType<IRouteProvider>();

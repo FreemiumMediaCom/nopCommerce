@@ -36,14 +36,14 @@ namespace Nop.Web.Controllers
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
         [HttpPost]
-        public virtual IActionResult SubscribeNewsletter(string email, bool subscribe)
+        public async virtual Task<IActionResult> SubscribeNewsletter(string email, bool subscribe)
         {
             string result;
             var success = false;
 
             if (!CommonHelper.IsValidEmail(email))
             {
-                result = _localizationService.GetResource("Newsletter.Email.Wrong");
+                result = await _localizationService.GetResource("Newsletter.Email.Wrong");
             }
             else
             {
@@ -58,7 +58,7 @@ namespace Nop.Web.Controllers
                         {
                             _workflowMessageService.SendNewsLetterSubscriptionActivationMessage(subscription, _workContext.WorkingLanguage.Id);
                         }
-                        result = _localizationService.GetResource("Newsletter.SubscribeEmailSent");
+                        result = await _localizationService.GetResource("Newsletter.SubscribeEmailSent");
                     }
                     else
                     {
@@ -66,7 +66,7 @@ namespace Nop.Web.Controllers
                         {
                             _workflowMessageService.SendNewsLetterSubscriptionDeactivationMessage(subscription, _workContext.WorkingLanguage.Id);
                         }
-                        result = _localizationService.GetResource("Newsletter.UnsubscribeEmailSent");
+                        result = await _localizationService.GetResource("Newsletter.UnsubscribeEmailSent");
                     }
                 }
                 else if (subscribe)
@@ -82,11 +82,11 @@ namespace Nop.Web.Controllers
                     _newsLetterSubscriptionService.InsertNewsLetterSubscription(subscription);
                     _workflowMessageService.SendNewsLetterSubscriptionActivationMessage(subscription, _workContext.WorkingLanguage.Id);
 
-                    result = _localizationService.GetResource("Newsletter.SubscribeEmailSent");
+                    result = await _localizationService.GetResource("Newsletter.SubscribeEmailSent");
                 }
                 else
                 {
-                    result = _localizationService.GetResource("Newsletter.UnsubscribeEmailSent");
+                    result = await _localizationService.GetResource("Newsletter.UnsubscribeEmailSent");
                 }
                 success = true;
             }
@@ -100,7 +100,7 @@ namespace Nop.Web.Controllers
 
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
-        public virtual IActionResult SubscriptionActivation(Guid token, bool active)
+        public async virtual Task<IActionResult> SubscriptionActivation(Guid token, bool active)
         {
             var subscription = _newsLetterSubscriptionService.GetNewsLetterSubscriptionByGuid(token);
             if (subscription == null)

@@ -71,7 +71,7 @@ namespace Nop.Plugin.Payments.Square.Components
         /// <param name="widgetZone">Widget zone name</param>
         /// <param name="additionalData">Additional data</param>
         /// <returns>View component result</returns>
-        public IViewComponentResult Invoke(string widgetZone, object additionalData)
+        public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
             var model = new PaymentInfoModel
             {
@@ -89,7 +89,7 @@ namespace Nop.Plugin.Payments.Square.Components
             var customer = _squarePaymentManager.GetCustomer(customerId);
             if (customer?.Cards != null)
             {
-                var cardNumberMask = _localizationService.GetResource("Plugins.Payments.Square.Fields.StoredCard.Mask");
+                var cardNumberMask = await _localizationService.GetResource("Plugins.Payments.Square.Fields.StoredCard.Mask");
                 model.StoredCards = customer.Cards
                     .Select(card => new SelectListItem { Text = string.Format(cardNumberMask, card.Last4), Value = card.Id })
                     .ToList();
@@ -98,7 +98,7 @@ namespace Nop.Plugin.Payments.Square.Components
             //add the special item for 'select card' with empty GUID value
             if (model.StoredCards.Any())
             {
-                var selectCardText = _localizationService.GetResource("Plugins.Payments.Square.Fields.StoredCard.SelectCard");
+                var selectCardText = await _localizationService.GetResource("Plugins.Payments.Square.Fields.StoredCard.SelectCard");
                 model.StoredCards.Insert(0, new SelectListItem { Text = selectCardText, Value = Guid.Empty.ToString() });
             }
 

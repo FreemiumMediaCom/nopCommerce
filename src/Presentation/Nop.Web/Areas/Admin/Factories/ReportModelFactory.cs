@@ -87,17 +87,17 @@ namespace Nop.Web.Areas.Admin.Factories
             searchModel.AvailablePublishedOptions.Add(new SelectListItem
             {
                 Value = "0",
-                Text = _localizationService.GetResource("Admin.Reports.LowStock.SearchPublished.All")
+                Text = await _localizationService.GetResource("Admin.Reports.LowStock.SearchPublished.All")
             });
             searchModel.AvailablePublishedOptions.Add(new SelectListItem
             {
                 Value = "1",
-                Text = _localizationService.GetResource("Admin.Reports.LowStock.SearchPublished.PublishedOnly")
+                Text = await _localizationService.GetResource("Admin.Reports.LowStock.SearchPublished.PublishedOnly")
             });
             searchModel.AvailablePublishedOptions.Add(new SelectListItem
             {
                 Value = "2",
-                Text = _localizationService.GetResource("Admin.Reports.LowStock.SearchPublished.UnpublishedOnly")
+                Text = await _localizationService.GetResource("Admin.Reports.LowStock.SearchPublished.UnpublishedOnly")
             });
 
             //prepare page parameters
@@ -130,7 +130,7 @@ namespace Nop.Web.Areas.Admin.Factories
             {
                 Id = product.Id,
                 Name = product.Name,
-                ManageInventoryMethod = _localizationService.GetLocalizedEnum(product.ManageInventoryMethod),
+                ManageInventoryMethod = await _localizationService.GetLocalizedEnum(product.ManageInventoryMethod),
                 StockQuantity = _productService.GetTotalStockQuantity(product),
                 Published = product.Published
             }));
@@ -141,7 +141,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 Name = combination.Product.Name,
                 Attributes = _productAttributeFormatter
                     .FormatAttributes(combination.Product, combination.AttributesXml, _workContext.CurrentCustomer, "<br />", true, true, true, false),
-                ManageInventoryMethod = _localizationService.GetLocalizedEnum(combination.Product.ManageInventoryMethod),
+                ManageInventoryMethod = await _localizationService.GetLocalizedEnum(combination.Product.ManageInventoryMethod),
                 StockQuantity = combination.StockQuantity,
                 Published = combination.Product.Published
             }));
@@ -191,7 +191,7 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare available billing countries
             searchModel.AvailableCountries = _countryService.GetAllCountriesForBilling(showHidden: true)
                 .Select(country => new SelectListItem { Text = country.Name, Value = country.Id.ToString() }).ToList();
-            searchModel.AvailableCountries.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
+            searchModel.AvailableCountries.Insert(0, new SelectListItem { Text = await _localizationService.GetResource("Admin.Common.All"), Value = "0" });
 
             //prepare available vendors
             _baseAdminModelFactory.PrepareVendors(searchModel.AvailableVendors);
@@ -559,22 +559,22 @@ namespace Nop.Web.Areas.Admin.Factories
             {
                 new RegisteredCustomersReportModel
                 {
-                    Period = _localizationService.GetResource("Admin.Reports.Customers.RegisteredCustomers.Fields.Period.7days"),
+                    Period = await _localizationService.GetResource("Admin.Reports.Customers.RegisteredCustomers.Fields.Period.7days"),
                     Customers = _customerReportService.GetRegisteredCustomersReport(7)
                 },
                 new RegisteredCustomersReportModel
                 {
-                    Period = _localizationService.GetResource("Admin.Reports.Customers.RegisteredCustomers.Fields.Period.14days"),
+                    Period = await _localizationService.GetResource("Admin.Reports.Customers.RegisteredCustomers.Fields.Period.14days"),
                     Customers = _customerReportService.GetRegisteredCustomersReport(14)
                 },
                 new RegisteredCustomersReportModel
                 {
-                    Period = _localizationService.GetResource("Admin.Reports.Customers.RegisteredCustomers.Fields.Period.month"),
+                    Period = await _localizationService.GetResource("Admin.Reports.Customers.RegisteredCustomers.Fields.Period.month"),
                     Customers = _customerReportService.GetRegisteredCustomersReport(30)
                 },
                 new RegisteredCustomersReportModel
                 {
-                    Period = _localizationService.GetResource("Admin.Reports.Customers.RegisteredCustomers.Fields.Period.year"),
+                    Period = await _localizationService.GetResource("Admin.Reports.Customers.RegisteredCustomers.Fields.Period.year"),
                     Customers = _customerReportService.GetRegisteredCustomersReport(365)
                 }
             };

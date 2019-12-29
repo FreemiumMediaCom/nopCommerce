@@ -48,7 +48,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             //display a warning to a store owner if there are some error
             if (_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
@@ -58,7 +58,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                                             warning.Level == SystemWarningLevel.CopyrightRemovalKey ||
                                             warning.Level == SystemWarningLevel.Warning))
                     _notificationService.WarningNotification(
-                        string.Format(_localizationService.GetResource("Admin.System.Warnings.Errors"),
+                        string.Format(await _localizationService.GetResource("Admin.System.Warnings.Errors"),
                         Url.Action("Warnings", "Common")),
                         //do not encode URLs
                         false);
@@ -71,7 +71,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult NopCommerceNewsHideAdv()
+        public async virtual Task<IActionResult> NopCommerceNewsHideAdv()
         {
             _adminAreaSettings.HideAdvertisementsOnAdminArea = !_adminAreaSettings.HideAdvertisementsOnAdminArea;
             _settingService.SaveSetting(_adminAreaSettings);

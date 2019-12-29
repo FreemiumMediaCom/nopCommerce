@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
@@ -15,14 +16,14 @@ namespace Nop.Services.Orders
         /// Deletes a gift card
         /// </summary>
         /// <param name="giftCard">Gift card</param>
-        void DeleteGiftCard(GiftCard giftCard);
+        Task DeleteGiftCard(GiftCard giftCard);
 
         /// <summary>
         /// Gets a gift card
         /// </summary>
         /// <param name="giftCardId">Gift card identifier</param>
         /// <returns>Gift card entry</returns>
-        GiftCard GetGiftCardById(int giftCardId);
+        Task<GiftCard> GetGiftCardById(int giftCardId);
 
         /// <summary>
         /// Gets all gift cards
@@ -47,27 +48,27 @@ namespace Nop.Services.Orders
         /// Inserts a gift card
         /// </summary>
         /// <param name="giftCard">Gift card</param>
-        void InsertGiftCard(GiftCard giftCard);
+        Task InsertGiftCard(GiftCard giftCard);
 
         /// <summary>
         /// Updates the gift card
         /// </summary>
         /// <param name="giftCard">Gift card</param>
-        void UpdateGiftCard(GiftCard giftCard);
+        Task UpdateGiftCard(GiftCard giftCard);
 
         /// <summary>
         /// Gets gift cards by 'PurchasedWithOrderItemId'
         /// </summary>
         /// <param name="purchasedWithOrderItemId">Purchased with order item identifier</param>
         /// <returns>Gift card entries</returns>
-        IList<GiftCard> GetGiftCardsByPurchasedWithOrderItemId(int purchasedWithOrderItemId);
+        Task<IList<GiftCard>> GetGiftCardsByPurchasedWithOrderItemId(int purchasedWithOrderItemId);
 
         /// <summary>
         /// Get active gift cards that are applied by a customer
         /// </summary>
         /// <param name="customer">Customer</param>
         /// <returns>Active gift cards</returns>
-        IList<GiftCard> GetActiveGiftCardsAppliedByCustomer(Customer customer);
+        Task<IList<GiftCard>> GetActiveGiftCardsAppliedByCustomer(Customer customer);
 
         /// <summary>
         /// Generate new gift card code
@@ -79,7 +80,7 @@ namespace Nop.Services.Orders
         /// Delete gift card usage history
         /// </summary>
         /// <param name="order">Order</param>
-        void DeleteGiftCardUsageHistory(Order order);
+        Task DeleteGiftCardUsageHistory(Order order);
 
         /// <summary>
         /// Gets a gift card remaining amount

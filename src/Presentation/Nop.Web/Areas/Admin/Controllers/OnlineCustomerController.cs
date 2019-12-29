@@ -27,7 +27,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         
         #region Methods
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -39,7 +39,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(OnlineCustomerSearchModel searchModel)
+        public async virtual Task<IActionResult> List(OnlineCustomerSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();

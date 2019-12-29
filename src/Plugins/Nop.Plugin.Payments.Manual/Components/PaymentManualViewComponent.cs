@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Plugin.Payments.Manual.Models;
@@ -12,7 +13,7 @@ namespace Nop.Plugin.Payments.Manual.Components
     [ViewComponent(Name = "PaymentManual")]
     public class PaymentManualViewComponent : NopViewComponent
     {
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             var model = new PaymentInfoModel()
             {

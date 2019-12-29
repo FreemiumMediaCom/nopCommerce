@@ -81,7 +81,7 @@ namespace Nop.Plugin.Payments.Square.Services
             var accessTokenRenewalPeriod = scheduleTaskModel.Seconds / 60 / 60 / 24;
             if (accessTokenRenewalPeriod > SquarePaymentDefaults.AccessTokenRenewalPeriodMax)
             {
-                var error = string.Format(_localizationService.GetResource("Plugins.Payments.Square.AccessTokenRenewalPeriod.Error"),
+                var error = string.Format(await _localizationService.GetResource("Plugins.Payments.Square.AccessTokenRenewalPeriod.Error"),
                     SquarePaymentDefaults.AccessTokenRenewalPeriodMax, SquarePaymentDefaults.AccessTokenRenewalPeriodRecommended);
                 eventMessage.ModelState.AddModelError(string.Empty, error);
             }

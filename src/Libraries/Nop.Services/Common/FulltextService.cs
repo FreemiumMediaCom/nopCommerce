@@ -1,4 +1,6 @@
-using System.Linq;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Domain.Common;
 using Nop.Data;
 
@@ -30,28 +32,28 @@ namespace Nop.Services.Common
         /// Gets value indicating whether Full-Text is supported
         /// </summary>
         /// <returns>Result</returns>
-        public virtual bool IsFullTextSupported()
+        public async virtual Task<bool> IsFullTextSupported()
         {
-            var result = _dbContext
+            var result = await _dbContext
                 .QueryFromSql<IntQueryType>("EXEC [FullText_IsSupported]")
-                .Select(intValue => intValue.Value).FirstOrDefault();
+                .Select(intValue => intValue.Value).FirstOrDefaultAsync();
             return result > 0;
         }
 
         /// <summary>
         /// Enable Full-Text support
         /// </summary>
-        public virtual void EnableFullText()
+        public async virtual Task EnableFullText()
         {
-            _dbContext.ExecuteSqlCommand("EXEC [FullText_Enable]", true);
+            await _dbContext.ExecuteSqlCommand("EXEC [FullText_Enable]", true);
         }
 
         /// <summary>
         /// Disable Full-Text support
         /// </summary>
-        public virtual void DisableFullText()
+        public async virtual Task DisableFullText()
         {
-            _dbContext.ExecuteSqlCommand("EXEC [FullText_Disable]", true);
+            await _dbContext.ExecuteSqlCommand("EXEC [FullText_Disable]", true);
         }
 
         #endregion

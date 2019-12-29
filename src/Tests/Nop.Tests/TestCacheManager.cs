@@ -42,7 +42,7 @@ namespace Nop.Tests
         /// <param name="key">Key of cached item</param>
         /// <param name="data">Value for caching</param>
         /// <param name="cacheTime">Cache time in minutes</param>
-        public virtual void Set(string key, object data, int cacheTime)
+        public async virtual Task Set(string key, object data, int cacheTime)
         {
         }
 
@@ -60,7 +60,7 @@ namespace Nop.Tests
         /// Removes the value with the specified key from the cache
         /// </summary>
         /// <param name="key">Key of cached item</param>
-        public virtual void Remove(string key)
+        public async virtual Task Remove(string key)
         {
         }
 
@@ -69,21 +69,21 @@ namespace Nop.Tests
         /// Removes items by key prefix
         /// </summary>
         /// <param name="prefix">String key prefix</param>
-        public virtual void RemoveByPrefix(string prefix)
+        public async virtual Task RemoveByPrefix(string prefix)
         {
         }
 
         /// <summary>
         /// Clear all cache data
         /// </summary>
-        public virtual void Clear()
+        public async virtual Task Clear()
         {
         }
 
         /// <summary>
         /// Dispose cache manager
         /// </summary>
-        public virtual void Dispose()
+        public async virtual Task Dispose()
         {
             //nothing special
         }

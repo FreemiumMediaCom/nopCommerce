@@ -100,7 +100,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     logModel.CreatedOn = _dateTimeHelper.ConvertToUserTime(logItem.CreatedOnUtc, DateTimeKind.Utc);
 
                     //fill in additional values (not existing in the entity)
-                    logModel.LogLevel = _localizationService.GetLocalizedEnum(logItem.LogLevel);
+                    logModel.LogLevel = await _localizationService.GetLocalizedEnum(logItem.LogLevel);
                     logModel.ShortMessage = HtmlHelper.FormatText(logItem.ShortMessage, false, true, false, false, false, false);
                     logModel.FullMessage = string.Empty;
                     logModel.CustomerEmail = logItem.Customer?.Email ?? string.Empty;
@@ -128,7 +128,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 {
                     model = log.ToModel<LogModel>();
 
-                    model.LogLevel = _localizationService.GetLocalizedEnum(log.LogLevel);
+                    model.LogLevel = await _localizationService.GetLocalizedEnum(log.LogLevel);
                     model.ShortMessage = HtmlHelper.FormatText(log.ShortMessage, false, true, false, false, false, false);
                     model.FullMessage = HtmlHelper.FormatText(log.FullMessage, false, true, false, false, false, false);
                     model.CreatedOn = _dateTimeHelper.ConvertToUserTime(log.CreatedOnUtc, DateTimeKind.Utc);

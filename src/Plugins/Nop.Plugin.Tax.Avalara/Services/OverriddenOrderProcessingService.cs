@@ -236,7 +236,7 @@ namespace Nop.Plugin.Tax.Avalara.Services
                 throw new NopException($"Country '{details.BillingAddress.Country.Name}' is not allowed for billing");
 
             //checkout attributes
-            details.CheckoutAttributesXml = _genericAttributeService.GetAttribute<string>(details.Customer, NopCustomerDefaults.CheckoutAttributes, processPaymentRequest.StoreId);
+            details.CheckoutAttributesXml = await _genericAttributeService.GetAttribute<string>(details.Customer, NopCustomerDefaults.CheckoutAttributes, processPaymentRequest.StoreId);
             details.CheckoutAttributeDescription = _checkoutAttributeFormatter.FormatAttributes(details.CheckoutAttributesXml, details.Customer);
 
             //load shopping cart
@@ -264,14 +264,14 @@ namespace Nop.Plugin.Tax.Avalara.Services
             if (!ValidateMinOrderSubtotalAmount(details.Cart))
             {
                 var minOrderSubtotalAmount = _currencyService.ConvertFromPrimaryStoreCurrency(_orderSettings.MinOrderSubtotalAmount, _workContext.WorkingCurrency);
-                throw new NopException(string.Format(_localizationService.GetResource("Checkout.MinOrderSubtotalAmount"),
+                throw new NopException(string.Format(await _localizationService.GetResource("Checkout.MinOrderSubtotalAmount"),
                     _priceFormatter.FormatPrice(minOrderSubtotalAmount, true, false)));
             }
 
             if (!ValidateMinOrderTotalAmount(details.Cart))
             {
                 var minOrderTotalAmount = _currencyService.ConvertFromPrimaryStoreCurrency(_orderSettings.MinOrderTotalAmount, _workContext.WorkingCurrency);
-                throw new NopException(string.Format(_localizationService.GetResource("Checkout.MinOrderTotalAmount"),
+                throw new NopException(string.Format(await _localizationService.GetResource("Checkout.MinOrderTotalAmount"),
                     _priceFormatter.FormatPrice(minOrderTotalAmount, true, false)));
             }
 
@@ -300,7 +300,7 @@ namespace Nop.Plugin.Tax.Avalara.Services
             //shipping info
             if (_shoppingCartService.ShoppingCartRequiresShipping(details.Cart))
             {
-                var pickupPoint = _genericAttributeService.GetAttribute<PickupPoint>(details.Customer,
+                var pickupPoint = await _genericAttributeService.GetAttribute<PickupPoint>(details.Customer,
                     NopCustomerDefaults.SelectedPickupPointAttribute, processPaymentRequest.StoreId);
                 if (_shippingSettings.AllowPickupInStore && pickupPoint != null)
                 {
@@ -333,7 +333,7 @@ namespace Nop.Plugin.Tax.Avalara.Services
                         throw new NopException($"Country '{details.ShippingAddress.Country.Name}' is not allowed for shipping");
                 }
 
-                var shippingOption = _genericAttributeService.GetAttribute<ShippingOption>(details.Customer,
+                var shippingOption = await _genericAttributeService.GetAttribute<ShippingOption>(details.Customer,
                     NopCustomerDefaults.SelectedShippingOptionAttribute, processPaymentRequest.StoreId);
                 if (shippingOption != null)
                 {
@@ -387,7 +387,7 @@ namespace Nop.Plugin.Tax.Avalara.Services
             //VAT number
             var customerVatStatus = (VatNumberStatus)_genericAttributeService.GetAttribute<int>(details.Customer, NopCustomerDefaults.VatNumberStatusIdAttribute);
             if (_taxSettings.EuVatEnabled && customerVatStatus == VatNumberStatus.Valid)
-                details.VatNumber = _genericAttributeService.GetAttribute<string>(details.Customer, NopCustomerDefaults.VatNumberAttribute);
+                details.VatNumber = await _genericAttributeService.GetAttribute<string>(details.Customer, NopCustomerDefaults.VatNumberAttribute);
 
             //tax rates
             details.TaxRates = taxRatesDictionary.Aggregate(string.Empty, (current, next) =>

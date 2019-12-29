@@ -1,3 +1,5 @@
+﻿using System.Threading.Tasks;
+
 namespace Nop.Core.Domain.Stores
 {
     /// <summary>

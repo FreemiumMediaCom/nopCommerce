@@ -175,11 +175,11 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(category, entity => entity.Name, languageId, false, false);
-                    locale.Description = _localizationService.GetLocalized(category, entity => entity.Description, languageId, false, false);
-                    locale.MetaKeywords = _localizationService.GetLocalized(category, entity => entity.MetaKeywords, languageId, false, false);
-                    locale.MetaDescription = _localizationService.GetLocalized(category, entity => entity.MetaDescription, languageId, false, false);
-                    locale.MetaTitle = _localizationService.GetLocalized(category, entity => entity.MetaTitle, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(category, entity => entity.Name, languageId, false, false);
+                    locale.Description = await _localizationService.GetLocalized(category, entity => entity.Description, languageId, false, false);
+                    locale.MetaKeywords = await _localizationService.GetLocalized(category, entity => entity.MetaKeywords, languageId, false, false);
+                    locale.MetaDescription = await _localizationService.GetLocalized(category, entity => entity.MetaDescription, languageId, false, false);
+                    locale.MetaTitle = await _localizationService.GetLocalized(category, entity => entity.MetaTitle, languageId, false, false);
                     locale.SeName = _urlRecordService.GetSeName(category, languageId, false, false);
                 };
             }

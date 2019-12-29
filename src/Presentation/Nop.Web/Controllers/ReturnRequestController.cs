@@ -79,7 +79,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult CustomerReturnRequests()
+        public async virtual Task<IActionResult> CustomerReturnRequests()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -89,9 +89,9 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult ReturnRequest(int orderId)
+        public async virtual Task<IActionResult> ReturnRequest(int orderId)
         {
-            var order = _orderService.GetOrderById(orderId);
+            var order = await _orderService.GetOrderById(orderId);
             if (order == null || order.Deleted || _workContext.CurrentCustomer.Id != order.CustomerId)
                 return Challenge();
 
@@ -105,9 +105,9 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("ReturnRequest")]
         [PublicAntiForgery]
-        public virtual IActionResult ReturnRequestSubmit(int orderId, SubmitReturnRequestModel model, IFormCollection form)
+        public async virtual Task<IActionResult> ReturnRequestSubmit(int orderId, SubmitReturnRequestModel model, IFormCollection form)
         {
-            var order = _orderService.GetOrderById(orderId);
+            var order = await _orderService.GetOrderById(orderId);
             if (order == null || order.Deleted || _workContext.CurrentCustomer.Id != order.CustomerId)
                 return Challenge();
 
@@ -147,8 +147,8 @@ namespace Nop.Web.Controllers
                         OrderItemId = orderItem.Id,
                         Quantity = quantity,
                         CustomerId = _workContext.CurrentCustomer.Id,
-                        ReasonForReturn = rrr != null ? _localizationService.GetLocalized(rrr, x => x.Name) : "not available",
-                        RequestedAction = rra != null ? _localizationService.GetLocalized(rra, x => x.Name) : "not available",
+                        ReasonForReturn = rrr != null ? await _localizationService.GetLocalized(rrr, x => x.Name) : "not available",
+                        RequestedAction = rra != null ? await _localizationService.GetLocalized(rra, x => x.Name) : "not available",
                         CustomerComments = model.Comments,
                         UploadedFileId = downloadId,
                         StaffNotes = string.Empty,
@@ -172,15 +172,15 @@ namespace Nop.Web.Controllers
 
             model = _returnRequestModelFactory.PrepareSubmitReturnRequestModel(model, order);
             if (count > 0)
-                model.Result = _localizationService.GetResource("ReturnRequests.Submitted");
+                model.Result = await _localizationService.GetResource("ReturnRequests.Submitted");
             else
-                model.Result = _localizationService.GetResource("ReturnRequests.NoItemsSubmitted");
+                model.Result = await _localizationService.GetResource("ReturnRequests.NoItemsSubmitted");
 
             return View(model);
         }
 
         [HttpPost]
-        public virtual IActionResult UploadFileReturnRequest()
+        public async virtual Task<IActionResult> UploadFileReturnRequest()
         {
             if (!_orderSettings.ReturnRequestsEnabled || !_orderSettings.ReturnRequestsAllowFiles)
             {
@@ -227,7 +227,7 @@ namespace Nop.Web.Controllers
                     return Json(new
                     {
                         success = false,
-                        message = string.Format(_localizationService.GetResource("ShoppingCart.MaximumUploadedFileSize"), validationFileMaximumSize),
+                        message = string.Format(await _localizationService.GetResource("ShoppingCart.MaximumUploadedFileSize"), validationFileMaximumSize),
                         downloadGuid = Guid.Empty,
                     });
                 }
@@ -252,7 +252,7 @@ namespace Nop.Web.Controllers
             return Json(new
             {
                 success = true,
-                message = _localizationService.GetResource("ShoppingCart.FileUploaded"),
+                message = await _localizationService.GetResource("ShoppingCart.FileUploaded"),
                 downloadUrl = Url.Action("GetFileUpload", "Download", new { downloadId = download.DownloadGuid }),
                 downloadGuid = download.DownloadGuid,
             });

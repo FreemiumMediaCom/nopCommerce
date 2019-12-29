@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -165,7 +166,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Services
         /// Insert the shipping by weight record
         /// </summary>
         /// <param name="shippingByWeightRecord">Shipping by weight record</param>
-        public virtual void InsertShippingByWeightRecord(ShippingByWeightByTotalRecord shippingByWeightRecord)
+        public async virtual Task InsertShippingByWeightRecord(ShippingByWeightByTotalRecord shippingByWeightRecord)
         {
             if (shippingByWeightRecord == null)
                 throw new ArgumentNullException(nameof(shippingByWeightRecord));
@@ -179,7 +180,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Services
         /// Update the shipping by weight record
         /// </summary>
         /// <param name="shippingByWeightRecord">Shipping by weight record</param>
-        public virtual void UpdateShippingByWeightRecord(ShippingByWeightByTotalRecord shippingByWeightRecord)
+        public async virtual Task UpdateShippingByWeightRecord(ShippingByWeightByTotalRecord shippingByWeightRecord)
         {
             if (shippingByWeightRecord == null)
                 throw new ArgumentNullException(nameof(shippingByWeightRecord));
@@ -193,7 +194,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Services
         /// Delete the shipping by weight record
         /// </summary>
         /// <param name="shippingByWeightRecord">Shipping by weight record</param>
-        public virtual void DeleteShippingByWeightRecord(ShippingByWeightByTotalRecord shippingByWeightRecord)
+        public async virtual Task DeleteShippingByWeightRecord(ShippingByWeightByTotalRecord shippingByWeightRecord)
         {
             if (shippingByWeightRecord == null)
                 throw new ArgumentNullException(nameof(shippingByWeightRecord));

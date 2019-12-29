@@ -225,7 +225,7 @@ namespace Nop.Web.Factories
         {
             var model = new LogoModel
             {
-                StoreName = _localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name)
+                StoreName = await _localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name)
             };
 
             var cacheKey = string.Format(NopModelCacheDefaults.StoreLogoPath, _storeContext.CurrentStore.Id, _themeContext.WorkingThemeName, _webHelper.IsCurrentConnectionSecured());
@@ -310,7 +310,7 @@ namespace Nop.Web.Factories
                         var currencyModel = new CurrencyModel
                         {
                             Id = x.Id,
-                            Name = _localizationService.GetLocalized(x, y => y.Name),
+                            Name = await _localizationService.GetLocalized(x, y => y.Name),
                             CurrencySymbol = currencySymbol
                         };
                         return currencyModel;
@@ -355,14 +355,14 @@ namespace Nop.Web.Factories
             var alertMessage = string.Empty;
             if (unreadMessageCount > 0)
             {
-                unreadMessage = string.Format(_localizationService.GetResource("PrivateMessages.TotalUnread"), unreadMessageCount);
+                unreadMessage = string.Format(await _localizationService.GetResource("PrivateMessages.TotalUnread"), unreadMessageCount);
 
                 //notifications here
                 if (_forumSettings.ShowAlertForPM &&
                     !_genericAttributeService.GetAttribute<bool>(customer, NopCustomerDefaults.NotifiedAboutNewPrivateMessagesAttribute, _storeContext.CurrentStore.Id))
                 {
                     _genericAttributeService.SaveAttribute(customer, NopCustomerDefaults.NotifiedAboutNewPrivateMessagesAttribute, true, _storeContext.CurrentStore.Id);
-                    alertMessage = string.Format(_localizationService.GetResource("PrivateMessages.YouHaveUnreadPM"), unreadMessageCount);
+                    alertMessage = string.Format(await _localizationService.GetResource("PrivateMessages.YouHaveUnreadPM"), unreadMessageCount);
                 }
             }
 
@@ -443,7 +443,7 @@ namespace Nop.Web.Factories
                 .Select(t => new FooterModel.FooterTopicModel
                 {
                     Id = t.Id,
-                    Name = _localizationService.GetLocalized(t, x => x.Title),
+                    Name = await _localizationService.GetLocalized(t, x => x.Title),
                     SeName = _urlRecordService.GetSeName(t),
                     IncludeInFooterColumn1 = t.IncludeInFooterColumn1,
                     IncludeInFooterColumn2 = t.IncludeInFooterColumn2,
@@ -455,7 +455,7 @@ namespace Nop.Web.Factories
             //model
             var model = new FooterModel
             {
-                StoreName = _localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name),
+                StoreName = await _localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name),
                 WishlistEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableWishlist),
                 ShoppingCartEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart),
                 SitemapEnabled = _sitemapSettings.SitemapEnabled,
@@ -537,7 +537,7 @@ namespace Nop.Web.Factories
             model.SubjectEnabled = _commonSettings.SubjectFieldOnContactUsForm;
             model.DisplayCaptcha = _captchaSettings.Enabled && _captchaSettings.ShowOnContactUsPage;
             model.VendorId = vendor.Id;
-            model.VendorName = _localizationService.GetLocalized(vendor, x => x.Name);
+            model.VendorName = await _localizationService.GetLocalized(vendor, x => x.Name);
 
             return model;
         }
@@ -562,13 +562,13 @@ namespace Nop.Web.Factories
                 var model = new SitemapModel();
 
                 //prepare common items
-                var commonGroupTitle = _localizationService.GetResource("Sitemap.General");
+                var commonGroupTitle = await _localizationService.GetResource("Sitemap.General");
 
                 //home page
                 model.Items.Add(new SitemapModel.SitemapItemModel
                 {
                     GroupTitle = commonGroupTitle,
-                    Name = _localizationService.GetResource("Homepage"),
+                    Name = await _localizationService.GetResource("Homepage"),
                     Url = urlHelper.RouteUrl("Homepage")
                 });
 
@@ -576,7 +576,7 @@ namespace Nop.Web.Factories
                 model.Items.Add(new SitemapModel.SitemapItemModel
                 {
                     GroupTitle = commonGroupTitle,
-                    Name = _localizationService.GetResource("Search"),
+                    Name = await _localizationService.GetResource("Search"),
                     Url = urlHelper.RouteUrl("ProductSearch")
                 });
 
@@ -586,7 +586,7 @@ namespace Nop.Web.Factories
                     model.Items.Add(new SitemapModel.SitemapItemModel
                     {
                         GroupTitle = commonGroupTitle,
-                        Name = _localizationService.GetResource("News"),
+                        Name = await _localizationService.GetResource("News"),
                         Url = urlHelper.RouteUrl("NewsArchive")
                     });
                 }
@@ -597,7 +597,7 @@ namespace Nop.Web.Factories
                     model.Items.Add(new SitemapModel.SitemapItemModel
                     {
                         GroupTitle = commonGroupTitle,
-                        Name = _localizationService.GetResource("Blog"),
+                        Name = await _localizationService.GetResource("Blog"),
                         Url = urlHelper.RouteUrl("Blog")
                     });
                 }
@@ -608,7 +608,7 @@ namespace Nop.Web.Factories
                     model.Items.Add(new SitemapModel.SitemapItemModel
                     {
                         GroupTitle = commonGroupTitle,
-                        Name = _localizationService.GetResource("Forum.Forums"),
+                        Name = await _localizationService.GetResource("Forum.Forums"),
                         Url = urlHelper.RouteUrl("Boards")
                     });
                 }
@@ -617,7 +617,7 @@ namespace Nop.Web.Factories
                 model.Items.Add(new SitemapModel.SitemapItemModel
                 {
                     GroupTitle = commonGroupTitle,
-                    Name = _localizationService.GetResource("ContactUs"),
+                    Name = await _localizationService.GetResource("ContactUs"),
                     Url = urlHelper.RouteUrl("ContactUs")
                 });
 
@@ -625,7 +625,7 @@ namespace Nop.Web.Factories
                 model.Items.Add(new SitemapModel.SitemapItemModel
                 {
                     GroupTitle = commonGroupTitle,
-                    Name = _localizationService.GetResource("Account.MyAccount"),
+                    Name = await _localizationService.GetResource("Account.MyAccount"),
                     Url = urlHelper.RouteUrl("CustomerInfo")
                 });
 
@@ -638,7 +638,7 @@ namespace Nop.Web.Factories
                     model.Items.AddRange(topics.Select(topic => new SitemapModel.SitemapItemModel
                     {
                         GroupTitle = commonGroupTitle,
-                        Name = _localizationService.GetLocalized(topic, x => x.Title),
+                        Name = await _localizationService.GetLocalized(topic, x => x.Title),
                         Url = urlHelper.RouteUrl("Topic", new { SeName = _urlRecordService.GetSeName(topic) })
                     }));
                 }
@@ -646,7 +646,7 @@ namespace Nop.Web.Factories
                 //blog posts
                 if (_sitemapSettings.SitemapIncludeBlogPosts && _blogSettings.Enabled)
                 {
-                    var blogPostsGroupTitle = _localizationService.GetResource("Sitemap.BlogPosts");
+                    var blogPostsGroupTitle = await _localizationService.GetResource("Sitemap.BlogPosts");
                     var blogPosts = _blogService.GetAllBlogPosts(storeId: _storeContext.CurrentStore.Id)
                         .Where(p => p.IncludeInSitemap);
 
@@ -661,7 +661,7 @@ namespace Nop.Web.Factories
                 //news
                 if (_sitemapSettings.SitemapIncludeNews && _newsSettings.Enabled)
                 {
-                    var newsGroupTitle = _localizationService.GetResource("Sitemap.News");
+                    var newsGroupTitle = await _localizationService.GetResource("Sitemap.News");
                     var news = _newsService.GetAllNews(storeId: _storeContext.CurrentStore.Id);
                     model.Items.AddRange(news.Select(newsItem => new SitemapModel.SitemapItemModel
                     {
@@ -674,12 +674,12 @@ namespace Nop.Web.Factories
                 //categories
                 if (_sitemapSettings.SitemapIncludeCategories)
                 {
-                    var categoriesGroupTitle = _localizationService.GetResource("Sitemap.Categories");
+                    var categoriesGroupTitle = await _localizationService.GetResource("Sitemap.Categories");
                     var categories = _categoryService.GetAllCategories(storeId: _storeContext.CurrentStore.Id);
                     model.Items.AddRange(categories.Select(category => new SitemapModel.SitemapItemModel
                     {
                         GroupTitle = categoriesGroupTitle,
-                        Name = _localizationService.GetLocalized(category, x => x.Name),
+                        Name = await _localizationService.GetLocalized(category, x => x.Name),
                         Url = urlHelper.RouteUrl("Category", new { SeName = _urlRecordService.GetSeName(category) })
                     }));
                 }
@@ -687,12 +687,12 @@ namespace Nop.Web.Factories
                 //manufacturers
                 if (_sitemapSettings.SitemapIncludeManufacturers)
                 {
-                    var manufacturersGroupTitle = _localizationService.GetResource("Sitemap.Manufacturers");
+                    var manufacturersGroupTitle = await _localizationService.GetResource("Sitemap.Manufacturers");
                     var manufacturers = _manufacturerService.GetAllManufacturers(storeId: _storeContext.CurrentStore.Id);
                     model.Items.AddRange(manufacturers.Select(manufacturer => new SitemapModel.SitemapItemModel
                     {
                         GroupTitle = manufacturersGroupTitle,
-                        Name = _localizationService.GetLocalized(manufacturer, x => x.Name),
+                        Name = await _localizationService.GetLocalized(manufacturer, x => x.Name),
                         Url = urlHelper.RouteUrl("Manufacturer", new { SeName = _urlRecordService.GetSeName(manufacturer) })
                     }));
                 }
@@ -700,12 +700,12 @@ namespace Nop.Web.Factories
                 //products
                 if (_sitemapSettings.SitemapIncludeProducts)
                 {
-                    var productsGroupTitle = _localizationService.GetResource("Sitemap.Products");
+                    var productsGroupTitle = await _localizationService.GetResource("Sitemap.Products");
                     var products = _productService.SearchProducts(storeId: _storeContext.CurrentStore.Id, visibleIndividuallyOnly: true);
                     model.Items.AddRange(products.Select(product => new SitemapModel.SitemapItemModel
                     {
                         GroupTitle = productsGroupTitle,
-                        Name = _localizationService.GetLocalized(product, x => x.Name),
+                        Name = await _localizationService.GetLocalized(product, x => x.Name),
                         Url = urlHelper.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) })
                     }));
                 }
@@ -713,12 +713,12 @@ namespace Nop.Web.Factories
                 //product tags
                 if (_sitemapSettings.SitemapIncludeProductTags)
                 {
-                    var productTagsGroupTitle = _localizationService.GetResource("Sitemap.ProductTags");
+                    var productTagsGroupTitle = await _localizationService.GetResource("Sitemap.ProductTags");
                     var productTags = _productTagService.GetAllProductTags();
                     model.Items.AddRange(productTags.Select(productTag => new SitemapModel.SitemapItemModel
                     {
                         GroupTitle = productTagsGroupTitle,
-                        Name = _localizationService.GetLocalized(productTag, x => x.Name),
+                        Name = await _localizationService.GetLocalized(productTag, x => x.Name),
                         Url = urlHelper.RouteUrl("ProductsByTag", new { SeName = _urlRecordService.GetSeName(productTag) })
                     }));
                 }
@@ -742,7 +742,7 @@ namespace Nop.Web.Factories
         /// </summary>
         /// <param name="id">Sitemap identifier; pass null to load the first sitemap or sitemap index file</param>
         /// <returns>Sitemap as string in XML format</returns>
-        public virtual string PrepareSitemapXml(int? id)
+        public async virtual Task<string> PrepareSitemapXml(int? id)
         {
             var cacheKey = string.Format(NopModelCacheDefaults.SitemapSeoModelKey, id,
                 _workContext.WorkingLanguage.Id,
@@ -794,7 +794,7 @@ namespace Nop.Web.Factories
         /// Get robots.txt file
         /// </summary>
         /// <returns>Robots.txt file as string</returns>
-        public virtual string PrepareRobotsTextFile()
+        public async virtual Task<string> PrepareRobotsTextFile()
         {
             var sb = new StringBuilder();
 

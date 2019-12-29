@@ -159,7 +159,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(language));
 
             //get locale resources
-            var localeResources = _localizationService.GetAllResourceValues(language.Id, loadPublicLocales: null)
+            var localeResources = await _localizationService.GetAllResourceValues(language.Id, loadPublicLocales: null)
                 .OrderBy(localeResource => localeResource.Key).AsQueryable();
 
             //filter locale resources

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
@@ -53,12 +55,12 @@ namespace Nop.Services.Shipping
         /// Deletes a shipment
         /// </summary>
         /// <param name="shipment">Shipment</param>
-        public virtual void DeleteShipment(Shipment shipment)
+        public async virtual Task DeleteShipment(Shipment shipment)
         {
             if (shipment == null)
                 throw new ArgumentNullException(nameof(shipment));
 
-            _shipmentRepository.Delete(shipment);
+            await _shipmentRepository.Delete(shipment);
 
             //event notification
             _eventPublisher.EntityDeleted(shipment);
@@ -150,7 +152,7 @@ namespace Nop.Services.Shipping
         /// </summary>
         /// <param name="shipmentIds">Shipment identifiers</param>
         /// <returns>Shipments</returns>
-        public virtual IList<Shipment> GetShipmentsByIds(int[] shipmentIds)
+        public async virtual Task<IList<Shipment>> GetShipmentsByIds(int[] shipmentIds)
         {
             if (shipmentIds == null || shipmentIds.Length == 0)
                 return new List<Shipment>();
@@ -158,7 +160,7 @@ namespace Nop.Services.Shipping
             var query = from o in _shipmentRepository.Table
                         where shipmentIds.Contains(o.Id)
                         select o;
-            var shipments = query.ToList();
+            var shipments = await query.ToListAsync();
             //sort by passed identifiers
             var sortedOrders = new List<Shipment>();
             foreach (var id in shipmentIds)
@@ -176,24 +178,24 @@ namespace Nop.Services.Shipping
         /// </summary>
         /// <param name="shipmentId">Shipment identifier</param>
         /// <returns>Shipment</returns>
-        public virtual Shipment GetShipmentById(int shipmentId)
+        public async virtual Task<Shipment> GetShipmentById(int shipmentId)
         {
             if (shipmentId == 0)
                 return null;
 
-            return _shipmentRepository.GetById(shipmentId);
+            return await _shipmentRepository.GetById(shipmentId);
         }
 
         /// <summary>
         /// Inserts a shipment
         /// </summary>
         /// <param name="shipment">Shipment</param>
-        public virtual void InsertShipment(Shipment shipment)
+        public async virtual Task InsertShipment(Shipment shipment)
         {
             if (shipment == null)
                 throw new ArgumentNullException(nameof(shipment));
 
-            _shipmentRepository.Insert(shipment);
+            await _shipmentRepository.Insert(shipment);
 
             //event notification
             _eventPublisher.EntityInserted(shipment);
@@ -203,12 +205,12 @@ namespace Nop.Services.Shipping
         /// Updates the shipment
         /// </summary>
         /// <param name="shipment">Shipment</param>
-        public virtual void UpdateShipment(Shipment shipment)
+        public async virtual Task UpdateShipment(Shipment shipment)
         {
             if (shipment == null)
                 throw new ArgumentNullException(nameof(shipment));
 
-            _shipmentRepository.Update(shipment);
+            await _shipmentRepository.Update(shipment);
 
             //event notification
             _eventPublisher.EntityUpdated(shipment);
@@ -218,12 +220,12 @@ namespace Nop.Services.Shipping
         /// Deletes a shipment item
         /// </summary>
         /// <param name="shipmentItem">Shipment item</param>
-        public virtual void DeleteShipmentItem(ShipmentItem shipmentItem)
+        public async virtual Task DeleteShipmentItem(ShipmentItem shipmentItem)
         {
             if (shipmentItem == null)
                 throw new ArgumentNullException(nameof(shipmentItem));
 
-            _siRepository.Delete(shipmentItem);
+            await _siRepository.Delete(shipmentItem);
 
             //event notification
             _eventPublisher.EntityDeleted(shipmentItem);
@@ -234,24 +236,24 @@ namespace Nop.Services.Shipping
         /// </summary>
         /// <param name="shipmentItemId">Shipment item identifier</param>
         /// <returns>Shipment item</returns>
-        public virtual ShipmentItem GetShipmentItemById(int shipmentItemId)
+        public async virtual Task<ShipmentItem> GetShipmentItemById(int shipmentItemId)
         {
             if (shipmentItemId == 0)
                 return null;
 
-            return _siRepository.GetById(shipmentItemId);
+            return await _siRepository.GetById(shipmentItemId);
         }
 
         /// <summary>
         /// Inserts a shipment item
         /// </summary>
         /// <param name="shipmentItem">Shipment item</param>
-        public virtual void InsertShipmentItem(ShipmentItem shipmentItem)
+        public async virtual Task InsertShipmentItem(ShipmentItem shipmentItem)
         {
             if (shipmentItem == null)
                 throw new ArgumentNullException(nameof(shipmentItem));
 
-            _siRepository.Insert(shipmentItem);
+            await _siRepository.Insert(shipmentItem);
 
             //event notification
             _eventPublisher.EntityInserted(shipmentItem);
@@ -261,12 +263,12 @@ namespace Nop.Services.Shipping
         /// Updates the shipment item
         /// </summary>
         /// <param name="shipmentItem">Shipment item</param>
-        public virtual void UpdateShipmentItem(ShipmentItem shipmentItem)
+        public async virtual Task UpdateShipmentItem(ShipmentItem shipmentItem)
         {
             if (shipmentItem == null)
                 throw new ArgumentNullException(nameof(shipmentItem));
 
-            _siRepository.Update(shipmentItem);
+            await _siRepository.Update(shipmentItem);
 
             //event notification
             _eventPublisher.EntityUpdated(shipmentItem);

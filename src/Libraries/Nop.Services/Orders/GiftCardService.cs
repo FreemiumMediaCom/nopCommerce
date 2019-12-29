@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Customers;
@@ -45,12 +47,12 @@ namespace Nop.Services.Orders
         /// Deletes a gift card
         /// </summary>
         /// <param name="giftCard">Gift card</param>
-        public virtual void DeleteGiftCard(GiftCard giftCard)
+        public async virtual Task DeleteGiftCard(GiftCard giftCard)
         {
             if (giftCard == null)
                 throw new ArgumentNullException(nameof(giftCard));
 
-            _giftCardRepository.Delete(giftCard);
+            await _giftCardRepository.Delete(giftCard);
 
             //event notification
             _eventPublisher.EntityDeleted(giftCard);
@@ -61,12 +63,12 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="giftCardId">Gift card identifier</param>
         /// <returns>Gift card entry</returns>
-        public virtual GiftCard GetGiftCardById(int giftCardId)
+        public async virtual Task<GiftCard> GetGiftCardById(int giftCardId)
         {
             if (giftCardId == 0)
                 return null;
 
-            return _giftCardRepository.GetById(giftCardId);
+            return await _giftCardRepository.GetById(giftCardId);
         }
 
         /// <summary>
@@ -113,12 +115,12 @@ namespace Nop.Services.Orders
         /// Inserts a gift card
         /// </summary>
         /// <param name="giftCard">Gift card</param>
-        public virtual void InsertGiftCard(GiftCard giftCard)
+        public async virtual Task InsertGiftCard(GiftCard giftCard)
         {
             if (giftCard == null)
                 throw new ArgumentNullException(nameof(giftCard));
 
-            _giftCardRepository.Insert(giftCard);
+            await _giftCardRepository.Insert(giftCard);
 
             //event notification
             _eventPublisher.EntityInserted(giftCard);
@@ -128,12 +130,12 @@ namespace Nop.Services.Orders
         /// Updates the gift card
         /// </summary>
         /// <param name="giftCard">Gift card</param>
-        public virtual void UpdateGiftCard(GiftCard giftCard)
+        public async virtual Task UpdateGiftCard(GiftCard giftCard)
         {
             if (giftCard == null)
                 throw new ArgumentNullException(nameof(giftCard));
 
-            _giftCardRepository.Update(giftCard);
+            await _giftCardRepository.Update(giftCard);
 
             //event notification
             _eventPublisher.EntityUpdated(giftCard);
@@ -144,7 +146,7 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="purchasedWithOrderItemId">Purchased with order item identifier</param>
         /// <returns>Gift card entries</returns>
-        public virtual IList<GiftCard> GetGiftCardsByPurchasedWithOrderItemId(int purchasedWithOrderItemId)
+        public async virtual Task<IList<GiftCard>> GetGiftCardsByPurchasedWithOrderItemId(int purchasedWithOrderItemId)
         {
             if (purchasedWithOrderItemId == 0)
                 return new List<GiftCard>();
@@ -153,7 +155,7 @@ namespace Nop.Services.Orders
             query = query.Where(gc => gc.PurchasedWithOrderItemId.HasValue && gc.PurchasedWithOrderItemId.Value == purchasedWithOrderItemId);
             query = query.OrderBy(gc => gc.Id);
 
-            var giftCards = query.ToList();
+            var giftCards = await query.ToListAsync();
             return giftCards;
         }
 
@@ -162,13 +164,13 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="customer">Customer</param>
         /// <returns>Active gift cards</returns>
-        public virtual IList<GiftCard> GetActiveGiftCardsAppliedByCustomer(Customer customer)
+        public async virtual Task<IList<GiftCard>> GetActiveGiftCardsAppliedByCustomer(Customer customer)
         {
             var result = new List<GiftCard>();
             if (customer == null)
                 return result;
 
-            var couponCodes = _customerService.ParseAppliedGiftCardCouponCodes(customer);
+            var couponCodes = await _customerService.ParseAppliedGiftCardCouponCodes(customer);
             foreach (var couponCode in couponCodes)
             {
                 var giftCards = GetAllGiftCards(isGiftCardActivated: true, giftCardCouponCode: couponCode);
@@ -199,15 +201,15 @@ namespace Nop.Services.Orders
         /// Delete gift card usage history
         /// </summary>
         /// <param name="order">Order</param>
-        public virtual void DeleteGiftCardUsageHistory(Order order)
+        public async virtual Task DeleteGiftCardUsageHistory(Order order)
         {
             var giftCardUsageHistory = order.GiftCardUsageHistory.ToList();
             var giftCards = giftCardUsageHistory.Select(gcuh => gcuh.GiftCard).ToList();
-            _giftCardUsageHistoryRepository.Delete(giftCardUsageHistory);
+            await _giftCardUsageHistoryRepository.Delete(giftCardUsageHistory);
 
             foreach (var giftCard in giftCards)
             {
-                UpdateGiftCard(giftCard);
+                await UpdateGiftCard(giftCard);
             }
         }
 

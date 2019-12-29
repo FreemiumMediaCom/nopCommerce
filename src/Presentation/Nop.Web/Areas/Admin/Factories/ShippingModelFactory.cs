@@ -284,8 +284,8 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(shippingMethod, entity => entity.Name, languageId, false, false);
-                    locale.Description = _localizationService.GetLocalized(shippingMethod, entity => entity.Description, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(shippingMethod, entity => entity.Name, languageId, false, false);
+                    locale.Description = await _localizationService.GetLocalized(shippingMethod, entity => entity.Description, languageId, false, false);
                 };
             }
 
@@ -355,7 +355,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(deliveryDate, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(deliveryDate, entity => entity.Name, languageId, false, false);
                 };
             }
 
@@ -409,7 +409,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(productAvailabilityRange, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(productAvailabilityRange, entity => entity.Name, languageId, false, false);
                 };
             }
 

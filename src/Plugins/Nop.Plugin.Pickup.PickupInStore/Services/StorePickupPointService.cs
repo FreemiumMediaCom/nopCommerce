@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -90,7 +91,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Services
         /// Inserts a pickup point
         /// </summary>
         /// <param name="pickupPoint">Pickup point</param>
-        public virtual void InsertStorePickupPoint(StorePickupPoint pickupPoint)
+        public async virtual Task InsertStorePickupPoint(StorePickupPoint pickupPoint)
         {
             if (pickupPoint == null)
                 throw new ArgumentNullException(nameof(pickupPoint));
@@ -103,7 +104,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Services
         /// Updates the pickup point
         /// </summary>
         /// <param name="pickupPoint">Pickup point</param>
-        public virtual void UpdateStorePickupPoint(StorePickupPoint pickupPoint)
+        public async virtual Task UpdateStorePickupPoint(StorePickupPoint pickupPoint)
         {
             if (pickupPoint == null)
                 throw new ArgumentNullException(nameof(pickupPoint));
@@ -116,7 +117,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Services
         /// Deletes a pickup point
         /// </summary>
         /// <param name="pickupPoint">Pickup point</param>
-        public virtual void DeleteStorePickupPoint(StorePickupPoint pickupPoint)
+        public async virtual Task DeleteStorePickupPoint(StorePickupPoint pickupPoint)
         {
             if (pickupPoint == null)
                 throw new ArgumentNullException(nameof(pickupPoint));

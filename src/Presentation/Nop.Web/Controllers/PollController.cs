@@ -42,7 +42,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         [HttpPost]
-        public virtual IActionResult Vote(int pollAnswerId)
+        public async virtual Task<IActionResult> Vote(int pollAnswerId)
         {
             var pollAnswer = _pollService.GetPollAnswerById(pollAnswerId);
             if (pollAnswer == null)
@@ -53,7 +53,7 @@ namespace Nop.Web.Controllers
                 return Json(new { error = "Poll is not available" });
 
             if (_workContext.CurrentCustomer.IsGuest() && !poll.AllowGuestsToVote)
-                return Json(new { error = _localizationService.GetResource("Polls.OnlyRegisteredUsersVote") });
+                return Json(new { error = await _localizationService.GetResource("Polls.OnlyRegisteredUsersVote") });
 
             var alreadyVoted = _pollService.AlreadyVoted(poll.Id, _workContext.CurrentCustomer.Id);
             if (!alreadyVoted)

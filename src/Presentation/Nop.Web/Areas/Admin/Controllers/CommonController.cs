@@ -84,7 +84,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult SystemInfo()
+        public async virtual Task<IActionResult> SystemInfo()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -95,7 +95,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Warnings()
+        public async virtual Task<IActionResult> Warnings()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -106,7 +106,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Maintenance()
+        public async virtual Task<IActionResult> Maintenance()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -119,7 +119,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("delete-guests")]
-        public virtual IActionResult MaintenanceDeleteGuests(MaintenanceModel model)
+        public async virtual Task<IActionResult> MaintenanceDeleteGuests(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -137,7 +137,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("delete-abondoned-carts")]
-        public virtual IActionResult MaintenanceDeleteAbandonedCarts(MaintenanceModel model)
+        public async virtual Task<IActionResult> MaintenanceDeleteAbandonedCarts(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -150,7 +150,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("delete-exported-files")]
-        public virtual IActionResult MaintenanceDeleteFiles(MaintenanceModel model)
+        public async virtual Task<IActionResult> MaintenanceDeleteFiles(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -190,7 +190,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult BackupFiles(BackupFileSearchModel searchModel)
+        public async virtual Task<IActionResult> BackupFiles(BackupFileSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedDataTablesJson();
@@ -203,7 +203,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("backup-database")]
-        public virtual IActionResult BackupDatabase(MaintenanceModel model)
+        public async virtual Task<IActionResult> BackupDatabase(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -211,7 +211,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             try
             {
                 _maintenanceService.BackupDatabase();
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.System.Maintenance.BackupDatabase.BackupCreated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.System.Maintenance.BackupDatabase.BackupCreated"));
             }
             catch (Exception exc)
             {
@@ -226,7 +226,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("re-index")]
-        public virtual IActionResult ReIndexTables(MaintenanceModel model)
+        public async virtual Task<IActionResult> ReIndexTables(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -234,7 +234,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             try
             {
                 _maintenanceService.ReIndexTables();
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.System.Maintenance.ReIndexTables.Complete"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.System.Maintenance.ReIndexTables.Complete"));
             }
             catch (Exception exc)
             {
@@ -246,7 +246,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("backupFileName", "action")]
-        public virtual IActionResult BackupAction(MaintenanceModel model)
+        public async virtual Task<IActionResult> BackupAction(MaintenanceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -263,13 +263,13 @@ namespace Nop.Web.Areas.Admin.Controllers
                     case "delete-backup":
                         {
                             _fileProvider.DeleteFile(backupPath);
-                            _notificationService.SuccessNotification(string.Format(_localizationService.GetResource("Admin.System.Maintenance.BackupDatabase.BackupDeleted"), fileName));
+                            _notificationService.SuccessNotification(string.Format(await _localizationService.GetResource("Admin.System.Maintenance.BackupDatabase.BackupDeleted"), fileName));
                         }
                         break;
                     case "restore-backup":
                         {
                             _maintenanceService.RestoreDatabase(backupPath);
-                            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.System.Maintenance.BackupDatabase.DatabaseRestored"));
+                            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.System.Maintenance.BackupDatabase.DatabaseRestored"));
                         }
                         break;
                 }
@@ -285,7 +285,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult SetLanguage(int langid, string returnUrl = "")
+        public async virtual Task<IActionResult> SetLanguage(int langid, string returnUrl = "")
         {
             var language = _languageService.GetLanguageById(langid);
             if (language != null)
@@ -303,7 +303,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ClearCache(string returnUrl = "")
+        public async virtual Task<IActionResult> ClearCache(string returnUrl = "")
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -322,7 +322,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult RestartApplication(string returnUrl = "")
+        public async virtual Task<IActionResult> RestartApplication(string returnUrl = "")
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -341,7 +341,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Redirect(returnUrl);
         }
 
-        public virtual IActionResult SeNames()
+        public async virtual Task<IActionResult> SeNames()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -353,7 +353,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult SeNames(UrlRecordSearchModel searchModel)
+        public async virtual Task<IActionResult> SeNames(UrlRecordSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedDataTablesJson();
@@ -365,7 +365,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteSelectedSeNames(ICollection<int> selectedIds)
+        public async virtual Task<IActionResult> DeleteSelectedSeNames(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
                 return AccessDeniedView();
@@ -377,7 +377,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PopularSearchTermsReport(PopularSearchTermSearchModel searchModel)
+        public async virtual Task<IActionResult> PopularSearchTermsReport(PopularSearchTermSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -389,7 +389,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         //action displaying notification (warning) to a store owner that entered SE URL already exists
-        public virtual IActionResult UrlReservedWarning(string entityId, string entityName, string seName)
+        public async virtual Task<IActionResult> UrlReservedWarning(string entityId, string entityName, string seName)
         {
             if (string.IsNullOrEmpty(seName))
                 return Json(new { Result = string.Empty });
@@ -400,7 +400,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (seName.Equals(validatedSeName, StringComparison.InvariantCultureIgnoreCase))
                 return Json(new { Result = string.Empty });
 
-            return Json(new { Result = string.Format(_localizationService.GetResource("Admin.System.Warnings.URL.Reserved"), validatedSeName) });
+            return Json(new { Result = string.Format(await _localizationService.GetResource("Admin.System.Warnings.URL.Reserved"), validatedSeName) });
         }
 
         #endregion

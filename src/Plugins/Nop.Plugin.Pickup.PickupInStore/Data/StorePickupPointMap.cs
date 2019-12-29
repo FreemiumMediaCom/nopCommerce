@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nop.Data.Mapping;
 using Nop.Plugin.Pickup.PickupInStore.Domain;
@@ -16,7 +17,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Data
         /// Configures the entity
         /// </summary>
         /// <param name="builder">The builder to be used to configure the entity</param>
-        public override void Configure(EntityTypeBuilder<StorePickupPoint> builder)
+        public async override Task Configure(EntityTypeBuilder<StorePickupPoint> builder)
         {
             builder.ToTable(nameof(StorePickupPoint));
             builder.HasKey(point => point.Id);

@@ -25,11 +25,11 @@ namespace Nop.Plugin.Payments.CheckMoneyOrder.Components
             _workContext = workContext;
         }
 
-        public IViewComponentResult Invoke()
+public async Task<IViewComponentResult> InvokeAsync()
         {
             var model = new PaymentInfoModel
             {
-                DescriptionText = _localizationService.GetLocalizedSetting(_checkMoneyOrderPaymentSettings,
+                DescriptionText = await _localizationService.GetLocalizedSetting(_checkMoneyOrderPaymentSettings,
                     x => x.DescriptionText, _workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id)
             };
 

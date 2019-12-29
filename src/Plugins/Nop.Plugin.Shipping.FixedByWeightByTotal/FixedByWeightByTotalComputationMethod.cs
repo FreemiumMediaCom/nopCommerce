@@ -173,8 +173,8 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal
 
                     response.ShippingOptions.Add(new ShippingOption
                     {
-                        Name = _localizationService.GetLocalized(shippingMethod, x => x.Name),
-                        Description = _localizationService.GetLocalized(shippingMethod, x => x.Description),
+                        Name = await _localizationService.GetLocalized(shippingMethod, x => x.Name),
+                        Description = await _localizationService.GetLocalized(shippingMethod, x => x.Description),
                         Rate = rate.Value
                     });
                 }
@@ -185,8 +185,8 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal
                 var restrictByCountryId = getShippingOptionRequest.ShippingAddress?.Country?.Id;
                 response.ShippingOptions = _shippingService.GetAllShippingMethods(restrictByCountryId).Select(shippingMethod => new ShippingOption
                 {
-                    Name = _localizationService.GetLocalized(shippingMethod, x => x.Name),
-                    Description = _localizationService.GetLocalized(shippingMethod, x => x.Description),
+                    Name = await _localizationService.GetLocalized(shippingMethod, x => x.Name),
+                    Description = await _localizationService.GetLocalized(shippingMethod, x => x.Description),
                     Rate = GetRate(shippingMethod.Id)
                 }).ToList();
             }

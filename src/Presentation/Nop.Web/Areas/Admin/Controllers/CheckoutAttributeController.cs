@@ -194,12 +194,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Checkout attributes
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -211,7 +211,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(CheckoutAttributeSearchModel searchModel)
+        public async virtual Task<IActionResult> List(CheckoutAttributeSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedDataTablesJson();
@@ -222,7 +222,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -234,7 +234,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(CheckoutAttributeModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(CheckoutAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -252,9 +252,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewCheckoutAttribute",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewCheckoutAttribute"), checkoutAttribute.Name), checkoutAttribute);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewCheckoutAttribute"), checkoutAttribute.Name), checkoutAttribute);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.CheckoutAttributes.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Catalog.Attributes.CheckoutAttributes.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -269,7 +269,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -286,7 +286,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(CheckoutAttributeModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(CheckoutAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -310,9 +310,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditCheckoutAttribute",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditCheckoutAttribute"), checkoutAttribute.Name), checkoutAttribute);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditCheckoutAttribute"), checkoutAttribute.Name), checkoutAttribute);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.CheckoutAttributes.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Catalog.Attributes.CheckoutAttributes.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -328,7 +328,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -342,9 +342,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteCheckoutAttribute",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteCheckoutAttribute"), checkoutAttribute.Name), checkoutAttribute);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteCheckoutAttribute"), checkoutAttribute.Name), checkoutAttribute);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.CheckoutAttributes.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Catalog.Attributes.CheckoutAttributes.Deleted"));
 
             return RedirectToAction("List");
         }
@@ -354,7 +354,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Checkout attribute values
 
         [HttpPost]
-        public virtual IActionResult ValueList(CheckoutAttributeValueSearchModel searchModel)
+        public async virtual Task<IActionResult> ValueList(CheckoutAttributeValueSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedDataTablesJson();
@@ -369,7 +369,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult ValueCreatePopup(int checkoutAttributeId)
+        public async virtual Task<IActionResult> ValueCreatePopup(int checkoutAttributeId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -387,7 +387,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueCreatePopup(CheckoutAttributeValueModel model)
+        public async virtual Task<IActionResult> ValueCreatePopup(CheckoutAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -436,7 +436,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ValueEditPopup(int id)
+        public async virtual Task<IActionResult> ValueEditPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -458,7 +458,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueEditPopup(CheckoutAttributeValueModel model)
+        public async virtual Task<IActionResult> ValueEditPopup(CheckoutAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -513,7 +513,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueDelete(int id)
+        public async virtual Task<IActionResult> ValueDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();

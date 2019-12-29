@@ -202,17 +202,17 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare "approved" property (0 - all; 1 - approved only; 2 - disapproved only)
             searchModel.AvailableApprovedOptions.Add(new SelectListItem
             {
-                Text = _localizationService.GetResource("Admin.ContentManagement.News.Comments.List.SearchApproved.All"),
+                Text = await _localizationService.GetResource("Admin.ContentManagement.News.Comments.List.SearchApproved.All"),
                 Value = "0"
             });
             searchModel.AvailableApprovedOptions.Add(new SelectListItem
             {
-                Text = _localizationService.GetResource("Admin.ContentManagement.News.Comments.List.SearchApproved.ApprovedOnly"),
+                Text = await _localizationService.GetResource("Admin.ContentManagement.News.Comments.List.SearchApproved.ApprovedOnly"),
                 Value = "1"
             });
             searchModel.AvailableApprovedOptions.Add(new SelectListItem
             {
-                Text = _localizationService.GetResource("Admin.ContentManagement.News.Comments.List.SearchApproved.DisapprovedOnly"),
+                Text = await _localizationService.GetResource("Admin.ContentManagement.News.Comments.List.SearchApproved.DisapprovedOnly"),
                 Value = "2"
             });
 

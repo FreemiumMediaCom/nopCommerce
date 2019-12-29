@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
@@ -45,7 +46,7 @@ namespace Nop.Services.Messages
         /// <param name="type">Notification type</param>
         /// <param name="message">Message</param>
         /// <param name="encode">A value indicating whether the message should not be encoded</param>
-        protected virtual void PrepareTempData(NotifyType type, string message, bool encode = true)
+        protected async virtual Task PrepareTempData(NotifyType type, string message, bool encode = true)
         {
             var context = _httpContextAccessor.HttpContext;
             var tempData = _tempDataDictionaryFactory.GetTempData(context);
@@ -87,9 +88,9 @@ namespace Nop.Services.Messages
         /// <param name="type">Notification type</param>
         /// <param name="message">Message</param>
         /// <param name="encode">A value indicating whether the message should not be encoded</param>
-        public virtual void Notification(NotifyType type, string message, bool encode = true)
+        public async virtual Task Notification(NotifyType type, string message, bool encode = true)
         {
-            PrepareTempData(type, message, encode);
+            await PrepareTempData(type, message, encode);
         }
 
         /// <summary>
@@ -97,9 +98,9 @@ namespace Nop.Services.Messages
         /// </summary>
         /// <param name="message">Message</param>
         /// <param name="encode">A value indicating whether the message should not be encoded</param>
-        public virtual void SuccessNotification(string message, bool encode = true)
+        public async virtual Task SuccessNotification(string message, bool encode = true)
         {
-            PrepareTempData(NotifyType.Success, message, encode);
+            await PrepareTempData(NotifyType.Success, message, encode);
         }
 
         /// <summary>
@@ -107,9 +108,9 @@ namespace Nop.Services.Messages
         /// </summary>
         /// <param name="message">Message</param>
         /// <param name="encode">A value indicating whether the message should not be encoded</param>
-        public virtual void WarningNotification(string message, bool encode = true)
+        public async virtual Task WarningNotification(string message, bool encode = true)
         {
-            PrepareTempData(NotifyType.Warning, message, encode);
+            await PrepareTempData(NotifyType.Warning, message, encode);
         }
 
         /// <summary>
@@ -117,9 +118,9 @@ namespace Nop.Services.Messages
         /// </summary>
         /// <param name="message">Message</param>
         /// <param name="encode">A value indicating whether the message should not be encoded</param>
-        public virtual void ErrorNotification(string message, bool encode = true)
+        public async virtual Task ErrorNotification(string message, bool encode = true)
         {
-            PrepareTempData(NotifyType.Error, message, encode);
+            await PrepareTempData(NotifyType.Error, message, encode);
         }
 
         /// <summary>
@@ -127,7 +128,7 @@ namespace Nop.Services.Messages
         /// </summary>
         /// <param name="exception">Exception</param>
         /// <param name="logException">A value indicating whether exception should be logged</param>
-        public virtual void ErrorNotification(Exception exception, bool logException = true)
+        public async virtual Task ErrorNotification(Exception exception, bool logException = true)
         {
             if (exception == null)
                 return;
@@ -135,7 +136,7 @@ namespace Nop.Services.Messages
             if (logException)
                 LogException(exception);
 
-            ErrorNotification(exception.Message);
+            await ErrorNotification(exception.Message);
         }
 
         #endregion

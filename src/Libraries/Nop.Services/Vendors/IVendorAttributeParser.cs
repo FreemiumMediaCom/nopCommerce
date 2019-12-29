@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Vendors;
 
 namespace Nop.Services.Vendors
@@ -44,6 +45,6 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="attributesXml">Attributes in XML format</param>
         /// <returns>Warnings</returns>
-        IList<string> GetAttributeWarnings(string attributesXml);
+        Task<IList<string>> GetAttributeWarnings(string attributesXml);
     }
 }

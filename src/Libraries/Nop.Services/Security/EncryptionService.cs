@@ -2,6 +2,8 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
+
 using Nop.Core.Domain.Security;
 
 namespace Nop.Services.Security

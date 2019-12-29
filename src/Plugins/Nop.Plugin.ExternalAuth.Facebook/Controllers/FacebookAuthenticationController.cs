@@ -66,7 +66,7 @@ namespace Nop.Plugin.ExternalAuth.Facebook.Controllers
 
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageExternalAuthenticationMethods))
                 return AccessDeniedView();
@@ -84,7 +84,7 @@ namespace Nop.Plugin.ExternalAuth.Facebook.Controllers
         [AdminAntiForgery]
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure(ConfigurationModel model)
+        public async Task<IActionResult> Configure(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageExternalAuthenticationMethods))
                 return AccessDeniedView();
@@ -100,12 +100,12 @@ namespace Nop.Plugin.ExternalAuth.Facebook.Controllers
             //clear Facebook authentication options cache
             _optionsCache.TryRemove(FacebookDefaults.AuthenticationScheme);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
         }
 
-        public IActionResult Login(string returnUrl)
+        public async Task<IActionResult> Login(string returnUrl)
         {
             var methodIsAvailable = _authenticationPluginManager
                 .IsPluginActive(FacebookAuthenticationDefaults.SystemName, _workContext.CurrentCustomer, _storeContext.CurrentStore.Id);

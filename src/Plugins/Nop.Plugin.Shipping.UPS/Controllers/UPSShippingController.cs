@@ -53,7 +53,7 @@ namespace Nop.Plugin.Shipping.UPS.Controllers
 
         #region Methods
 
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             //whether user has the authority to manage configuration
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
@@ -103,7 +103,7 @@ namespace Nop.Plugin.Shipping.UPS.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult Configure(UPSShippingModel model)
+        public async Task<IActionResult> Configure(UPSShippingModel model)
         {
             //whether user has the authority to manage configuration
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
@@ -144,7 +144,7 @@ namespace Nop.Plugin.Shipping.UPS.Controllers
 
             _settingService.SaveSetting(_upsSettings);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
         }

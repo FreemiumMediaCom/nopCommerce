@@ -21,7 +21,7 @@ namespace Nop.Web.Areas.Admin.Components
             _storeService = storeService;
         }
 
-        public IViewComponentResult Invoke()
+public async Task<IViewComponentResult> InvokeAsync()
         {
 
             //action displaying notification (warning) to a store owner that "limit per store" feature is ignored

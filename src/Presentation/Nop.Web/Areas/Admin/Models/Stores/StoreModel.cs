@@ -29,7 +29,7 @@ namespace Nop.Web.Areas.Admin.Models.Stores
         public string Url { get; set; }
 
         [NopResourceDisplayName("Admin.Configuration.Stores.Fields.SslEnabled")]
-        public virtual bool SslEnabled { get; set; }
+        public async virtual Task<bool> SslEnabled { get; set; }
 
         [NopResourceDisplayName("Admin.Configuration.Stores.Fields.Hosts")]
         public string Hosts { get; set; }

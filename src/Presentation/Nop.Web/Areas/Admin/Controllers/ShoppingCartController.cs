@@ -45,7 +45,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         
         #region Methods
         
-        public virtual IActionResult CurrentCarts()
+        public async virtual Task<IActionResult> CurrentCarts()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrentCarts))
                 return AccessDeniedView();
@@ -57,7 +57,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CurrentCarts(ShoppingCartSearchModel searchModel)
+        public async virtual Task<IActionResult> CurrentCarts(ShoppingCartSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrentCarts))
                 return AccessDeniedDataTablesJson();
@@ -68,7 +68,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult ProductSearchAutoComplete(string term)
+        public async virtual Task<IActionResult> ProductSearchAutoComplete(string term)
         {
             const int searchTermMinimumLength = 3;
             if (string.IsNullOrWhiteSpace(term) || term.Length < searchTermMinimumLength)
@@ -99,7 +99,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult GetCartDetails(ShoppingCartItemSearchModel searchModel)
+        public async virtual Task<IActionResult> GetCartDetails(ShoppingCartItemSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrentCarts))
                 return AccessDeniedDataTablesJson();
@@ -115,7 +115,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
         
         [HttpPost]
-        public virtual IActionResult DeleteItem(int id)
+        public async virtual Task<IActionResult> DeleteItem(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrentCarts))
                 return AccessDeniedDataTablesJson();

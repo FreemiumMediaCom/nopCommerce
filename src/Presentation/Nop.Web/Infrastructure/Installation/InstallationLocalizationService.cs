@@ -108,7 +108,7 @@ namespace Nop.Web.Infrastructure.Installation
         /// Save a language for the installation page
         /// </summary>
         /// <param name="languageCode">Language code</param>
-        public virtual void SaveCurrentLanguage(string languageCode)
+        public async virtual Task SaveCurrentLanguage(string languageCode)
         {
             var httpContext = _httpContextAccessor.HttpContext;
             var cookieOptions = new CookieOptions

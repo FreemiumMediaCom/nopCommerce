@@ -1,7 +1,9 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Media;
@@ -41,12 +43,12 @@ namespace Nop.Services.Media
         /// </summary>
         /// <param name="downloadId">Download identifier</param>
         /// <returns>Download</returns>
-        public virtual Download GetDownloadById(int downloadId)
+        public async virtual Task<Download> GetDownloadById(int downloadId)
         {
             if (downloadId == 0)
                 return null;
 
-            return _downloadRepository.GetById(downloadId);
+            return await _downloadRepository.GetById(downloadId);
         }
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace Nop.Services.Media
         /// </summary>
         /// <param name="downloadGuid">Download GUID</param>
         /// <returns>Download</returns>
-        public virtual Download GetDownloadByGuid(Guid downloadGuid)
+        public async virtual Task<Download> GetDownloadByGuid(Guid downloadGuid)
         {
             if (downloadGuid == Guid.Empty)
                 return null;
@@ -63,19 +65,19 @@ namespace Nop.Services.Media
                         where o.DownloadGuid == downloadGuid
                         select o;
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
         /// <summary>
         /// Deletes a download
         /// </summary>
         /// <param name="download">Download</param>
-        public virtual void DeleteDownload(Download download)
+        public async virtual Task DeleteDownload(Download download)
         {
             if (download == null)
                 throw new ArgumentNullException(nameof(download));
 
-            _downloadRepository.Delete(download);
+            await _downloadRepository.Delete(download);
 
             _eventPubisher.EntityDeleted(download);
         }
@@ -84,12 +86,12 @@ namespace Nop.Services.Media
         /// Inserts a download
         /// </summary>
         /// <param name="download">Download</param>
-        public virtual void InsertDownload(Download download)
+        public async virtual Task InsertDownload(Download download)
         {
             if (download == null)
                 throw new ArgumentNullException(nameof(download));
 
-            _downloadRepository.Insert(download);
+            await _downloadRepository.Insert(download);
 
             _eventPubisher.EntityInserted(download);
         }
@@ -98,12 +100,12 @@ namespace Nop.Services.Media
         /// Updates the download
         /// </summary>
         /// <param name="download">Download</param>
-        public virtual void UpdateDownload(Download download)
+        public async virtual Task UpdateDownload(Download download)
         {
             if (download == null)
                 throw new ArgumentNullException(nameof(download));
 
-            _downloadRepository.Update(download);
+            await _downloadRepository.Update(download);
 
             _eventPubisher.EntityUpdated(download);
         }
@@ -193,13 +195,13 @@ namespace Nop.Services.Media
         /// </summary>
         /// <param name="file">File</param>
         /// <returns>Download binary array</returns>
-        public virtual byte[] GetDownloadBits(IFormFile file)
+        public async virtual Task<byte[]> GetDownloadBits(IFormFile file)
         {
             using (var fileStream = file.OpenReadStream())
             {
                 using (var ms = new MemoryStream())
                 {
-                    fileStream.CopyTo(ms);
+                    await fileStream.CopyToAsync(ms);
                     var fileBytes = ms.ToArray();
                     return fileBytes;
                 }

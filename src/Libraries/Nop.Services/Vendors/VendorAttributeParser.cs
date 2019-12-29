@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Xml;
 using Nop.Core.Domain.Vendors;
 using Nop.Services.Localization;
@@ -251,7 +252,7 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="attributesXml">Attributes in XML format</param>
         /// <returns>Warnings</returns>
-        public virtual IList<string> GetAttributeWarnings(string attributesXml)
+        public async virtual Task<IList<string>> GetAttributeWarnings(string attributesXml)
         {
             var warnings = new List<string>();
 
@@ -287,7 +288,7 @@ namespace Nop.Services.Vendors
                     continue;
 
                 //if not found
-                var notFoundWarning = string.Format(_localizationService.GetResource("ShoppingCart.SelectAttribute"), _localizationService.GetLocalized(a2, a => a.Name));
+                var notFoundWarning = string.Format(await _localizationService.GetResource("ShoppingCart.SelectAttribute"), _localizationService.GetLocalized(a2, a => a.Name));
 
                 warnings.Add(notFoundWarning);
             }

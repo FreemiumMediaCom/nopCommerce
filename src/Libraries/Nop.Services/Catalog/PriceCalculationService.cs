@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Catalog;
@@ -106,7 +107,7 @@ namespace Nop.Services.Catalog
         /// <param name="product">Product</param>
         /// <param name="customer">Customer</param>
         /// <returns>Discounts</returns>
-        protected virtual IList<DiscountForCaching> GetAllowedDiscountsAppliedToProduct(Product product, Customer customer)
+        protected async virtual Task<IList<DiscountForCaching>> GetAllowedDiscountsAppliedToProduct(Product product, Customer customer)
         {
             var allowedDiscounts = new List<DiscountForCaching>();
             if (_catalogSettings.IgnoreDiscounts)
@@ -119,7 +120,7 @@ namespace Nop.Services.Catalog
             foreach (var discount in product.AppliedDiscounts)
             {
                 if (discount.DiscountType == DiscountType.AssignedToSkus &&
-                    _discountService.ValidateDiscount(discount, customer).IsValid)
+                    (await _discountService.ValidateDiscount(discount, customer)).IsValid)
                     allowedDiscounts.Add(_discountService.MapDiscount(discount));
             }
 
@@ -132,17 +133,17 @@ namespace Nop.Services.Catalog
         /// <param name="product">Product</param>
         /// <param name="customer">Customer</param>
         /// <returns>Discounts</returns>
-        protected virtual IList<DiscountForCaching> GetAllowedDiscountsAppliedToCategories(Product product, Customer customer)
+        protected async virtual Task<IList<DiscountForCaching>> GetAllowedDiscountsAppliedToCategories(Product product, Customer customer)
         {
             var allowedDiscounts = new List<DiscountForCaching>();
             if (_catalogSettings.IgnoreDiscounts)
                 return allowedDiscounts;
 
             //load cached discount models (performance optimization)
-            foreach (var discount in _discountService.GetAllDiscountsForCaching(DiscountType.AssignedToCategories))
+            foreach (var discount in await _discountService.GetAllDiscountsForCaching(DiscountType.AssignedToCategories))
             {
                 //load identifier of categories with this discount applied to
-                var discountCategoryIds = _discountService.GetAppliedCategoryIds(discount, customer);
+                var discountCategoryIds = await _discountService.GetAppliedCategoryIds(discount, customer);
 
                 //compare with categories of this product
                 var productCategoryIds = new List<int>();
@@ -153,9 +154,9 @@ namespace Nop.Services.Catalog
                         product.Id,
                         string.Join(",", customer.GetCustomerRoleIds()),
                         _storeContext.CurrentStore.Id);
-                    productCategoryIds = _cacheManager.Get(cacheKey, () =>
-                        _categoryService
-                        .GetProductCategoriesByProductId(product.Id)
+                    productCategoryIds = await _cacheManager.Get(cacheKey, async () =>
+                        (await _categoryService
+                        .GetProductCategoriesByProductId(product.Id))
                         .Select(x => x.CategoryId)
                         .ToList());
                 }
@@ -165,8 +166,8 @@ namespace Nop.Services.Catalog
                     if (!discountCategoryIds.Contains(categoryId)) 
                         continue;
 
-                    if (!_discountService.ContainsDiscount(allowedDiscounts, discount) &&
-                        _discountService.ValidateDiscount(discount, customer).IsValid)
+                    if (!await _discountService.ContainsDiscount(allowedDiscounts, discount) &&
+                        (await _discountService.ValidateDiscount(discount, customer)).IsValid)
                         allowedDiscounts.Add(discount);
                 }
             }
@@ -180,13 +181,13 @@ namespace Nop.Services.Catalog
         /// <param name="product">Product</param>
         /// <param name="customer">Customer</param>
         /// <returns>Discounts</returns>
-        protected virtual IList<DiscountForCaching> GetAllowedDiscountsAppliedToManufacturers(Product product, Customer customer)
+        protected async virtual Task<IList<DiscountForCaching>> GetAllowedDiscountsAppliedToManufacturers(Product product, Customer customer)
         {
             var allowedDiscounts = new List<DiscountForCaching>();
             if (_catalogSettings.IgnoreDiscounts)
                 return allowedDiscounts;
 
-            foreach (var discount in _discountService.GetAllDiscountsForCaching(DiscountType.AssignedToManufacturers))
+            foreach (var discount in await _discountService.GetAllDiscountsForCaching(DiscountType.AssignedToManufacturers))
             {
                 //load identifier of manufacturers with this discount applied to
                 var discountManufacturerIds = _discountService.GetAppliedManufacturerIds(discount, customer);
@@ -200,9 +201,9 @@ namespace Nop.Services.Catalog
                         product.Id,
                         string.Join(",", customer.GetCustomerRoleIds()),
                         _storeContext.CurrentStore.Id);
-                    productManufacturerIds = _cacheManager.Get(cacheKey, () =>
-                        _manufacturerService
-                        .GetProductManufacturersByProductId(product.Id)
+                    productManufacturerIds = await _cacheManager.Get(cacheKey, async () =>
+                        (await _manufacturerService
+                        .GetProductManufacturersByProductId(product.Id))
                         .Select(x => x.ManufacturerId)
                         .ToList());
                 }
@@ -212,8 +213,8 @@ namespace Nop.Services.Catalog
                     if (!discountManufacturerIds.Contains(manufacturerId)) 
                         continue;
 
-                    if (!_discountService.ContainsDiscount(allowedDiscounts, discount) &&
-                        _discountService.ValidateDiscount(discount, customer).IsValid)
+                    if (!await _discountService.ContainsDiscount(allowedDiscounts, discount) &&
+                       (await _discountService.ValidateDiscount(discount, customer)).IsValid)
                         allowedDiscounts.Add(discount);
                 }
             }
@@ -227,25 +228,25 @@ namespace Nop.Services.Catalog
         /// <param name="product">Product</param>
         /// <param name="customer">Customer</param>
         /// <returns>Discounts</returns>
-        protected virtual IList<DiscountForCaching> GetAllowedDiscounts(Product product, Customer customer)
+        protected async virtual Task<IList<DiscountForCaching>> GetAllowedDiscounts(Product product, Customer customer)
         {
             var allowedDiscounts = new List<DiscountForCaching>();
             if (_catalogSettings.IgnoreDiscounts)
                 return allowedDiscounts;
 
             //discounts applied to products
-            foreach (var discount in GetAllowedDiscountsAppliedToProduct(product, customer))
-                if (!_discountService.ContainsDiscount(allowedDiscounts, discount))
+            foreach (var discount in await GetAllowedDiscountsAppliedToProduct(product, customer))
+                if (!await _discountService.ContainsDiscount(allowedDiscounts, discount))
                     allowedDiscounts.Add(discount);
 
             //discounts applied to categories
-            foreach (var discount in GetAllowedDiscountsAppliedToCategories(product, customer))
-                if (!_discountService.ContainsDiscount(allowedDiscounts, discount))
+            foreach (var discount in await GetAllowedDiscountsAppliedToCategories(product, customer))
+                if (!await _discountService.ContainsDiscount(allowedDiscounts, discount))
                     allowedDiscounts.Add(discount);
 
             //discounts applied to manufacturers
-            foreach (var discount in GetAllowedDiscountsAppliedToManufacturers(product, customer))
-                if (!_discountService.ContainsDiscount(allowedDiscounts, discount))
+            foreach (var discount in await GetAllowedDiscountsAppliedToManufacturers(product, customer))
+                if (!await _discountService.ContainsDiscount(allowedDiscounts, discount))
                     allowedDiscounts.Add(discount);
 
             return allowedDiscounts;
@@ -278,7 +279,7 @@ namespace Nop.Services.Catalog
             if (_catalogSettings.IgnoreDiscounts)
                 return appliedDiscountAmount;
 
-            var allowedDiscounts = GetAllowedDiscounts(product, customer);
+            var allowedDiscounts = GetAllowedDiscounts(product, customer).Result;
 
             //no discounts
             if (!allowedDiscounts.Any())
@@ -537,7 +538,7 @@ namespace Nop.Services.Catalog
 
             decimal finalPrice;
 
-            var combination = _productAttributeParser.FindProductAttributeCombination(product, attributesXml);
+            var combination = _productAttributeParser.FindProductAttributeCombination(product, attributesXml).Result;
             if (combination?.OverriddenPrice.HasValue ?? false)
             {
                 finalPrice = GetFinalPrice(product,
@@ -554,12 +555,12 @@ namespace Nop.Services.Catalog
             {
                 //summarize price of all attributes
                 var attributesTotalPrice = decimal.Zero;
-                var attributeValues = _productAttributeParser.ParseProductAttributeValues(attributesXml);
+                var attributeValues = _productAttributeParser.ParseProductAttributeValues(attributesXml).Result;
                 if (attributeValues != null)
                 {
                     foreach (var attributeValue in attributeValues)
                     {
-                        attributesTotalPrice += GetProductAttributeValuePriceAdjustment(attributeValue, customer, product.CustomerEntersPrice ? (decimal?)customerEnteredPrice : null);
+                        attributesTotalPrice += GetProductAttributeValuePriceAdjustment(attributeValue, customer, product.CustomerEntersPrice ? (decimal?)customerEnteredPrice : null).Result;
                     }
                 }
 
@@ -602,7 +603,7 @@ namespace Nop.Services.Catalog
 
             //rounding
             if (_shoppingCartSettings.RoundPricesDuringCalculation)
-                finalPrice = RoundPrice(finalPrice);
+                finalPrice = RoundPrice(finalPrice).Result;
 
             return finalPrice;
         }
@@ -690,13 +691,13 @@ namespace Nop.Services.Catalog
         /// <param name="product">Product</param>
         /// <param name="attributesXml">Shopping cart item attributes in XML</param>
         /// <returns>Product cost (one item)</returns>
-        public virtual decimal GetProductCost(Product product, string attributesXml)
+        public async virtual Task<decimal> GetProductCost(Product product, string attributesXml)
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
 
             var cost = product.ProductCost;
-            var attributeValues = _productAttributeParser.ParseProductAttributeValues(attributesXml);
+            var attributeValues = await _productAttributeParser.ParseProductAttributeValues(attributesXml);
             foreach (var attributeValue in attributeValues)
             {
                 switch (attributeValue.AttributeValueType)
@@ -707,7 +708,7 @@ namespace Nop.Services.Catalog
                         break;
                     case AttributeValueType.AssociatedToProduct:
                         //bundled product
-                        var associatedProduct = _productService.GetProductById(attributeValue.AssociatedProductId);
+                        var associatedProduct = await _productService.GetProductById(attributeValue.AssociatedProductId);
                         if (associatedProduct != null)
                             cost += associatedProduct.ProductCost * attributeValue.Quantity;
                         break;
@@ -719,7 +720,7 @@ namespace Nop.Services.Catalog
             return cost;
         }
 
-        public virtual decimal GetProductAttributeValuePriceAdjustment(ProductAttributeValue value, Customer customer, decimal? productPrice = null)
+        public async virtual Task<decimal> GetProductAttributeValuePriceAdjustment(ProductAttributeValue value, Customer customer, decimal? productPrice = null)
         {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
@@ -744,7 +745,7 @@ namespace Nop.Services.Catalog
                     break;
                 case AttributeValueType.AssociatedToProduct:
                     //bundled product
-                    var associatedProduct = _productService.GetProductById(value.AssociatedProductId);
+                    var associatedProduct = await _productService.GetProductById(value.AssociatedProductId);
                     if (associatedProduct != null)
                     {
                         adjustment = GetFinalPrice(associatedProduct, _workContext.CurrentCustomer) * value.Quantity;
@@ -764,12 +765,12 @@ namespace Nop.Services.Catalog
         /// <param name="value">Value to round</param>
         /// <param name="currency">Currency; pass null to use the primary store currency</param>
         /// <returns>Rounded value</returns>
-        public virtual decimal RoundPrice(decimal value, Currency currency = null)
+        public async virtual Task<decimal> RoundPrice(decimal value, Currency currency = null)
         {
             //we use this method because some currencies (e.g. Gungarian Forint or Swiss Franc) use non-standard rules for rounding
             //you can implement any rounding logic here
 
-            currency = currency ?? _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId);
+            currency = currency ?? await _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId);
 
             return Round(value, currency.RoundingType);
         }

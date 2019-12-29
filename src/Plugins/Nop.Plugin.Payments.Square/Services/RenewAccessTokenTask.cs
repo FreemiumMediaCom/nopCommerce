@@ -71,12 +71,12 @@ namespace Nop.Plugin.Payments.Square.Services
                 _settingService.SaveSetting(_squarePaymentSettings);
 
                 //log information about the successful renew of the access token
-                _logger.Information(_localizationService.GetResource("Plugins.Payments.Square.RenewAccessToken.Success"));
+                _logger.Information(await _localizationService.GetResource("Plugins.Payments.Square.RenewAccessToken.Success"));
             }
             catch (Exception exception)
             {
                 //log error on renewing of the access token
-                _logger.Error(_localizationService.GetResource("Plugins.Payments.Square.RenewAccessToken.Error"), exception);
+                _logger.Error(await _localizationService.GetResource("Plugins.Payments.Square.RenewAccessToken.Error"), exception);
             }
         }
 

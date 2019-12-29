@@ -1,9 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
 using Nop.Services.Events;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nop.Services.Catalog
 {
@@ -36,12 +38,12 @@ namespace Nop.Services.Catalog
         /// Delete manufacturer template
         /// </summary>
         /// <param name="manufacturerTemplate">Manufacturer template</param>
-        public virtual void DeleteManufacturerTemplate(ManufacturerTemplate manufacturerTemplate)
+        public async virtual Task DeleteManufacturerTemplate(ManufacturerTemplate manufacturerTemplate)
         {
             if (manufacturerTemplate == null)
                 throw new ArgumentNullException(nameof(manufacturerTemplate));
 
-            _manufacturerTemplateRepository.Delete(manufacturerTemplate);
+            await _manufacturerTemplateRepository.Delete(manufacturerTemplate);
 
             //event notification
             _eventPublisher.EntityDeleted(manufacturerTemplate);
@@ -51,13 +53,13 @@ namespace Nop.Services.Catalog
         /// Gets all manufacturer templates
         /// </summary>
         /// <returns>Manufacturer templates</returns>
-        public virtual IList<ManufacturerTemplate> GetAllManufacturerTemplates()
+        public async virtual Task<IList<ManufacturerTemplate>> GetAllManufacturerTemplates()
         {
             var query = from pt in _manufacturerTemplateRepository.Table
                         orderby pt.DisplayOrder, pt.Id
                         select pt;
 
-            var templates = query.ToList();
+            var templates = await query.ToListAsync();
             return templates;
         }
 
@@ -66,24 +68,24 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="manufacturerTemplateId">Manufacturer template identifier</param>
         /// <returns>Manufacturer template</returns>
-        public virtual ManufacturerTemplate GetManufacturerTemplateById(int manufacturerTemplateId)
+        public async virtual Task<ManufacturerTemplate> GetManufacturerTemplateById(int manufacturerTemplateId)
         {
             if (manufacturerTemplateId == 0)
                 return null;
 
-            return _manufacturerTemplateRepository.GetById(manufacturerTemplateId);
+            return await _manufacturerTemplateRepository.GetById(manufacturerTemplateId);
         }
 
         /// <summary>
         /// Inserts manufacturer template
         /// </summary>
         /// <param name="manufacturerTemplate">Manufacturer template</param>
-        public virtual void InsertManufacturerTemplate(ManufacturerTemplate manufacturerTemplate)
+        public async virtual Task InsertManufacturerTemplate(ManufacturerTemplate manufacturerTemplate)
         {
             if (manufacturerTemplate == null)
                 throw new ArgumentNullException(nameof(manufacturerTemplate));
 
-            _manufacturerTemplateRepository.Insert(manufacturerTemplate);
+            await _manufacturerTemplateRepository.Insert(manufacturerTemplate);
 
             //event notification
             _eventPublisher.EntityInserted(manufacturerTemplate);
@@ -93,12 +95,12 @@ namespace Nop.Services.Catalog
         /// Updates the manufacturer template
         /// </summary>
         /// <param name="manufacturerTemplate">Manufacturer template</param>
-        public virtual void UpdateManufacturerTemplate(ManufacturerTemplate manufacturerTemplate)
+        public async virtual Task UpdateManufacturerTemplate(ManufacturerTemplate manufacturerTemplate)
         {
             if (manufacturerTemplate == null)
                 throw new ArgumentNullException(nameof(manufacturerTemplate));
 
-            _manufacturerTemplateRepository.Update(manufacturerTemplate);
+            await _manufacturerTemplateRepository.Update(manufacturerTemplate);
 
             //event notification
             _eventPublisher.EntityUpdated(manufacturerTemplate);

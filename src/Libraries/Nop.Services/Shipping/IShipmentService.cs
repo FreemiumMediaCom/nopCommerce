@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Shipping;
@@ -16,7 +17,7 @@ namespace Nop.Services.Shipping
         /// Deletes a shipment
         /// </summary>
         /// <param name="shipment">Shipment</param>
-        void DeleteShipment(Shipment shipment);
+        Task DeleteShipment(Shipment shipment);
 
         /// <summary>
         /// Search shipments
@@ -51,51 +52,51 @@ namespace Nop.Services.Shipping
         /// </summary>
         /// <param name="shipmentIds">Shipment identifiers</param>
         /// <returns>Shipments</returns>
-        IList<Shipment> GetShipmentsByIds(int[] shipmentIds);
+        Task<IList<Shipment>> GetShipmentsByIds(int[] shipmentIds);
 
         /// <summary>
         /// Gets a shipment
         /// </summary>
         /// <param name="shipmentId">Shipment identifier</param>
         /// <returns>Shipment</returns>
-        Shipment GetShipmentById(int shipmentId);
+        Task<Shipment> GetShipmentById(int shipmentId);
 
         /// <summary>
         /// Inserts a shipment
         /// </summary>
         /// <param name="shipment">Shipment</param>
-        void InsertShipment(Shipment shipment);
+        Task InsertShipment(Shipment shipment);
 
         /// <summary>
         /// Updates the shipment
         /// </summary>
         /// <param name="shipment">Shipment</param>
-        void UpdateShipment(Shipment shipment);
+        Task UpdateShipment(Shipment shipment);
 
         /// <summary>
         /// Deletes a shipment item
         /// </summary>
         /// <param name="shipmentItem">Shipment item</param>
-        void DeleteShipmentItem(ShipmentItem shipmentItem);
+        Task DeleteShipmentItem(ShipmentItem shipmentItem);
 
         /// <summary>
         /// Gets a shipment item
         /// </summary>
         /// <param name="shipmentItemId">Shipment item identifier</param>
         /// <returns>Shipment item</returns>
-        ShipmentItem GetShipmentItemById(int shipmentItemId);
+        Task<ShipmentItem> GetShipmentItemById(int shipmentItemId);
 
         /// <summary>
         /// Inserts a shipment item
         /// </summary>
         /// <param name="shipmentItem">Shipment item</param>
-        void InsertShipmentItem(ShipmentItem shipmentItem);
+        Task InsertShipmentItem(ShipmentItem shipmentItem);
 
         /// <summary>
         /// Updates the shipment item
         /// </summary>
         /// <param name="shipmentItem">Shipment item</param>
-        void UpdateShipmentItem(ShipmentItem shipmentItem);
+        Task UpdateShipmentItem(ShipmentItem shipmentItem);
 
         /// <summary>
         /// Get quantity in shipments. For example, get planned quantity to be shipped

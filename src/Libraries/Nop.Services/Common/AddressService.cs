@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Common;
@@ -56,12 +58,12 @@ namespace Nop.Services.Common
         /// Deletes an address
         /// </summary>
         /// <param name="address">Address</param>
-        public virtual void DeleteAddress(Address address)
+        public async virtual Task DeleteAddress(Address address)
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
 
-            _addressRepository.Delete(address);
+            await _addressRepository.Delete(address);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressesPrefixCacheKey);
@@ -75,7 +77,7 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="countryId">Country identifier</param>
         /// <returns>Number of addresses</returns>
-        public virtual int GetAddressTotalByCountryId(int countryId)
+        public async virtual Task<int> GetAddressTotalByCountryId(int countryId)
         {
             if (countryId == 0)
                 return 0;
@@ -83,7 +85,7 @@ namespace Nop.Services.Common
             var query = from a in _addressRepository.Table
                         where a.CountryId == countryId
                         select a;
-            return query.Count();
+            return await query.CountAsync();
         }
 
         /// <summary>
@@ -91,7 +93,7 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="stateProvinceId">State/province identifier</param>
         /// <returns>Number of addresses</returns>
-        public virtual int GetAddressTotalByStateProvinceId(int stateProvinceId)
+        public async virtual Task<int> GetAddressTotalByStateProvinceId(int stateProvinceId)
         {
             if (stateProvinceId == 0)
                 return 0;
@@ -99,7 +101,7 @@ namespace Nop.Services.Common
             var query = from a in _addressRepository.Table
                         where a.StateProvinceId == stateProvinceId
                         select a;
-            return query.Count();
+            return await query.CountAsync();
         }
 
         /// <summary>
@@ -107,20 +109,20 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="addressId">Address identifier</param>
         /// <returns>Address</returns>
-        public virtual Address GetAddressById(int addressId)
+        public async virtual Task<Address> GetAddressById(int addressId)
         {
             if (addressId == 0)
                 return null;
 
             var key = string.Format(NopCommonDefaults.AddressesByIdCacheKey, addressId);
-            return _cacheManager.Get(key, () => _addressRepository.GetById(addressId));
+            return await _cacheManager.Get(key, async() => await _addressRepository.GetById(addressId));
         }
 
         /// <summary>
         /// Inserts an address
         /// </summary>
         /// <param name="address">Address</param>
-        public virtual void InsertAddress(Address address)
+        public async virtual Task InsertAddress(Address address)
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
@@ -133,7 +135,7 @@ namespace Nop.Services.Common
             if (address.StateProvinceId == 0)
                 address.StateProvinceId = null;
 
-            _addressRepository.Insert(address);
+            await _addressRepository.Insert(address);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressesPrefixCacheKey);
@@ -146,7 +148,7 @@ namespace Nop.Services.Common
         /// Updates the address
         /// </summary>
         /// <param name="address">Address</param>
-        public virtual void UpdateAddress(Address address)
+        public async virtual Task UpdateAddress(Address address)
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
@@ -157,7 +159,7 @@ namespace Nop.Services.Common
             if (address.StateProvinceId == 0)
                 address.StateProvinceId = null;
 
-            _addressRepository.Update(address);
+            await _addressRepository.Update(address);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCommonDefaults.AddressesPrefixCacheKey);
@@ -171,7 +173,7 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="address">Address to validate</param>
         /// <returns>Result</returns>
-        public virtual bool IsAddressValid(Address address)
+        public async virtual Task<bool> IsAddressValid(Address address)
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
@@ -249,11 +251,11 @@ namespace Nop.Services.Common
                 string.IsNullOrWhiteSpace(address.FaxNumber))
                 return false;
 
-            var requiredAttributes = _addressAttributeService.GetAllAddressAttributes().Where(x => x.IsRequired);
+            var requiredAttributes = (await _addressAttributeService.GetAllAddressAttributes()).Where(x => x.IsRequired);
 
             foreach (var requiredAttribute in requiredAttributes)
             { 
-                var value  = _addressAttributeParser.ParseValues(address.CustomAttributes, requiredAttribute.Id);
+                var value  = await _addressAttributeParser.ParseValues(address.CustomAttributes, requiredAttribute.Id);
 
                 if (!value.Any() || (string.IsNullOrEmpty(value[0])))
                     return false;
@@ -281,7 +283,7 @@ namespace Nop.Services.Common
         /// <param name="countryId">Country identifier</param>
         /// <param name="customAttributes">Custom address attributes (XML format)</param>
         /// <returns>Address</returns>
-        public virtual Address FindAddress(List<Address> source, string firstName, string lastName, string phoneNumber, string email,
+        public async virtual Task<Address> FindAddress(List<Address> source, string firstName, string lastName, string phoneNumber, string email,
             string faxNumber, string company, string address1, string address2, string city, string county, int? stateProvinceId,
             string zipPostalCode, int? countryId, string customAttributes)
         {

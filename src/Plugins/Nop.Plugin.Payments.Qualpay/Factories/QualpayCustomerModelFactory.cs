@@ -61,7 +61,7 @@ namespace Nop.Plugin.Payments.Qualpay.Factories
                 Id = customerModel.Id,
                 CustomerExists = vaultCustomer != null,
                 QualpayCustomerId = vaultCustomer?.CustomerId,
-                HideBlock = _genericAttributeService.GetAttribute<bool>(_workContext.CurrentCustomer, QualpayDefaults.HideBlockAttribute)
+                HideBlock = await _genericAttributeService.GetAttribute<bool>(_workContext.CurrentCustomer, QualpayDefaults.HideBlockAttribute)
             };
 
             //prepare nested search models

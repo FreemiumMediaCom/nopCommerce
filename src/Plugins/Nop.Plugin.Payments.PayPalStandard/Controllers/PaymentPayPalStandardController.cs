@@ -90,14 +90,14 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
                 orderNumberGuid = Guid.Empty;
             }
 
-            var order = _orderService.GetOrderByGuid(orderNumberGuid);
+            var order = await _orderService.GetOrderByGuid(orderNumberGuid);
             if (order == null)
             {
                 _logger.Error("PayPal IPN. Order is not found", new NopException(ipnInfo));
                 return;
             }
 
-            var recurringPayments = _orderService.SearchRecurringPayments(initialOrderId: order.Id);
+            var recurringPayments = await _orderService.SearchRecurringPayments(initialOrderId: order.Id);
 
             foreach (var rp in recurringPayments)
             {
@@ -166,7 +166,7 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
                 orderNumberGuid = Guid.Empty;
             }
 
-            var order = _orderService.GetOrderByGuid(orderNumberGuid);
+            var order = await _orderService.GetOrderByGuid(orderNumberGuid);
 
             if (order == null)
             {
@@ -248,7 +248,7 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
 
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -285,7 +285,7 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
         [AuthorizeAdmin]
         [AdminAntiForgery]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure(ConfigurationModel model)
+        public async Task<IActionResult> Configure(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -318,7 +318,7 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
             //now clear settings cache
             _settingService.ClearCache();
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
         }
@@ -326,19 +326,19 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
         //action displaying notification (warning) to a store owner about inaccurate PayPal rounding
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
-        public IActionResult RoundingWarning(bool passProductNamesAndTotals)
+        public async Task<IActionResult> RoundingWarning(bool passProductNamesAndTotals)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
 
             //prices and total aren't rounded, so display warning
             if (passProductNamesAndTotals && !_shoppingCartSettings.RoundPricesDuringCalculation)
-                return Json(new { Result = _localizationService.GetResource("Plugins.Payments.PayPalStandard.RoundingWarning") });
+                return Json(new { Result = await _localizationService.GetResource("Plugins.Payments.PayPalStandard.RoundingWarning") });
 
             return Json(new { Result = string.Empty });
         }
 
-        public IActionResult PDTHandler()
+        public async Task<IActionResult> PDTHandler()
         {
             var tx = _webHelper.QueryString<string>("tx");
 
@@ -358,7 +358,7 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
                     // ignored
                 }
 
-                var order = _orderService.GetOrderByGuid(orderNumberGuid);
+                var order = await _orderService.GetOrderByGuid(orderNumberGuid);
 
                 if (order == null)
                     return RedirectToAction("Index", "Home", new { area = string.Empty });
@@ -412,7 +412,7 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
                 _orderService.UpdateOrder(order);
 
                 //validate order total
-                var orderTotalSentToPayPal = _genericAttributeService.GetAttribute<decimal?>(order, PayPalHelper.OrderTotalSentToPayPal);
+                var orderTotalSentToPayPal = await _genericAttributeService.GetAttribute<decimal?>(order, PayPalHelper.OrderTotalSentToPayPal);
                 if (orderTotalSentToPayPal.HasValue && mcGross != orderTotalSentToPayPal.Value)
                 {
                     var errorStr = $"PayPal PDT. Returned order total {mcGross} doesn't equal order total {order.OrderTotal}. Order# {order.Id}.";
@@ -463,7 +463,7 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
                     // ignored
                 }
 
-                var order = _orderService.GetOrderByGuid(orderNumberGuid);
+                var order = await _orderService.GetOrderByGuid(orderNumberGuid);
                 if (order == null)
                     return RedirectToAction("Index", "Home", new { area = string.Empty });
 
@@ -480,7 +480,7 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
             }
         }
 
-        public IActionResult IPNHandler()
+        public async Task<IActionResult> IPNHandler()
         {
             byte[] parameters;
 
@@ -540,10 +540,10 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
                 case "recurring_payment_failed":
                     if (Guid.TryParse(rpInvoiceId, out var orderGuid))
                     {
-                        var order = _orderService.GetOrderByGuid(orderGuid);
+                        var order = await _orderService.GetOrderByGuid(orderGuid);
                         if (order != null)
                         {
-                            var recurringPayment = _orderService.SearchRecurringPayments(initialOrderId: order.Id)
+                            var recurringPayment = await _orderService.SearchRecurringPayments(initialOrderId: order.Id)
                                 .FirstOrDefault();
                             //failed payment
                             if (recurringPayment != null)
@@ -568,9 +568,9 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
             return Content(string.Empty);
         }
 
-        public IActionResult CancelOrder()
+        public async Task<IActionResult> CancelOrder()
         {
-            var order = _orderService.SearchOrders(_storeContext.CurrentStore.Id,
+            var order = await _orderService.SearchOrders(_storeContext.CurrentStore.Id,
                 customerId: _workContext.CurrentCustomer.Id, pageSize: 1).FirstOrDefault();
 
             if (order != null)

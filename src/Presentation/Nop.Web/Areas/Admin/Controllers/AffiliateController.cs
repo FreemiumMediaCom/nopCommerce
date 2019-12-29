@@ -15,7 +15,7 @@ using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Web.Areas.Admin.Controllers
 {
-    public partial class AffiliateController : BaseAdminController
+    public async partial class AffiliateController : BaseAdminController
     {
         #region Fields
 
@@ -49,12 +49,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
@@ -66,7 +66,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(AffiliateSearchModel searchModel)
+        public async virtual Task<IActionResult> List(AffiliateSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedDataTablesJson();
@@ -77,7 +77,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
@@ -90,7 +90,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Create(AffiliateModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(AffiliateModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
@@ -116,9 +116,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewAffiliate",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewAffiliate"), affiliate.Id), affiliate);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewAffiliate"), affiliate.Id), affiliate);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Affiliates.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Affiliates.Added"));
 
                 return continueEditing ? RedirectToAction("Edit", new { id = affiliate.Id }) : RedirectToAction("List");
             }
@@ -130,7 +130,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
@@ -147,7 +147,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(AffiliateModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(AffiliateModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
@@ -177,9 +177,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditAffiliate",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditAffiliate"), affiliate.Id), affiliate);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditAffiliate"), affiliate.Id), affiliate);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Affiliates.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Affiliates.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -196,7 +196,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         //delete
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
@@ -210,15 +210,15 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteAffiliate",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteAffiliate"), affiliate.Id), affiliate);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteAffiliate"), affiliate.Id), affiliate);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Affiliates.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Affiliates.Deleted"));
 
             return RedirectToAction("List");
         }
 
         [HttpPost]
-        public virtual IActionResult AffiliatedOrderListGrid(AffiliatedOrderSearchModel searchModel)
+        public async virtual Task<IActionResult> AffiliatedOrderListGrid(AffiliatedOrderSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedDataTablesJson();
@@ -234,7 +234,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AffiliatedCustomerList(AffiliatedCustomerSearchModel searchModel)
+        public async virtual Task<IActionResult> AffiliatedCustomerList(AffiliatedCustomerSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedDataTablesJson();

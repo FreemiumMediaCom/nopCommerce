@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Catalog;
 
 namespace Nop.Services.Catalog
@@ -15,7 +16,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="attributesXml">Attributes in XML format</param>
         /// <returns>Selected product attribute mappings</returns>
-        IList<ProductAttributeMapping> ParseProductAttributeMappings(string attributesXml);
+        Task<IList<ProductAttributeMapping>> ParseProductAttributeMappings(string attributesXml);
 
         /// <summary>
         /// Get product attribute values
@@ -23,7 +24,7 @@ namespace Nop.Services.Catalog
         /// <param name="attributesXml">Attributes in XML format</param>
         /// <param name="productAttributeMappingId">Product attribute mapping identifier; pass 0 to load all values</param>
         /// <returns>Product attribute values</returns>
-        IList<ProductAttributeValue> ParseProductAttributeValues(string attributesXml, int productAttributeMappingId = 0);
+        Task<IList<ProductAttributeValue>> ParseProductAttributeValues(string attributesXml, int productAttributeMappingId = 0);
 
         /// <summary>
         /// Gets selected product attribute values
@@ -59,7 +60,7 @@ namespace Nop.Services.Catalog
         /// <param name="ignoreNonCombinableAttributes">A value indicating whether we should ignore non-combinable attributes</param>
         /// <param name="ignoreQuantity">A value indicating whether we should ignore the quantity of attribute value entered by the customer</param>
         /// <returns>Result</returns>
-        bool AreProductAttributesEqual(string attributesXml1, string attributesXml2, bool ignoreNonCombinableAttributes, bool ignoreQuantity = true);
+        Task<bool> AreProductAttributesEqual(string attributesXml1, string attributesXml2, bool ignoreNonCombinableAttributes, bool ignoreQuantity = true);
 
         /// <summary>
         /// Check whether condition of some attribute is met (if specified). Return "null" if not condition is specified
@@ -67,7 +68,7 @@ namespace Nop.Services.Catalog
         /// <param name="pam">Product attribute</param>
         /// <param name="selectedAttributesXml">Selected attributes (XML format)</param>
         /// <returns>Result</returns>
-        bool? IsConditionMet(ProductAttributeMapping pam, string selectedAttributesXml);
+        Task<bool?> IsConditionMet(ProductAttributeMapping pam, string selectedAttributesXml);
 
         /// <summary>
         /// Finds a product attribute combination by attributes stored in XML 
@@ -76,7 +77,7 @@ namespace Nop.Services.Catalog
         /// <param name="attributesXml">Attributes in XML format</param>
         /// <param name="ignoreNonCombinableAttributes">A value indicating whether we should ignore non-combinable attributes</param>
         /// <returns>Found product attribute combination</returns>
-        ProductAttributeCombination FindProductAttributeCombination(Product product,
+        Task<ProductAttributeCombination> FindProductAttributeCombination(Product product,
             string attributesXml, bool ignoreNonCombinableAttributes = true);
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace Nop.Services.Catalog
         /// <param name="ignoreNonCombinableAttributes">A value indicating whether we should ignore non-combinable attributes</param>
         /// <param name="allowedAttributeIds">List of allowed attribute identifiers. If null or empty then all attributes would be used.</param>
         /// <returns>Attribute combinations in XML format</returns>
-        IList<string> GenerateAllCombinations(Product product, bool ignoreNonCombinableAttributes = false, IList<int> allowedAttributeIds = null);
+        Task<IList<string>> GenerateAllCombinations(Product product, bool ignoreNonCombinableAttributes = false, IList<int> allowedAttributeIds = null);
 
         #endregion
 

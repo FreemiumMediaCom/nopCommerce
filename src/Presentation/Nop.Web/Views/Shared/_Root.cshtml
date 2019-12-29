@@ -6,33 +6,59 @@
 @await Html.PartialAsync("_Notifications")
 @await Html.PartialAsync("_JavaScriptDisabledWarning")
 @await Html.PartialAsync("_OldInternetExplorerWarning")
-    <div class="master-wrapper-page">
-        @await Component.InvokeAsync("AdminHeaderLinks")
-        @await Html.PartialAsync("_FreemiumMedia_Header")
-        <script asp-location="Footer">
+<div class="master-wrapper-page">
+    @await Component.InvokeAsync("AdminHeaderLinks")
+    @await Html.PartialAsync("_FreemiumMedia_Header")
+    <script asp-location="Footer">
         var localized_data = {
             AjaxCartFailure: "@T("AjaxCart.Failure")"
         };
         AjaxCart.init(false, '.header-links .cart-qty', '.header-links .wishlist-qty', '#flyout-cart', localized_data);
-        </script>
-        <div class="header-menu">
-            @*@await Component.InvokeAsync("TopMenu")*@
-            @await Component.InvokeAsync("FreemiumMedia_TopMenu")
-        </div>
-        <div class="master-wrapper-content">
-            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContentBefore })
-
-            @if (IsSectionDefined("Breadcrumb"))
-            {
-                @RenderSection("Breadcrumb")
-            }
-            <div class="master-column-wrapper">
-                @RenderBody()
-            </div>
-            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContentAfter })
-        </div>
-        @*@await Component.InvokeAsync("Footer")*@
-        @await Component.InvokeAsync("FreemiumMedia_Footer")
+    </script>
+    <div class="header-menu">
+        @*@await Component.InvokeAsync("TopMenu")*@
+        @await Component.InvokeAsync("FreemiumMedia_TopMenu")
     </div>
+    <div class="master-wrapper-content">
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContentBefore })
+
+        @if (IsSectionDefined("Breadcrumb"))
+        {
+            @RenderSection("Breadcrumb")
+        }
+        <div class="master-column-wrapper">
+            @RenderBody()
+        </div>
+        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContentAfter })
+    </div>
+    @*@await Component.InvokeAsync("Footer")*@
+    @await Component.InvokeAsync("FreemiumMedia_Footer")
+</div>
+<!--Start of FreemiumTraining.com Script-->
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/5de3bea0d96992700fca253f/default';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>
+<!--Start of FeemiumMedia.com Script-->
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function () {
+        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/5de3bf84d96992700fca254b/default';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>
+<!--End of Tawk.to Script-->
+<!--End of Tawk.to Script-->
 @await Component.InvokeAsync("EuCookieLaw")
 @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BodyEndHtmlTagBefore })

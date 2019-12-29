@@ -18,7 +18,7 @@ namespace Nop.Web.Framework.UI.Paging
         /// </summary>
         /// <typeparam name="T">Type</typeparam>
         /// <param name="pagedList">Entities (models)</param>
-        public virtual void LoadPagedList<T>(IPagedList<T> pagedList)
+        public async virtual Task LoadPagedList<T>(IPagedList<T> pagedList)
         {
             FirstItem = (pagedList.PageIndex * pagedList.PageSize) + 1;
             HasNextPage = pagedList.HasNextPage;

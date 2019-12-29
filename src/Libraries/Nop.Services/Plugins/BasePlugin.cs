@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+
 
 namespace Nop.Services.Plugins
 {
@@ -10,7 +12,7 @@ namespace Nop.Services.Plugins
         /// <summary>
         /// Gets a configuration page URL
         /// </summary>
-        public virtual string GetConfigurationPageUrl()
+        public async virtual Task<string> GetConfigurationPageUrl()
         {
             return null;
         }
@@ -23,21 +25,21 @@ namespace Nop.Services.Plugins
         /// <summary>
         /// Install plugin
         /// </summary>
-        public virtual void Install() 
+        public async virtual Task Install() 
         {
         }
 
         /// <summary>
         /// Uninstall plugin
         /// </summary>
-        public virtual void Uninstall() 
+        public async virtual Task Uninstall() 
         {
         }
 
         /// <summary>
         /// Prepare plugin to the uninstallation
         /// </summary>
-        public virtual void PreparePluginToUninstall()
+        public async virtual Task PreparePluginToUninstall()
         {
             //any can put any custom validation logic here
             //throw an exception if this plugin cannot be uninstalled

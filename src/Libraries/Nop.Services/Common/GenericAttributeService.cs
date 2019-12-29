@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -42,12 +44,12 @@ namespace Nop.Services.Common
         /// Deletes an attribute
         /// </summary>
         /// <param name="attribute">Attribute</param>
-        public virtual void DeleteAttribute(GenericAttribute attribute)
+        public async virtual Task DeleteAttribute(GenericAttribute attribute)
         {
             if (attribute == null)
                 throw new ArgumentNullException(nameof(attribute));
 
-            _genericAttributeRepository.Delete(attribute);
+            await _genericAttributeRepository.Delete(attribute);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCommonDefaults.GenericAttributePrefixCacheKey);
@@ -60,12 +62,12 @@ namespace Nop.Services.Common
         /// Deletes an attributes
         /// </summary>
         /// <param name="attributes">Attributes</param>
-        public virtual void DeleteAttributes(IList<GenericAttribute> attributes)
+        public async virtual Task DeleteAttributes(IList<GenericAttribute> attributes)
         {
             if (attributes == null)
                 throw new ArgumentNullException(nameof(attributes));
 
-            _genericAttributeRepository.Delete(attributes);
+            await _genericAttributeRepository.Delete(attributes);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCommonDefaults.GenericAttributePrefixCacheKey);
@@ -82,24 +84,24 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="attributeId">Attribute identifier</param>
         /// <returns>An attribute</returns>
-        public virtual GenericAttribute GetAttributeById(int attributeId)
+        public async virtual Task<GenericAttribute> GetAttributeById(int attributeId)
         {
             if (attributeId == 0)
                 return null;
 
-            return _genericAttributeRepository.GetById(attributeId);
+            return await _genericAttributeRepository.GetById(attributeId);
         }
 
         /// <summary>
         /// Inserts an attribute
         /// </summary>
         /// <param name="attribute">attribute</param>
-        public virtual void InsertAttribute(GenericAttribute attribute)
+        public async virtual Task InsertAttribute(GenericAttribute attribute)
         {
             if (attribute == null)
                 throw new ArgumentNullException(nameof(attribute));
 
-            _genericAttributeRepository.Insert(attribute);
+            await _genericAttributeRepository.Insert(attribute);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCommonDefaults.GenericAttributePrefixCacheKey);
@@ -112,12 +114,12 @@ namespace Nop.Services.Common
         /// Updates the attribute
         /// </summary>
         /// <param name="attribute">Attribute</param>
-        public virtual void UpdateAttribute(GenericAttribute attribute)
+        public async virtual Task UpdateAttribute(GenericAttribute attribute)
         {
             if (attribute == null)
                 throw new ArgumentNullException(nameof(attribute));
 
-            _genericAttributeRepository.Update(attribute);
+            await _genericAttributeRepository.Update(attribute);
 
             //cache
             _cacheManager.RemoveByPrefix(NopCommonDefaults.GenericAttributePrefixCacheKey);
@@ -132,16 +134,16 @@ namespace Nop.Services.Common
         /// <param name="entityId">Entity identifier</param>
         /// <param name="keyGroup">Key group</param>
         /// <returns>Get attributes</returns>
-        public virtual IList<GenericAttribute> GetAttributesForEntity(int entityId, string keyGroup)
+        public async virtual Task<IList<GenericAttribute>> GetAttributesForEntity(int entityId, string keyGroup)
         {
             var key = string.Format(NopCommonDefaults.GenericAttributeCacheKey, entityId, keyGroup);
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async () =>
             {
                 var query = from ga in _genericAttributeRepository.Table
                             where ga.EntityId == entityId &&
                             ga.KeyGroup == keyGroup
                             select ga;
-                var attributes = query.ToList();
+                var attributes = await query.ToListAsync();
                 return attributes;
             });
         }
@@ -154,7 +156,7 @@ namespace Nop.Services.Common
         /// <param name="key">Key</param>
         /// <param name="value">Value</param>
         /// <param name="storeId">Store identifier; pass 0 if this attribute will be available for all stores</param>
-        public virtual void SaveAttribute<TPropType>(BaseEntity entity, string key, TPropType value, int storeId = 0)
+        public async virtual Task SaveAttribute<TPropType>(BaseEntity entity, string key, TPropType value, int storeId = 0)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -164,7 +166,7 @@ namespace Nop.Services.Common
 
             var keyGroup = entity.GetUnproxiedEntityType().Name;
 
-            var props = GetAttributesForEntity(entity.Id, keyGroup)
+            var props = (await GetAttributesForEntity(entity.Id, keyGroup))
                 .Where(x => x.StoreId == storeId)
                 .ToList();
             var prop = props.FirstOrDefault(ga =>
@@ -177,13 +179,13 @@ namespace Nop.Services.Common
                 if (string.IsNullOrWhiteSpace(valueStr))
                 {
                     //delete
-                    DeleteAttribute(prop);
+                    await DeleteAttribute(prop);
                 }
                 else
                 {
                     //update
                     prop.Value = valueStr;
-                    UpdateAttribute(prop);
+                    await UpdateAttribute(prop);
                 }
             }
             else
@@ -201,7 +203,7 @@ namespace Nop.Services.Common
                     StoreId = storeId
                 };
 
-                InsertAttribute(prop);
+                await InsertAttribute(prop);
             }
         }
 
@@ -214,14 +216,14 @@ namespace Nop.Services.Common
         /// <param name="storeId">Load a value specific for a certain store; pass 0 to load a value shared for all stores</param>
         /// <param name="defaultValue">Default value</param>
         /// <returns>Attribute</returns>
-        public virtual TPropType GetAttribute<TPropType>(BaseEntity entity, string key, int storeId = 0, TPropType defaultValue = default(TPropType))
+        public async virtual Task<TPropType> GetAttribute<TPropType>(BaseEntity entity, string key, int storeId = 0, TPropType defaultValue = default(TPropType))
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
             var keyGroup = entity.GetUnproxiedEntityType().Name;
 
-            var props = GetAttributesForEntity(entity.Id, keyGroup);
+            var props = await GetAttributesForEntity(entity.Id, keyGroup);
 
             //little hack here (only for unit testing). we should write expect-return rules in unit tests for such cases
             if (props == null)

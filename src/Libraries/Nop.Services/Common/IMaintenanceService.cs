@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 
 namespace Nop.Services.Common
@@ -13,14 +14,14 @@ namespace Nop.Services.Common
         /// </summary>
         /// <typeparam name="T">Entity</typeparam>
         /// <returns>Integer identity; null if cannot get the result</returns>
-        int? GetTableIdent<T>() where T : BaseEntity;
+        Task<int?> GetTableIdent<T>() where T : BaseEntity;
 
         /// <summary>
         /// Set table identity (is supported)
         /// </summary>
         /// <typeparam name="T">Entity</typeparam>
         /// <param name="ident">Identity value</param>
-        void SetTableIdent<T>(int ident) where T : BaseEntity;
+        Task SetTableIdent<T>(int ident) where T : BaseEntity;
 
         /// <summary>
         /// Gets all backup files

@@ -13,7 +13,7 @@ namespace Nop.Web.Components
             _catalogModelFactory = catalogModelFactory;
         }
 
-        public IViewComponentResult Invoke()
+public async Task<IViewComponentResult> InvokeAsync()
         {
             var model = _catalogModelFactory.PrepareSearchBoxModel();
             return View(model);

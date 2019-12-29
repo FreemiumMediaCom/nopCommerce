@@ -34,7 +34,7 @@ namespace Nop.Web.Framework.Menu
         /// Load sitemap
         /// </summary>
         /// <param name="physicalPath">Filepath to load a sitemap</param>
-        public virtual void LoadFrom(string physicalPath)
+        public async virtual Task LoadFrom(string physicalPath)
         {
             var fileProvider = EngineContext.Current.Resolve<INopFileProvider>();
 

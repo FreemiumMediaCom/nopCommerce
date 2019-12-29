@@ -990,12 +990,12 @@ namespace Nop.Web.Areas.Admin.Factories
             model.ActiveStoreScopeConfiguration = storeId;
             model.AvailableViewModes.Add(new SelectListItem
             {
-                Text = _localizationService.GetResource("Admin.Catalog.ViewMode.Grid"),
+                Text = await _localizationService.GetResource("Admin.Catalog.ViewMode.Grid"),
                 Value = "grid"
             });
             model.AvailableViewModes.Add(new SelectListItem
             {
-                Text = _localizationService.GetResource("Admin.Catalog.ViewMode.List"),
+                Text = await _localizationService.GetResource("Admin.Catalog.ViewMode.List"),
                 Value = "list"
             });
 
@@ -1106,7 +1106,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     };
 
                     //fill in additional values (not existing in the entity)
-                    sortOptionModel.Name = _localizationService.GetLocalizedEnum(option);
+                    sortOptionModel.Name = await _localizationService.GetLocalizedEnum(option);
                     sortOptionModel.IsActive = !catalogSettings.ProductSortingEnumDisabled.Contains((int)option);
                     sortOptionModel.DisplayOrder = catalogSettings
                         .ProductSortingEnumDisplayOrder.TryGetValue((int)option, out var value) ? value : (int)option;
@@ -1375,8 +1375,8 @@ namespace Nop.Web.Areas.Admin.Factories
                 {
                     var gdprConsentModel = consent.ToModel<GdprConsentModel>();
                     var gdprConsent = _gdprService.GetConsentById(gdprConsentModel.Id);
-                    gdprConsentModel.Message = _localizationService.GetLocalized(gdprConsent, entity => entity.Message);
-                    gdprConsentModel.RequiredMessage = _localizationService.GetLocalized(gdprConsent, entity => entity.RequiredMessage);
+                    gdprConsentModel.Message = await _localizationService.GetLocalized(gdprConsent, entity => entity.Message);
+                    gdprConsentModel.RequiredMessage = await _localizationService.GetLocalized(gdprConsent, entity => entity.RequiredMessage);
 
                     return gdprConsentModel;
                 });
@@ -1404,8 +1404,8 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Message = _localizationService.GetLocalized(gdprConsent, entity => entity.Message, languageId, false, false);
-                    locale.RequiredMessage = _localizationService.GetLocalized(gdprConsent, entity => entity.RequiredMessage, languageId, false, false);
+                    locale.Message = await _localizationService.GetLocalized(gdprConsent, entity => entity.Message, languageId, false, false);
+                    locale.RequiredMessage = await _localizationService.GetLocalized(gdprConsent, entity => entity.RequiredMessage, languageId, false, false);
                 };
             }
 
@@ -1557,7 +1557,7 @@ namespace Nop.Web.Areas.Admin.Factories
             var model = new SettingModeModel
             {
                 ModeName = modeName,
-                Enabled = _genericAttributeService.GetAttribute<bool>(_workContext.CurrentCustomer, modeName)
+                Enabled = await _genericAttributeService.GetAttribute<bool>(_workContext.CurrentCustomer, modeName)
             };
 
             return model;

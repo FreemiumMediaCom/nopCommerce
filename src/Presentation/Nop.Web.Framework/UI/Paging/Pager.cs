@@ -1,4 +1,4 @@
-//Contributor : MVCContrib
+﻿//Contributor : MVCContrib
 
 using System;
 using System.Collections.Generic;
@@ -320,7 +320,7 @@ namespace Nop.Web.Framework.UI.Paging
         /// Generate HTML control
         /// </summary>
         /// <returns>HTML control</returns>
-        public virtual string GenerateHtmlString()
+        public async virtual Task<string> GenerateHtmlString()
 		{
             if (model.TotalItems == 0) 
 				return null;
@@ -398,7 +398,7 @@ namespace Nop.Web.Framework.UI.Paging
         /// Is pager empty (only one page)?
         /// </summary>
         /// <returns>Result</returns>
-	    public virtual bool IsEmpty()
+	    public async virtual Task<bool> IsEmpty()
 	    {
             var html = GenerateHtmlString();
 	        return string.IsNullOrEmpty(html);

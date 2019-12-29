@@ -49,7 +49,7 @@ namespace Nop.Plugin.Payments.Qualpay.Controllers
 
         #region Methods
 
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -96,7 +96,7 @@ namespace Nop.Plugin.Payments.Qualpay.Controllers
 
         [HttpPost, ActionName("Configure")]
         [FormValueRequired("save")]
-        public IActionResult Configure(ConfigurationModel model)
+        public async Task<IActionResult> Configure(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -120,7 +120,7 @@ namespace Nop.Plugin.Payments.Qualpay.Controllers
                     _settingService.SaveSetting(settings, x => x.WebhookSecretKey, storeId, false);
                 }
                 else
-                    _notificationService.WarningNotification(_localizationService.GetResource("Plugins.Payments.Qualpay.Fields.Webhook.Warning"));
+                    _notificationService.WarningNotification(await _localizationService.GetResource("Plugins.Payments.Qualpay.Fields.Webhook.Warning"));
             }
 
             //save settings
@@ -149,14 +149,14 @@ namespace Nop.Plugin.Payments.Qualpay.Controllers
             _settingService.ClearCache();
 
             //display notification
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
         }
 
         [HttpPost, ActionName("Configure")]
         [FormValueRequired("subscribe")]
-        public IActionResult Subscribe(ConfigurationModel model)
+        public async Task<IActionResult> Subscribe(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();

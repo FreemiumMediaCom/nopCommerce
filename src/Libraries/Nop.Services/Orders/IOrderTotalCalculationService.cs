@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
 using Nop.Services.Discounts;
@@ -159,14 +160,14 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="updateOrderParameters">Parameters for the updating order</param>
         /// <param name="restoredCart">Shopping cart</param>
-        void UpdateOrderTotals(UpdateOrderParameters updateOrderParameters, IList<ShoppingCartItem> restoredCart);
+        Task UpdateOrderTotals(UpdateOrderParameters updateOrderParameters, IList<ShoppingCartItem> restoredCart);
 
         /// <summary>
         /// Converts existing reward points to amount
         /// </summary>
         /// <param name="rewardPoints">Reward points</param>
         /// <returns>Converted value</returns>
-        decimal ConvertRewardPointsToAmount(int rewardPoints);
+        Task<decimal> ConvertRewardPointsToAmount(int rewardPoints);
 
         /// <summary>
         /// Converts an amount to reward points

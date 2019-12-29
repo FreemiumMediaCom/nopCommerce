@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Orders;
@@ -98,7 +99,7 @@ namespace Nop.Services.Orders
         /// <param name="visibleIndividuallyOnly">A values indicating whether to load only products marked as "visible individually"; "false" to load all records; "true" to load "visible individually" only</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Products</returns>
-        int[] GetAlsoPurchasedProductsIds(int storeId, int productId,
+        Task<int[]> GetAlsoPurchasedProductsIds(int storeId, int productId,
             int recordsToReturn = 5, bool visibleIndividuallyOnly = true, bool showHidden = false);
 
         /// <summary>

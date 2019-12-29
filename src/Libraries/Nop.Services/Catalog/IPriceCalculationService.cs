@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Directory;
@@ -148,7 +149,7 @@ namespace Nop.Services.Catalog
         /// <param name="product">Product</param>
         /// <param name="attributesXml">Shopping cart item attributes in XML</param>
         /// <returns>Product cost (one item)</returns>
-        decimal GetProductCost(Product product, string attributesXml);
+        Task<decimal> GetProductCost(Product product, string attributesXml);
 
         /// <summary>
         /// Get a price adjustment of a product attribute value
@@ -157,7 +158,7 @@ namespace Nop.Services.Catalog
         /// <param name="customer">Customer</param>
         /// <param name="productPrice">Product price (null for using the base product price)</param>
         /// <returns>Price adjustment</returns>
-        decimal GetProductAttributeValuePriceAdjustment(ProductAttributeValue value, Customer customer, decimal? productPrice = null);
+        Task<decimal> GetProductAttributeValuePriceAdjustment(ProductAttributeValue value, Customer customer, decimal? productPrice = null);
 
         /// <summary>
         /// Round a product or order total for the currency
@@ -165,7 +166,7 @@ namespace Nop.Services.Catalog
         /// <param name="value">Value to round</param>
         /// <param name="currency">Currency; pass null to use the primary store currency</param>
         /// <returns>Rounded value</returns>
-        decimal RoundPrice(decimal value, Currency currency = null);
+        Task<decimal> RoundPrice(decimal value, Currency currency = null);
 
         /// <summary>
         /// Round

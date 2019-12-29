@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nop.Core
 {
@@ -20,7 +21,7 @@ namespace Nop.Core
         /// <param name="getOnlyTotalCount">A value in indicating whether you want to load only total number of records. Set to "true" if you don't want to load data from database</param>
         public PagedList(IQueryable<T> source, int pageIndex, int pageSize, bool getOnlyTotalCount = false)
         {
-            var total = source.Count();
+            var total = source.CountAsync().Result; //todo: fix this
             TotalCount = total;
             TotalPages = total / pageSize;
 
@@ -31,7 +32,7 @@ namespace Nop.Core
             PageIndex = pageIndex;
             if (getOnlyTotalCount)
                 return;
-            AddRange(source.Skip(pageIndex * pageSize).Take(pageSize).ToList());
+            AddRange(source.Skip(pageIndex * pageSize).Take(pageSize).ToListAsync().Result); //todo: fix this
         }
 
         /// <summary>

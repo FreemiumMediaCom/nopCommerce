@@ -23,7 +23,7 @@ namespace Nop.Web.Components
 
         #region Methods
 
-        public IViewComponentResult Invoke()
+public async Task<IViewComponentResult> InvokeAsync()
         {
             var model = _externalAuthenticationModelFactory.PrepareExternalMethodsModel();
 

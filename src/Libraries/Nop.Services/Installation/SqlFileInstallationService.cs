@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Customers;
@@ -163,7 +164,7 @@ namespace Nop.Services.Installation
         /// </summary>
         /// <param name="defaultUserEmail">Default user email</param>
         /// <param name="defaultUserPassword">Default user password</param>
-        public virtual void InstallRequiredData(string defaultUserEmail, string defaultUserPassword)
+        public async virtual Task InstallRequiredData(string defaultUserEmail, string defaultUserPassword)
         {
             ExecuteSqlFile(_fileProvider.MapPath(NopInstallationDefaults.RequiredDataPath));
             InstallLocaleResources();
@@ -175,7 +176,7 @@ namespace Nop.Services.Installation
         /// Install sample data
         /// </summary>
         /// <param name="defaultUserEmail">Default user email</param>
-        public virtual void InstallSampleData(string defaultUserEmail)
+        public async virtual Task InstallSampleData(string defaultUserEmail)
         {
             ExecuteSqlFile(_fileProvider.MapPath(NopInstallationDefaults.SampleDataPath));
         }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -65,12 +67,12 @@ namespace Nop.Services.Topics
         /// Deletes a topic
         /// </summary>
         /// <param name="topic">Topic</param>
-        public virtual void DeleteTopic(Topic topic)
+        public async virtual Task DeleteTopic(Topic topic)
         {
             if (topic == null)
                 throw new ArgumentNullException(nameof(topic));
 
-            _topicRepository.Delete(topic);
+            await _topicRepository.Delete(topic);
 
             //cache
             _cacheManager.RemoveByPrefix(NopTopicDefaults.TopicsPrefixCacheKey);
@@ -84,13 +86,13 @@ namespace Nop.Services.Topics
         /// </summary>
         /// <param name="topicId">The topic identifier</param>
         /// <returns>Topic</returns>
-        public virtual Topic GetTopicById(int topicId)
+        public async virtual Task<Topic> GetTopicById(int topicId)
         {
             if (topicId == 0)
                 return null;
 
             var key = string.Format(NopTopicDefaults.TopicsByIdCacheKey, topicId);
-            return _cacheManager.Get(key, () => _topicRepository.GetById(topicId));
+            return await _cacheManager.Get(key, async () => await _topicRepository.GetById(topicId));
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace Nop.Services.Topics
         /// <param name="storeId">Store identifier; pass 0 to ignore filtering by store and load the first one</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Topic</returns>
-        public virtual Topic GetTopicBySystemName(string systemName, int storeId = 0, bool showHidden = false)
+        public async virtual Task<Topic> GetTopicBySystemName(string systemName, int storeId = 0, bool showHidden = false)
         {
             if (string.IsNullOrEmpty(systemName))
                 return null;
@@ -110,7 +112,7 @@ namespace Nop.Services.Topics
             if (!showHidden)
                 query = query.Where(c => c.Published);
             query = query.OrderBy(t => t.Id);
-            var topics = query.ToList();
+            var topics = await query.ToListAsync();
             if (storeId > 0)
             {
                 //filter by store
@@ -120,7 +122,7 @@ namespace Nop.Services.Topics
             if (!showHidden)
             {
                 //ACL (access control list)
-                topics = topics.Where(x => _aclService.Authorize(x)).ToList();
+                topics = topics.Where(x => _aclService.Authorize(x).Result).ToList();
             }
 
             return topics.FirstOrDefault();
@@ -133,10 +135,10 @@ namespace Nop.Services.Topics
         /// <param name="ignorAcl">A value indicating whether to ignore ACL rules</param>
         /// <param name="showHidden">A value indicating whether to show hidden topics</param>
         /// <returns>Topics</returns>
-        public virtual IList<Topic> GetAllTopics(int storeId, bool ignorAcl = false, bool showHidden = false)
+        public async virtual Task<IList<Topic>> GetAllTopics(int storeId, bool ignorAcl = false, bool showHidden = false)
         {
             var key = string.Format(NopTopicDefaults.TopicsAllCacheKey, storeId, ignorAcl, showHidden);
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async () =>
             {
                 var query = _topicRepository.Table;
                 query = query.OrderBy(t => t.DisplayOrder).ThenBy(t => t.SystemName);
@@ -173,7 +175,7 @@ namespace Nop.Services.Topics
                     query = query.Distinct().OrderBy(t => t.DisplayOrder).ThenBy(t => t.SystemName);
                 }
 
-                return query.ToList();
+                return await query.ToListAsync();
             });
         }
 
@@ -181,12 +183,12 @@ namespace Nop.Services.Topics
         /// Inserts a topic
         /// </summary>
         /// <param name="topic">Topic</param>
-        public virtual void InsertTopic(Topic topic)
+        public async virtual Task InsertTopic(Topic topic)
         {
             if (topic == null)
                 throw new ArgumentNullException(nameof(topic));
 
-            _topicRepository.Insert(topic);
+            await _topicRepository.Insert(topic);
 
             //cache
             _cacheManager.RemoveByPrefix(NopTopicDefaults.TopicsPrefixCacheKey);
@@ -199,12 +201,12 @@ namespace Nop.Services.Topics
         /// Updates the topic
         /// </summary>
         /// <param name="topic">Topic</param>
-        public virtual void UpdateTopic(Topic topic)
+        public async virtual Task UpdateTopic(Topic topic)
         {
             if (topic == null)
                 throw new ArgumentNullException(nameof(topic));
 
-            _topicRepository.Update(topic);
+            await _topicRepository.Update(topic);
 
             //cache
             _cacheManager.RemoveByPrefix(NopTopicDefaults.TopicsPrefixCacheKey);

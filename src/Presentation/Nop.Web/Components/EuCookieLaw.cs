@@ -27,7 +27,7 @@ namespace Nop.Web.Components
             _storeInformationSettings = storeInformationSettings;
         }
 
-        public IViewComponentResult Invoke()
+public async Task<IViewComponentResult> InvokeAsync()
         {
             if (!_storeInformationSettings.DisplayEuCookieLawWarning)
                 //disabled

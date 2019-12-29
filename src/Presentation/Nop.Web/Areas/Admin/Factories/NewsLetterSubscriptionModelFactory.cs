@@ -70,17 +70,17 @@ namespace Nop.Web.Areas.Admin.Factories
             searchModel.ActiveList.Add(new SelectListItem
             {
                 Value = "0",
-                Text = _localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.List.SearchActive.All")
+                Text = await _localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.List.SearchActive.All")
             });
             searchModel.ActiveList.Add(new SelectListItem
             {
                 Value = "1",
-                Text = _localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.List.SearchActive.ActiveOnly")
+                Text = await _localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.List.SearchActive.ActiveOnly")
             });
             searchModel.ActiveList.Add(new SelectListItem
             {
                 Value = "2",
-                Text = _localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.List.SearchActive.NotActiveOnly")
+                Text = await _localizationService.GetResource("Admin.Promotions.NewsLetterSubscriptions.List.SearchActive.NotActiveOnly")
             });
 
             searchModel.HideStoresList = _catalogSettings.IgnoreStoreLimitations || searchModel.AvailableStores.SelectionIsNotPossible();

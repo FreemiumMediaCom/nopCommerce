@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Nop.Core;
@@ -23,7 +24,7 @@ namespace Nop.Data
         /// Saves all changes made in this context to the database
         /// </summary>
         /// <returns>The number of state entries written to the database</returns>
-        int SaveChanges();
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generate a script to create all tables for the current model

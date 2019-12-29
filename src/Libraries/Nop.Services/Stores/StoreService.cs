@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Stores;
@@ -40,7 +42,7 @@ namespace Nop.Services.Stores
         /// Deletes a store
         /// </summary>
         /// <param name="store">Store</param>
-        public virtual void DeleteStore(Store store)
+        public async virtual Task DeleteStore(Store store)
         {
             if (store == null)
                 throw new ArgumentNullException(nameof(store));
@@ -48,11 +50,11 @@ namespace Nop.Services.Stores
             if (store is IEntityForCaching)
                 throw new ArgumentException("Cacheable entities are not supported by Entity Framework");
 
-            var allStores = GetAllStores();
+            var allStores = await GetAllStores();
             if (allStores.Count == 1)
                 throw new Exception("You cannot delete the only configured store");
 
-            _storeRepository.Delete(store);
+            await _storeRepository.Delete(store);
 
             _cacheManager.RemoveByPrefix(NopStoreDefaults.StoresPrefixCacheKey);
 
@@ -65,13 +67,11 @@ namespace Nop.Services.Stores
         /// </summary>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Stores</returns>
-        public virtual IList<Store> GetAllStores(bool loadCacheableCopy = true)
+        public async virtual Task<IList<Store>> GetAllStores(bool loadCacheableCopy = true)
         {
-            IList<Store> LoadStoresFunc()
-            {
-                var query = from s in _storeRepository.Table orderby s.DisplayOrder, s.Id select s;
-                return query.ToList();
-            }
+            var query = from s in _storeRepository.Table orderby s.DisplayOrder, s.Id select s;
+
+            IList<Store> loadedStores = await query.ToListAsync();
 
             if (loadCacheableCopy)
             {
@@ -79,13 +79,13 @@ namespace Nop.Services.Stores
                 return _cacheManager.Get(NopStoreDefaults.StoresAllCacheKey, () =>
                 {
                     var result = new List<Store>();
-                    foreach (var store in LoadStoresFunc())
+                    foreach (var store in loadedStores)
                         result.Add(new StoreForCaching(store));
                     return result;
                 });
             }
 
-            return LoadStoresFunc();
+            return loadedStores;
         }
 
         /// <summary>
@@ -94,24 +94,21 @@ namespace Nop.Services.Stores
         /// <param name="storeId">Store identifier</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Store</returns>
-        public virtual Store GetStoreById(int storeId, bool loadCacheableCopy = true)
+        public async virtual Task<Store> GetStoreById(int storeId, bool loadCacheableCopy = true)
         {
             if (storeId == 0)
                 return null;
 
-            Store LoadStoreFunc()
-            {
-                return _storeRepository.GetById(storeId);
-            }
+            Store loadedStore = await _storeRepository.GetById(storeId);
 
-            if (!loadCacheableCopy) 
-                return LoadStoreFunc();
+            if (!loadCacheableCopy)
+                return loadedStore;
 
             //cacheable copy
             var key = string.Format(NopStoreDefaults.StoresByIdCacheKey, storeId);
             return _cacheManager.Get(key, () =>
             {
-                var store = LoadStoreFunc();
+                var store = loadedStore;
                 if (store == null)
                     return null;
                 return new StoreForCaching(store);
@@ -122,7 +119,7 @@ namespace Nop.Services.Stores
         /// Inserts a store
         /// </summary>
         /// <param name="store">Store</param>
-        public virtual void InsertStore(Store store)
+        public async virtual Task InsertStore(Store store)
         {
             if (store == null)
                 throw new ArgumentNullException(nameof(store));
@@ -130,7 +127,7 @@ namespace Nop.Services.Stores
             if (store is IEntityForCaching)
                 throw new ArgumentException("Cacheable entities are not supported by Entity Framework");
 
-            _storeRepository.Insert(store);
+            await _storeRepository.Insert(store);
 
             _cacheManager.RemoveByPrefix(NopStoreDefaults.StoresPrefixCacheKey);
 
@@ -142,7 +139,7 @@ namespace Nop.Services.Stores
         /// Updates the store
         /// </summary>
         /// <param name="store">Store</param>
-        public virtual void UpdateStore(Store store)
+        public async virtual Task UpdateStore(Store store)
         {
             if (store == null)
                 throw new ArgumentNullException(nameof(store));
@@ -150,7 +147,7 @@ namespace Nop.Services.Stores
             if (store is IEntityForCaching)
                 throw new ArgumentException("Cacheable entities are not supported by Entity Framework");
 
-            _storeRepository.Update(store);
+            await _storeRepository.Update(store);
 
             _cacheManager.RemoveByPrefix(NopStoreDefaults.StoresPrefixCacheKey);
 

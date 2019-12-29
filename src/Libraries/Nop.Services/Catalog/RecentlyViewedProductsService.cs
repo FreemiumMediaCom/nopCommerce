@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Http;
@@ -101,13 +102,13 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="number">Number of products to load</param>
         /// <returns>"recently viewed products" list</returns>
-        public virtual IList<Product> GetRecentlyViewedProducts(int number)
+        public async virtual Task<IList<Product>> GetRecentlyViewedProducts(int number)
         {
             //get list of recently viewed product identifiers
             var productIds = GetRecentlyViewedProductsIds(number);
 
             //return list of product
-            return _productService.GetProductsByIds(productIds.ToArray())
+            return (await _productService.GetProductsByIds(productIds.ToArray()))
                 .Where(product => product.Published && !product.Deleted).ToList();
         }
 

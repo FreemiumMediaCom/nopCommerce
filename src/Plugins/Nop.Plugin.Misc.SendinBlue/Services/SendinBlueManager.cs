@@ -221,10 +221,10 @@ namespace Nop.Plugin.Misc.SendinBlue.Services
                         var customer = _customerService.GetCustomerByEmail(subscription.Email);
                         if (customer != null)
                         {
-                            firstName = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.FirstNameAttribute);
-                            lastName = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.LastNameAttribute);
-                            phone = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.PhoneAttribute);
-                            var countryId = _genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.CountryIdAttribute);
+                            firstName = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.FirstNameAttribute);
+                            lastName = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.LastNameAttribute);
+                            phone = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.PhoneAttribute);
+                            var countryId = await _genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.CountryIdAttribute);
                             var country = _countryService.GetCountryById(countryId);
                             countryName = country?.Name;
                             var countryIsoCode = country?.NumericIsoCode ?? 0;
@@ -235,16 +235,16 @@ namespace Nop.Plugin.Misc.SendinBlue.Services
                                     ?.DialCodes?.FirstOrDefault()?.Replace(" ", string.Empty) ?? string.Empty;
                                 sms = phone.Replace($"+{phoneCode}", string.Empty);
                             }
-                            gender = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.GenderAttribute);
-                            dateOfBirth = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.DateOfBirthAttribute);
-                            company = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CompanyAttribute);
-                            address1 = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.StreetAddressAttribute);
-                            address2 = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.StreetAddress2Attribute);
-                            zipCode = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.ZipPostalCodeAttribute);
-                            city = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CityAttribute);
-                            county = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CountyAttribute);
+                            gender = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.GenderAttribute);
+                            dateOfBirth = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.DateOfBirthAttribute);
+                            company = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CompanyAttribute);
+                            address1 = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.StreetAddressAttribute);
+                            address2 = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.StreetAddress2Attribute);
+                            zipCode = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.ZipPostalCodeAttribute);
+                            city = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CityAttribute);
+                            county = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CountyAttribute);
                             state = _stateProvinceService.GetStateProvinceById(_genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.StateProvinceIdAttribute))?.Name;
-                            fax = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.FaxAttribute);
+                            fax = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.FaxAttribute);
                         }
                         return $"{all}\n" +
                             $"{subscription.Email};" +
@@ -479,10 +479,10 @@ namespace Nop.Plugin.Misc.SendinBlue.Services
                     var customer = _customerService.GetCustomerByEmail(subscription.Email);
                     if (customer != null)
                     {
-                        firstName = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.FirstNameAttribute);
-                        lastName = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.LastNameAttribute);
-                        phone = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.PhoneAttribute);
-                        var countryId = _genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.CountryIdAttribute);
+                        firstName = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.FirstNameAttribute);
+                        lastName = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.LastNameAttribute);
+                        phone = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.PhoneAttribute);
+                        var countryId = await _genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.CountryIdAttribute);
                         var country = _countryService.GetCountryById(countryId);
                         countryName = country?.Name;
                         var countryIsoCode = country?.NumericIsoCode ?? 0;
@@ -493,16 +493,16 @@ namespace Nop.Plugin.Misc.SendinBlue.Services
                                 ?.DialCodes?.FirstOrDefault()?.Replace(" ", string.Empty) ?? string.Empty;
                             sms = phone.Replace($"+{phoneCode}", string.Empty);
                         }
-                        gender = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.GenderAttribute);
-                        dateOfBirth = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.DateOfBirthAttribute);
-                        company = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CompanyAttribute);
-                        address1 = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.StreetAddressAttribute);
-                        address2 = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.StreetAddress2Attribute);
-                        zipCode = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.ZipPostalCodeAttribute);
-                        city = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CityAttribute);
-                        county = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CountyAttribute);
+                        gender = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.GenderAttribute);
+                        dateOfBirth = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.DateOfBirthAttribute);
+                        company = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CompanyAttribute);
+                        address1 = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.StreetAddressAttribute);
+                        address2 = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.StreetAddress2Attribute);
+                        zipCode = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.ZipPostalCodeAttribute);
+                        city = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CityAttribute);
+                        county = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CountyAttribute);
                         state = _stateProvinceService.GetStateProvinceById(_genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.StateProvinceIdAttribute))?.Name;
-                        fax = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.FaxAttribute);
+                        fax = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.FaxAttribute);
                     }
 
                     var attributes = new Dictionary<string, string>

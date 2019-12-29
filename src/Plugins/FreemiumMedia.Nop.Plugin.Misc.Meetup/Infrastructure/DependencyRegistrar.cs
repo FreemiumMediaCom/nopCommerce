@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Threading.Tasks;
+using Autofac;
 using FreemiumMedia.Nop.Plugin.Misc.Meetup.Services;
 using Nop.Core.Configuration;
 using Nop.Core.Infrastructure;
@@ -17,7 +18,7 @@ namespace FreemiumMedia.Nop.Plugin.Misc.Meetup.Infrastructure
         /// <param name="builder">Container builder</param>
         /// <param name="typeFinder">Type finder</param>
         /// <param name="config">Config</param>
-        public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder, NopConfig config)
+        public async virtual Task Register(ContainerBuilder builder, ITypeFinder typeFinder, NopConfig config)
         {
             //register UPSService
             builder.RegisterType<MeetupService>().AsSelf().InstancePerLifetimeScope();

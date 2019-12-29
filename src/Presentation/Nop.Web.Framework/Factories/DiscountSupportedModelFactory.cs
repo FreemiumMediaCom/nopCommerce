@@ -21,7 +21,7 @@ namespace Nop.Web.Framework.Factories
         /// <typeparam name="TModel">Discount supported model type</typeparam>
         /// <param name="model">Model</param>
         /// <param name="availableDiscounts">List of all available discounts</param>
-        public virtual void PrepareModelDiscounts<TModel>(TModel model, IList<Discount> availableDiscounts) where TModel : IDiscountSupportedModel
+        public async virtual Task PrepareModelDiscounts<TModel>(TModel model, IList<Discount> availableDiscounts) where TModel : IDiscountSupportedModel
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -44,7 +44,7 @@ namespace Nop.Web.Framework.Factories
         /// <param name="entity">Entity</param>
         /// <param name="availableDiscounts">List of all available discounts</param>
         /// <param name="ignoreAppliedDiscounts">Whether to ignore existing applied discounts</param>
-        public virtual void PrepareModelDiscounts<TModel, TEntity>(TModel model, TEntity entity, 
+        public async virtual Task PrepareModelDiscounts<TModel, TEntity>(TModel model, TEntity entity, 
             IList<Discount> availableDiscounts, bool ignoreAppliedDiscounts)
             where TModel : IDiscountSupportedModel where TEntity : BaseEntity, IDiscountSupported
         {

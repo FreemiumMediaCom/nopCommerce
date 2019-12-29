@@ -187,7 +187,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Pass,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.URL.Match")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.URL.Match")
                 });
                 return;
             }
@@ -195,7 +195,7 @@ namespace Nop.Web.Areas.Admin.Factories
             models.Add(new SystemWarningModel
             {
                 Level = SystemWarningLevel.Fail,
-                Text = string.Format(_localizationService.GetResource("Admin.System.Warnings.URL.NoMatch"),
+                Text = string.Format(await _localizationService.GetResource("Admin.System.Warnings.URL.NoMatch"),
                     currentStoreUrl, _webHelper.GetStoreLocation(false))
             });
         }
@@ -246,7 +246,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.ExchangeCurrency.NotSet")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.ExchangeCurrency.NotSet")
                 });
                 return;
             }
@@ -254,7 +254,7 @@ namespace Nop.Web.Areas.Admin.Factories
             models.Add(new SystemWarningModel
             {
                 Level = SystemWarningLevel.Pass,
-                Text = _localizationService.GetResource("Admin.System.Warnings.ExchangeCurrency.Set")
+                Text = await _localizationService.GetResource("Admin.System.Warnings.ExchangeCurrency.Set")
             });
 
             //check whether primary exchange rate currency rate configured
@@ -263,7 +263,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.ExchangeCurrency.Rate1")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.ExchangeCurrency.Rate1")
                 });
             }
         }
@@ -284,7 +284,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.PrimaryCurrency.NotSet")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.PrimaryCurrency.NotSet")
                 });
                 return;
             }
@@ -292,7 +292,7 @@ namespace Nop.Web.Areas.Admin.Factories
             models.Add(new SystemWarningModel
             {
                 Level = SystemWarningLevel.Pass,
-                Text = _localizationService.GetResource("Admin.System.Warnings.PrimaryCurrency.Set")
+                Text = await _localizationService.GetResource("Admin.System.Warnings.PrimaryCurrency.Set")
             });
         }
 
@@ -312,7 +312,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.DefaultWeight.NotSet")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.DefaultWeight.NotSet")
                 });
                 return;
             }
@@ -320,7 +320,7 @@ namespace Nop.Web.Areas.Admin.Factories
             models.Add(new SystemWarningModel
             {
                 Level = SystemWarningLevel.Pass,
-                Text = _localizationService.GetResource("Admin.System.Warnings.DefaultWeight.Set")
+                Text = await _localizationService.GetResource("Admin.System.Warnings.DefaultWeight.Set")
             });
 
             //check whether base measure weight ratio configured
@@ -329,7 +329,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.DefaultWeight.Ratio1")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.DefaultWeight.Ratio1")
                 });
             }
         }
@@ -350,7 +350,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.DefaultDimension.NotSet")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.DefaultDimension.NotSet")
                 });
                 return;
             }
@@ -358,7 +358,7 @@ namespace Nop.Web.Areas.Admin.Factories
             models.Add(new SystemWarningModel
             {
                 Level = SystemWarningLevel.Pass,
-                Text = _localizationService.GetResource("Admin.System.Warnings.DefaultDimension.Set")
+                Text = await _localizationService.GetResource("Admin.System.Warnings.DefaultDimension.Set")
             });
 
             //check whether base measure dimension ratio configured
@@ -367,7 +367,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.DefaultDimension.Ratio1")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.DefaultDimension.Ratio1")
                 });
             }
         }
@@ -387,7 +387,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Pass,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.PaymentMethods.OK")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.PaymentMethods.OK")
                 });
                 return;
             }
@@ -395,7 +395,7 @@ namespace Nop.Web.Areas.Admin.Factories
             models.Add(new SystemWarningModel
             {
                 Level = SystemWarningLevel.Fail,
-                Text = _localizationService.GetResource("Admin.System.Warnings.PaymentMethods.NoActive")
+                Text = await _localizationService.GetResource("Admin.System.Warnings.PaymentMethods.NoActive")
             });
         }
 
@@ -414,7 +414,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Warning,
-                    Text = string.Format(_localizationService.GetResource("Admin.System.Warnings.PluginNotLoaded"), pluginName)
+                    Text = string.Format(await _localizationService.GetResource("Admin.System.Warnings.PluginNotLoaded"), pluginName)
                 });
             }
 
@@ -430,7 +430,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Warning,
-                    Text = string.Format(_localizationService.GetResource("Admin.System.Warnings.AssemblyHasCollision"),
+                    Text = string.Format(await _localizationService.GetResource("Admin.System.Warnings.AssemblyHasCollision"),
                         assembly.ShortName, assembly.AssemblyFullNameInMemory, message)
                 });
             }
@@ -451,7 +451,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Recommendation,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.Performance.IgnoreStoreLimitations")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.Performance.IgnoreStoreLimitations")
                 });
             }
 
@@ -461,7 +461,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Recommendation,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.Performance.IgnoreAcl")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.Performance.IgnoreAcl")
                 });
             }
         }
@@ -485,7 +485,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Warning,
-                    Text = string.Format(_localizationService.GetResource("Admin.System.Warnings.DirectoryPermission.Wrong"),
+                    Text = string.Format(await _localizationService.GetResource("Admin.System.Warnings.DirectoryPermission.Wrong"),
                         CurrentOSUser.FullName, dir)
                 });
                 dirPermissionsOk = false;
@@ -496,7 +496,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Pass,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.DirectoryPermission.OK")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.DirectoryPermission.OK")
                 });
             }
 
@@ -510,7 +510,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Warning,
-                    Text = string.Format(_localizationService.GetResource("Admin.System.Warnings.FilePermission.Wrong"),
+                    Text = string.Format(await _localizationService.GetResource("Admin.System.Warnings.FilePermission.Wrong"),
                         CurrentOSUser.FullName, file)
                 });
                 filePermissionsOk = false;
@@ -521,7 +521,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Pass,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.FilePermission.OK")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.FilePermission.OK")
                 });
             }
         }
@@ -699,7 +699,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Pass,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.ProxyConnection.OK")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.ProxyConnection.OK")
                 });
             }
             catch
@@ -708,7 +708,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 models.Add(new SystemWarningModel
                 {
                     Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.ProxyConnection.Failed")
+                    Text = await _localizationService.GetResource("Admin.System.Warnings.ProxyConnection.Failed")
                 });
             }
         }
@@ -958,7 +958,7 @@ namespace Nop.Web.Areas.Admin.Factories
         {
             var model = new CommonStatisticsModel
             {
-                NumberOfOrders = _orderService.SearchOrders(pageIndex: 0, pageSize: 1, getOnlyTotalCount: true).TotalCount
+                NumberOfOrders = await _orderService.SearchOrders(pageIndex: 0, pageSize: 1, getOnlyTotalCount: true).TotalCount
             };
 
             var customerRoleIds = new[] { _customerService.GetCustomerRoleBySystemName(NopCustomerDefaults.RegisteredRoleName).Id };

@@ -298,7 +298,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //recurring info
                 if (orderItem.Product.IsRecurring)
                 {
-                    orderItemModel.RecurringInfo = string.Format(_localizationService.GetResource("Admin.Orders.Products.RecurringPeriod"),
+                    orderItemModel.RecurringInfo = string.Format(await _localizationService.GetResource("Admin.Orders.Products.RecurringPeriod"),
                         orderItem.Product.RecurringCycleLength, _localizationService.GetLocalizedEnum(orderItem.Product.RecurringCyclePeriod));
                 }
 
@@ -309,7 +309,7 @@ namespace Nop.Web.Areas.Admin.Factories
                         ? _productService.FormatRentalDate(orderItem.Product, orderItem.RentalStartDateUtc.Value) : string.Empty;
                     var rentalEndDate = orderItem.RentalEndDateUtc.HasValue
                         ? _productService.FormatRentalDate(orderItem.Product, orderItem.RentalEndDateUtc.Value) : string.Empty;
-                    orderItemModel.RentalInfo = string.Format(_localizationService.GetResource("Order.Rental.FormattedDate"),
+                    orderItemModel.RentalInfo = string.Format(await _localizationService.GetResource("Order.Rental.FormattedDate"),
                         rentalStartDate, rentalEndDate);
                 }
 
@@ -405,7 +405,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
             //tax
             model.Tax = _priceFormatter.FormatPrice(order.OrderTax, true, false);
-            var taxRates = _orderService.ParseTaxRates(order, order.TaxRates);
+            var taxRates = await _orderService.ParseTaxRates(order, order.TaxRates);
             var displayTaxRates = _taxSettings.DisplayTaxRates && taxRates.Any();
             var displayTax = !displayTaxRates;
             foreach (var tr in taxRates)
@@ -526,7 +526,7 @@ namespace Nop.Web.Areas.Admin.Factories
             //payment method info
             var pm = _paymentPluginManager.LoadPluginBySystemName(order.PaymentMethodSystemName);
             model.PaymentMethod = pm != null ? pm.PluginDescriptor.FriendlyName : order.PaymentMethodSystemName;
-            model.PaymentStatus = _localizationService.GetLocalizedEnum(order.PaymentStatus);
+            model.PaymentStatus = await _localizationService.GetLocalizedEnum(order.PaymentStatus);
 
             //payment method buttons
             model.CanCancelOrder = _orderProcessingService.CanCancelOrder(order);
@@ -543,7 +543,7 @@ namespace Nop.Web.Areas.Admin.Factories
             model.MaxAmountToRefund = order.OrderTotal - order.RefundedAmount;
 
             //recurring payment record
-            model.RecurringPaymentId = _orderService.SearchRecurringPayments(initialOrderId: order.Id, showHidden: true).FirstOrDefault()?.Id ?? 0;
+            model.RecurringPaymentId = await _orderService.SearchRecurringPayments(initialOrderId: order.Id, showHidden: true).FirstOrDefault()?.Id ?? 0;
         }
 
         /// <summary>
@@ -559,13 +559,13 @@ namespace Nop.Web.Areas.Admin.Factories
             if (order == null)
                 throw new ArgumentNullException(nameof(order));
 
-            model.ShippingStatus = _localizationService.GetLocalizedEnum(order.ShippingStatus);
+            model.ShippingStatus = await _localizationService.GetLocalizedEnum(order.ShippingStatus);
             if (order.ShippingStatus == ShippingStatus.ShippingNotRequired)
                 return;
 
             model.IsShippable = true;
             model.ShippingMethod = order.ShippingMethod;
-            model.CanAddNewShipments = _orderService.HasItemsToAddToShipment(order);
+            model.CanAddNewShipments = await _orderService.HasItemsToAddToShipment(order);
             model.PickupInStore = order.PickupInStore;
             if (!order.PickupInStore)
             {
@@ -681,8 +681,8 @@ namespace Nop.Web.Areas.Admin.Factories
             model.AttributeInfo = orderItem.AttributeDescription;
             model.ShipSeparately = orderItem.Product.ShipSeparately;
             model.QuantityOrdered = orderItem.Quantity;
-            model.QuantityInAllShipments = _orderService.GetTotalNumberOfItemsInAllShipment(orderItem);
-            model.QuantityToAdd = _orderService.GetTotalNumberOfItemsCanBeAddedToShipment(orderItem);
+            model.QuantityInAllShipments = await _orderService.GetTotalNumberOfItemsInAllShipment(orderItem);
+            model.QuantityToAdd = await _orderService.GetTotalNumberOfItemsCanBeAddedToShipment(orderItem);
 
             var baseWeight = _measureService.GetMeasureWeightById(_measureSettings.BaseWeightId)?.Name;
             var baseDimension = _measureService.GetMeasureDimensionById(_measureSettings.BaseDimensionId)?.Name;
@@ -698,7 +698,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 ? _productService.FormatRentalDate(orderItem.Product, orderItem.RentalStartDateUtc.Value) : string.Empty;
             var rentalEndDate = orderItem.RentalEndDateUtc.HasValue
                 ? _productService.FormatRentalDate(orderItem.Product, orderItem.RentalEndDateUtc.Value) : string.Empty;
-            model.RentalInfo = string.Format(_localizationService.GetResource("Order.Rental.FormattedDate"), rentalStartDate, rentalEndDate);
+            model.RentalInfo = string.Format(await _localizationService.GetResource("Order.Rental.FormattedDate"), rentalStartDate, rentalEndDate);
         }
 
         /// <summary>
@@ -726,7 +726,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 };
                 var shipmentEventCountry = _countryService.GetCountryByTwoLetterIsoCode(shipmentEvent.CountryCode);
                 shipmentStatusEventModel.Country = shipmentEventCountry != null
-                    ? _localizationService.GetLocalized(shipmentEventCountry, x => x.Name) : shipmentEvent.CountryCode;
+                    ? await _localizationService.GetLocalized(shipmentEventCountry, x => x.Name) : shipmentEvent.CountryCode;
                 models.Add(shipmentStatusEventModel);
             }
         }
@@ -863,12 +863,12 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare available payment methods
             searchModel.AvailablePaymentMethods = _paymentPluginManager.LoadAllPlugins().Select(method =>
                 new SelectListItem { Text = method.PluginDescriptor.FriendlyName, Value = method.PluginDescriptor.SystemName }).ToList();
-            searchModel.AvailablePaymentMethods.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = string.Empty });
+            searchModel.AvailablePaymentMethods.Insert(0, new SelectListItem { Text = await _localizationService.GetResource("Admin.Common.All"), Value = string.Empty });
 
             //prepare available billing countries
             searchModel.AvailableCountries = _countryService.GetAllCountriesForBilling(showHidden: true)
                 .Select(country => new SelectListItem { Text = country.Name, Value = country.Id.ToString() }).ToList();
-            searchModel.AvailableCountries.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
+            searchModel.AvailableCountries.Insert(0, new SelectListItem { Text = await _localizationService.GetResource("Admin.Common.All"), Value = "0" });
 
             //prepare grid
             searchModel.SetGridPageSize();
@@ -903,7 +903,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 ? searchModel.ProductId : 0;
 
             //get orders
-            var orders = _orderService.SearchOrders(storeId: searchModel.StoreId,
+            var orders = await _orderService.SearchOrders(storeId: searchModel.StoreId,
                 vendorId: searchModel.VendorId,
                 productId: filterByProductId,
                 warehouseId: searchModel.WarehouseId,
@@ -944,9 +944,9 @@ namespace Nop.Web.Areas.Admin.Factories
 
                     //fill in additional values (not existing in the entity)
                     orderModel.StoreName = _storeService.GetStoreById(order.StoreId)?.Name ?? "Deleted";
-                    orderModel.OrderStatus = _localizationService.GetLocalizedEnum(order.OrderStatus);
-                    orderModel.PaymentStatus = _localizationService.GetLocalizedEnum(order.PaymentStatus);
-                    orderModel.ShippingStatus = _localizationService.GetLocalizedEnum(order.ShippingStatus);
+                    orderModel.OrderStatus = await _localizationService.GetLocalizedEnum(order.OrderStatus);
+                    orderModel.PaymentStatus = await _localizationService.GetLocalizedEnum(order.PaymentStatus);
+                    orderModel.ShippingStatus = await _localizationService.GetLocalizedEnum(order.ShippingStatus);
                     orderModel.OrderTotal = _priceFormatter.FormatPrice(order.OrderTotal, true, false);
 
                     return orderModel;
@@ -1055,7 +1055,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 model.CustomOrderNumber = order.CustomOrderNumber;
                 model.CustomerIp = order.CustomerIp;
                 model.CustomerId = order.CustomerId;
-                model.OrderStatus = _localizationService.GetLocalizedEnum(order.OrderStatus);
+                model.OrderStatus = await _localizationService.GetLocalizedEnum(order.OrderStatus);
                 model.StoreName = _storeService.GetStoreById(order.StoreId)?.Name ?? "Deleted";
                 model.CustomerInfo = order.Customer.IsRegistered() ? order.Customer.Email : _localizationService.GetResource("Admin.Customers.Guest");
                 model.CreatedOn = _dateTimeHelper.ConvertToUserTime(order.CreatedOnUtc, DateTimeKind.Utc);
@@ -1393,7 +1393,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //prepare shipment items
                 foreach (var item in shipment.ShipmentItems)
                 {
-                    var orderItem = _orderService.GetOrderItemById(item.OrderItemId);
+                    var orderItem = await _orderService.GetOrderItemById(item.OrderItemId);
                     if (orderItem == null)
                         continue;
 
@@ -1577,7 +1577,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     };
 
                     //fill in additional values (not existing in the entity)
-                    var orderItem = _orderService.GetOrderItemById(item.OrderItemId);
+                    var orderItem = await _orderService.GetOrderItemById(item.OrderItemId);
                     if (orderItem == null)
                         return shipmentItemModel;
 
@@ -1631,7 +1631,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     orderNoteModel.CreatedOn = _dateTimeHelper.ConvertToUserTime(orderNote.CreatedOnUtc, DateTimeKind.Utc);
 
                     //fill in additional values (not existing in the entity)
-                    orderNoteModel.Note = _orderService.FormatOrderNoteText(orderNote);
+                    orderNoteModel.Note = await _orderService.FormatOrderNoteText(orderNote);
                     orderNoteModel.DownloadGuid = _downloadService.GetDownloadById(orderNote.DownloadId)?.DownloadGuid ?? Guid.Empty;
 
                     return orderNoteModel;
@@ -1721,7 +1721,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //fill in model values from the entity
                 return pagedList.Select(reportItem => new OrderAverageReportModel
                 {
-                    OrderStatus = _localizationService.GetLocalizedEnum(reportItem.OrderStatus),
+                    OrderStatus = await _localizationService.GetLocalizedEnum(reportItem.OrderStatus),
                     SumTodayOrders = _priceFormatter.FormatPrice(reportItem.SumTodayOrders, true, false),
                     SumThisWeekOrders = _priceFormatter.FormatPrice(reportItem.SumThisWeekOrders, true, false),
                     SumThisMonthOrders = _priceFormatter.FormatPrice(reportItem.SumThisMonthOrders, true, false),
@@ -1751,7 +1751,7 @@ namespace Nop.Web.Areas.Admin.Factories
             var psPending = _orderReportService.GetOrderAverageReportLine(psIds: paymentStatuses, osIds: orderStatuses);
             orderIncompleteReportModels.Add(new OrderIncompleteReportModel
             {
-                Item = _localizationService.GetResource("Admin.SalesReport.Incomplete.TotalUnpaidOrders"),
+                Item = await _localizationService.GetResource("Admin.SalesReport.Incomplete.TotalUnpaidOrders"),
                 Count = psPending.CountOrders,
                 Total = _priceFormatter.FormatPrice(psPending.SumOrders, true, false),
                 ViewLink = urlHelper.Action("List", "Order", new
@@ -1766,7 +1766,7 @@ namespace Nop.Web.Areas.Admin.Factories
             var ssPending = _orderReportService.GetOrderAverageReportLine(osIds: orderStatuses, ssIds: shippingStatuses);
             orderIncompleteReportModels.Add(new OrderIncompleteReportModel
             {
-                Item = _localizationService.GetResource("Admin.SalesReport.Incomplete.TotalNotShippedOrders"),
+                Item = await _localizationService.GetResource("Admin.SalesReport.Incomplete.TotalNotShippedOrders"),
                 Count = ssPending.CountOrders,
                 Total = _priceFormatter.FormatPrice(ssPending.SumOrders, true, false),
                 ViewLink = urlHelper.Action("List", "Order", new
@@ -1781,7 +1781,7 @@ namespace Nop.Web.Areas.Admin.Factories
             var osPending = _orderReportService.GetOrderAverageReportLine(osIds: orderStatuses);
             orderIncompleteReportModels.Add(new OrderIncompleteReportModel
             {
-                Item = _localizationService.GetResource("Admin.SalesReport.Incomplete.TotalIncompleteOrders"),
+                Item = await _localizationService.GetResource("Admin.SalesReport.Incomplete.TotalIncompleteOrders"),
                 Count = osPending.CountOrders,
                 Total = _priceFormatter.FormatPrice(osPending.SumOrders, true, false),
                 ViewLink = urlHelper.Action("List", "Order", new { orderStatuses = string.Join(",", orderStatuses) })

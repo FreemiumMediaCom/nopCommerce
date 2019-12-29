@@ -105,7 +105,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     var attributeModel = attribute.ToModel<VendorAttributeModel>();
 
                     //fill in additional values (not existing in the entity)
-                    attributeModel.AttributeControlTypeName = _localizationService.GetLocalizedEnum(attribute.AttributeControlType);
+                    attributeModel.AttributeControlTypeName = await _localizationService.GetLocalizedEnum(attribute.AttributeControlType);
 
                     return attributeModel;
                 });
@@ -137,7 +137,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(vendorAttribute, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(vendorAttribute, entity => entity.Name, languageId, false, false);
                 };
             }
 
@@ -200,7 +200,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(vendorAttributeValue, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(vendorAttributeValue, entity => entity.Name, languageId, false, false);
                 };
             }
 

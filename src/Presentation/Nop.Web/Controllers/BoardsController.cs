@@ -59,7 +59,7 @@ namespace Nop.Web.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -68,7 +68,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ActiveDiscussions(int forumId = 0, int pageNumber = 1)
+        public async virtual Task<IActionResult> ActiveDiscussions(int forumId = 0, int pageNumber = 1)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -77,7 +77,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ActiveDiscussionsRss(int forumId = 0)
+        public async virtual Task<IActionResult> ActiveDiscussionsRss(int forumId = 0)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -88,8 +88,8 @@ namespace Nop.Web.Controllers
             var topics = _forumService.GetActiveTopics(forumId, 0, _forumSettings.ActiveDiscussionsFeedCount);
             var url = Url.RouteUrl("ActiveDiscussionsRSS", null, _webHelper.CurrentRequestProtocol);
 
-            var feedTitle = _localizationService.GetResource("Forum.ActiveDiscussionsFeedTitle");
-            var feedDescription = _localizationService.GetResource("Forum.ActiveDiscussionsFeedDescription");
+            var feedTitle = await _localizationService.GetResource("Forum.ActiveDiscussionsFeedTitle");
+            var feedDescription = await _localizationService.GetResource("Forum.ActiveDiscussionsFeedDescription");
 
             var feed = new RssFeed(
                 string.Format(feedTitle, _localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name)),
@@ -99,8 +99,8 @@ namespace Nop.Web.Controllers
 
             var items = new List<RssItem>();
 
-            var viewsText = _localizationService.GetResource("Forum.Views");
-            var repliesText = _localizationService.GetResource("Forum.Replies");
+            var viewsText = await _localizationService.GetResource("Forum.Views");
+            var repliesText = await _localizationService.GetResource("Forum.Replies");
 
             foreach (var topic in topics)
             {
@@ -115,7 +115,7 @@ namespace Nop.Web.Controllers
             return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
         }
 
-        public virtual IActionResult ForumGroup(int id)
+        public async virtual Task<IActionResult> ForumGroup(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -128,7 +128,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Forum(int id, int pageNumber = 1)
+        public async virtual Task<IActionResult> Forum(int id, int pageNumber = 1)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -141,7 +141,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ForumRss(int id)
+        public async virtual Task<IActionResult> ForumRss(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -160,8 +160,8 @@ namespace Nop.Web.Controllers
 
                 var url = Url.RouteUrl("ForumRSS", new { id = forum.Id }, _webHelper.CurrentRequestProtocol);
 
-                var feedTitle = _localizationService.GetResource("Forum.ForumFeedTitle");
-                var feedDescription = _localizationService.GetResource("Forum.ForumFeedDescription");
+                var feedTitle = await _localizationService.GetResource("Forum.ForumFeedTitle");
+                var feedDescription = await _localizationService.GetResource("Forum.ForumFeedDescription");
 
                 var feed = new RssFeed(
                     string.Format(feedTitle, _localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name), forum.Name),
@@ -171,8 +171,8 @@ namespace Nop.Web.Controllers
 
                 var items = new List<RssItem>();
 
-                var viewsText = _localizationService.GetResource("Forum.Views");
-                var repliesText = _localizationService.GetResource("Forum.Replies");
+                var viewsText = await _localizationService.GetResource("Forum.Views");
+                var repliesText = await _localizationService.GetResource("Forum.Replies");
 
                 foreach (var topic in topics)
                 {
@@ -191,10 +191,10 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ForumWatch(int id)
+        public async virtual Task<IActionResult> ForumWatch(int id)
         {
-            var watchTopic = _localizationService.GetResource("Forum.WatchForum");
-            var unwatchTopic = _localizationService.GetResource("Forum.UnwatchForum");
+            var watchTopic = await _localizationService.GetResource("Forum.WatchForum");
+            var unwatchTopic = await _localizationService.GetResource("Forum.UnwatchForum");
             var returnText = watchTopic;
 
             var forum = _forumService.GetForumById(id);
@@ -230,7 +230,7 @@ namespace Nop.Web.Controllers
             return Json(new { Subscribed = subscribed, Text = returnText, Error = false });
         }
 
-        public virtual IActionResult Topic(int id, int pageNumber = 1)
+        public async virtual Task<IActionResult> Topic(int id, int pageNumber = 1)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -252,10 +252,10 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult TopicWatch(int id)
+        public async virtual Task<IActionResult> TopicWatch(int id)
         {
-            var watchTopic = _localizationService.GetResource("Forum.WatchTopic");
-            var unwatchTopic = _localizationService.GetResource("Forum.UnwatchTopic");
+            var watchTopic = await _localizationService.GetResource("Forum.WatchTopic");
+            var unwatchTopic = await _localizationService.GetResource("Forum.UnwatchTopic");
             var returnText = watchTopic;
 
             var forumTopic = _forumService.GetTopicById(id);
@@ -291,7 +291,7 @@ namespace Nop.Web.Controllers
             return Json(new { Subscribed = subscribed, Text = returnText, Error = false });
         }
 
-        public virtual IActionResult TopicMove(int id)
+        public async virtual Task<IActionResult> TopicMove(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -306,7 +306,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult TopicMove(TopicMoveModel model)
+        public async virtual Task<IActionResult> TopicMove(TopicMoveModel model)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -327,7 +327,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult TopicDelete(int id)
+        public async virtual Task<IActionResult> TopicDelete(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return Json(new
@@ -358,7 +358,7 @@ namespace Nop.Web.Controllers
             });
         }
 
-        public virtual IActionResult TopicCreate(int id)
+        public async virtual Task<IActionResult> TopicCreate(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -378,7 +378,7 @@ namespace Nop.Web.Controllers
         [HttpPost]
         [PublicAntiForgery]
         [ValidateCaptcha]
-        public virtual IActionResult TopicCreate(EditForumTopicModel model, bool captchaValid)
+        public async virtual Task<IActionResult> TopicCreate(EditForumTopicModel model, bool captchaValid)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -390,7 +390,7 @@ namespace Nop.Web.Controllers
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnForum && !captchaValid)
             {
-                ModelState.AddModelError("", _localizationService.GetResource("Common.WrongCaptchaMessage"));
+                ModelState.AddModelError("", await _localizationService.GetResource("Common.WrongCaptchaMessage"));
             }
 
             if (ModelState.IsValid)
@@ -483,7 +483,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult TopicEdit(int id)
+        public async virtual Task<IActionResult> TopicEdit(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -503,7 +503,7 @@ namespace Nop.Web.Controllers
         [HttpPost]
         [PublicAntiForgery]
         [ValidateCaptcha]
-        public virtual IActionResult TopicEdit(EditForumTopicModel model, bool captchaValid)
+        public async virtual Task<IActionResult> TopicEdit(EditForumTopicModel model, bool captchaValid)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -519,7 +519,7 @@ namespace Nop.Web.Controllers
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnForum && !captchaValid)
             {
-                ModelState.AddModelError("", _localizationService.GetResource("Common.WrongCaptchaMessage"));
+                ModelState.AddModelError("", await _localizationService.GetResource("Common.WrongCaptchaMessage"));
             }
 
             if (ModelState.IsValid)
@@ -623,7 +623,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult PostDelete(int id)
+        public async virtual Task<IActionResult> PostDelete(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return Json(new
@@ -664,7 +664,7 @@ namespace Nop.Web.Controllers
             });
         }
 
-        public virtual IActionResult PostCreate(int id, int? quote)
+        public async virtual Task<IActionResult> PostCreate(int id, int? quote)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -683,7 +683,7 @@ namespace Nop.Web.Controllers
         [HttpPost]
         [PublicAntiForgery]
         [ValidateCaptcha]
-        public virtual IActionResult PostCreate(EditForumPostModel model, bool captchaValid)
+        public async virtual Task<IActionResult> PostCreate(EditForumPostModel model, bool captchaValid)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -695,7 +695,7 @@ namespace Nop.Web.Controllers
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnForum && !captchaValid)
             {
-                ModelState.AddModelError("", _localizationService.GetResource("Common.WrongCaptchaMessage"));
+                ModelState.AddModelError("", await _localizationService.GetResource("Common.WrongCaptchaMessage"));
             }
 
             if (ModelState.IsValid)
@@ -776,7 +776,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult PostEdit(int id)
+        public async virtual Task<IActionResult> PostEdit(int id)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -795,7 +795,7 @@ namespace Nop.Web.Controllers
         [HttpPost]
         [PublicAntiForgery]
         [ValidateCaptcha]
-        public virtual IActionResult PostEdit(EditForumPostModel model, bool captchaValid)
+        public async virtual Task<IActionResult> PostEdit(EditForumPostModel model, bool captchaValid)
         {
             if (!_forumSettings.ForumsEnabled)
                 return RedirectToRoute("Homepage");
@@ -818,7 +818,7 @@ namespace Nop.Web.Controllers
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnForum && !captchaValid)
             {
-                ModelState.AddModelError("", _localizationService.GetResource("Common.WrongCaptchaMessage"));
+                ModelState.AddModelError("", await _localizationService.GetResource("Common.WrongCaptchaMessage"));
             }
 
             if (ModelState.IsValid)
@@ -891,7 +891,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Search(string searchterms, bool? adv, string forumId,
+        public async virtual Task<IActionResult> Search(string searchterms, bool? adv, string forumId,
             string within, string limitDays, int pageNumber = 1)
         {
             if (!_forumSettings.ForumsEnabled)
@@ -901,7 +901,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult CustomerForumSubscriptions(int? pageNumber)
+        public async virtual Task<IActionResult> CustomerForumSubscriptions(int? pageNumber)
         {
             if (!_forumSettings.AllowCustomersToManageSubscriptions)
                 return RedirectToRoute("CustomerInfo");
@@ -911,7 +911,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost, ActionName("CustomerForumSubscriptions")]
-        public virtual IActionResult CustomerForumSubscriptionsPOST(IFormCollection formCollection)
+        public async virtual Task<IActionResult> CustomerForumSubscriptionsPOST(IFormCollection formCollection)
         {
             foreach (var key in formCollection.Keys)
             {
@@ -935,7 +935,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PostVote(int postId, bool isUp)
+        public async virtual Task<IActionResult> PostVote(int postId, bool isUp)
         {
             if (!_forumSettings.AllowPostVoting)
                 return new NullJsonResult();
@@ -947,14 +947,14 @@ namespace Nop.Web.Controllers
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Json(new
                 {
-                    Error = _localizationService.GetResource("Forum.Votes.Login"),
+                    Error = await _localizationService.GetResource("Forum.Votes.Login"),
                     VoteCount = forumPost.VoteCount
                 });
 
             if (_workContext.CurrentCustomer.Id == forumPost.CustomerId)
                 return Json(new
                 {
-                    Error = _localizationService.GetResource("Forum.Votes.OwnPost"),
+                    Error = await _localizationService.GetResource("Forum.Votes.OwnPost"),
                     VoteCount = forumPost.VoteCount
                 });
 
@@ -964,7 +964,7 @@ namespace Nop.Web.Controllers
                 if ((forumPostVote.IsUp && isUp) || (!forumPostVote.IsUp && !isUp))
                     return Json(new
                     {
-                        Error = _localizationService.GetResource("Forum.Votes.AlreadyVoted"),
+                        Error = await _localizationService.GetResource("Forum.Votes.AlreadyVoted"),
                         VoteCount = forumPost.VoteCount
                     });
 
@@ -975,7 +975,7 @@ namespace Nop.Web.Controllers
             if (_forumService.GetNumberOfPostVotes(_workContext.CurrentCustomer, DateTime.UtcNow.AddDays(-1)) >= _forumSettings.MaxVotesPerDay)
                 return Json(new
                 {
-                    Error = string.Format(_localizationService.GetResource("Forum.Votes.MaxVotesReached"), _forumSettings.MaxVotesPerDay),
+                    Error = string.Format(await _localizationService.GetResource("Forum.Votes.MaxVotesReached"), _forumSettings.MaxVotesPerDay),
                     VoteCount = forumPost.VoteCount
                 });
 

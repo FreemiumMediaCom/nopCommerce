@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Common;
@@ -69,7 +71,7 @@ namespace Nop.Services.Logging
         /// </summary>
         /// <param name="level">Log level</param>
         /// <returns>Result</returns>
-        public virtual bool IsEnabled(LogLevel level)
+        public async virtual Task<bool> IsEnabled(LogLevel level)
         {
             switch (level)
             {
@@ -84,34 +86,34 @@ namespace Nop.Services.Logging
         /// Deletes a log item
         /// </summary>
         /// <param name="log">Log item</param>
-        public virtual void DeleteLog(Log log)
+        public async virtual Task DeleteLog(Log log)
         {
             if (log == null)
                 throw new ArgumentNullException(nameof(log));
 
-            _logRepository.Delete(log);
+            await _logRepository.Delete(log);
         }
 
         /// <summary>
         /// Deletes a log items
         /// </summary>
         /// <param name="logs">Log items</param>
-        public virtual void DeleteLogs(IList<Log> logs)
+        public async virtual Task DeleteLogs(IList<Log> logs)
         {
             if (logs == null)
                 throw new ArgumentNullException(nameof(logs));
 
-            _logRepository.Delete(logs);
+            await _logRepository.Delete(logs);
         }
 
         /// <summary>
         /// Clears a log
         /// </summary>
-        public virtual void ClearLog()
+        public async virtual Task ClearLog()
         {
             //do all databases support "Truncate command"?
             var logTableName = _dbContext.GetTableName<Log>();
-            _dbContext.ExecuteSqlCommand($"TRUNCATE TABLE [{logTableName}]");
+            await _dbContext.ExecuteSqlCommand($"TRUNCATE TABLE [{logTableName}]");
 
             //var log = _logRepository.Table.ToList();
             //foreach (var logItem in log)
@@ -156,12 +158,12 @@ namespace Nop.Services.Logging
         /// </summary>
         /// <param name="logId">Log item identifier</param>
         /// <returns>Log item</returns>
-        public virtual Log GetLogById(int logId)
+        public async virtual Task<Log> GetLogById(int logId)
         {
             if (logId == 0)
                 return null;
 
-            return _logRepository.GetById(logId);
+            return await _logRepository.GetById(logId);
         }
 
         /// <summary>
@@ -169,7 +171,7 @@ namespace Nop.Services.Logging
         /// </summary>
         /// <param name="logIds">Log item identifiers</param>
         /// <returns>Log items</returns>
-        public virtual IList<Log> GetLogByIds(int[] logIds)
+        public async virtual Task<IList<Log>> GetLogByIds(int[] logIds)
         {
             if (logIds == null || logIds.Length == 0)
                 return new List<Log>();
@@ -177,7 +179,8 @@ namespace Nop.Services.Logging
             var query = from l in _logRepository.Table
                         where logIds.Contains(l.Id)
                         select l;
-            var logItems = query.ToList();
+            var logItems = await query.ToListAsync();
+
             //sort by passed identifiers
             var sortedLogItems = new List<Log>();
             foreach (var id in logIds)
@@ -198,7 +201,7 @@ namespace Nop.Services.Logging
         /// <param name="fullMessage">The full message</param>
         /// <param name="customer">The customer to associate log record with</param>
         /// <returns>A log item</returns>
-        public virtual Log InsertLog(LogLevel logLevel, string shortMessage, string fullMessage = "", Customer customer = null)
+        public async virtual Task<Log> InsertLog(LogLevel logLevel, string shortMessage, string fullMessage = "", Customer customer = null)
         {
             //check ignore word/phrase list?
             if (IgnoreLog(shortMessage) || IgnoreLog(fullMessage))
@@ -216,7 +219,7 @@ namespace Nop.Services.Logging
                 CreatedOnUtc = DateTime.UtcNow
             };
 
-            _logRepository.Insert(log);
+            await _logRepository.Insert(log);
 
             return log;
         }
@@ -227,14 +230,14 @@ namespace Nop.Services.Logging
         /// <param name="message">Message</param>
         /// <param name="exception">Exception</param>
         /// <param name="customer">Customer</param>
-        public virtual void Information(string message, Exception exception = null, Customer customer = null)
+        public async virtual Task Information(string message, Exception exception = null, Customer customer = null)
         {
             //don't log thread abort exception
             if (exception is System.Threading.ThreadAbortException)
                 return;
 
-            if (IsEnabled(LogLevel.Information))
-                InsertLog(LogLevel.Information, message, exception?.ToString() ?? string.Empty, customer);
+            if (await IsEnabled(LogLevel.Information))
+                await InsertLog(LogLevel.Information, message, exception?.ToString() ?? string.Empty, customer);
         }
 
         /// <summary>
@@ -243,14 +246,14 @@ namespace Nop.Services.Logging
         /// <param name="message">Message</param>
         /// <param name="exception">Exception</param>
         /// <param name="customer">Customer</param>
-        public virtual void Warning(string message, Exception exception = null, Customer customer = null)
+        public async virtual Task Warning(string message, Exception exception = null, Customer customer = null)
         {
             //don't log thread abort exception
             if (exception is System.Threading.ThreadAbortException)
                 return;
 
-            if (IsEnabled(LogLevel.Warning))
-                InsertLog(LogLevel.Warning, message, exception?.ToString() ?? string.Empty, customer);
+            if (await IsEnabled(LogLevel.Warning))
+                await InsertLog(LogLevel.Warning, message, exception?.ToString() ?? string.Empty, customer);
         }
 
         /// <summary>
@@ -259,14 +262,14 @@ namespace Nop.Services.Logging
         /// <param name="message">Message</param>
         /// <param name="exception">Exception</param>
         /// <param name="customer">Customer</param>
-        public virtual void Error(string message, Exception exception = null, Customer customer = null)
+        public async virtual Task Error(string message, Exception exception = null, Customer customer = null)
         {
             //don't log thread abort exception
             if (exception is System.Threading.ThreadAbortException)
                 return;
 
-            if (IsEnabled(LogLevel.Error))
-                InsertLog(LogLevel.Error, message, exception?.ToString() ?? string.Empty, customer);
+            if (await IsEnabled(LogLevel.Error))
+                await InsertLog(LogLevel.Error, message, exception?.ToString() ?? string.Empty, customer);
         }
 
         #endregion

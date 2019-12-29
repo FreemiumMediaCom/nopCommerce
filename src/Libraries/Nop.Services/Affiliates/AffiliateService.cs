@@ -1,5 +1,7 @@
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Affiliates;
@@ -52,12 +54,12 @@ namespace Nop.Services.Affiliates
         /// </summary>
         /// <param name="affiliateId">Affiliate identifier</param>
         /// <returns>Affiliate</returns>
-        public virtual Affiliate GetAffiliateById(int affiliateId)
+        public async virtual Task<Affiliate> GetAffiliateById(int affiliateId)
         {
             if (affiliateId == 0)
                 return null;
 
-            return _affiliateRepository.GetById(affiliateId);
+            return await _affiliateRepository.GetById(affiliateId);
         }
 
         /// <summary>
@@ -65,7 +67,7 @@ namespace Nop.Services.Affiliates
         /// </summary>
         /// <param name="friendlyUrlName">Friendly URL name</param>
         /// <returns>Affiliate</returns>
-        public virtual Affiliate GetAffiliateByFriendlyUrlName(string friendlyUrlName)
+        public async virtual Task<Affiliate> GetAffiliateByFriendlyUrlName(string friendlyUrlName)
         {
             if (string.IsNullOrWhiteSpace(friendlyUrlName))
                 return null;
@@ -74,7 +76,7 @@ namespace Nop.Services.Affiliates
                         orderby a.Id
                         where a.FriendlyUrlName == friendlyUrlName
                         select a;
-            var affiliate = query.FirstOrDefault();
+            var affiliate = await query.FirstOrDefaultAsync();
             return affiliate;
         }
 
@@ -82,13 +84,13 @@ namespace Nop.Services.Affiliates
         /// Marks affiliate as deleted 
         /// </summary>
         /// <param name="affiliate">Affiliate</param>
-        public virtual void DeleteAffiliate(Affiliate affiliate)
+        public async virtual Task DeleteAffiliate(Affiliate affiliate)
         {
             if (affiliate == null)
                 throw new ArgumentNullException(nameof(affiliate));
 
             affiliate.Deleted = true;
-            UpdateAffiliate(affiliate);
+            await UpdateAffiliate(affiliate);
 
             //event notification
             _eventPublisher.EntityDeleted(affiliate);
@@ -107,7 +109,7 @@ namespace Nop.Services.Affiliates
         /// <param name="pageSize">Page size</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Affiliates</returns>
-        public virtual IPagedList<Affiliate> GetAllAffiliates(string friendlyUrlName = null,
+        public async virtual Task<IPagedList<Affiliate>> GetAllAffiliates(string friendlyUrlName = null,
             string firstName = null, string lastName = null,
             bool loadOnlyWithOrders = false,
             DateTime? ordersCreatedFromUtc = null, DateTime? ordersCreatedToUtc = null,
@@ -150,12 +152,12 @@ namespace Nop.Services.Affiliates
         /// Inserts an affiliate
         /// </summary>
         /// <param name="affiliate">Affiliate</param>
-        public virtual void InsertAffiliate(Affiliate affiliate)
+        public async virtual Task InsertAffiliate(Affiliate affiliate)
         {
             if (affiliate == null)
                 throw new ArgumentNullException(nameof(affiliate));
 
-            _affiliateRepository.Insert(affiliate);
+            await _affiliateRepository.Insert(affiliate);
 
             //event notification
             _eventPublisher.EntityInserted(affiliate);
@@ -165,12 +167,12 @@ namespace Nop.Services.Affiliates
         /// Updates the affiliate
         /// </summary>
         /// <param name="affiliate">Affiliate</param>
-        public virtual void UpdateAffiliate(Affiliate affiliate)
+        public async virtual Task UpdateAffiliate(Affiliate affiliate)
         {
             if (affiliate == null)
                 throw new ArgumentNullException(nameof(affiliate));
 
-            _affiliateRepository.Update(affiliate);
+            await _affiliateRepository.Update(affiliate);
 
             //event notification
             _eventPublisher.EntityUpdated(affiliate);
@@ -181,7 +183,7 @@ namespace Nop.Services.Affiliates
         /// </summary>
         /// <param name="affiliate">Affiliate</param>
         /// <returns>Affiliate full name</returns>
-        public virtual string GetAffiliateFullName(Affiliate affiliate)
+        public async virtual Task<string> GetAffiliateFullName(Affiliate affiliate)
         {
             if (affiliate == null)
                 throw new ArgumentNullException(nameof(affiliate));
@@ -209,7 +211,7 @@ namespace Nop.Services.Affiliates
         /// </summary>
         /// <param name="affiliate">Affiliate</param>
         /// <returns>Generated affiliate URL</returns>
-        public virtual string GenerateUrl(Affiliate affiliate)
+        public async virtual Task<string> GenerateUrl(Affiliate affiliate)
         {
             if (affiliate == null)
                 throw new ArgumentNullException(nameof(affiliate));
@@ -230,7 +232,7 @@ namespace Nop.Services.Affiliates
         /// <param name="affiliate">Affiliate</param>
         /// <param name="friendlyUrlName">Friendly URL name</param>
         /// <returns>Valid friendly name</returns>
-        public virtual string ValidateFriendlyUrlName(Affiliate affiliate, string friendlyUrlName)
+        public async virtual Task<string> ValidateFriendlyUrlName(Affiliate affiliate, string friendlyUrlName)
         {
             if (affiliate == null)
                 throw new ArgumentNullException(nameof(affiliate));

@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Threading.Tasks;
+using Autofac;
 using Nop.Core.Configuration;
 
 namespace Nop.Core.Infrastructure.DependencyManagement

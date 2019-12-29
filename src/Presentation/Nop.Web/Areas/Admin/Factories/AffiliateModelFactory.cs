@@ -262,7 +262,7 @@ namespace Nop.Web.Areas.Admin.Factories
             var shippingStatusIds = searchModel.ShippingStatusId > 0 ? new List<int> { searchModel.ShippingStatusId } : null;
 
             //get orders
-            var orders = _orderService.SearchOrders(createdFromUtc: startDateValue,
+            var orders = await _orderService.SearchOrders(createdFromUtc: startDateValue,
                 createdToUtc: endDateValue,
                 osIds: orderStatusIds,
                 psIds: paymentStatusIds,
@@ -279,9 +279,9 @@ namespace Nop.Web.Areas.Admin.Factories
                     var affiliatedOrderModel = order.ToModel<AffiliatedOrderModel>();
 
                     //fill in additional values (not existing in the entity)
-                    affiliatedOrderModel.OrderStatus = _localizationService.GetLocalizedEnum(order.OrderStatus);
-                    affiliatedOrderModel.PaymentStatus = _localizationService.GetLocalizedEnum(order.PaymentStatus);
-                    affiliatedOrderModel.ShippingStatus = _localizationService.GetLocalizedEnum(order.ShippingStatus);
+                    affiliatedOrderModel.OrderStatus = await _localizationService.GetLocalizedEnum(order.OrderStatus);
+                    affiliatedOrderModel.PaymentStatus = await _localizationService.GetLocalizedEnum(order.PaymentStatus);
+                    affiliatedOrderModel.ShippingStatus = await _localizationService.GetLocalizedEnum(order.ShippingStatus);
                     affiliatedOrderModel.OrderTotal = _priceFormatter.FormatPrice(order.OrderTotal, true, false);
                     affiliatedOrderModel.CreatedOn = _dateTimeHelper.ConvertToUserTime(order.CreatedOnUtc, DateTimeKind.Utc);
 

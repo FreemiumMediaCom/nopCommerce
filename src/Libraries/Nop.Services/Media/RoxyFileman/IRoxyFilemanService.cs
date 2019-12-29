@@ -12,7 +12,7 @@ namespace Nop.Services.Media.RoxyFileman
         /// <summary>
         /// Initial service configuration
         /// </summary>
-        void Configure();
+        Task Configure();
 
         /// <summary>
         /// Gets a configuration file path
@@ -22,7 +22,7 @@ namespace Nop.Services.Media.RoxyFileman
         /// <summary>
         /// Create configuration file for RoxyFileman
         /// </summary>
-        void CreateConfiguration();
+        Task CreateConfiguration();
 
         #endregion
 
@@ -33,7 +33,7 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source directory</param>
         /// <param name="destinationPath">Path to the destination directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task CopyDirectoryAsync(string sourcePath, string destinationPath);
 
         /// <summary>
@@ -41,28 +41,28 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="parentDirectoryPath">Path to the parent directory</param>
         /// <param name="name">Name of the new directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task CreateDirectoryAsync(string parentDirectoryPath, string name);
 
         /// <summary>
         /// Delete the directory
         /// </summary>
         /// <param name="path">Path to the directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task DeleteDirectoryAsync(string path);
 
         /// <summary>
         /// Download the directory from the server as a zip archive
         /// </summary>
         /// <param name="path">Path to the directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task DownloadDirectoryAsync(string path);
 
         /// <summary>
         /// Get all available directories as a directory tree
         /// </summary>
         /// <param name="type">Type of the file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task GetDirectoriesAsync(string type);
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source directory</param>
         /// <param name="destinationPath">Path to the destination directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task MoveDirectoryAsync(string sourcePath, string destinationPath);
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source directory</param>
         /// <param name="newName">New name of the directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task RenameDirectoryAsync(string sourcePath, string newName);
 
         #endregion
@@ -90,21 +90,21 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source file</param>
         /// <param name="destinationPath">Path to the destination file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task CopyFileAsync(string sourcePath, string destinationPath);
 
         /// <summary>
         /// Delete the file
         /// </summary>
         /// <param name="path">Path to the file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task DeleteFileAsync(string path);
 
         /// <summary>
         /// Download the file from the server
         /// </summary>
         /// <param name="path">Path to the file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task DownloadFileAsync(string path);
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="directoryPath">Path to the files directory</param>
         /// <param name="type">Type of the files</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task GetFilesAsync(string directoryPath, string type);
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source file</param>
         /// <param name="destinationPath">Path to the destination file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task MoveFileAsync(string sourcePath, string destinationPath);
 
         /// <summary>
@@ -128,14 +128,14 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source file</param>
         /// <param name="newName">New name of the file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task RenameFileAsync(string sourcePath, string newName);
 
         /// <summary>
         /// Upload files to a directory on passed path
         /// </summary>
         /// <param name="directoryPath">Path to directory to upload files</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         Task UploadFilesAsync(string directoryPath);
 
         #endregion
@@ -146,19 +146,19 @@ namespace Nop.Services.Media.RoxyFileman
         /// Create the thumbnail of the image and write it to the response
         /// </summary>
         /// <param name="path">Path to the image</param>
-        void CreateImageThumbnail(string path);
+        Task CreateImageThumbnail(string path);
 
         /// <summary>
         /// Flush all images on disk
         /// </summary>
         /// <param name="removeOriginal">Specifies whether to delete original images</param>
-        void FlushAllImagesOnDisk(bool removeOriginal = true);
+        Task FlushAllImagesOnDisk(bool removeOriginal = true);
 
         /// <summary>
         /// Flush images on disk
         /// </summary>
         /// <param name="directoryPath">Directory path to flush images</param>
-        void FlushImagesOnDisk(string directoryPath);
+        Task FlushImagesOnDisk(string directoryPath);
 
         #endregion
 
@@ -176,7 +176,7 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="key">Language resource key</param>
         /// <returns>Language resource value</returns>
-        string GetLanguageResource(string key);
+        Task<string> GetLanguageResource(string key);
 
         /// <summary>
         /// Whether the request is made with ajax 

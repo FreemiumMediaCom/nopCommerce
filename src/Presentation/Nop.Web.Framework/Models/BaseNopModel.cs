@@ -29,7 +29,7 @@ namespace Nop.Web.Framework.Models
         /// </summary>
         /// <param name="bindingContext">Model binding context</param>
         /// <remarks>Developers can override this method in custom partial classes in order to add some custom model binding</remarks>
-        public virtual void BindModel(ModelBindingContext bindingContext)
+        public async virtual Task BindModel(ModelBindingContext bindingContext)
         {
         }
 

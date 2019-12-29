@@ -12,7 +12,7 @@ namespace FreemiumMedia.Nop.Plugin.ExternalAuth.LinkedIn.Components
         /// <param name="widgetZone">Widget zone name</param>
         /// <param name="additionalData">Additional data</param>
         /// <returns>View component result</returns>
-        public IViewComponentResult Invoke(string widgetZone, object additionalData)
+        public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
             return View("~/Plugins/FreemiumMedia.ExternalAuth.LinkedIn/Views/PublicInfo.cshtml");
         }

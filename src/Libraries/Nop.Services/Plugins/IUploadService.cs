@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
 namespace Nop.Services.Plugins
@@ -19,7 +20,7 @@ namespace Nop.Services.Plugins
         /// Upload favicon and app icons
         /// </summary>
         /// <param name="archivefile">Archive file</param>
-        void UploadIconsArchive(IFormFile archivefile);
+        Task UploadIconsArchive(IFormFile archivefile);
 
     }
 }

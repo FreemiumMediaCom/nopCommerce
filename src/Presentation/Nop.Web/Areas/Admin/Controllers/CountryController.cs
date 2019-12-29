@@ -127,12 +127,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Countries
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -144,7 +144,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CountryList(CountrySearchModel searchModel)
+        public async virtual Task<IActionResult> CountryList(CountrySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedDataTablesJson();
@@ -155,7 +155,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -167,7 +167,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(CountryModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(CountryModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -179,7 +179,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewCountry",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewCountry"), country.Id), country);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewCountry"), country.Id), country);
 
                 //locales
                 UpdateLocales(country, model);
@@ -187,7 +187,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //Stores
                 SaveStoreMappings(country, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Countries.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Countries.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -202,7 +202,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -219,7 +219,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(CountryModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(CountryModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -236,7 +236,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditCountry",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditCountry"), country.Id), country);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditCountry"), country.Id), country);
 
                 //locales
                 UpdateLocales(country, model);
@@ -244,7 +244,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //stores
                 SaveStoreMappings(country, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Countries.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Countries.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -260,7 +260,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -279,9 +279,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("DeleteCountry",
-                    string.Format(_localizationService.GetResource("ActivityLog.DeleteCountry"), country.Id), country);
+                    string.Format(await _localizationService.GetResource("ActivityLog.DeleteCountry"), country.Id), country);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Countries.Deleted"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Countries.Deleted"));
 
                 return RedirectToAction("List");
             }
@@ -293,7 +293,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PublishSelected(ICollection<int> selectedIds)
+        public async virtual Task<IActionResult> PublishSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -312,7 +312,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult UnpublishSelected(ICollection<int> selectedIds)
+        public async virtual Task<IActionResult> UnpublishSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -335,7 +335,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region States / provinces
 
         [HttpPost]
-        public virtual IActionResult States(StateProvinceSearchModel searchModel)
+        public async virtual Task<IActionResult> States(StateProvinceSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedDataTablesJson();
@@ -350,7 +350,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult StateCreatePopup(int countryId)
+        public async virtual Task<IActionResult> StateCreatePopup(int countryId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -367,7 +367,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult StateCreatePopup(StateProvinceModel model)
+        public async virtual Task<IActionResult> StateCreatePopup(StateProvinceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -385,7 +385,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewStateProvince",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewStateProvince"), sp.Id), sp);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewStateProvince"), sp.Id), sp);
 
                 UpdateLocales(sp, model);
 
@@ -401,7 +401,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult StateEditPopup(int id)
+        public async virtual Task<IActionResult> StateEditPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -423,7 +423,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult StateEditPopup(StateProvinceModel model)
+        public async virtual Task<IActionResult> StateEditPopup(StateProvinceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -445,7 +445,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditStateProvince",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditStateProvince"), state.Id), state);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditStateProvince"), state.Id), state);
 
                 UpdateLocales(state, model);
 
@@ -462,7 +462,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult StateDelete(int id)
+        public async virtual Task<IActionResult> StateDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -473,7 +473,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             if (_addressService.GetAddressTotalByStateProvinceId(state.Id) > 0)
             {
-                return ErrorJson(_localizationService.GetResource("Admin.Configuration.Countries.States.CantDeleteWithAddresses"));
+                return ErrorJson(await _localizationService.GetResource("Admin.Configuration.Countries.States.CantDeleteWithAddresses"));
             }
 
             //int countryId = state.CountryId;
@@ -481,12 +481,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteStateProvince",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteStateProvince"), state.Id), state);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteStateProvince"), state.Id), state);
 
             return new NullJsonResult();
         }
 
-        public virtual IActionResult GetStatesByCountryId(string countryId, bool? addSelectStateItem, bool? addAsterisk)
+        public async virtual Task<IActionResult> GetStatesByCountryId(string countryId, bool? addSelectStateItem, bool? addAsterisk)
         {
             //permission validation is not required here
 
@@ -510,11 +510,11 @@ namespace Nop.Web.Areas.Admin.Controllers
                     //country is not selected ("choose country" item)
                     if (addSelectStateItem.HasValue && addSelectStateItem.Value)
                     {
-                        result.Insert(0, new { id = 0, name = _localizationService.GetResource("Admin.Address.SelectState") });
+                        result.Insert(0, new { id = 0, name = await _localizationService.GetResource("Admin.Address.SelectState") });
                     }
                     else
                     {
-                        result.Insert(0, new { id = 0, name = _localizationService.GetResource("Admin.Address.OtherNonUS") });
+                        result.Insert(0, new { id = 0, name = await _localizationService.GetResource("Admin.Address.OtherNonUS") });
                     }
                 }
                 else
@@ -523,14 +523,14 @@ namespace Nop.Web.Areas.Admin.Controllers
                     if (!result.Any())
                     {
                         //country does not have states
-                        result.Insert(0, new { id = 0, name = _localizationService.GetResource("Admin.Address.OtherNonUS") });
+                        result.Insert(0, new { id = 0, name = await _localizationService.GetResource("Admin.Address.OtherNonUS") });
                     }
                     else
                     {
                         //country has some states
                         if (addSelectStateItem.HasValue && addSelectStateItem.Value)
                         {
-                            result.Insert(0, new { id = 0, name = _localizationService.GetResource("Admin.Address.SelectState") });
+                            result.Insert(0, new { id = 0, name = await _localizationService.GetResource("Admin.Address.SelectState") });
                         }
                     }
                 }
@@ -543,7 +543,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Export / import
 
-        public virtual IActionResult ExportCsv()
+        public async virtual Task<IActionResult> ExportCsv()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -557,7 +557,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ImportCsv(IFormFile importcsvfile)
+        public async virtual Task<IActionResult> ImportCsv(IFormFile importcsvfile)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -568,12 +568,12 @@ namespace Nop.Web.Areas.Admin.Controllers
                 {
                     var count = _importManager.ImportStatesFromTxt(importcsvfile.OpenReadStream());
 
-                    _notificationService.SuccessNotification(string.Format(_localizationService.GetResource("Admin.Configuration.Countries.ImportSuccess"), count));
+                    _notificationService.SuccessNotification(string.Format(await _localizationService.GetResource("Admin.Configuration.Countries.ImportSuccess"), count));
 
                     return RedirectToAction("List");
                 }
 
-                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Common.UploadFile"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Common.UploadFile"));
 
                 return RedirectToAction("List");
             }

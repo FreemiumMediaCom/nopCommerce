@@ -95,12 +95,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Blog posts
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("BlogPosts");
         }
 
-        public virtual IActionResult BlogPosts(int? filterByBlogPostId)
+        public async virtual Task<IActionResult> BlogPosts(int? filterByBlogPostId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -112,7 +112,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(BlogPostSearchModel searchModel)
+        public async virtual Task<IActionResult> List(BlogPostSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedDataTablesJson();
@@ -123,7 +123,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult BlogPostCreate()
+        public async virtual Task<IActionResult> BlogPostCreate()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -135,7 +135,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult BlogPostCreate(BlogPostModel model, bool continueEditing)
+        public async virtual Task<IActionResult> BlogPostCreate(BlogPostModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -148,7 +148,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewBlogPost",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewBlogPost"), blogPost.Id), blogPost);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewBlogPost"), blogPost.Id), blogPost);
 
                 //search engine name
                 var seName = _urlRecordService.ValidateSeName(blogPost, model.SeName, model.Title, true);
@@ -157,7 +157,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //Stores
                 SaveStoreMappings(blogPost, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.Blog.BlogPosts.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.Blog.BlogPosts.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("BlogPosts");
@@ -172,7 +172,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult BlogPostEdit(int id)
+        public async virtual Task<IActionResult> BlogPostEdit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -189,7 +189,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult BlogPostEdit(BlogPostModel model, bool continueEditing)
+        public async virtual Task<IActionResult> BlogPostEdit(BlogPostModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -206,7 +206,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditBlogPost",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditBlogPost"), blogPost.Id), blogPost);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditBlogPost"), blogPost.Id), blogPost);
 
                 //search engine name
                 var seName = _urlRecordService.ValidateSeName(blogPost, model.SeName, model.Title, true);
@@ -215,7 +215,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //Stores
                 SaveStoreMappings(blogPost, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.Blog.BlogPosts.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.Blog.BlogPosts.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("BlogPosts");
@@ -231,7 +231,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -245,9 +245,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteBlogPost",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteBlogPost"), blogPost.Id), blogPost);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteBlogPost"), blogPost.Id), blogPost);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.Blog.BlogPosts.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.Blog.BlogPosts.Deleted"));
 
             return RedirectToAction("BlogPosts");
         }
@@ -256,7 +256,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Comments
 
-        public virtual IActionResult BlogComments(int? filterByBlogPostId)
+        public async virtual Task<IActionResult> BlogComments(int? filterByBlogPostId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -273,7 +273,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Comments(BlogCommentSearchModel searchModel)
+        public async virtual Task<IActionResult> Comments(BlogCommentSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedDataTablesJson();
@@ -285,7 +285,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CommentUpdate(BlogCommentModel model)
+        public async virtual Task<IActionResult> CommentUpdate(BlogCommentModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -306,12 +306,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("EditBlogComment",
-               string.Format(_localizationService.GetResource("ActivityLog.EditBlogComment"), comment.Id), comment);
+               string.Format(await _localizationService.GetResource("ActivityLog.EditBlogComment"), comment.Id), comment);
 
             return new NullJsonResult();
         }
 
-        public virtual IActionResult CommentDelete(int id)
+        public async virtual Task<IActionResult> CommentDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -324,13 +324,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteBlogPostComment",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteBlogPostComment"), comment.Id), comment);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteBlogPostComment"), comment.Id), comment);
 
             return new NullJsonResult();
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteSelectedComments(ICollection<int> selectedIds)
+        public async virtual Task<IActionResult> DeleteSelectedComments(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -345,14 +345,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             foreach (var blogComment in comments)
             {
                 _customerActivityService.InsertActivity("DeleteBlogPostComment",
-                    string.Format(_localizationService.GetResource("ActivityLog.DeleteBlogPostComment"), blogComment.Id), blogComment);
+                    string.Format(await _localizationService.GetResource("ActivityLog.DeleteBlogPostComment"), blogComment.Id), blogComment);
             }
 
             return Json(new { Result = true });
         }
 
         [HttpPost]
-        public virtual IActionResult ApproveSelected(ICollection<int> selectedIds)
+        public async virtual Task<IActionResult> ApproveSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -373,14 +373,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditBlogComment",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditBlogComment"), blogComment.Id), blogComment);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditBlogComment"), blogComment.Id), blogComment);
             }
 
             return Json(new { Result = true });
         }
 
         [HttpPost]
-        public virtual IActionResult DisapproveSelected(ICollection<int> selectedIds)
+        public async virtual Task<IActionResult> DisapproveSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -398,7 +398,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditBlogComment",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditBlogComment"), blogComment.Id), blogComment);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditBlogComment"), blogComment.Id), blogComment);
             }
 
             return Json(new { Result = true });

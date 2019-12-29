@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Services.Common;
@@ -108,11 +109,11 @@ namespace Nop.Services.Customers
         /// <param name="usernameOrEmail">Username or email</param>
         /// <param name="password">Password</param>
         /// <returns>Result</returns>
-        public virtual CustomerLoginResults ValidateCustomer(string usernameOrEmail, string password)
+        public async virtual Task<CustomerLoginResults> ValidateCustomer(string usernameOrEmail, string password)
         {
             var customer = _customerSettings.UsernamesEnabled ?
-                _customerService.GetCustomerByUsername(usernameOrEmail) :
-                _customerService.GetCustomerByEmail(usernameOrEmail);
+                await _customerService.GetCustomerByUsername(usernameOrEmail) :
+                await _customerService.GetCustomerByEmail(usernameOrEmail);
 
             if (customer == null)
                 return CustomerLoginResults.CustomerNotExist;
@@ -140,7 +141,7 @@ namespace Nop.Services.Customers
                     customer.FailedLoginAttempts = 0;
                 }
 
-                _customerService.UpdateCustomer(customer);
+                await _customerService.UpdateCustomer(customer);
 
                 return CustomerLoginResults.WrongPassword;
             }
@@ -150,7 +151,7 @@ namespace Nop.Services.Customers
             customer.CannotLoginUntilDateUtc = null;
             customer.RequireReLogin = false;
             customer.LastLoginDateUtc = DateTime.UtcNow;
-            _customerService.UpdateCustomer(customer);
+            await _customerService.UpdateCustomer(customer);
 
             return CustomerLoginResults.Successful;
         }
@@ -160,7 +161,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="request">Request</param>
         /// <returns>Result</returns>
-        public virtual CustomerRegistrationResult RegisterCustomer(CustomerRegistrationRequest request)
+        public async virtual Task<CustomerRegistrationResult> RegisterCustomer(CustomerRegistrationRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
@@ -189,38 +190,38 @@ namespace Nop.Services.Customers
 
             if (string.IsNullOrEmpty(request.Email))
             {
-                result.AddError(_localizationService.GetResource("Account.Register.Errors.EmailIsNotProvided"));
+                result.AddError(await _localizationService.GetResource("Account.Register.Errors.EmailIsNotProvided"));
                 return result;
             }
 
             if (!CommonHelper.IsValidEmail(request.Email))
             {
-                result.AddError(_localizationService.GetResource("Common.WrongEmail"));
+                result.AddError(await _localizationService.GetResource("Common.WrongEmail"));
                 return result;
             }
 
             if (string.IsNullOrWhiteSpace(request.Password))
             {
-                result.AddError(_localizationService.GetResource("Account.Register.Errors.PasswordIsNotProvided"));
+                result.AddError(await _localizationService.GetResource("Account.Register.Errors.PasswordIsNotProvided"));
                 return result;
             }
 
             if (_customerSettings.UsernamesEnabled && string.IsNullOrEmpty(request.Username))
             {
-                result.AddError(_localizationService.GetResource("Account.Register.Errors.UsernameIsNotProvided"));
+                result.AddError(await _localizationService.GetResource("Account.Register.Errors.UsernameIsNotProvided"));
                 return result;
             }
 
             //validate unique user
-            if (_customerService.GetCustomerByEmail(request.Email) != null)
+            if (await _customerService.GetCustomerByEmail(request.Email) != null)
             {
-                result.AddError(_localizationService.GetResource("Account.Register.Errors.EmailAlreadyExists"));
+                result.AddError(await _localizationService.GetResource("Account.Register.Errors.EmailAlreadyExists"));
                 return result;
             }
 
-            if (_customerSettings.UsernamesEnabled && _customerService.GetCustomerByUsername(request.Username) != null)
+            if (_customerSettings.UsernamesEnabled && await _customerService.GetCustomerByUsername(request.Username) != null)
             {
-                result.AddError(_localizationService.GetResource("Account.Register.Errors.UsernameAlreadyExists"));
+                result.AddError(await _localizationService.GetResource("Account.Register.Errors.UsernameAlreadyExists"));
                 return result;
             }
 
@@ -249,7 +250,7 @@ namespace Nop.Services.Customers
                     break;
             }
 
-            _customerService.InsertCustomerPassword(customerPassword);
+            await _customerService.InsertCustomerPassword(customerPassword);
 
             request.Customer.Active = request.IsApproved;
 
@@ -273,11 +274,11 @@ namespace Nop.Services.Customers
             {
                 var endDate = _rewardPointsSettings.RegistrationPointsValidity > 0
                     ? (DateTime?)DateTime.UtcNow.AddDays(_rewardPointsSettings.RegistrationPointsValidity.Value) : null;
-                _rewardPointService.AddRewardPointsHistoryEntry(request.Customer, _rewardPointsSettings.PointsForRegistration,
-                    request.StoreId, _localizationService.GetResource("RewardPoints.Message.EarnedForRegistration"), endDate: endDate);
+               await _rewardPointService.AddRewardPointsHistoryEntry(request.Customer, _rewardPointsSettings.PointsForRegistration,
+                    request.StoreId, await _localizationService.GetResource("RewardPoints.Message.EarnedForRegistration"), endDate: endDate);
             }
 
-            _customerService.UpdateCustomer(request.Customer);
+            await _customerService.UpdateCustomer(request.Customer);
 
             return result;
         }
@@ -287,7 +288,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="request">Request</param>
         /// <returns>Result</returns>
-        public virtual ChangePasswordResult ChangePassword(ChangePasswordRequest request)
+        public async  virtual Task<ChangePasswordResult> ChangePassword(ChangePasswordRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
@@ -295,27 +296,27 @@ namespace Nop.Services.Customers
             var result = new ChangePasswordResult();
             if (string.IsNullOrWhiteSpace(request.Email))
             {
-                result.AddError(_localizationService.GetResource("Account.ChangePassword.Errors.EmailIsNotProvided"));
+                result.AddError(await _localizationService.GetResource("Account.ChangePassword.Errors.EmailIsNotProvided"));
                 return result;
             }
 
             if (string.IsNullOrWhiteSpace(request.NewPassword))
             {
-                result.AddError(_localizationService.GetResource("Account.ChangePassword.Errors.PasswordIsNotProvided"));
+                result.AddError(await _localizationService.GetResource("Account.ChangePassword.Errors.PasswordIsNotProvided"));
                 return result;
             }
 
-            var customer = _customerService.GetCustomerByEmail(request.Email);
+            var customer = await _customerService.GetCustomerByEmail(request.Email);
             if (customer == null)
             {
-                result.AddError(_localizationService.GetResource("Account.ChangePassword.Errors.EmailNotFound"));
+                result.AddError(await _localizationService.GetResource("Account.ChangePassword.Errors.EmailNotFound"));
                 return result;
             }
           
             //request isn't valid
             if (request.ValidateRequest && !PasswordsMatch(_customerService.GetCurrentPassword(customer.Id), request.OldPassword))
             {
-                result.AddError(_localizationService.GetResource("Account.ChangePassword.Errors.OldPasswordDoesntMatch"));
+                result.AddError(await _localizationService.GetResource("Account.ChangePassword.Errors.OldPasswordDoesntMatch"));
                 return result;
             }
 
@@ -328,7 +329,7 @@ namespace Nop.Services.Customers
                 var newPasswordMatchesWithPrevious = previousPasswords.Any(password => PasswordsMatch(password, request.NewPassword));
                 if (newPasswordMatchesWithPrevious)
                 {
-                    result.AddError(_localizationService.GetResource("Account.ChangePassword.Errors.PasswordMatchesWithPrevious"));
+                    result.AddError(await _localizationService.GetResource("Account.ChangePassword.Errors.PasswordMatchesWithPrevious"));
                     return result;
                 }
             }
@@ -356,7 +357,7 @@ namespace Nop.Services.Customers
                     break;
             }
 
-            _customerService.InsertCustomerPassword(customerPassword);
+            await _customerService.InsertCustomerPassword(customerPassword);
 
             //publish event
             _eventPublisher.Publish(new CustomerPasswordChangedEvent(customerPassword));
@@ -370,7 +371,7 @@ namespace Nop.Services.Customers
         /// <param name="customer">Customer</param>
         /// <param name="newEmail">New email</param>
         /// <param name="requireValidation">Require validation of new email address</param>
-        public virtual void SetEmail(Customer customer, string newEmail, bool requireValidation)
+        public async virtual Task SetEmail(Customer customer, string newEmail, bool requireValidation)
         {
             if (customer == null)
                 throw new ArgumentNullException(nameof(customer));
@@ -382,35 +383,35 @@ namespace Nop.Services.Customers
             var oldEmail = customer.Email;
 
             if (!CommonHelper.IsValidEmail(newEmail))
-                throw new NopException(_localizationService.GetResource("Account.EmailUsernameErrors.NewEmailIsNotValid"));
+                throw new NopException(await _localizationService.GetResource("Account.EmailUsernameErrors.NewEmailIsNotValid"));
 
             if (newEmail.Length > 100)
-                throw new NopException(_localizationService.GetResource("Account.EmailUsernameErrors.EmailTooLong"));
+                throw new NopException(await _localizationService.GetResource("Account.EmailUsernameErrors.EmailTooLong"));
 
-            var customer2 = _customerService.GetCustomerByEmail(newEmail);
+            var customer2 = await _customerService.GetCustomerByEmail(newEmail);
             if (customer2 != null && customer.Id != customer2.Id)
-                throw new NopException(_localizationService.GetResource("Account.EmailUsernameErrors.EmailAlreadyExists"));
+                throw new NopException(await _localizationService.GetResource("Account.EmailUsernameErrors.EmailAlreadyExists"));
 
             if (requireValidation)
             {
                 //re-validate email
                 customer.EmailToRevalidate = newEmail;
-                _customerService.UpdateCustomer(customer);
+                await _customerService.UpdateCustomer(customer);
 
                 //email re-validation message
-                _genericAttributeService.SaveAttribute(customer, NopCustomerDefaults.EmailRevalidationTokenAttribute, Guid.NewGuid().ToString());
+                await _genericAttributeService.SaveAttribute(customer, NopCustomerDefaults.EmailRevalidationTokenAttribute, Guid.NewGuid().ToString());
                 _workflowMessageService.SendCustomerEmailRevalidationMessage(customer, _workContext.WorkingLanguage.Id);
             }
             else
             {
                 customer.Email = newEmail;
-                _customerService.UpdateCustomer(customer);
+                await _customerService.UpdateCustomer(customer);
                 
                 if (string.IsNullOrEmpty(oldEmail) || oldEmail.Equals(newEmail, StringComparison.InvariantCultureIgnoreCase)) 
                     return;
 
                 //update newsletter subscription (if required)
-                foreach (var store in _storeService.GetAllStores())
+                foreach (var store in await _storeService.GetAllStores())
                 {
                     var subscriptionOld = _newsLetterSubscriptionService.GetNewsLetterSubscriptionByEmailAndStoreId(oldEmail, store.Id);
                     
@@ -428,7 +429,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customer">Customer</param>
         /// <param name="newUsername">New Username</param>
-        public virtual void SetUsername(Customer customer, string newUsername)
+        public async virtual Task SetUsername(Customer customer, string newUsername)
         {
             if (customer == null)
                 throw new ArgumentNullException(nameof(customer));
@@ -439,14 +440,14 @@ namespace Nop.Services.Customers
             newUsername = newUsername.Trim();
 
             if (newUsername.Length > NopCustomerServiceDefaults.CustomerUsernameLength)
-                throw new NopException(_localizationService.GetResource("Account.EmailUsernameErrors.UsernameTooLong"));
+                throw new NopException(await _localizationService.GetResource("Account.EmailUsernameErrors.UsernameTooLong"));
 
             var user2 = _customerService.GetCustomerByUsername(newUsername);
             if (user2 != null && customer.Id != user2.Id)
-                throw new NopException(_localizationService.GetResource("Account.EmailUsernameErrors.UsernameAlreadyExists"));
+                throw new NopException(await _localizationService.GetResource("Account.EmailUsernameErrors.UsernameAlreadyExists"));
 
             customer.Username = newUsername;
-            _customerService.UpdateCustomer(customer);
+            await _customerService.UpdateCustomer(customer);
         }
 
         #endregion

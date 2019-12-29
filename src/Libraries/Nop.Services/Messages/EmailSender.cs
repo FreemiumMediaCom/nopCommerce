@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using MimeKit;
 using MimeKit.Text;
 using Nop.Core.Domain.Media;
@@ -123,7 +124,7 @@ namespace Nop.Services.Messages
         /// <param name="attachmentFileName">Attachment file name. If specified, then this file name will be sent to a recipient. Otherwise, "AttachmentFilePath" name will be used.</param>
         /// <param name="attachedDownloadId">Attachment download ID (another attachment)</param>
         /// <param name="headers">Headers</param>
-        public virtual void SendEmail(EmailAccount emailAccount, string subject, string body,
+        public async virtual Task SendEmail(EmailAccount emailAccount, string subject, string body,
             string fromAddress, string fromName, string toAddress, string toName,
             string replyTo = null, string replyToName = null,
             IEnumerable<string> bcc = null, IEnumerable<string> cc = null,

@@ -113,7 +113,7 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare available billing countries
             searchModel.AvailableCountries = _countryService.GetAllCountriesForBilling(showHidden: true)
                 .Select(country => new SelectListItem { Text = country.Name, Value = country.Id.ToString() }).ToList();
-            searchModel.AvailableCountries.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
+            searchModel.AvailableCountries.Insert(0, new SelectListItem { Text = await _localizationService.GetResource("Admin.Common.All"), Value = "0" });
 
             //prepare available stores
             _baseAdminModelFactory.PrepareStores(searchModel.AvailableStores);

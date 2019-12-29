@@ -52,7 +52,7 @@ namespace Nop.Plugin.Payments.Square.Controllers
 
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -91,7 +91,7 @@ namespace Nop.Plugin.Payments.Square.Controllers
                 }).ToList();
                 if (model.Locations.Any())
                 {
-                    var selectLocationText = _localizationService.GetResource("Plugins.Payments.Square.Fields.Location.Select");
+                    var selectLocationText = await _localizationService.GetResource("Plugins.Payments.Square.Fields.Location.Select");
                     model.Locations.Insert(0, new SelectListItem { Text = selectLocationText, Value = "0" });
                 }
             }
@@ -99,13 +99,13 @@ namespace Nop.Plugin.Payments.Square.Controllers
             //add the special item for 'there are no location' with value 0
             if (!model.Locations.Any())
             {
-                var noLocationText = _localizationService.GetResource("Plugins.Payments.Square.Fields.Location.NotExist");
+                var noLocationText = await _localizationService.GetResource("Plugins.Payments.Square.Fields.Location.NotExist");
                 model.Locations.Add(new SelectListItem { Text = noLocationText, Value = "0" });
             }
 
             //warn admin that the location is a required parameter
             if (string.IsNullOrEmpty(_squarePaymentSettings.LocationId) || _squarePaymentSettings.LocationId.Equals("0"))
-                _notificationService.WarningNotification(_localizationService.GetResource("Plugins.Payments.Square.Fields.Location.Hint"));
+                _notificationService.WarningNotification(await _localizationService.GetResource("Plugins.Payments.Square.Fields.Location.Hint"));
 
             //migrate to using refresh tokens
             if (!_squarePaymentSettings.UseSandbox && _squarePaymentSettings.RefreshToken == Guid.Empty.ToString())
@@ -124,7 +124,7 @@ namespace Nop.Plugin.Payments.Square.Controllers
         [AuthorizeAdmin]
         [AdminAntiForgery]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure(ConfigurationModel model)
+        public async Task<IActionResult> Configure(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -154,7 +154,7 @@ namespace Nop.Plugin.Payments.Square.Controllers
             _squarePaymentSettings.AdditionalFeePercentage = model.AdditionalFeePercentage;
             _settingService.SaveSetting(_squarePaymentSettings);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
         }
@@ -164,7 +164,7 @@ namespace Nop.Plugin.Payments.Square.Controllers
         [AuthorizeAdmin]
         [AdminAntiForgery]
         [Area(AreaNames.Admin)]
-        public IActionResult ObtainAccessToken(ConfigurationModel model)
+        public async Task<IActionResult> ObtainAccessToken(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -179,7 +179,7 @@ namespace Nop.Plugin.Payments.Square.Controllers
             return Redirect(redirectUrl);
         }
 
-        public IActionResult AccessTokenCallback()
+        public async Task<IActionResult> AccessTokenCallback()
         {
             //handle access token callback
             try
@@ -209,12 +209,12 @@ namespace Nop.Plugin.Payments.Square.Controllers
                 _squarePaymentSettings.RefreshToken = refreshToken;
                 _settingService.SaveSetting(_squarePaymentSettings);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Plugins.Payments.Square.ObtainAccessToken.Success"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Plugins.Payments.Square.ObtainAccessToken.Success"));
             }
             catch (Exception exception)
             {
                 //display errors
-                _notificationService.ErrorNotification(_localizationService.GetResource("Plugins.Payments.Square.ObtainAccessToken.Error"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Plugins.Payments.Square.ObtainAccessToken.Error"));
                 if (!string.IsNullOrEmpty(exception.Message))
                     _notificationService.ErrorNotification(exception.Message);
             }
@@ -227,7 +227,7 @@ namespace Nop.Plugin.Payments.Square.Controllers
         [AuthorizeAdmin]
         [AdminAntiForgery]
         [Area(AreaNames.Admin)]
-        public IActionResult RevokeAccessTokens(ConfigurationModel model)
+        public async Task<IActionResult> RevokeAccessTokens(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -243,11 +243,11 @@ namespace Nop.Plugin.Payments.Square.Controllers
                 _squarePaymentSettings.AccessToken = string.Empty;
                 _settingService.SaveSetting(_squarePaymentSettings);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Plugins.Payments.Square.RevokeAccessTokens.Success"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Plugins.Payments.Square.RevokeAccessTokens.Success"));
             }
             catch (Exception exception)
             {
-                var error = _localizationService.GetResource("Plugins.Payments.Square.RevokeAccessTokens.Error");
+                var error = await _localizationService.GetResource("Plugins.Payments.Square.RevokeAccessTokens.Error");
                 if (!string.IsNullOrEmpty(exception.Message))
                     error = $"{error} - {exception.Message}";
                 _notificationService.ErrorNotification(exception.Message);

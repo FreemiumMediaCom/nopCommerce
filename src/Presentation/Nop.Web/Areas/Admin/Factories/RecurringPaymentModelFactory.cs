@@ -108,7 +108,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(searchModel));
 
             //get recurringPayments
-            var recurringPayments = _orderService.SearchRecurringPayments(showHidden: true,
+            var recurringPayments = await _orderService.SearchRecurringPayments(showHidden: true,
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
             //prepare list model
@@ -132,7 +132,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     //fill in additional values (not existing in the entity)
                     recurringPaymentModel.CustomerId = recurringPayment.InitialOrder.CustomerId;
                     recurringPaymentModel.InitialOrderId = recurringPayment.InitialOrder.Id;
-                    recurringPaymentModel.CyclePeriodStr = _localizationService.GetLocalizedEnum(recurringPayment.CyclePeriod);
+                    recurringPaymentModel.CyclePeriodStr = await _localizationService.GetLocalizedEnum(recurringPayment.CyclePeriod);
                     recurringPaymentModel.CustomerEmail = recurringPayment.InitialOrder.Customer.IsRegistered()
                         ? recurringPayment.InitialOrder.Customer.Email : _localizationService.GetResource("Admin.Customers.Guest");
 
@@ -169,7 +169,7 @@ namespace Nop.Web.Areas.Admin.Factories
             model.InitialOrderId = recurringPayment.InitialOrder.Id;
             model.CustomerEmail = recurringPayment.InitialOrder.Customer.IsRegistered()
                 ? recurringPayment.InitialOrder.Customer.Email : _localizationService.GetResource("Admin.Customers.Guest");
-            model.PaymentType = _localizationService.GetLocalizedEnum(_paymentService
+            model.PaymentType = await _localizationService.GetLocalizedEnum(_paymentService
                 .GetRecurringPaymentType(recurringPayment.InitialOrder.PaymentMethodSystemName));
             model.CanCancelRecurringPayment = _orderProcessingService.CanCancelRecurringPayment(_workContext.CurrentCustomer, recurringPayment);
 
@@ -211,13 +211,13 @@ namespace Nop.Web.Areas.Admin.Factories
                     historyModel.CreatedOn = _dateTimeHelper.ConvertToUserTime(historyEntry.CreatedOnUtc, DateTimeKind.Utc);
 
                     //fill in additional values (not existing in the entity)
-                    var order = _orderService.GetOrderById(historyEntry.OrderId);
+                    var order = await _orderService.GetOrderById(historyEntry.OrderId);
                     if (order == null)
                         return historyModel;
 
-                    historyModel.OrderStatus = _localizationService.GetLocalizedEnum(order.OrderStatus);
-                    historyModel.PaymentStatus = _localizationService.GetLocalizedEnum(order.PaymentStatus);
-                    historyModel.ShippingStatus = _localizationService.GetLocalizedEnum(order.ShippingStatus);
+                    historyModel.OrderStatus = await _localizationService.GetLocalizedEnum(order.OrderStatus);
+                    historyModel.PaymentStatus = await _localizationService.GetLocalizedEnum(order.PaymentStatus);
+                    historyModel.ShippingStatus = await _localizationService.GetLocalizedEnum(order.ShippingStatus);
                     historyModel.CustomOrderNumber = order.CustomOrderNumber;
 
                     return historyModel;

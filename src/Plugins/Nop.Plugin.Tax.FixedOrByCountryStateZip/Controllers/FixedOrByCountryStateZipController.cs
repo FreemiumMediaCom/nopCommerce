@@ -59,7 +59,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Controllers
 
         #region Methods
 
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();
@@ -95,7 +95,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveMode(bool value)
+        public async Task<IActionResult> SaveMode(bool value)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return Content("Access denied");
@@ -110,7 +110,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Controllers
         #region Fixed tax
 
         [HttpPost]
-        public IActionResult FixedRatesList(ConfigurationModel searchModel)
+        public async Task<IActionResult> FixedRatesList(ConfigurationModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedDataTablesJson();
@@ -132,7 +132,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Controllers
         }
 
         [HttpPost]
-        public IActionResult FixedRateUpdate(FixedTaxRateModel model)
+        public async Task<IActionResult> FixedRateUpdate(FixedTaxRateModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return Content("Access denied");
@@ -148,7 +148,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult RatesByCountryStateZipList(ConfigurationModel searchModel)
+        public async Task<IActionResult> RatesByCountryStateZipList(ConfigurationModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedDataTablesJson();
@@ -178,7 +178,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult AddRateByCountryStateZip(ConfigurationModel model)
+        public async Task<IActionResult> AddRateByCountryStateZip(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return Content("Access denied");
@@ -198,7 +198,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult UpdateRateByCountryStateZip(CountryStateZipModel model)
+        public async Task<IActionResult> UpdateRateByCountryStateZip(CountryStateZipModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return Content("Access denied");
@@ -213,7 +213,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult DeleteRateByCountryStateZip(int id)
+        public async Task<IActionResult> DeleteRateByCountryStateZip(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return Content("Access denied");

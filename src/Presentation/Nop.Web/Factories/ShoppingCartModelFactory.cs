@@ -214,11 +214,11 @@ namespace Nop.Web.Factories
                 var attributeModel = new ShoppingCartModel.CheckoutAttributeModel
                 {
                     Id = attribute.Id,
-                    Name = _localizationService.GetLocalized(attribute, x => x.Name),
-                    TextPrompt = _localizationService.GetLocalized(attribute, x => x.TextPrompt),
+                    Name = await _localizationService.GetLocalized(attribute, x => x.Name),
+                    TextPrompt = await _localizationService.GetLocalized(attribute, x => x.TextPrompt),
                     IsRequired = attribute.IsRequired,
                     AttributeControlType = attribute.AttributeControlType,
-                    DefaultValue = _localizationService.GetLocalized(attribute, x => x.DefaultValue)
+                    DefaultValue = await _localizationService.GetLocalized(attribute, x => x.DefaultValue)
                 };
                 if (!string.IsNullOrEmpty(attribute.ValidationFileAllowedExtensions))
                 {
@@ -236,7 +236,7 @@ namespace Nop.Web.Factories
                         var attributeValueModel = new ShoppingCartModel.CheckoutAttributeValueModel
                         {
                             Id = attributeValue.Id,
-                            Name = _localizationService.GetLocalized(attributeValue, x => x.Name),
+                            Name = await _localizationService.GetLocalized(attributeValue, x => x.Name),
                             ColorSquaresRgb = attributeValue.ColorSquaresRgb,
                             IsPreSelected = attributeValue.IsPreSelected,
                         };
@@ -256,7 +256,7 @@ namespace Nop.Web.Factories
                 }
 
                 //set already selected attributes
-                var selectedCheckoutAttributes = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
+                var selectedCheckoutAttributes = await _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
                     NopCustomerDefaults.CheckoutAttributes, _storeContext.CurrentStore.Id);
                 switch (attribute.AttributeControlType)
                 {
@@ -357,7 +357,7 @@ namespace Nop.Web.Factories
                 Sku = _productService.FormatSku(sci.Product, sci.AttributesXml),
                 VendorName = vendors.FirstOrDefault(v => v.Id == sci.Product.VendorId)?.Name ?? string.Empty,
                 ProductId = sci.Product.Id,
-                ProductName = _localizationService.GetLocalized(sci.Product, x => x.Name),
+                ProductName = await _localizationService.GetLocalized(sci.Product, x => x.Name),
                 ProductSeName = _urlRecordService.GetSeName(sci.Product),
                 Quantity = sci.Quantity,
                 AttributeInfo = _productAttributeFormatter.FormatAttributes(sci.Product, sci.AttributesXml),
@@ -392,7 +392,7 @@ namespace Nop.Web.Factories
 
             //recurring info
             if (sci.Product.IsRecurring)
-                cartItemModel.RecurringInfo = string.Format(_localizationService.GetResource("ShoppingCart.RecurringPeriod"),
+                cartItemModel.RecurringInfo = string.Format(await _localizationService.GetResource("ShoppingCart.RecurringPeriod"),
                         sci.Product.RecurringCycleLength, _localizationService.GetLocalizedEnum(sci.Product.RecurringCyclePeriod));
 
             //rental info
@@ -405,7 +405,7 @@ namespace Nop.Web.Factories
                     ? _productService.FormatRentalDate(sci.Product, sci.RentalEndDateUtc.Value)
                     : "";
                 cartItemModel.RentalInfo =
-                    string.Format(_localizationService.GetResource("ShoppingCart.Rental.FormattedDate"),
+                    string.Format(await _localizationService.GetResource("ShoppingCart.Rental.FormattedDate"),
                         rentalStartDate, rentalEndDate);
             }
 
@@ -414,7 +414,7 @@ namespace Nop.Web.Factories
                 //also check whether the current user is impersonated
                 (!_orderSettings.AllowAdminsToBuyCallForPriceProducts || _workContext.OriginalCustomerIfImpersonated == null))
             {
-                cartItemModel.UnitPrice = _localizationService.GetResource("Products.CallForPrice");
+                cartItemModel.UnitPrice = await _localizationService.GetResource("Products.CallForPrice");
             }
             else
             {
@@ -427,7 +427,7 @@ namespace Nop.Web.Factories
                 //also check whether the current user is impersonated
                 (!_orderSettings.AllowAdminsToBuyCallForPriceProducts || _workContext.OriginalCustomerIfImpersonated == null))
             {
-                cartItemModel.SubTotal = _localizationService.GetResource("Products.CallForPrice");
+                cartItemModel.SubTotal = await _localizationService.GetResource("Products.CallForPrice");
             }
             else
             {
@@ -494,7 +494,7 @@ namespace Nop.Web.Factories
                 Id = sci.Id,
                 Sku = _productService.FormatSku(sci.Product, sci.AttributesXml),
                 ProductId = sci.Product.Id,
-                ProductName = _localizationService.GetLocalized(sci.Product, x => x.Name),
+                ProductName = await _localizationService.GetLocalized(sci.Product, x => x.Name),
                 ProductSeName = _urlRecordService.GetSeName(sci.Product),
                 Quantity = sci.Quantity,
                 AttributeInfo = _productAttributeFormatter.FormatAttributes(sci.Product, sci.AttributesXml),
@@ -525,7 +525,7 @@ namespace Nop.Web.Factories
 
             //recurring info
             if (sci.Product.IsRecurring)
-                cartItemModel.RecurringInfo = string.Format(_localizationService.GetResource("ShoppingCart.RecurringPeriod"),
+                cartItemModel.RecurringInfo = string.Format(await _localizationService.GetResource("ShoppingCart.RecurringPeriod"),
                         sci.Product.RecurringCycleLength, _localizationService.GetLocalizedEnum(sci.Product.RecurringCyclePeriod));
 
             //rental info
@@ -538,7 +538,7 @@ namespace Nop.Web.Factories
                     ? _productService.FormatRentalDate(sci.Product, sci.RentalEndDateUtc.Value)
                     : "";
                 cartItemModel.RentalInfo =
-                    string.Format(_localizationService.GetResource("ShoppingCart.Rental.FormattedDate"),
+                    string.Format(await _localizationService.GetResource("ShoppingCart.Rental.FormattedDate"),
                         rentalStartDate, rentalEndDate);
             }
 
@@ -547,7 +547,7 @@ namespace Nop.Web.Factories
                 //also check whether the current user is impersonated
                 (!_orderSettings.AllowAdminsToBuyCallForPriceProducts || _workContext.OriginalCustomerIfImpersonated == null))
             {
-                cartItemModel.UnitPrice = _localizationService.GetResource("Products.CallForPrice");
+                cartItemModel.UnitPrice = await _localizationService.GetResource("Products.CallForPrice");
             }
             else
             {
@@ -560,7 +560,7 @@ namespace Nop.Web.Factories
                 //also check whether the current user is impersonated
                 (!_orderSettings.AllowAdminsToBuyCallForPriceProducts || _workContext.OriginalCustomerIfImpersonated == null))
             {
-                cartItemModel.SubTotal = _localizationService.GetResource("Products.CallForPrice");
+                cartItemModel.SubTotal = await _localizationService.GetResource("Products.CallForPrice");
             }
             else
             {
@@ -638,7 +638,7 @@ namespace Nop.Web.Factories
             {
                 model.IsShippable = true;
 
-                var pickupPoint = _genericAttributeService.GetAttribute<PickupPoint>(_workContext.CurrentCustomer,
+                var pickupPoint = await _genericAttributeService.GetAttribute<PickupPoint>(_workContext.CurrentCustomer,
                     NopCustomerDefaults.SelectedPickupPointAttribute, _storeContext.CurrentStore.Id);
                 model.SelectedPickupInStore = _shippingSettings.AllowPickupInStore && pickupPoint != null;
                 if (!model.SelectedPickupInStore)
@@ -668,14 +668,14 @@ namespace Nop.Web.Factories
                 }
 
                 //selected shipping method
-                var shippingOption = _genericAttributeService.GetAttribute<ShippingOption>(_workContext.CurrentCustomer,
+                var shippingOption = await _genericAttributeService.GetAttribute<ShippingOption>(_workContext.CurrentCustomer,
                     NopCustomerDefaults.SelectedShippingOptionAttribute, _storeContext.CurrentStore.Id);
                 if (shippingOption != null)
                     model.ShippingMethod = shippingOption.Name;
             }
 
             //payment info
-            var selectedPaymentMethodSystemName = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedPaymentMethodAttribute, _storeContext.CurrentStore.Id);
+            var selectedPaymentMethodSystemName = await _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedPaymentMethodAttribute, _storeContext.CurrentStore.Id);
             var paymentMethod = _paymentPluginManager.LoadPluginBySystemName(selectedPaymentMethodSystemName);
             model.PaymentMethod = paymentMethod != null
                 ? _localizationService.GetLocalizedFriendlyName(paymentMethod, _workContext.WorkingLanguage.Id)
@@ -716,14 +716,14 @@ namespace Nop.Web.Factories
                     : model.CountryId;
                 model.AvailableCountries.Add(new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Address.SelectCountry"),
+                    Text = await _localizationService.GetResource("Address.SelectCountry"),
                     Value = "0"
                 });
 
                 foreach (var c in _countryService.GetAllCountriesForShipping(_workContext.WorkingLanguage.Id))
                     model.AvailableCountries.Add(new SelectListItem
                     {
-                        Text = _localizationService.GetLocalized(c, x => x.Name),
+                        Text = await _localizationService.GetLocalized(c, x => x.Name),
                         Value = c.Id.ToString(),
                         Selected = c.Id == defaultEstimateCountryId
                     });
@@ -741,7 +741,7 @@ namespace Nop.Web.Factories
                     {
                         model.AvailableStates.Add(new SelectListItem
                         {
-                            Text = _localizationService.GetLocalized(s, x => x.Name),
+                            Text = await _localizationService.GetLocalized(s, x => x.Name),
                             Value = s.Id.ToString(),
                             Selected = s.Id == defaultEstimateStateId
                         });
@@ -751,7 +751,7 @@ namespace Nop.Web.Factories
                 {
                     model.AvailableStates.Add(new SelectListItem
                     {
-                        Text = _localizationService.GetResource("Address.OtherNonUS"),
+                        Text = await _localizationService.GetResource("Address.OtherNonUS"),
                         Value = "0"
                     });
                 }
@@ -784,8 +784,8 @@ namespace Nop.Web.Factories
                 return new PictureModel
                 {
                     ImageUrl = _pictureService.GetPictureUrl(sciPicture, pictureSize, showDefaultPicture),
-                    Title = string.Format(_localizationService.GetResource("Media.Product.ImageLinkTitleFormat"), productName),
-                    AlternateText = string.Format(_localizationService.GetResource("Media.Product.ImageAlternateTextFormat"), productName),
+                    Title = string.Format(await _localizationService.GetResource("Media.Product.ImageLinkTitleFormat"), productName),
+                    AlternateText = string.Format(await _localizationService.GetResource("Media.Product.ImageAlternateTextFormat"), productName),
                 };
             }, cacheTime);
             return model;
@@ -825,13 +825,13 @@ namespace Nop.Web.Factories
             model.ShowProductImages = _shoppingCartSettings.ShowProductImagesOnShoppingCart;
             model.ShowSku = _catalogSettings.ShowSkuOnProductDetailsPage;
             model.ShowVendorName = _vendorSettings.ShowVendorOnOrderDetailsPage;
-            var checkoutAttributesXml = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
+            var checkoutAttributesXml = await _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
                 NopCustomerDefaults.CheckoutAttributes, _storeContext.CurrentStore.Id);
             var minOrderSubtotalAmountOk = _orderProcessingService.ValidateMinOrderSubtotalAmount(cart);
             if (!minOrderSubtotalAmountOk)
             {
                 var minOrderSubtotalAmount = _currencyService.ConvertFromPrimaryStoreCurrency(_orderSettings.MinOrderSubtotalAmount, _workContext.WorkingCurrency);
-                model.MinOrderSubtotalWarning = string.Format(_localizationService.GetResource("Checkout.MinOrderSubtotalAmount"), _priceFormatter.FormatPrice(minOrderSubtotalAmount, true, false));
+                model.MinOrderSubtotalWarning = string.Format(await _localizationService.GetResource("Checkout.MinOrderSubtotalAmount"), _priceFormatter.FormatPrice(minOrderSubtotalAmount, true, false));
             }
             model.TermsOfServiceOnShoppingCartPage = _orderSettings.TermsOfServiceOnShoppingCartPage;
             model.TermsOfServiceOnOrderConfirmPage = _orderSettings.TermsOfServiceOnOrderConfirmPage;
@@ -1026,7 +1026,7 @@ namespace Nop.Web.Factories
                         {
                             Id = sci.Id,
                             ProductId = sci.Product.Id,
-                            ProductName = _localizationService.GetLocalized(sci.Product, x => x.Name),
+                            ProductName = await _localizationService.GetLocalized(sci.Product, x => x.Name),
                             ProductSeName = _urlRecordService.GetSeName(sci.Product),
                             Quantity = sci.Quantity,
                             AttributeInfo = _productAttributeFormatter.FormatAttributes(sci.Product, sci.AttributesXml)
@@ -1037,7 +1037,7 @@ namespace Nop.Web.Factories
                             //also check whether the current user is impersonated
                             (!_orderSettings.AllowAdminsToBuyCallForPriceProducts || _workContext.OriginalCustomerIfImpersonated == null))
                         {
-                            cartItemModel.UnitPrice = _localizationService.GetResource("Products.CallForPrice");
+                            cartItemModel.UnitPrice = await _localizationService.GetResource("Products.CallForPrice");
                         }
                         else
                         {
@@ -1065,9 +1065,9 @@ namespace Nop.Web.Factories
         /// Prepare selected checkout attributes
         /// </summary>
         /// <returns>Formatted attributes</returns>
-        public virtual string FormatSelectedCheckoutAttributes()
+        public async virtual Task<string> FormatSelectedCheckoutAttributes()
         {
-            var checkoutAttributesXml = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
+            var checkoutAttributesXml = await _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
                 NopCustomerDefaults.CheckoutAttributes, _storeContext.CurrentStore.Id);
             return _checkoutAttributeFormatter.FormatAttributes(checkoutAttributesXml, _workContext.CurrentCustomer);
         }
@@ -1114,7 +1114,7 @@ namespace Nop.Web.Factories
                         model.Shipping = _priceFormatter.FormatShippingPrice(shoppingCartShipping, true);
 
                         //selected shipping method
-                        var shippingOption = _genericAttributeService.GetAttribute<ShippingOption>(_workContext.CurrentCustomer,
+                        var shippingOption = await _genericAttributeService.GetAttribute<ShippingOption>(_workContext.CurrentCustomer,
                             NopCustomerDefaults.SelectedShippingOptionAttribute, _storeContext.CurrentStore.Id);
                         if (shippingOption != null)
                             model.SelectedShippingMethod = shippingOption.Name;
@@ -1126,7 +1126,7 @@ namespace Nop.Web.Factories
                 }
 
                 //payment method fee
-                var paymentMethodSystemName = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedPaymentMethodAttribute, _storeContext.CurrentStore.Id);
+                var paymentMethodSystemName = await _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedPaymentMethodAttribute, _storeContext.CurrentStore.Id);
                 var paymentMethodAdditionalFee = _paymentService.GetAdditionalHandlingFee(cart, paymentMethodSystemName);
                 var paymentMethodAdditionalFeeWithTaxBase = _taxService.GetPaymentMethodAdditionalFee(paymentMethodAdditionalFee, _workContext.CurrentCustomer);
                 if (paymentMethodAdditionalFeeWithTaxBase > decimal.Zero)
@@ -1292,8 +1292,8 @@ namespace Nop.Web.Factories
                         {
                             var soModel = new EstimateShippingResultModel.ShippingOptionModel
                             {
-                                Name = _localizationService.GetResource("Checkout.PickupPoints"),
-                                Description = _localizationService.GetResource("Checkout.PickupPoints.Description"),
+                                Name = await _localizationService.GetResource("Checkout.PickupPoints"),
+                                Description = await _localizationService.GetResource("Checkout.PickupPoints.Description"),
                             };
                             var pickupFee = pickupPointsResponse.PickupPoints.Min(x => x.PickupFee);
                             if (pickupFee > 0)

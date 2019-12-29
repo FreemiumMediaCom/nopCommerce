@@ -32,7 +32,7 @@ namespace Nop.Plugin.Shipping.UPS
         /// </summary>
         /// <param name="trackingNumber">The tracking number to track.</param>
         /// <returns>True if the tracker can track, otherwise false.</returns>
-        public virtual bool IsMatch(string trackingNumber)
+        public async virtual Task<bool> IsMatch(string trackingNumber)
         {
             if (string.IsNullOrEmpty(trackingNumber))
                 return false;
@@ -49,7 +49,7 @@ namespace Nop.Plugin.Shipping.UPS
         /// </summary>
         /// <param name="trackingNumber">The tracking number to track.</param>
         /// <returns>URL of a tracking page.</returns>
-        public virtual string GetUrl(string trackingNumber)
+        public async virtual Task<string> GetUrl(string trackingNumber)
         {
             return $"https://www.ups.com/track?&tracknum={trackingNumber}";
         }

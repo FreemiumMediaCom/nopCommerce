@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nop.Core.Domain.Blogs;
+using System.Threading.Tasks;
 
 namespace Nop.Data.Mapping.Blogs
 {

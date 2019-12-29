@@ -48,7 +48,7 @@ namespace Nop.Plugin.DiscountRules.CustomerRoles.Controllers
 
         #region Methods
 
-        public IActionResult Configure(int discountId, int? discountRequirementId)
+        public async Task<IActionResult> Configure(int discountId, int? discountRequirementId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return Content("Access denied");
@@ -81,7 +81,7 @@ namespace Nop.Plugin.DiscountRules.CustomerRoles.Controllers
             }).ToList();
             model.AvailableCustomerRoles.Insert(0, new SelectListItem
             {
-                Text = _localizationService.GetResource("Plugins.DiscountRules.CustomerRoles.Fields.CustomerRole.Select"),
+                Text = await _localizationService.GetResource("Plugins.DiscountRules.CustomerRoles.Fields.CustomerRole.Select"),
                 Value = "0"
             });
 
@@ -93,7 +93,7 @@ namespace Nop.Plugin.DiscountRules.CustomerRoles.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult Configure(int discountId, int? discountRequirementId, int customerRoleId)
+        public async Task<IActionResult> Configure(int discountId, int? discountRequirementId, int customerRoleId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageDiscounts))
                 return Content("Access denied");

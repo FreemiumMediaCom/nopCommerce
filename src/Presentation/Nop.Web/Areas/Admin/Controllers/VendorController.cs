@@ -204,12 +204,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Vendors
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -221,7 +221,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(VendorSearchModel searchModel)
+        public async virtual Task<IActionResult> List(VendorSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedDataTablesJson();
@@ -232,7 +232,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -245,7 +245,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Create(VendorModel model, bool continueEditing, IFormCollection form)
+        public async virtual Task<IActionResult> Create(VendorModel model, bool continueEditing, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -262,7 +262,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewVendor",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewVendor"), vendor.Id), vendor);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewVendor"), vendor.Id), vendor);
 
                 //search engine name
                 model.SeName = _urlRecordService.ValidateSeName(vendor, model.SeName, vendor.Name, true);
@@ -290,7 +290,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //update picture seo file name
                 UpdatePictureSeoNames(vendor);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Vendors.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Vendors.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -305,7 +305,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -322,7 +322,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(VendorModel model, bool continueEditing, IFormCollection form)
+        public async virtual Task<IActionResult> Edit(VendorModel model, bool continueEditing, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -348,7 +348,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditVendor",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditVendor"), vendor.Id), vendor);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditVendor"), vendor.Id), vendor);
 
                 //search engine name
                 model.SeName = _urlRecordService.ValidateSeName(vendor, model.SeName, vendor.Name, true);
@@ -397,7 +397,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //update picture seo file name
                 UpdatePictureSeoNames(vendor);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Vendors.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Vendors.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -413,7 +413,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -436,9 +436,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteVendor",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteVendor"), vendor.Id), vendor);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteVendor"), vendor.Id), vendor);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Vendors.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Vendors.Deleted"));
 
             return RedirectToAction("List");
         }
@@ -448,7 +448,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Vendor notes
 
         [HttpPost]
-        public virtual IActionResult VendorNotesSelect(VendorNoteSearchModel searchModel)
+        public async virtual Task<IActionResult> VendorNotesSelect(VendorNoteSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedDataTablesJson();
@@ -463,7 +463,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult VendorNoteAdd(int vendorId, string message)
+        public async virtual Task<IActionResult> VendorNoteAdd(int vendorId, string message)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -474,7 +474,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return ErrorJson("Vendor cannot be loaded");
 
             if (string.IsNullOrEmpty(message))
-                return ErrorJson(_localizationService.GetResource("Admin.Vendors.VendorNotes.Fields.Note.Validation"));
+                return ErrorJson(await _localizationService.GetResource("Admin.Vendors.VendorNotes.Fields.Note.Validation"));
 
             var vendorNote = new VendorNote
             {
@@ -488,7 +488,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult VendorNoteDelete(int id, int vendorId)
+        public async virtual Task<IActionResult> VendorNoteDelete(int id, int vendorId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();

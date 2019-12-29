@@ -52,7 +52,7 @@ namespace FreemiumMedia.Nop.Plugin.ExternalAuth.LinkedIn.Controllers
 
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageExternalAuthenticationMethods))
                 return AccessDeniedView();
@@ -70,7 +70,7 @@ namespace FreemiumMedia.Nop.Plugin.ExternalAuth.LinkedIn.Controllers
         [AdminAntiForgery]
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
-        public IActionResult Configure(ConfigurationModel model)
+        public async Task<IActionResult> Configure(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageExternalAuthenticationMethods))
                 return AccessDeniedView();
@@ -82,12 +82,12 @@ namespace FreemiumMedia.Nop.Plugin.ExternalAuth.LinkedIn.Controllers
             _linkedInAuthenticationSettings.ClientKeyIdentifier = model.ClientId;
             _linkedInAuthenticationSettings.ClientSecret = model.ClientSecret;
             _settingService.SaveSetting(_linkedInAuthenticationSettings);
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
         }
 
-        public IActionResult Login(string returnUrl)
+        public async Task<IActionResult> Login(string returnUrl)
         {
 
             if (string.IsNullOrEmpty(_linkedInAuthenticationSettings.ClientKeyIdentifier) || string.IsNullOrEmpty(_linkedInAuthenticationSettings.ClientSecret))

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Blogs;
@@ -50,12 +52,12 @@ namespace Nop.Services.Blogs
         /// Deletes a blog post
         /// </summary>
         /// <param name="blogPost">Blog post</param>
-        public virtual void DeleteBlogPost(BlogPost blogPost)
+        public async virtual Task DeleteBlogPost(BlogPost blogPost)
         {
             if (blogPost == null)
                 throw new ArgumentNullException(nameof(blogPost));
 
-            _blogPostRepository.Delete(blogPost);
+            await _blogPostRepository.Delete(blogPost);
 
             //event notification
             _eventPublisher.EntityDeleted(blogPost);
@@ -66,12 +68,12 @@ namespace Nop.Services.Blogs
         /// </summary>
         /// <param name="blogPostId">Blog post identifier</param>
         /// <returns>Blog post</returns>
-        public virtual BlogPost GetBlogPostById(int blogPostId)
+        public async virtual Task<BlogPost> GetBlogPostById(int blogPostId)
         {
             if (blogPostId == 0)
                 return null;
 
-            return _blogPostRepository.GetById(blogPostId);
+            return  await _blogPostRepository.GetById(blogPostId);
         }
 
         /// <summary>
@@ -79,10 +81,10 @@ namespace Nop.Services.Blogs
         /// </summary>
         /// <param name="blogPostIds">Blog post identifiers</param>
         /// <returns>Blog posts</returns>
-        public virtual IList<BlogPost> GetBlogPostsByIds(int[] blogPostIds)
+        public async virtual Task<IList<BlogPost>> GetBlogPostsByIds(int[] blogPostIds)
         {
             var query = _blogPostRepository.Table;
-            return query.Where(bp => blogPostIds.Contains(bp.Id)).ToList();
+            return await query.Where(bp => blogPostIds.Contains(bp.Id)).ToListAsync();
         }
 
         /// <summary>
@@ -96,7 +98,7 @@ namespace Nop.Services.Blogs
         /// <param name="pageSize">Page size</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Blog posts</returns>
-        public virtual IPagedList<BlogPost> GetAllBlogPosts(int storeId = 0, int languageId = 0,
+        public async virtual Task<IPagedList<BlogPost>> GetAllBlogPosts(int storeId = 0, int languageId = 0,
             DateTime? dateFrom = null, DateTime? dateTo = null,
             int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
         {
@@ -142,18 +144,18 @@ namespace Nop.Services.Blogs
         /// <param name="pageSize">Page size</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Blog posts</returns>
-        public virtual IPagedList<BlogPost> GetAllBlogPostsByTag(int storeId = 0,
+        public async virtual Task<IPagedList<BlogPost>> GetAllBlogPostsByTag(int storeId = 0,
             int languageId = 0, string tag = "",
             int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
         {
             tag = tag.Trim();
 
             //we load all records and only then filter them by tag
-            var blogPostsAll = GetAllBlogPosts(storeId: storeId, languageId: languageId, showHidden: showHidden);
+            var blogPostsAll = await GetAllBlogPosts(storeId: storeId, languageId: languageId, showHidden: showHidden);
             var taggedBlogPosts = new List<BlogPost>();
             foreach (var blogPost in blogPostsAll)
             {
-                var tags = ParseTags(blogPost);
+                var tags = await ParseTags(blogPost);
                 if (!string.IsNullOrEmpty(tags.FirstOrDefault(t => t.Equals(tag, StringComparison.InvariantCultureIgnoreCase))))
                     taggedBlogPosts.Add(blogPost);
             }
@@ -170,14 +172,14 @@ namespace Nop.Services.Blogs
         /// <param name="languageId">Language identifier. 0 if you want to get all blog posts</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Blog post tags</returns>
-        public virtual IList<BlogPostTag> GetAllBlogPostTags(int storeId, int languageId, bool showHidden = false)
+        public async virtual Task<IList<BlogPostTag>> GetAllBlogPostTags(int storeId, int languageId, bool showHidden = false)
         {
             var blogPostTags = new List<BlogPostTag>();
 
-            var blogPosts = GetAllBlogPosts(storeId: storeId, languageId: languageId, showHidden: showHidden);
+            var blogPosts = await GetAllBlogPosts(storeId: storeId, languageId: languageId, showHidden: showHidden);
             foreach (var blogPost in blogPosts)
             {
-                var tags = ParseTags(blogPost);
+                var tags = await ParseTags(blogPost);
                 foreach (var tag in tags)
                 {
                     var foundBlogPostTag = blogPostTags.Find(bpt => bpt.Name.Equals(tag, StringComparison.InvariantCultureIgnoreCase));
@@ -202,7 +204,7 @@ namespace Nop.Services.Blogs
         /// Inserts a blog post
         /// </summary>
         /// <param name="blogPost">Blog post</param>
-        public virtual void InsertBlogPost(BlogPost blogPost)
+        public async virtual Task InsertBlogPost(BlogPost blogPost)
         {
             if (blogPost == null)
                 throw new ArgumentNullException(nameof(blogPost));
@@ -217,7 +219,7 @@ namespace Nop.Services.Blogs
         /// Updates the blog post
         /// </summary>
         /// <param name="blogPost">Blog post</param>
-        public virtual void UpdateBlogPost(BlogPost blogPost)
+        public async virtual Task UpdateBlogPost(BlogPost blogPost)
         {
             if (blogPost == null)
                 throw new ArgumentNullException(nameof(blogPost));
@@ -235,7 +237,7 @@ namespace Nop.Services.Blogs
         /// <param name="dateFrom">Date from</param>
         /// <param name="dateTo">Date to</param>
         /// <returns>Filtered posts</returns>
-        public virtual IList<BlogPost> GetPostsByDate(IList<BlogPost> blogPosts, DateTime dateFrom, DateTime dateTo)
+        public async virtual Task<IList<BlogPost>> GetPostsByDate(IList<BlogPost> blogPosts, DateTime dateFrom, DateTime dateTo)
         {
             if (blogPosts == null)
                 throw new ArgumentNullException(nameof(blogPosts));
@@ -250,7 +252,7 @@ namespace Nop.Services.Blogs
         /// </summary>
         /// <param name="blogPost">Blog post</param>
         /// <returns>Tags</returns>
-        public virtual IList<string> ParseTags(BlogPost blogPost) 
+        public async virtual Task<IList<string>> ParseTags(BlogPost blogPost) 
         {
             if (blogPost == null)
                 throw new ArgumentNullException(nameof(blogPost));
@@ -271,7 +273,7 @@ namespace Nop.Services.Blogs
         /// <param name="blogPost">Blog post</param>
         /// <param name="dateTime">Datetime to check; pass null to use current date</param>
         /// <returns>Result</returns>
-        public virtual bool BlogPostIsAvailable(BlogPost blogPost, DateTime? dateTime = null)
+        public async virtual Task<bool> BlogPostIsAvailable(BlogPost blogPost, DateTime? dateTime = null)
         {
             if (blogPost == null)
                 throw new ArgumentNullException(nameof(blogPost));
@@ -300,7 +302,7 @@ namespace Nop.Services.Blogs
         /// <param name="toUtc">Item creation to; null to load all records</param>
         /// <param name="commentText">Search comment text; null to load all records</param>
         /// <returns>Comments</returns>
-        public virtual IList<BlogComment> GetAllComments(int customerId = 0, int storeId = 0, int? blogPostId = null,
+        public async virtual Task<IList<BlogComment>> GetAllComments(int customerId = 0, int storeId = 0, int? blogPostId = null,
             bool? approved = null, DateTime? fromUtc = null, DateTime? toUtc = null, string commentText = null)
         {
             var query = _blogCommentRepository.Table;
@@ -328,7 +330,7 @@ namespace Nop.Services.Blogs
 
             query = query.OrderBy(comment => comment.CreatedOnUtc);
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
         /// <summary>
@@ -336,12 +338,12 @@ namespace Nop.Services.Blogs
         /// </summary>
         /// <param name="blogCommentId">Blog comment identifier</param>
         /// <returns>Blog comment</returns>
-        public virtual BlogComment GetBlogCommentById(int blogCommentId)
+        public async virtual Task<BlogComment> GetBlogCommentById(int blogCommentId)
         {
             if (blogCommentId == 0)
                 return null;
 
-            return _blogCommentRepository.GetById(blogCommentId);
+            return await _blogCommentRepository.GetById(blogCommentId);
         }
 
         /// <summary>
@@ -349,7 +351,7 @@ namespace Nop.Services.Blogs
         /// </summary>
         /// <param name="commentIds">Blog comment identifiers</param>
         /// <returns>Blog comments</returns>
-        public virtual IList<BlogComment> GetBlogCommentsByIds(int[] commentIds)
+        public async virtual Task<IList<BlogComment>> GetBlogCommentsByIds(int[] commentIds)
         {
             if (commentIds == null || commentIds.Length == 0)
                 return new List<BlogComment>();
@@ -357,7 +359,7 @@ namespace Nop.Services.Blogs
             var query = from bc in _blogCommentRepository.Table
                         where commentIds.Contains(bc.Id)
                         select bc;
-            var comments = query.ToList();
+            var comments = await query.ToListAsync();
             //sort by passed identifiers
             var sortedComments = new List<BlogComment>();
             foreach (var id in commentIds)
@@ -377,7 +379,7 @@ namespace Nop.Services.Blogs
         /// <param name="storeId">Store identifier; pass 0 to load all records</param>
         /// <param name="isApproved">A value indicating whether to count only approved or not approved comments; pass null to get number of all comments</param>
         /// <returns>Number of blog comments</returns>
-        public virtual int GetBlogCommentsCount(BlogPost blogPost, int storeId = 0, bool? isApproved = null)
+        public async virtual Task<int> GetBlogCommentsCount(BlogPost blogPost, int storeId = 0, bool? isApproved = null)
         {
             var query = _blogCommentRepository.Table.Where(comment => comment.BlogPostId == blogPost.Id);
 
@@ -387,19 +389,19 @@ namespace Nop.Services.Blogs
             if (isApproved.HasValue)
                 query = query.Where(comment => comment.IsApproved == isApproved.Value);
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
         /// <summary>
         /// Deletes a blog comment
         /// </summary>
         /// <param name="blogComment">Blog comment</param>
-        public virtual void DeleteBlogComment(BlogComment blogComment)
+        public async virtual Task DeleteBlogComment(BlogComment blogComment)
         {
             if (blogComment == null)
                 throw new ArgumentNullException(nameof(blogComment));
 
-            _blogCommentRepository.Delete(blogComment);
+            await _blogCommentRepository.Delete(blogComment);
 
             //event notification
             _eventPublisher.EntityDeleted(blogComment);
@@ -409,14 +411,14 @@ namespace Nop.Services.Blogs
         /// Deletes blog comments
         /// </summary>
         /// <param name="blogComments">Blog comments</param>
-        public virtual void DeleteBlogComments(IList<BlogComment> blogComments)
+        public async virtual Task DeleteBlogComments(IList<BlogComment> blogComments)
         {
             if (blogComments == null)
                 throw new ArgumentNullException(nameof(blogComments));
 
             foreach (var blogComment in blogComments)
             {
-                DeleteBlogComment(blogComment);
+                await DeleteBlogComment(blogComment);
             }
         }
 

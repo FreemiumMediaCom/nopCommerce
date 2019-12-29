@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 
@@ -13,7 +14,7 @@ namespace Nop.Services.Catalog
         /// Delete category
         /// </summary>
         /// <param name="category">Category</param>
-        void DeleteCategory(Category category);
+        Task DeleteCategory(Category category);
 
         /// <summary>
         /// Gets all categories
@@ -22,7 +23,7 @@ namespace Nop.Services.Catalog
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Categories</returns>
-        IList<Category> GetAllCategories(int storeId = 0, bool showHidden = false, bool loadCacheableCopy = true);
+        Task<IList<Category>> GetAllCategories(int storeId = 0, bool showHidden = false, bool loadCacheableCopy = true);
 
         /// <summary>
         /// Gets all categories
@@ -33,7 +34,7 @@ namespace Nop.Services.Catalog
         /// <param name="pageSize">Page size</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Categories</returns>
-        IPagedList<Category> GetAllCategories(string categoryName, int storeId = 0,
+        Task<IPagedList<Category>> GetAllCategories(string categoryName, int storeId = 0,
             int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
 
         /// <summary>
@@ -42,14 +43,14 @@ namespace Nop.Services.Catalog
         /// <param name="parentCategoryId">Parent category identifier</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Categories</returns>
-        IList<Category> GetAllCategoriesByParentCategoryId(int parentCategoryId, bool showHidden = false);
+        Task<IList<Category>> GetAllCategoriesByParentCategoryId(int parentCategoryId, bool showHidden = false);
 
         /// <summary>
         /// Gets all categories displayed on the home page
         /// </summary>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Categories</returns>
-        IList<Category> GetAllCategoriesDisplayedOnHomepage(bool showHidden = false);
+        Task<IList<Category>> GetAllCategoriesDisplayedOnHomepage(bool showHidden = false);
 
         /// <summary>
         /// Gets child category identifiers
@@ -58,32 +59,32 @@ namespace Nop.Services.Catalog
         /// <param name="storeId">Store identifier; 0 if you want to get all records</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Category identifiers</returns>
-        IList<int> GetChildCategoryIds(int parentCategoryId, int storeId = 0, bool showHidden = false);
+        Task<IList<int>> GetChildCategoryIds(int parentCategoryId, int storeId = 0, bool showHidden = false);
 
         /// <summary>
         /// Gets a category
         /// </summary>
         /// <param name="categoryId">Category identifier</param>
         /// <returns>Category</returns>
-        Category GetCategoryById(int categoryId);
+        Task<Category> GetCategoryById(int categoryId);
 
         /// <summary>
         /// Inserts category
         /// </summary>
         /// <param name="category">Category</param>
-        void InsertCategory(Category category);
+        Task InsertCategory(Category category);
 
         /// <summary>
         /// Updates the category
         /// </summary>
         /// <param name="category">Category</param>
-        void UpdateCategory(Category category);
+        Task UpdateCategory(Category category);
 
         /// <summary>
         /// Deletes a product category mapping
         /// </summary>
         /// <param name="productCategory">Product category</param>
-        void DeleteProductCategory(ProductCategory productCategory);
+        Task DeleteProductCategory(ProductCategory productCategory);
 
         /// <summary>
         /// Gets product category mapping collection
@@ -102,7 +103,7 @@ namespace Nop.Services.Catalog
         /// <param name="productId">Product identifier</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Product category mapping collection</returns>
-        IList<ProductCategory> GetProductCategoriesByProductId(int productId, bool showHidden = false);
+        Task<IList<ProductCategory>> GetProductCategoriesByProductId(int productId, bool showHidden = false);
 
         /// <summary>
         /// Gets a product category mapping collection
@@ -111,33 +112,33 @@ namespace Nop.Services.Catalog
         /// <param name="storeId">Store identifier (used in multi-store environment). "showHidden" parameter should also be "true"</param>
         /// <param name="showHidden"> A value indicating whether to show hidden records</param>
         /// <returns> Product category mapping collection</returns>
-        IList<ProductCategory> GetProductCategoriesByProductId(int productId, int storeId, bool showHidden = false);
+        Task<IList<ProductCategory>> GetProductCategoriesByProductId(int productId, int storeId, bool showHidden = false);
 
         /// <summary>
         /// Gets a product category mapping 
         /// </summary>
         /// <param name="productCategoryId">Product category mapping identifier</param>
         /// <returns>Product category mapping</returns>
-        ProductCategory GetProductCategoryById(int productCategoryId);
+        Task<ProductCategory> GetProductCategoryById(int productCategoryId);
 
         /// <summary>
         /// Inserts a product category mapping
         /// </summary>
         /// <param name="productCategory">>Product category mapping</param>
-        void InsertProductCategory(ProductCategory productCategory);
+        Task InsertProductCategory(ProductCategory productCategory);
 
         /// <summary>
         /// Updates the product category mapping 
         /// </summary>
         /// <param name="productCategory">>Product category mapping</param>
-        void UpdateProductCategory(ProductCategory productCategory);
+        Task UpdateProductCategory(ProductCategory productCategory);
 
         /// <summary>
         /// Returns a list of names of not existing categories
         /// </summary>
         /// <param name="categoryIdsNames">The names and/or IDs of the categories to check</param>
         /// <returns>List of names and/or IDs not existing categories</returns>
-        string[] GetNotExistingCategories(string[] categoryIdsNames);
+        Task<string[]> GetNotExistingCategories(string[] categoryIdsNames);
 
         /// <summary>
         /// Get category IDs for products
@@ -151,7 +152,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="categoryIds">Category identifiers</param>
         /// <returns>Categories</returns>
-        List<Category> GetCategoriesByIds(int[] categoryIds);
+        Task<List<Category>> GetCategoriesByIds(int[] categoryIds);
 
         /// <summary>
         /// Sort categories for tree representation
@@ -181,7 +182,7 @@ namespace Nop.Services.Catalog
         /// <param name="separator">Separator</param>
         /// <param name="languageId">Language identifier for localization</param>
         /// <returns>Formatted breadcrumb</returns>
-        string GetFormattedBreadCrumb(Category category, IList<Category> allCategories = null,
+        Task<string> GetFormattedBreadCrumb(Category category, IList<Category> allCategories = null,
             string separator = ">>", int languageId = 0);
 
         /// <summary>
@@ -191,6 +192,6 @@ namespace Nop.Services.Catalog
         /// <param name="allCategories">All categories</param>
         /// <param name="showHidden">A value indicating whether to load hidden records</param>
         /// <returns>Category breadcrumb </returns>
-        IList<Category> GetCategoryBreadCrumb(Category category, IList<Category> allCategories = null, bool showHidden = false);
+        Task<IList<Category>> GetCategoryBreadCrumb(Category category, IList<Category> allCategories = null, bool showHidden = false);
     }
 }

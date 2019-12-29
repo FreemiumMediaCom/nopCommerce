@@ -44,7 +44,7 @@ namespace Nop.Core.Data
 
                 //get data settings from the old txt file
                 var dataSettings = new DataSettings();
-                using (var reader = new StringReader(fileProvider.ReadAllText(filePath, Encoding.UTF8)))
+                using (var reader = new StringReader(fileProvider.ReadAllText(filePath, Encoding.UTF8).Result))
                 {
                     string settingsLine;
                     while ((settingsLine = reader.ReadLine()) != null)
@@ -81,7 +81,7 @@ namespace Nop.Core.Data
                 return Singleton<DataSettings>.Instance;
             }
 
-            var text = fileProvider.ReadAllText(filePath, Encoding.UTF8);
+            var text = fileProvider.ReadAllText(filePath, Encoding.UTF8).Result;
             if (string.IsNullOrEmpty(text))
                 return new DataSettings();
 

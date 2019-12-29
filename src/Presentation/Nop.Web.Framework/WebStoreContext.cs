@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using Nop.Core;
@@ -79,7 +80,7 @@ namespace Nop.Web.Framework
         /// <summary>
         /// Gets active store scope configuration
         /// </summary>
-        public virtual int ActiveStoreScopeConfiguration
+        public async virtual Task<int> ActiveStoreScopeConfiguration
         {
             get
             {

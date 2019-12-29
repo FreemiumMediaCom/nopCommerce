@@ -98,7 +98,7 @@ namespace Nop.Plugin.Tax.Avalara.Components
         /// <param name="widgetZone">Widget zone</param>
         /// <param name="additionalData">Additional parameters</param>
         /// <returns>View component result</returns>
-        public IViewComponentResult Invoke(string widgetZone, object additionalData)
+        public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
             //ensure that Avalara tax provider is active
             if (!_taxPluginManager.IsPluginActive(AvalaraTaxDefaults.SystemName, _workContext.CurrentCustomer, _storeContext.CurrentStore.Id))
@@ -147,7 +147,7 @@ namespace Nop.Plugin.Tax.Avalara.Components
                 //and display error message to customer
                 return View("~/Plugins/Tax.Avalara/Views/Checkout/AddressValidation.cshtml", new AddressValidationModel
                 {
-                    Message = string.Format(_localizationService.GetResource("Plugins.Tax.Avalara.AddressValidation.Error"), WebUtility.HtmlEncode(errorMessage)),
+                    Message = string.Format(await _localizationService.GetResource("Plugins.Tax.Avalara.AddressValidation.Error"), WebUtility.HtmlEncode(errorMessage)),
                     IsError = true
                 });
             }
@@ -191,7 +191,7 @@ namespace Nop.Plugin.Tax.Avalara.Components
             else
                 model.AddressId = existingAddress.Id;
 
-            model.Message = string.Format(_localizationService.GetResource("Plugins.Tax.Avalara.AddressValidation.Confirm"),
+            model.Message = string.Format(await _localizationService.GetResource("Plugins.Tax.Avalara.AddressValidation.Confirm"),
                 GetAddressLine(address), GetAddressLine(existingAddress ?? validatedAddress));
 
             return View("~/Plugins/Tax.Avalara/Views/Checkout/AddressValidation.cshtml", model);

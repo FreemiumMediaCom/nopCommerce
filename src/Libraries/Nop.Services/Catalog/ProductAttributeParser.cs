@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Xml;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Catalog;
 using Nop.Data;
 using Nop.Data.Extensions;
@@ -157,7 +158,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="attributesXml">Attributes in XML format</param>
         /// <returns>Selected product attribute mappings</returns>
-        public virtual IList<ProductAttributeMapping> ParseProductAttributeMappings(string attributesXml)
+        public async virtual Task<IList<ProductAttributeMapping>> ParseProductAttributeMappings(string attributesXml)
         {
             var result = new List<ProductAttributeMapping>();
             if (string.IsNullOrEmpty(attributesXml))
@@ -166,7 +167,7 @@ namespace Nop.Services.Catalog
             var ids = ParseProductAttributeMappingIds(attributesXml);
             foreach (var id in ids)
             {
-                var attribute = _productAttributeService.GetProductAttributeMappingById(id);
+                var attribute = await _productAttributeService.GetProductAttributeMappingById(id);
                 if (attribute != null)
                 {
                     result.Add(attribute);
@@ -182,13 +183,13 @@ namespace Nop.Services.Catalog
         /// <param name="attributesXml">Attributes in XML format</param>
         /// <param name="productAttributeMappingId">Product attribute mapping identifier; pass 0 to load all values</param>
         /// <returns>Product attribute values</returns>
-        public virtual IList<ProductAttributeValue> ParseProductAttributeValues(string attributesXml, int productAttributeMappingId = 0)
+        public async virtual Task<IList<ProductAttributeValue>> ParseProductAttributeValues(string attributesXml, int productAttributeMappingId = 0)
         {
             var values = new List<ProductAttributeValue>();
             if (string.IsNullOrEmpty(attributesXml))
                 return values;
 
-            var attributes = ParseProductAttributeMappings(attributesXml);
+            var attributes = await ParseProductAttributeMappings(attributesXml);
 
             //to load values only for the passed product attribute mapping
             if (productAttributeMappingId > 0)
@@ -204,7 +205,7 @@ namespace Nop.Services.Catalog
                     if (string.IsNullOrEmpty(attributeValue.Item1) || !int.TryParse(attributeValue.Item1, out var attributeValueId)) 
                         continue;
 
-                    var value = _productAttributeService.GetProductAttributeValueById(attributeValueId);
+                    var value = await _productAttributeService.GetProductAttributeValueById(attributeValueId);
                     if (value == null) 
                         continue;
 
@@ -415,15 +416,15 @@ namespace Nop.Services.Catalog
         /// <param name="ignoreNonCombinableAttributes">A value indicating whether we should ignore non-combinable attributes</param>
         /// <param name="ignoreQuantity">A value indicating whether we should ignore the quantity of attribute value entered by the customer</param>
         /// <returns>Result</returns>
-        public virtual bool AreProductAttributesEqual(string attributesXml1, string attributesXml2, bool ignoreNonCombinableAttributes, bool ignoreQuantity = true)
+        public async virtual Task<bool> AreProductAttributesEqual(string attributesXml1, string attributesXml2, bool ignoreNonCombinableAttributes, bool ignoreQuantity = true)
         {
-            var attributes1 = ParseProductAttributeMappings(attributesXml1);
+            var attributes1 = await ParseProductAttributeMappings(attributesXml1);
             if (ignoreNonCombinableAttributes)
             {
                 attributes1 = attributes1.Where(x => !x.IsNonCombinable()).ToList();
             }
 
-            var attributes2 = ParseProductAttributeMappings(attributesXml2);
+            var attributes2 = await ParseProductAttributeMappings(attributesXml2);
             if (ignoreNonCombinableAttributes)
             {
                 attributes2 = attributes2.Where(x => !x.IsNonCombinable()).ToList();
@@ -490,7 +491,7 @@ namespace Nop.Services.Catalog
         /// <param name="pam">Product attribute</param>
         /// <param name="selectedAttributesXml">Selected attributes (XML format)</param>
         /// <returns>Result</returns>
-        public virtual bool? IsConditionMet(ProductAttributeMapping pam, string selectedAttributesXml)
+        public async virtual Task<bool?> IsConditionMet(ProductAttributeMapping pam, string selectedAttributesXml)
         {
             if (pam == null)
                 throw new ArgumentNullException(nameof(pam));
@@ -501,7 +502,7 @@ namespace Nop.Services.Catalog
                 return null;
 
             //load an attribute this one depends on
-            var dependOnAttribute = ParseProductAttributeMappings(conditionAttributeXml).FirstOrDefault();
+            var dependOnAttribute = (await ParseProductAttributeMappings(conditionAttributeXml)).FirstOrDefault();
             if (dependOnAttribute == null)
                 return true;
 
@@ -538,7 +539,7 @@ namespace Nop.Services.Catalog
         /// <param name="attributesXml">Attributes in XML format</param>
         /// <param name="ignoreNonCombinableAttributes">A value indicating whether we should ignore non-combinable attributes</param>
         /// <returns>Found product attribute combination</returns>
-        public virtual ProductAttributeCombination FindProductAttributeCombination(Product product,
+        public async virtual Task<ProductAttributeCombination> FindProductAttributeCombination(Product product,
             string attributesXml, bool ignoreNonCombinableAttributes = true)
         {
             if (product == null)
@@ -548,9 +549,9 @@ namespace Nop.Services.Catalog
             if (String.IsNullOrEmpty(attributesXml))
                 return null;
 
-            var combinations = _productAttributeService.GetAllProductAttributeCombinations(product.Id);
+            var combinations = await _productAttributeService.GetAllProductAttributeCombinations(product.Id);
             return combinations.FirstOrDefault(x =>
-                AreProductAttributesEqual(x.AttributesXml, attributesXml, ignoreNonCombinableAttributes));
+                AreProductAttributesEqual(x.AttributesXml, attributesXml, ignoreNonCombinableAttributes).Result);
         }
 
         /// <summary>
@@ -560,12 +561,12 @@ namespace Nop.Services.Catalog
         /// <param name="ignoreNonCombinableAttributes">A value indicating whether we should ignore non-combinable attributes</param>
         /// <param name="allowedAttributeIds">List of allowed attribute identifiers. If null or empty then all attributes would be used.</param>
         /// <returns>Attribute combinations in XML format</returns>
-        public virtual IList<string> GenerateAllCombinations(Product product, bool ignoreNonCombinableAttributes = false, IList<int> allowedAttributeIds = null)
+        public async virtual Task<IList<string>> GenerateAllCombinations(Product product, bool ignoreNonCombinableAttributes = false, IList<int> allowedAttributeIds = null)
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
 
-            var allProductAttributMappings = _productAttributeService.GetProductAttributeMappingsByProductId(product.Id);
+            var allProductAttributMappings = await _productAttributeService.GetProductAttributeMappingsByProductId(product.Id);
             if (ignoreNonCombinableAttributes)
             {
                 allProductAttributMappings = allProductAttributMappings.Where(x => !x.IsNonCombinable()).ToList();
@@ -585,7 +586,7 @@ namespace Nop.Services.Catalog
                         continue;
 
                     //get product attribute values
-                    var attributeValues = _productAttributeService.GetProductAttributeValues(productAttributeMapping.Id);
+                    var attributeValues = await _productAttributeService.GetProductAttributeValues(productAttributeMapping.Id);
                     
                     //filter product attribute values
                     if (allowedAttributeIds?.Any() ?? false)
@@ -651,7 +652,7 @@ namespace Nop.Services.Catalog
                 var attributesXml = allAttributesXml[i];
                 foreach (var attribute in allProductAttributMappings)
                 {
-                    var conditionMet = IsConditionMet(attribute, attributesXml);
+                    var conditionMet = await IsConditionMet(attribute, attributesXml);
                     if (conditionMet.HasValue && !conditionMet.Value)
                     {
                         allAttributesXml[i] = RemoveProductAttribute(attributesXml, attribute);

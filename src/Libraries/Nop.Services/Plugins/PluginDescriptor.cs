@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Nop.Core.Infrastructure;
 
@@ -97,7 +98,7 @@ namespace Nop.Services.Plugins
         /// <summary>
         /// Save plugin descriptor to the plugin description file
         /// </summary>
-        public virtual void Save()
+        public async virtual Task Save()
         {
             var fileProvider = EngineContext.Current.Resolve<INopFileProvider>();
 
@@ -111,7 +112,7 @@ namespace Nop.Services.Plugins
 
             //save the file
             var text = JsonConvert.SerializeObject(this, Formatting.Indented);
-            fileProvider.WriteAllText(filePath, text, Encoding.UTF8);
+            await fileProvider.WriteAllText(filePath, text, Encoding.UTF8);
         }
 
         /// <summary>

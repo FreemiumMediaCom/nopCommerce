@@ -142,7 +142,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //set already selected attributes
                 if (vendor != null)
                 {
-                    var selectedVendorAttributes = _genericAttributeService.GetAttribute<string>(vendor, NopVendorDefaults.VendorAttributes);
+                    var selectedVendorAttributes = await _genericAttributeService.GetAttribute<string>(vendor, NopVendorDefaults.VendorAttributes);
                     switch (attribute.AttributeControlType)
                     {
                         case AttributeControlType.DropdownList:
@@ -322,11 +322,11 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(vendor, entity => entity.Name, languageId, false, false);
-                    locale.Description = _localizationService.GetLocalized(vendor, entity => entity.Description, languageId, false, false);
-                    locale.MetaKeywords = _localizationService.GetLocalized(vendor, entity => entity.MetaKeywords, languageId, false, false);
-                    locale.MetaDescription = _localizationService.GetLocalized(vendor, entity => entity.MetaDescription, languageId, false, false);
-                    locale.MetaTitle = _localizationService.GetLocalized(vendor, entity => entity.MetaTitle, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(vendor, entity => entity.Name, languageId, false, false);
+                    locale.Description = await _localizationService.GetLocalized(vendor, entity => entity.Description, languageId, false, false);
+                    locale.MetaKeywords = await _localizationService.GetLocalized(vendor, entity => entity.MetaKeywords, languageId, false, false);
+                    locale.MetaDescription = await _localizationService.GetLocalized(vendor, entity => entity.MetaDescription, languageId, false, false);
+                    locale.MetaTitle = await _localizationService.GetLocalized(vendor, entity => entity.MetaTitle, languageId, false, false);
                     locale.SeName = _urlRecordService.GetSeName(vendor, languageId, false, false);
                 };
 

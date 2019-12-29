@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Nop.Core;
 using Nop.Core.Data;
@@ -7,6 +7,8 @@ using Nop.Core.Domain.Customers;
 using Nop.Services.Common;
 using Nop.Services.Events;
 using Nop.Services.Messages;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nop.Services.Catalog
 {
@@ -45,12 +47,12 @@ namespace Nop.Services.Catalog
         /// Delete a back in stock subscription
         /// </summary>
         /// <param name="subscription">Subscription</param>
-        public virtual void DeleteSubscription(BackInStockSubscription subscription)
+        public async virtual Task DeleteSubscription(BackInStockSubscription subscription)
         {
             if (subscription == null)
                 throw new ArgumentNullException(nameof(subscription));
 
-            _backInStockSubscriptionRepository.Delete(subscription);
+            await _backInStockSubscriptionRepository.Delete(subscription);
 
             //event notification
             _eventPublisher.EntityDeleted(subscription);
@@ -64,7 +66,7 @@ namespace Nop.Services.Catalog
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <returns>Subscriptions</returns>
-        public virtual IPagedList<BackInStockSubscription> GetAllSubscriptionsByCustomerId(int customerId,
+        public async virtual Task<IPagedList<BackInStockSubscription>> GetAllSubscriptionsByCustomerId(int customerId,
             int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _backInStockSubscriptionRepository.Table;
@@ -88,7 +90,7 @@ namespace Nop.Services.Catalog
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <returns>Subscriptions</returns>
-        public virtual IPagedList<BackInStockSubscription> GetAllSubscriptionsByProductId(int productId,
+        public async virtual Task<IPagedList<BackInStockSubscription>> GetAllSubscriptionsByProductId(int productId,
             int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _backInStockSubscriptionRepository.Table;
@@ -110,7 +112,7 @@ namespace Nop.Services.Catalog
         /// <param name="productId">Product identifier</param>
         /// <param name="storeId">Store identifier</param>
         /// <returns>Subscriptions</returns>
-        public virtual BackInStockSubscription FindSubscription(int customerId, int productId, int storeId)
+        public async virtual Task<BackInStockSubscription> FindSubscription(int customerId, int productId, int storeId)
         {
             var query = from biss in _backInStockSubscriptionRepository.Table
                         orderby biss.CreatedOnUtc descending
@@ -119,7 +121,7 @@ namespace Nop.Services.Catalog
                               biss.StoreId == storeId
                         select biss;
 
-            var subscription = query.FirstOrDefault();
+            var subscription = await query.FirstOrDefaultAsync();
             return subscription;
         }
 
@@ -128,12 +130,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="subscriptionId">Subscription identifier</param>
         /// <returns>Subscription</returns>
-        public virtual BackInStockSubscription GetSubscriptionById(int subscriptionId)
+        public async virtual Task<BackInStockSubscription> GetSubscriptionById(int subscriptionId)
         {
             if (subscriptionId == 0)
                 return null;
 
-            var subscription = _backInStockSubscriptionRepository.GetById(subscriptionId);
+            var subscription = await _backInStockSubscriptionRepository.GetById(subscriptionId);
             return subscription;
         }
 
@@ -141,12 +143,12 @@ namespace Nop.Services.Catalog
         /// Inserts subscription
         /// </summary>
         /// <param name="subscription">Subscription</param>
-        public virtual void InsertSubscription(BackInStockSubscription subscription)
+        public async virtual Task InsertSubscription(BackInStockSubscription subscription)
         {
             if (subscription == null)
                 throw new ArgumentNullException(nameof(subscription));
 
-            _backInStockSubscriptionRepository.Insert(subscription);
+            await _backInStockSubscriptionRepository.Insert(subscription);
 
             //event notification
             _eventPublisher.EntityInserted(subscription);
@@ -156,12 +158,12 @@ namespace Nop.Services.Catalog
         /// Updates subscription
         /// </summary>
         /// <param name="subscription">Subscription</param>
-        public virtual void UpdateSubscription(BackInStockSubscription subscription)
+        public async virtual Task UpdateSubscription(BackInStockSubscription subscription)
         {
             if (subscription == null)
                 throw new ArgumentNullException(nameof(subscription));
 
-            _backInStockSubscriptionRepository.Update(subscription);
+            await _backInStockSubscriptionRepository.Update(subscription);
 
             //event notification
             _eventPublisher.EntityUpdated(subscription);
@@ -172,13 +174,13 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="product">Product</param>
         /// <returns>Number of sent email</returns>
-        public virtual int SendNotificationsToSubscribers(Product product)
+        public async virtual Task<int> SendNotificationsToSubscribers(Product product)
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
 
             var result = 0;
-            var subscriptions = GetAllSubscriptionsByProductId(product.Id);
+            var subscriptions = await GetAllSubscriptionsByProductId(product.Id);
             foreach (var subscription in subscriptions)
             {
                 //ensure that customer is registered (simple and fast way)
@@ -186,13 +188,13 @@ namespace Nop.Services.Catalog
                     continue;
 
                 var customer = subscription.Customer;
-                var customerLanguageId = _genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.LanguageIdAttribute, subscription.StoreId);
+                var customerLanguageId = await _genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.LanguageIdAttribute, subscription.StoreId);
                 _workflowMessageService.SendBackInStockNotification(subscription, customerLanguageId);
                 result++;
             }
 
             for (var i = 0; i <= subscriptions.Count - 1; i++)
-                DeleteSubscription(subscriptions[i]);
+                await DeleteSubscription(subscriptions[i]);
 
             return result;
         }

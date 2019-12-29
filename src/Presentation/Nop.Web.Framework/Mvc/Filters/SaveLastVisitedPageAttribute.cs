@@ -87,7 +87,7 @@ namespace Nop.Web.Framework.Mvc.Filters
                     return;
 
                 //get previous last page
-                var previousPageUrl = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer, NopCustomerDefaults.LastVisitedPageAttribute);
+                var previousPageUrl = await _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer, NopCustomerDefaults.LastVisitedPageAttribute);
 
                 //save new one if don't match
                 if (!pageUrl.Equals(previousPageUrl, StringComparison.InvariantCultureIgnoreCase))

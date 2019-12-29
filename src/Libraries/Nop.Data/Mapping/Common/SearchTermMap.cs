@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nop.Core.Domain.Common;
+using System.Threading.Tasks;
 
 namespace Nop.Data.Mapping.Common
 {

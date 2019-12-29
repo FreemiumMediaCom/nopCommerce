@@ -158,7 +158,7 @@ namespace Nop.Web.Controllers
 
             ////activity log
             //_customerActivityService.InsertActivity("PublicStore.ViewProduct",
-            //    string.Format(_localizationService.GetResource("ActivityLog.PublicStore.ViewProduct"), product.Name), product);
+            //    string.Format(await _localizationService.GetResource("ActivityLog.PublicStore.ViewProduct"), product.Name), product);
 
             ////model
             //var model = _productModelFactory.PrepareProductDetailsModel(product, updatecartitem, false);
@@ -232,8 +232,8 @@ namespace Nop.Web.Controllers
         //    foreach (var product in products)
         //    {
         //        var productUrl = Url.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) }, _webHelper.CurrentRequestProtocol);
-        //        var productName = _localizationService.GetLocalized(product, x => x.Name);
-        //        var productDescription = _localizationService.GetLocalized(product, x => x.ShortDescription);
+        //        var productName = await _localizationService.GetLocalized(product, x => x.Name);
+        //        var productDescription = await _localizationService.GetLocalized(product, x => x.ShortDescription);
         //        var item = new RssItem(productName, productDescription, new Uri(productUrl), $"urn:store:{_storeContext.CurrentStore.Id}:newProducts:product:{product.Id}", product.CreatedOnUtc);
         //        items.Add(item);
         //        //uncomment below if you want to add RSS enclosure for pictures
@@ -264,16 +264,16 @@ namespace Nop.Web.Controllers
         //    model = _productModelFactory.PrepareProductReviewsModel(model, product);
         //    //only registered users can leave reviews
         //    if (_workContext.CurrentCustomer.IsGuest() && !_catalogSettings.AllowAnonymousUsersToReviewProduct)
-        //        ModelState.AddModelError("", _localizationService.GetResource("Reviews.OnlyRegisteredUsersCanWriteReviews"));
+        //        ModelState.AddModelError("", await _localizationService.GetResource("Reviews.OnlyRegisteredUsersCanWriteReviews"));
 
         //    if (_catalogSettings.ProductReviewPossibleOnlyAfterPurchasing)
         //    {
-        //        var hasCompletedOrders = _orderService.SearchOrders(customerId: _workContext.CurrentCustomer.Id,
+        //        var hasCompletedOrders = await _orderService.SearchOrders(customerId: _workContext.CurrentCustomer.Id,
         //            productId: productId,
         //            osIds: new List<int> { (int)OrderStatus.Complete },
         //            pageSize: 1).Any();
         //        if (!hasCompletedOrders)
-        //            ModelState.AddModelError(string.Empty, _localizationService.GetResource("Reviews.ProductReviewPossibleOnlyAfterPurchasing"));
+        //            ModelState.AddModelError(string.Empty, await _localizationService.GetResource("Reviews.ProductReviewPossibleOnlyAfterPurchasing"));
         //    }
 
         //    //default value
@@ -302,22 +302,22 @@ namespace Nop.Web.Controllers
         //    //validate CAPTCHA
         //    if (_captchaSettings.Enabled && _captchaSettings.ShowOnProductReviewPage && !captchaValid)
         //    {
-        //        ModelState.AddModelError("", _localizationService.GetResource("Common.WrongCaptchaMessage"));
+        //        ModelState.AddModelError("", await _localizationService.GetResource("Common.WrongCaptchaMessage"));
         //    }
 
         //    if (_workContext.CurrentCustomer.IsGuest() && !_catalogSettings.AllowAnonymousUsersToReviewProduct)
         //    {
-        //        ModelState.AddModelError("", _localizationService.GetResource("Reviews.OnlyRegisteredUsersCanWriteReviews"));
+        //        ModelState.AddModelError("", await _localizationService.GetResource("Reviews.OnlyRegisteredUsersCanWriteReviews"));
         //    }
 
         //    if (_catalogSettings.ProductReviewPossibleOnlyAfterPurchasing)
         //    {
-        //        var hasCompletedOrders = _orderService.SearchOrders(customerId: _workContext.CurrentCustomer.Id,
+        //        var hasCompletedOrders = await _orderService.SearchOrders(customerId: _workContext.CurrentCustomer.Id,
         //            productId: productId,
         //            osIds: new List<int> { (int)OrderStatus.Complete },
         //            pageSize: 1).Any();
         //        if (!hasCompletedOrders)
-        //            ModelState.AddModelError(string.Empty, _localizationService.GetResource("Reviews.ProductReviewPossibleOnlyAfterPurchasing"));
+        //            ModelState.AddModelError(string.Empty, await _localizationService.GetResource("Reviews.ProductReviewPossibleOnlyAfterPurchasing"));
         //    }
 
         //    if (ModelState.IsValid)
@@ -365,7 +365,7 @@ namespace Nop.Web.Controllers
 
         //        //activity log
         //        _customerActivityService.InsertActivity("PublicStore.AddProductReview",
-        //            string.Format(_localizationService.GetResource("ActivityLog.PublicStore.AddProductReview"), product.Name), product);
+        //            string.Format(await _localizationService.GetResource("ActivityLog.PublicStore.AddProductReview"), product.Name), product);
 
         //        //raise event
         //        if (productReview.IsApproved)
@@ -377,9 +377,9 @@ namespace Nop.Web.Controllers
 
         //        model.AddProductReview.SuccessfullyAdded = true;
         //        if (!isApproved)
-        //            model.AddProductReview.Result = _localizationService.GetResource("Reviews.SeeAfterApproving");
+        //            model.AddProductReview.Result = await _localizationService.GetResource("Reviews.SeeAfterApproving");
         //        else
-        //            model.AddProductReview.Result = _localizationService.GetResource("Reviews.SuccessfullyAdded");
+        //            model.AddProductReview.Result = await _localizationService.GetResource("Reviews.SuccessfullyAdded");
 
         //        return View(model);
         //    }
@@ -400,7 +400,7 @@ namespace Nop.Web.Controllers
         //    {
         //        return Json(new
         //        {
-        //            Result = _localizationService.GetResource("Reviews.Helpfulness.OnlyRegistered"),
+        //            Result = await _localizationService.GetResource("Reviews.Helpfulness.OnlyRegistered"),
         //            TotalYes = productReview.HelpfulYesTotal,
         //            TotalNo = productReview.HelpfulNoTotal
         //        });
@@ -411,7 +411,7 @@ namespace Nop.Web.Controllers
         //    {
         //        return Json(new
         //        {
-        //            Result = _localizationService.GetResource("Reviews.Helpfulness.YourOwnReview"),
+        //            Result = await _localizationService.GetResource("Reviews.Helpfulness.YourOwnReview"),
         //            TotalYes = productReview.HelpfulYesTotal,
         //            TotalNo = productReview.HelpfulNoTotal
         //        });
@@ -445,7 +445,7 @@ namespace Nop.Web.Controllers
 
         //    return Json(new
         //    {
-        //        Result = _localizationService.GetResource("Reviews.Helpfulness.SuccessfullyVoted"),
+        //        Result = await _localizationService.GetResource("Reviews.Helpfulness.SuccessfullyVoted"),
         //        TotalYes = productReview.HelpfulYesTotal,
         //        TotalNo = productReview.HelpfulNoTotal
         //    });
@@ -494,13 +494,13 @@ namespace Nop.Web.Controllers
         //    //validate CAPTCHA
         //    if (_captchaSettings.Enabled && _captchaSettings.ShowOnEmailProductToFriendPage && !captchaValid)
         //    {
-        //        ModelState.AddModelError("", _localizationService.GetResource("Common.WrongCaptchaMessage"));
+        //        ModelState.AddModelError("", await _localizationService.GetResource("Common.WrongCaptchaMessage"));
         //    }
 
         //    //check whether the current customer is guest and ia allowed to email a friend
         //    if (_workContext.CurrentCustomer.IsGuest() && !_catalogSettings.AllowAnonymousUsersToEmailAFriend)
         //    {
-        //        ModelState.AddModelError("", _localizationService.GetResource("Products.EmailAFriend.OnlyRegisteredUsers"));
+        //        ModelState.AddModelError("", await _localizationService.GetResource("Products.EmailAFriend.OnlyRegisteredUsers"));
         //    }
 
         //    if (ModelState.IsValid)
@@ -513,7 +513,7 @@ namespace Nop.Web.Controllers
 
         //        model = _productModelFactory.PrepareProductEmailAFriendModel(model, product, true);
         //        model.SuccessfullySent = true;
-        //        model.Result = _localizationService.GetResource("Products.EmailAFriend.SuccessfullySent");
+        //        model.Result = await _localizationService.GetResource("Products.EmailAFriend.SuccessfullySent");
 
         //        return View(model);
         //    }
@@ -549,12 +549,12 @@ namespace Nop.Web.Controllers
 
         //    //activity log
         //    _customerActivityService.InsertActivity("PublicStore.AddToCompareList",
-        //        string.Format(_localizationService.GetResource("ActivityLog.PublicStore.AddToCompareList"), product.Name), product);
+        //        string.Format(await _localizationService.GetResource("ActivityLog.PublicStore.AddToCompareList"), product.Name), product);
 
         //    return Json(new
         //    {
         //        success = true,
-        //        message = string.Format(_localizationService.GetResource("Products.ProductHasBeenAddedToCompareList.Link"), Url.RouteUrl("CompareProducts"))
+        //        message = string.Format(await _localizationService.GetResource("Products.ProductHasBeenAddedToCompareList.Link"), Url.RouteUrl("CompareProducts"))
         //        //use the code below (commented) if you want a customer to be automatically redirected to the compare products page
         //        //redirect = Url.RouteUrl("CompareProducts"),
         //    });

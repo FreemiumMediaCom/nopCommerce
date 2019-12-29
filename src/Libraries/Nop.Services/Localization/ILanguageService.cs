@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Localization;
 
 namespace Nop.Services.Localization
@@ -12,7 +13,7 @@ namespace Nop.Services.Localization
         /// Deletes a language
         /// </summary>
         /// <param name="language">Language</param>
-        void DeleteLanguage(Language language);
+        Task DeleteLanguage(Language language);
 
         /// <summary>
         /// Gets all languages
@@ -21,7 +22,7 @@ namespace Nop.Services.Localization
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Languages</returns>
-        IList<Language> GetAllLanguages(bool showHidden = false, int storeId = 0, bool loadCacheableCopy = true);
+        Task<IList<Language>> GetAllLanguages(bool showHidden = false, int storeId = 0, bool loadCacheableCopy = true);
 
         /// <summary>
         /// Gets a language
@@ -29,25 +30,25 @@ namespace Nop.Services.Localization
         /// <param name="languageId">Language identifier</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Language</returns>
-        Language GetLanguageById(int languageId, bool loadCacheableCopy = true);
+        Task<Language> GetLanguageById(int languageId, bool loadCacheableCopy = true);
 
         /// <summary>
         /// Inserts a language
         /// </summary>
         /// <param name="language">Language</param>
-        void InsertLanguage(Language language);
+        Task InsertLanguage(Language language);
 
         /// <summary>
         /// Updates a language
         /// </summary>
         /// <param name="language">Language</param>
-        void UpdateLanguage(Language language);
+        Task UpdateLanguage(Language language);
 
         /// <summary>
         /// Get 2 letter ISO language code
         /// </summary>
         /// <param name="language">Language</param>
         /// <returns>ISO language code</returns>
-        string GetTwoLetterIsoLanguageName(Language language);
+        Task<string> GetTwoLetterIsoLanguageName(Language language);
     }
 }

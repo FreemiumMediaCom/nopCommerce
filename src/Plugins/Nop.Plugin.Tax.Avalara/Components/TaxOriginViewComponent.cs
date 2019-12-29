@@ -47,7 +47,7 @@ namespace Nop.Plugin.Tax.Avalara.Components
         /// <param name="widgetZone">Widget zone</param>
         /// <param name="additionalData">Additional parameters</param>
         /// <returns>View component result</returns>
-        public IViewComponentResult Invoke(string widgetZone, object additionalData)
+        public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return Content(string.Empty);

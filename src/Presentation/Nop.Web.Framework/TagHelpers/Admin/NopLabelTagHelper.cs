@@ -98,7 +98,7 @@ namespace Nop.Web.Framework.TagHelpers.Admin
                     if (resourceDisplayName != null && DisplayHint)
                     {
                         var langId = _workContext.WorkingLanguage.Id;
-                        var hintResource = _localizationService.GetResource(
+                        var hintResource = await _localizationService.GetResource(
                             resourceDisplayName.ResourceKey + ".Hint", langId, returnEmptyIfNotFound: true,
                             logIfNotFound: false);
 

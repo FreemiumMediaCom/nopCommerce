@@ -567,7 +567,7 @@ namespace Nop.Plugin.Payments.Qualpay.Services
             transactionRequest.CardId = GetTokenizedCardId(processPaymentRequest, customer);
 
             //whether the customer has chosen to save card details for the future using
-            var saveCardKey = _localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card.Save");
+            var saveCardKey = await _localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card.Save");
             if (!processPaymentRequest.CustomValues.ContainsKey(saveCardKey))
                 return transactionRequest;
 
@@ -600,7 +600,7 @@ namespace Nop.Plugin.Payments.Qualpay.Services
         /// <returns>Billing card</returns>
         private BillingCard GetPreviouslySavedBillingCard(ProcessPaymentRequest processPaymentRequest, Core.Domain.Customers.Customer customer)
         {
-            var cardIdKey = _localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card");
+            var cardIdKey = await _localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card");
             if (!processPaymentRequest.CustomValues.TryGetValue(cardIdKey, out var cardId))
                 return null;
 
@@ -628,7 +628,7 @@ namespace Nop.Plugin.Payments.Qualpay.Services
             if (_qualpaySettings.UseEmbeddedFields)
             {
                 //tokenized card identifier has already been received from Qualpay Embedded Fields 
-                var tokenizedCardIdKey = _localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card.Token");
+                var tokenizedCardIdKey = await _localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card.Token");
                 if (processPaymentRequest.CustomValues.TryGetValue(tokenizedCardIdKey, out var tokenizedCardId))
                     cardId = tokenizedCardId.ToString();
 

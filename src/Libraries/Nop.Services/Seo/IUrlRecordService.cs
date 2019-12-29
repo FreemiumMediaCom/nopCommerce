@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Seo;
 
@@ -13,46 +14,46 @@ namespace Nop.Services.Seo
         /// Deletes an URL record
         /// </summary>
         /// <param name="urlRecord">URL record</param>
-        void DeleteUrlRecord(UrlRecord urlRecord);
+        Task DeleteUrlRecord(UrlRecord urlRecord);
 
         /// <summary>
         /// Deletes an URL records
         /// </summary>
         /// <param name="urlRecords">URL records</param>
-        void DeleteUrlRecords(IList<UrlRecord> urlRecords);
+        Task DeleteUrlRecords(IList<UrlRecord> urlRecords);
 
         /// <summary>
         /// Gets an URL record
         /// </summary>
         /// <param name="urlRecordId">URL record identifier</param>
         /// <returns>URL record</returns>
-        UrlRecord GetUrlRecordById(int urlRecordId);
+        Task<UrlRecord> GetUrlRecordById(int urlRecordId);
 
         /// <summary>
         /// Gets an URL records
         /// </summary>
         /// <param name="urlRecordIds">URL record identifiers</param>
         /// <returns>URL record</returns>
-        IList<UrlRecord> GetUrlRecordsByIds(int[] urlRecordIds);
+        Task<IList<UrlRecord>> GetUrlRecordsByIds(int[] urlRecordIds);
 
         /// <summary>
         /// Inserts an URL record
         /// </summary>
         /// <param name="urlRecord">URL record</param>
-        void InsertUrlRecord(UrlRecord urlRecord);
+        Task InsertUrlRecord(UrlRecord urlRecord);
 
         /// <summary>
         /// Updates the URL record
         /// </summary>
         /// <param name="urlRecord">URL record</param>
-        void UpdateUrlRecord(UrlRecord urlRecord);
+        Task UpdateUrlRecord(UrlRecord urlRecord);
 
         /// <summary>
         /// Find URL record
         /// </summary>
         /// <param name="slug">Slug</param>
         /// <returns>Found URL record</returns>
-        UrlRecord GetBySlug(string slug);
+        Task<UrlRecord> GetBySlug(string slug);
 
         /// <summary>
         /// Find URL record (cached version).
@@ -61,7 +62,7 @@ namespace Nop.Services.Seo
         /// </summary>
         /// <param name="slug">Slug</param>
         /// <returns>Found URL record</returns>
-        UrlRecordService.UrlRecordForCaching GetBySlugCached(string slug);
+        Task<UrlRecordService.UrlRecordForCaching> GetBySlugCached(string slug);
 
         /// <summary>
         /// Gets all URL records
@@ -88,7 +89,7 @@ namespace Nop.Services.Seo
         /// <param name="entity">Entity</param>
         /// <param name="slug">Slug</param>
         /// <param name="languageId">Language ID</param>
-        void SaveSlug<T>(T entity, string slug, int languageId) where T : BaseEntity, ISlugSupported;
+        Task SaveSlug<T>(T entity, string slug, int languageId) where T : BaseEntity, ISlugSupported;
 
         /// <summary>
         ///  Get search engine friendly name (slug)
@@ -99,7 +100,7 @@ namespace Nop.Services.Seo
         /// <param name="returnDefaultValue">A value indicating whether to return default value (if language specified one is not found)</param>
         /// <param name="ensureTwoPublishedLanguages">A value indicating whether to ensure that we have at least two published languages; otherwise, load only default value</param>
         /// <returns>Search engine  name (slug)</returns>
-        string GetSeName<T>(T entity, int? languageId = null, bool returnDefaultValue = true,
+        Task<string> GetSeName<T>(T entity, int? languageId = null, bool returnDefaultValue = true,
             bool ensureTwoPublishedLanguages = true) where T : BaseEntity, ISlugSupported;
 
         /// <summary>
@@ -111,7 +112,7 @@ namespace Nop.Services.Seo
         /// <param name="returnDefaultValue">A value indicating whether to return default value (if language specified one is not found)</param>
         /// <param name="ensureTwoPublishedLanguages">A value indicating whether to ensure that we have at least two published languages; otherwise, load only default value</param>
         /// <returns>Search engine  name (slug)</returns>
-        string GetSeName(int entityId, string entityName, int? languageId = null,
+        Task<string> GetSeName(int entityId, string entityName, int? languageId = null,
             bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true);
 
         /// <summary>
@@ -131,7 +132,7 @@ namespace Nop.Services.Seo
         /// <param name="name">User-friendly name used to generate sename</param>
         /// <param name="ensureNotEmpty">Ensure that sename is not empty</param>
         /// <returns>Valid sename</returns>
-        string ValidateSeName<T>(T entity, string seName, string name, bool ensureNotEmpty) where T : BaseEntity, ISlugSupported;
+        Task<string> ValidateSeName<T>(T entity, string seName, string name, bool ensureNotEmpty) where T : BaseEntity, ISlugSupported;
 
         /// <summary>
         /// Validate search engine name
@@ -142,6 +143,6 @@ namespace Nop.Services.Seo
         /// <param name="name">User-friendly name used to generate sename</param>
         /// <param name="ensureNotEmpty">Ensure that sename is not empty</param>
         /// <returns>Valid sename</returns>
-        string ValidateSeName(int entityId, string entityName, string seName, string name, bool ensureNotEmpty);
+        Task<string> ValidateSeName(int entityId, string entityName, string seName, string name, bool ensureNotEmpty);
     }
 }

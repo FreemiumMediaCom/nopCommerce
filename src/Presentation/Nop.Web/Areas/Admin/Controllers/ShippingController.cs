@@ -116,7 +116,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Shipping rate computation methods
 
-        public virtual IActionResult Providers()
+        public async virtual Task<IActionResult> Providers()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -128,7 +128,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Providers(ShippingProviderSearchModel searchModel)
+        public async virtual Task<IActionResult> Providers(ShippingProviderSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedDataTablesJson();
@@ -140,7 +140,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProviderUpdate(ShippingProviderModel model)
+        public async virtual Task<IActionResult> ProviderUpdate(ShippingProviderModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -183,7 +183,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Pickup point providers
 
-        public virtual IActionResult PickupPointProviders()
+        public async virtual Task<IActionResult> PickupPointProviders()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -195,7 +195,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PickupPointProviders(PickupPointProviderSearchModel searchModel)
+        public async virtual Task<IActionResult> PickupPointProviders(PickupPointProviderSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedDataTablesJson();
@@ -207,7 +207,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PickupPointProviderUpdate(PickupPointProviderModel model)
+        public async virtual Task<IActionResult> PickupPointProviderUpdate(PickupPointProviderModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -248,7 +248,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Shipping methods
 
-        public virtual IActionResult Methods()
+        public async virtual Task<IActionResult> Methods()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -260,7 +260,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Methods(ShippingMethodSearchModel searchModel)
+        public async virtual Task<IActionResult> Methods(ShippingMethodSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedDataTablesJson();
@@ -271,7 +271,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult CreateMethod()
+        public async virtual Task<IActionResult> CreateMethod()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -283,7 +283,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult CreateMethod(ShippingMethodModel model, bool continueEditing)
+        public async virtual Task<IActionResult> CreateMethod(ShippingMethodModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -296,7 +296,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(sm, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.Methods.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.Methods.Added"));
                 return continueEditing ? RedirectToAction("EditMethod", new { id = sm.Id }) : RedirectToAction("Methods");
             }
 
@@ -307,7 +307,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult EditMethod(int id)
+        public async virtual Task<IActionResult> EditMethod(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -324,7 +324,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult EditMethod(ShippingMethodModel model, bool continueEditing)
+        public async virtual Task<IActionResult> EditMethod(ShippingMethodModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -342,7 +342,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(shippingMethod, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.Methods.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.Methods.Updated"));
 
                 return continueEditing ? RedirectToAction("EditMethod", shippingMethod.Id) : RedirectToAction("Methods");
             }
@@ -355,7 +355,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteMethod(int id)
+        public async virtual Task<IActionResult> DeleteMethod(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -367,7 +367,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             _shippingService.DeleteShippingMethod(shippingMethod);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.Methods.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.Methods.Deleted"));
 
             return RedirectToAction("Methods");
         }
@@ -376,7 +376,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Dates and ranges
 
-        public virtual IActionResult DatesAndRanges()
+        public async virtual Task<IActionResult> DatesAndRanges()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -392,7 +392,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Delivery dates
 
         [HttpPost]
-        public virtual IActionResult DeliveryDates(DeliveryDateSearchModel searchModel)
+        public async virtual Task<IActionResult> DeliveryDates(DeliveryDateSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedDataTablesJson();
@@ -403,7 +403,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult CreateDeliveryDate()
+        public async virtual Task<IActionResult> CreateDeliveryDate()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -415,7 +415,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult CreateDeliveryDate(DeliveryDateModel model, bool continueEditing)
+        public async virtual Task<IActionResult> CreateDeliveryDate(DeliveryDateModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -428,7 +428,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(deliveryDate, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.DeliveryDates.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.DeliveryDates.Added"));
 
                 return continueEditing ? RedirectToAction("EditDeliveryDate", new { id = deliveryDate.Id }) : RedirectToAction("DatesAndRanges");
             }
@@ -440,7 +440,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult EditDeliveryDate(int id)
+        public async virtual Task<IActionResult> EditDeliveryDate(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -457,7 +457,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult EditDeliveryDate(DeliveryDateModel model, bool continueEditing)
+        public async virtual Task<IActionResult> EditDeliveryDate(DeliveryDateModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -475,7 +475,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(deliveryDate, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.DeliveryDates.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.DeliveryDates.Updated"));
 
                 return continueEditing ? RedirectToAction("EditDeliveryDate", deliveryDate.Id) : RedirectToAction("DatesAndRanges");
             }
@@ -488,7 +488,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteDeliveryDate(int id)
+        public async virtual Task<IActionResult> DeleteDeliveryDate(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -500,7 +500,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             _dateRangeService.DeleteDeliveryDate(deliveryDate);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.DeliveryDates.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.DeliveryDates.Deleted"));
 
             return RedirectToAction("DatesAndRanges");
         }
@@ -510,7 +510,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Product availability ranges
 
         [HttpPost]
-        public virtual IActionResult ProductAvailabilityRanges(ProductAvailabilityRangeSearchModel searchModel)
+        public async virtual Task<IActionResult> ProductAvailabilityRanges(ProductAvailabilityRangeSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedDataTablesJson();
@@ -521,7 +521,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult CreateProductAvailabilityRange()
+        public async virtual Task<IActionResult> CreateProductAvailabilityRange()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -533,7 +533,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult CreateProductAvailabilityRange(ProductAvailabilityRangeModel model, bool continueEditing)
+        public async virtual Task<IActionResult> CreateProductAvailabilityRange(ProductAvailabilityRangeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -546,7 +546,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(productAvailabilityRange, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.ProductAvailabilityRanges.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.ProductAvailabilityRanges.Added"));
 
                 return continueEditing ? RedirectToAction("EditProductAvailabilityRange", new { id = productAvailabilityRange.Id }) : RedirectToAction("DatesAndRanges");
             }
@@ -558,7 +558,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult EditProductAvailabilityRange(int id)
+        public async virtual Task<IActionResult> EditProductAvailabilityRange(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -575,7 +575,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult EditProductAvailabilityRange(ProductAvailabilityRangeModel model, bool continueEditing)
+        public async virtual Task<IActionResult> EditProductAvailabilityRange(ProductAvailabilityRangeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -593,7 +593,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(productAvailabilityRange, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.ProductAvailabilityRanges.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.ProductAvailabilityRanges.Updated"));
 
                 return continueEditing ? RedirectToAction("EditProductAvailabilityRange", productAvailabilityRange.Id) : RedirectToAction("DatesAndRanges");
             }
@@ -606,7 +606,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteProductAvailabilityRange(int id)
+        public async virtual Task<IActionResult> DeleteProductAvailabilityRange(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -618,7 +618,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             _dateRangeService.DeleteProductAvailabilityRange(productAvailabilityRange);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.ProductAvailabilityRanges.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.ProductAvailabilityRanges.Deleted"));
 
             return RedirectToAction("DatesAndRanges");
         }
@@ -627,7 +627,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Warehouses
 
-        public virtual IActionResult Warehouses()
+        public async virtual Task<IActionResult> Warehouses()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -639,7 +639,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Warehouses(WarehouseSearchModel searchModel)
+        public async virtual Task<IActionResult> Warehouses(WarehouseSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedDataTablesJson();
@@ -650,7 +650,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult CreateWarehouse()
+        public async virtual Task<IActionResult> CreateWarehouse()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -662,7 +662,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult CreateWarehouse(WarehouseModel model, bool continueEditing)
+        public async virtual Task<IActionResult> CreateWarehouse(WarehouseModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -681,9 +681,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewWarehouse",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewWarehouse"), warehouse.Id), warehouse);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewWarehouse"), warehouse.Id), warehouse);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.Warehouses.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.Warehouses.Added"));
 
                 return continueEditing ? RedirectToAction("EditWarehouse", new { id = warehouse.Id }) : RedirectToAction("Warehouses");
             }
@@ -695,7 +695,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult EditWarehouse(int id)
+        public async virtual Task<IActionResult> EditWarehouse(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -712,7 +712,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult EditWarehouse(WarehouseModel model, bool continueEditing)
+        public async virtual Task<IActionResult> EditWarehouse(WarehouseModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -744,9 +744,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditWarehouse",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditWarehouse"), warehouse.Id), warehouse);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditWarehouse"), warehouse.Id), warehouse);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.Warehouses.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.Warehouses.Updated"));
 
                 return continueEditing ? RedirectToAction("EditWarehouse", warehouse.Id) : RedirectToAction("Warehouses");
             }
@@ -759,7 +759,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteWarehouse(int id)
+        public async virtual Task<IActionResult> DeleteWarehouse(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -773,9 +773,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteWarehouse",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteWarehouse"), warehouse.Id), warehouse);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteWarehouse"), warehouse.Id), warehouse);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.warehouses.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.warehouses.Deleted"));
 
             return RedirectToAction("Warehouses");
         }
@@ -784,7 +784,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Restrictions
 
-        public virtual IActionResult Restrictions()
+        public async virtual Task<IActionResult> Restrictions()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -800,7 +800,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         //we use 2048 value because in some cases default value (1024) is too small for this action
         [RequestFormLimits(ValueCountLimit = 2048)]
         [HttpPost, ActionName("Restrictions")]
-        public virtual IActionResult RestrictionSave(ShippingMethodRestrictionModel model, IFormCollection form)
+        public async virtual Task<IActionResult> RestrictionSave(ShippingMethodRestrictionModel model, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -840,7 +840,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 }
             }
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Shipping.Restrictions.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Shipping.Restrictions.Updated"));
 
             return RedirectToAction("Restrictions");
         }

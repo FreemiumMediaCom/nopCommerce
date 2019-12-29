@@ -46,7 +46,7 @@ namespace Nop.Plugin.Payments.Manual.Controllers
 
         #region Methods
 
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -75,7 +75,7 @@ namespace Nop.Plugin.Payments.Manual.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult Configure(ConfigurationModel model)
+        public async Task<IActionResult> Configure(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManagePaymentMethods))
                 return AccessDeniedView();
@@ -103,7 +103,7 @@ namespace Nop.Plugin.Payments.Manual.Controllers
             //now clear settings cache
             _settingService.ClearCache();
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
         }

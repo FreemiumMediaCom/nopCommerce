@@ -9,6 +9,6 @@ namespace Nop.Web.Framework.Models
         /// <summary>
         /// Gets or sets model identifier
         /// </summary>
-        public virtual int Id { get; set; }
+        public async virtual Task<int> Id { get; set; }
     }
 }

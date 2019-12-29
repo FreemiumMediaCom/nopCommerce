@@ -76,7 +76,7 @@ namespace Nop.Web.Areas.Admin.Factories
             searchModel.ReturnRequestStatusList.Insert(0, new SelectListItem
             {
                 Value = "-1",
-                Text = _localizationService.GetResource("Admin.ReturnRequests.SearchReturnRequestStatus.All")
+                Text = await _localizationService.GetResource("Admin.ReturnRequests.SearchReturnRequestStatus.All")
             });
 
             //prepare page parameters
@@ -123,8 +123,8 @@ namespace Nop.Web.Areas.Admin.Factories
                     //fill in additional values (not existing in the entity)
                     returnRequestModel.CustomerInfo = returnRequest.Customer.IsRegistered()
                         ? returnRequest.Customer.Email : _localizationService.GetResource("Admin.Customers.Guest");
-                    returnRequestModel.ReturnRequestStatusStr = _localizationService.GetLocalizedEnum(returnRequest.ReturnRequestStatus);
-                    var orderItem = _orderService.GetOrderItemById(returnRequest.OrderItemId);
+                    returnRequestModel.ReturnRequestStatusStr = await _localizationService.GetLocalizedEnum(returnRequest.ReturnRequestStatus);
+                    var orderItem = await _orderService.GetOrderItemById(returnRequest.OrderItemId);
                     if (orderItem == null)
                         return returnRequestModel;
 
@@ -168,7 +168,7 @@ namespace Nop.Web.Areas.Admin.Factories
             model.CustomerInfo = returnRequest.Customer.IsRegistered()
                 ? returnRequest.Customer.Email : _localizationService.GetResource("Admin.Customers.Guest");
             model.UploadedFileGuid = _downloadService.GetDownloadById(returnRequest.UploadedFileId)?.DownloadGuid ?? Guid.Empty;
-            var orderItem = _orderService.GetOrderItemById(returnRequest.OrderItemId);
+            var orderItem = await _orderService.GetOrderItemById(returnRequest.OrderItemId);
             if (orderItem != null)
             {
                 model.ProductId = orderItem.ProductId;
@@ -248,7 +248,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(returnRequestReason, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(returnRequestReason, entity => entity.Name, languageId, false, false);
                 };
             }
 
@@ -317,7 +317,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(returnRequestAction, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(returnRequestAction, entity => entity.Name, languageId, false, false);
                 };
             }
 

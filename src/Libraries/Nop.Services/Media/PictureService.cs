@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
@@ -148,13 +150,13 @@ namespace Nop.Services.Media
         /// <param name="pictureId">Picture identifier</param>
         /// <param name="mimeType">MIME type</param>
         /// <returns>Picture binary</returns>
-        protected virtual byte[] LoadPictureFromFile(int pictureId, string mimeType)
+        protected async virtual Task<byte[]> LoadPictureFromFile(int pictureId, string mimeType)
         {
             var lastPart = GetFileExtensionFromMimeType(mimeType);
             var fileName = $"{pictureId:0000000}_0.{lastPart}";
             var filePath = GetPictureLocalPath(fileName);
 
-            return _fileProvider.ReadAllBytes(filePath);
+            return await _fileProvider.ReadAllBytes(filePath);
         }
 
         /// <summary>
@@ -286,14 +288,14 @@ namespace Nop.Services.Media
         /// <param name="picture">Picture</param>
         /// <param name="fromDb">Load from database; otherwise, from file system</param>
         /// <returns>Picture binary</returns>
-        protected virtual byte[] LoadPictureBinary(Picture picture, bool fromDb)
+        protected async virtual Task<byte[]> LoadPictureBinary(Picture picture, bool fromDb)
         {
             if (picture == null)
                 throw new ArgumentNullException(nameof(picture));
 
             var result = fromDb
                 ? picture.PictureBinary?.BinaryData ?? new byte[0]
-                : LoadPictureFromFile(picture.Id, picture.MimeType);
+                : await LoadPictureFromFile(picture.Id, picture.MimeType);
 
             return result;
         }
@@ -332,7 +334,7 @@ namespace Nop.Services.Media
         /// <param name="picture">The picture object</param>
         /// <param name="binaryData">The picture binary data</param>
         /// <returns>Picture binary</returns>
-        protected virtual PictureBinary UpdatePictureBinary(Picture picture, byte[] binaryData)
+        protected async virtual Task<PictureBinary> UpdatePictureBinary(Picture picture, byte[] binaryData)
         {
             if (picture == null)
                 throw new ArgumentNullException(nameof(picture));
@@ -350,9 +352,9 @@ namespace Nop.Services.Media
             pictureBinary.BinaryData = binaryData;
 
             if (isNew)
-                _pictureBinaryRepository.Insert(pictureBinary);
+                await _pictureBinaryRepository.Insert(pictureBinary);
             else
-                _pictureBinaryRepository.Update(pictureBinary);
+                await _pictureBinaryRepository.Update(pictureBinary);
 
             return pictureBinary;
         }
@@ -440,9 +442,9 @@ namespace Nop.Services.Media
         /// </summary>
         /// <param name="picture">Picture</param>
         /// <returns>Picture binary</returns>
-        public virtual byte[] LoadPictureBinary(Picture picture)
+        public async virtual Task<byte[]> LoadPictureBinary(Picture picture)
         {
-            return LoadPictureBinary(picture, StoreInDb);
+            return await LoadPictureBinary(picture, StoreInDb);
         }
 
         /// <summary>
@@ -523,14 +525,14 @@ namespace Nop.Services.Media
         /// <param name="storeLocation">Store location URL; null to use determine the current store location automatically</param>
         /// <param name="defaultPictureType">Default picture type</param>
         /// <returns>Picture URL</returns>
-        public virtual string GetPictureUrl(int pictureId,
+        public async virtual Task<string> GetPictureUrl(int pictureId,
             int targetSize = 0,
             bool showDefaultPicture = true,
             string storeLocation = null,
             PictureType defaultPictureType = PictureType.Entity)
         {
-            var picture = GetPictureById(pictureId);
-            return GetPictureUrl(picture, targetSize, showDefaultPicture, storeLocation, defaultPictureType);
+            var picture = await GetPictureById(pictureId);
+            return await GetPictureUrl(picture, targetSize, showDefaultPicture, storeLocation, defaultPictureType);
         }
 
         /// <summary>
@@ -542,7 +544,7 @@ namespace Nop.Services.Media
         /// <param name="storeLocation">Store location URL; null to use determine the current store location automatically</param>
         /// <param name="defaultPictureType">Default picture type</param>
         /// <returns>Picture URL</returns>
-        public virtual string GetPictureUrl(Picture picture,
+        public async virtual Task<string> GetPictureUrl(Picture picture,
             int targetSize = 0,
             bool showDefaultPicture = true,
             string storeLocation = null,
@@ -555,13 +557,13 @@ namespace Nop.Services.Media
             if (picture.IsNew)
             {
                 DeletePictureThumbs(picture);
-                pictureBinary = LoadPictureBinary(picture);
+                pictureBinary = await LoadPictureBinary(picture);
 
                 if ((pictureBinary?.Length ?? 0) == 0)
                     return showDefaultPicture ? GetDefaultPictureUrl(targetSize, defaultPictureType, storeLocation) : string.Empty;
 
                 //we do not validate picture binary here to ensure that no exception ("Parameter is not valid") will be thrown
-                picture = UpdatePicture(picture.Id,
+                picture = await UpdatePicture(picture.Id,
                     pictureBinary,
                     picture.MimeType,
                     picture.SeoFilename,
@@ -602,7 +604,7 @@ namespace Nop.Services.Media
                 //check, if the file was created, while we were waiting for the release of the mutex.
                 if (!GeneratedThumbExists(thumbFilePath, thumbFileName))
                 {
-                    pictureBinary = pictureBinary ?? LoadPictureBinary(picture);
+                    pictureBinary = pictureBinary ?? await LoadPictureBinary(picture);
 
                     if ((pictureBinary?.Length ?? 0) == 0)
                         return showDefaultPicture ? GetDefaultPictureUrl(targetSize, defaultPictureType, storeLocation) : string.Empty;
@@ -644,9 +646,9 @@ namespace Nop.Services.Media
         /// <param name="targetSize">The target picture size (longest side)</param>
         /// <param name="showDefaultPicture">A value indicating whether the default picture is shown</param>
         /// <returns></returns>
-        public virtual string GetThumbLocalPath(Picture picture, int targetSize = 0, bool showDefaultPicture = true)
+        public async virtual Task<string> GetThumbLocalPath(Picture picture, int targetSize = 0, bool showDefaultPicture = true)
         {
-            var url = GetPictureUrl(picture, targetSize, showDefaultPicture);
+            var url = await GetPictureUrl(picture, targetSize, showDefaultPicture);
             if (string.IsNullOrEmpty(url))
                 return string.Empty;
 
@@ -662,19 +664,19 @@ namespace Nop.Services.Media
         /// </summary>
         /// <param name="pictureId">Picture identifier</param>
         /// <returns>Picture</returns>
-        public virtual Picture GetPictureById(int pictureId)
+        public async virtual Task<Picture> GetPictureById(int pictureId)
         {
             if (pictureId == 0)
                 return null;
 
-            return _pictureRepository.GetById(pictureId);
+            return await _pictureRepository.GetById(pictureId);
         }
 
         /// <summary>
         /// Deletes a picture
         /// </summary>
         /// <param name="picture">Picture</param>
-        public virtual void DeletePicture(Picture picture)
+        public async virtual Task DeletePicture(Picture picture)
         {
             if (picture == null)
                 throw new ArgumentNullException(nameof(picture));
@@ -687,7 +689,7 @@ namespace Nop.Services.Media
                 DeletePictureOnFileSystem(picture);
 
             //delete from database
-            _pictureRepository.Delete(picture);
+            await _pictureRepository.Delete(picture);
 
             //event notification
             _eventPublisher.EntityDeleted(picture);
@@ -720,7 +722,7 @@ namespace Nop.Services.Media
         /// <param name="productId">Product identifier</param>
         /// <param name="recordsToReturn">Number of records to return. 0 if you want to get all items</param>
         /// <returns>Pictures</returns>
-        public virtual IList<Picture> GetPicturesByProductId(int productId, int recordsToReturn = 0)
+        public async virtual Task<IList<Picture>> GetPicturesByProductId(int productId, int recordsToReturn = 0)
         {
             if (productId == 0)
                 return new List<Picture>();
@@ -734,7 +736,7 @@ namespace Nop.Services.Media
             if (recordsToReturn > 0)
                 query = query.Take(recordsToReturn);
 
-            var pics = query.ToList();
+            var pics = await query.ToListAsync();
             return pics;
         }
 
@@ -747,9 +749,10 @@ namespace Nop.Services.Media
         /// <param name="altAttribute">"alt" attribute for "img" HTML element</param>
         /// <param name="titleAttribute">"title" attribute for "img" HTML element</param>
         /// <param name="isNew">A value indicating whether the picture is new</param>
-        /// <param name="validateBinary">A value indicating whether to validated provided picture binary</param>
+        /// <param name="validateBinary">A value 
+        /// ndicating whether to validated provided picture binary</param>
         /// <returns>Picture</returns>
-        public virtual Picture InsertPicture(byte[] pictureBinary, string mimeType, string seoFilename,
+        public async virtual Task<Picture> InsertPicture(byte[] pictureBinary, string mimeType, string seoFilename,
             string altAttribute = null, string titleAttribute = null,
             bool isNew = true, bool validateBinary = true)
         {
@@ -769,7 +772,7 @@ namespace Nop.Services.Media
                 TitleAttribute = titleAttribute,
                 IsNew = isNew
             };
-            _pictureRepository.Insert(picture);
+            await _pictureRepository.Insert(picture);
             UpdatePictureBinary(picture, StoreInDb ? pictureBinary : new byte[0]);
 
             if (!StoreInDb)
@@ -788,7 +791,7 @@ namespace Nop.Services.Media
         /// <param name="defaultFileName">File name which will be use if IFormFile.FileName not present</param>
         /// <param name="virtualPath">Virtual path</param>
         /// <returns>Picture</returns>
-        public virtual Picture InsertPicture(IFormFile formFile, string defaultFileName = "", string virtualPath = "")
+        public async virtual Task<Picture> InsertPicture(IFormFile formFile, string defaultFileName = "", string virtualPath = "")
         {
             var imgExt = new List<string>
             {
@@ -854,13 +857,13 @@ namespace Nop.Services.Media
                 }
             }
 
-            var picture = InsertPicture(_downloadService.GetDownloadBits(formFile), contentType, _fileProvider.GetFileNameWithoutExtension(fileName));
+            var picture = await InsertPicture(await _downloadService.GetDownloadBits(formFile), contentType, _fileProvider.GetFileNameWithoutExtension(fileName));
 
             if (string.IsNullOrEmpty(virtualPath))
                 return picture;
 
             picture.VirtualPath = _fileProvider.GetVirtualPath(virtualPath);
-            _pictureRepository.Update(picture);
+            await _pictureRepository.Update(picture);
 
             return picture;
         }
@@ -877,7 +880,7 @@ namespace Nop.Services.Media
         /// <param name="isNew">A value indicating whether the picture is new</param>
         /// <param name="validateBinary">A value indicating whether to validated provided picture binary</param>
         /// <returns>Picture</returns>
-        public virtual Picture UpdatePicture(int pictureId, byte[] pictureBinary, string mimeType,
+        public async virtual Task<Picture> UpdatePicture(int pictureId, byte[] pictureBinary, string mimeType,
             string seoFilename, string altAttribute = null, string titleAttribute = null,
             bool isNew = true, bool validateBinary = true)
         {
@@ -889,7 +892,7 @@ namespace Nop.Services.Media
             if (validateBinary)
                 pictureBinary = ValidatePicture(pictureBinary, mimeType);
 
-            var picture = GetPictureById(pictureId);
+            var picture = await GetPictureById(pictureId);
             if (picture == null)
                 return null;
 
@@ -903,8 +906,8 @@ namespace Nop.Services.Media
             picture.TitleAttribute = titleAttribute;
             picture.IsNew = isNew;
 
-            _pictureRepository.Update(picture);
-            UpdatePictureBinary(picture, StoreInDb ? pictureBinary : new byte[0]);
+            await _pictureRepository.Update(picture);
+            await UpdatePictureBinary(picture, StoreInDb ? pictureBinary : new byte[0]);
 
             if (!StoreInDb)
                 SavePictureInFile(picture.Id, pictureBinary, mimeType);
@@ -920,7 +923,7 @@ namespace Nop.Services.Media
         /// </summary>
         /// <param name="picture">The picture to update</param>
         /// <returns>Picture</returns>
-        public virtual Picture UpdatePicture(Picture picture)
+        public async virtual Task<Picture> UpdatePicture(Picture picture)
         {
             if (picture == null)
                 return null;
@@ -933,8 +936,8 @@ namespace Nop.Services.Media
 
             picture.SeoFilename = seoFilename;
 
-            _pictureRepository.Update(picture);
-            UpdatePictureBinary(picture, StoreInDb ? picture.PictureBinary.BinaryData : new byte[0]);
+            await _pictureRepository.Update(picture);
+            await UpdatePictureBinary(picture, StoreInDb ? picture.PictureBinary.BinaryData : new byte[0]);
 
             if (!StoreInDb)
                 SavePictureInFile(picture.Id, picture.PictureBinary.BinaryData, picture.MimeType);
@@ -951,9 +954,9 @@ namespace Nop.Services.Media
         /// <param name="pictureId">The picture identifier</param>
         /// <param name="seoFilename">The SEO filename</param>
         /// <returns>Picture</returns>
-        public virtual Picture SetSeoFilename(int pictureId, string seoFilename)
+        public async virtual Task<Picture> SetSeoFilename(int pictureId, string seoFilename)
         {
-            var picture = GetPictureById(pictureId);
+            var picture = await GetPictureById(pictureId);
             if (picture == null)
                 throw new ArgumentException("No picture found with the specified id");
 
@@ -961,8 +964,8 @@ namespace Nop.Services.Media
             if (seoFilename != picture.SeoFilename)
             {
                 //update picture
-                picture = UpdatePicture(picture.Id,
-                    LoadPictureBinary(picture),
+                picture = await UpdatePicture(picture.Id,
+                    await LoadPictureBinary(picture),
                     picture.MimeType,
                     seoFilename,
                     picture.AltAttribute,
@@ -1021,26 +1024,26 @@ namespace Nop.Services.Media
         /// <param name="product">Product</param>
         /// <param name="attributesXml">Attributes (in XML format)</param>
         /// <returns>Picture</returns>
-        public virtual Picture GetProductPicture(Product product, string attributesXml)
+        public async virtual Task<Picture> GetProductPicture(Product product, string attributesXml)
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
 
             //first, try to get product attribute combination picture
             var combination = _productAttributeParser.FindProductAttributeCombination(product, attributesXml);
-            var combinationPicture = GetPictureById(combination?.PictureId ?? 0);
+            var combinationPicture = await GetPictureById(combination?.PictureId ?? 0);
             if (combinationPicture != null)
                 return combinationPicture;
 
             //then, let's see whether we have attribute values with pictures
             var attributePicture = _productAttributeParser.ParseProductAttributeValues(attributesXml)
-                .Select(attributeValue => GetPictureById(attributeValue?.PictureId ?? 0))
+                .Select(attributeValue => GetPictureById(attributeValue?.PictureId ?? 0).Result)
                 .FirstOrDefault(picture => picture != null);
             if (attributePicture != null)
                 return attributePicture;
 
             //now let's load the default product picture
-            var productPicture = GetPicturesByProductId(product.Id, 1).FirstOrDefault();
+            var productPicture = (await GetPicturesByProductId(product.Id, 1)).FirstOrDefault();
             if (productPicture != null)
                 return productPicture;
 
@@ -1048,7 +1051,7 @@ namespace Nop.Services.Media
             if (product.VisibleIndividually || product.ParentGroupedProductId <= 0)
                 return null;
 
-            var parentGroupedProductPicture = GetPicturesByProductId(product.ParentGroupedProductId, 1).FirstOrDefault();
+            var parentGroupedProductPicture = (await GetPicturesByProductId(product.ParentGroupedProductId, 1)).FirstOrDefault();
             return parentGroupedProductPicture;
         }
 
@@ -1089,7 +1092,7 @@ namespace Nop.Services.Media
                             if (!string.IsNullOrEmpty(picture.VirtualPath))
                                 continue;
 
-                            var pictureBinary = LoadPictureBinary(picture, !value);
+                            var pictureBinary = LoadPictureBinary(picture, !value).Result;
 
                             //we used the code below before. but it's too slow
                             //let's do it manually (uncommented code) - copy some logic from "UpdatePicture" method

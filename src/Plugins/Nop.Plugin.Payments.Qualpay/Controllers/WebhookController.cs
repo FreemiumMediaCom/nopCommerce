@@ -38,7 +38,7 @@ namespace Nop.Plugin.Payments.Qualpay.Controllers
 
         [HttpPost]
         [HttpsRequirement(SslRequirement.Yes)]
-        public IActionResult WebhookHandler()
+        public async Task<IActionResult> WebhookHandler()
         {
             try
             {
@@ -49,12 +49,12 @@ namespace Nop.Plugin.Payments.Qualpay.Controllers
                     return Ok();
 
                 //try to get the initial order (an order GUID stored in a plan description)
-                var initialOrder = _orderService.GetOrderByGuid(new Guid(subscription.PlanDesc));
+                var initialOrder = await _orderService.GetOrderByGuid(new Guid(subscription.PlanDesc));
                 if (initialOrder == null)
                     return Ok();
 
                 //try to get related recurring payment
-                var recurringPayment = _orderService.SearchRecurringPayments(initialOrderId: initialOrder.Id).FirstOrDefault();
+                var recurringPayment = await _orderService.SearchRecurringPayments(initialOrderId: initialOrder.Id).FirstOrDefault();
                 if (recurringPayment == null)
                     return Ok();
 
@@ -79,7 +79,7 @@ namespace Nop.Plugin.Payments.Qualpay.Controllers
                     return Ok();
 
                 //get all orders of this recurring payment
-                var orders = _orderService.GetOrdersByIds(recurringPayment.RecurringPaymentHistory.Select(order => order.OrderId).ToArray());
+                var orders = await _orderService.GetOrdersByIds(recurringPayment.RecurringPaymentHistory.Select(order => order.OrderId).ToArray());
 
                 //whether an order for this transaction already exists
                 var orderExists = orders.Any(order => !string.IsNullOrEmpty(order.CaptureTransactionId) &&

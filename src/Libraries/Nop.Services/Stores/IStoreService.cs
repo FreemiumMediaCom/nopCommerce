@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Stores;
 
 namespace Nop.Services.Stores
@@ -12,14 +13,14 @@ namespace Nop.Services.Stores
         /// Deletes a store
         /// </summary>
         /// <param name="store">Store</param>
-        void DeleteStore(Store store);
+        Task DeleteStore(Store store);
 
         /// <summary>
         /// Gets all stores
         /// </summary>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Stores</returns>
-        IList<Store> GetAllStores(bool loadCacheableCopy = true);
+        Task<IList<Store>> GetAllStores(bool loadCacheableCopy = true);
 
         /// <summary>
         /// Gets a store 
@@ -27,19 +28,19 @@ namespace Nop.Services.Stores
         /// <param name="storeId">Store identifier</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Store</returns>
-        Store GetStoreById(int storeId, bool loadCacheableCopy = true);
+        Task<Store> GetStoreById(int storeId, bool loadCacheableCopy = true);
 
         /// <summary>
         /// Inserts a store
         /// </summary>
         /// <param name="store">Store</param>
-        void InsertStore(Store store);
+        Task InsertStore(Store store);
 
         /// <summary>
         /// Updates the store
         /// </summary>
         /// <param name="store">Store</param>
-        void UpdateStore(Store store);
+        Task UpdateStore(Store store);
 
         /// <summary>
         /// Parse comma-separated Hosts

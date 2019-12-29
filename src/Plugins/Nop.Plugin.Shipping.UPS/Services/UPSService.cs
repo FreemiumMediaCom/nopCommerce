@@ -295,7 +295,7 @@ namespace Nop.Plugin.Shipping.UPS.Services
                         eventName = "Plugins.Shipping.Tracker.Pickup";
                         break;
                 }
-                shipmentStatusEvent.EventName = _localizationService.GetResource(eventName);
+                shipmentStatusEvent.EventName = await _localizationService.GetResource(eventName);
             }
             catch { }
 

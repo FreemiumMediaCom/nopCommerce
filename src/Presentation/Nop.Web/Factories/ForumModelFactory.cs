@@ -86,19 +86,19 @@ namespace Nop.Web.Factories
             {
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Normal"),
+                    Text = await _localizationService.GetResource("Forum.Normal"),
                     Value = ((int)ForumTopicType.Normal).ToString()
                 },
 
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Sticky"),
+                    Text = await _localizationService.GetResource("Forum.Sticky"),
                     Value = ((int)ForumTopicType.Sticky).ToString()
                 },
 
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Announcement"),
+                    Text = await _localizationService.GetResource("Forum.Announcement"),
                     Value = ((int)ForumTopicType.Announcement).ToString()
                 }
             };
@@ -314,12 +314,12 @@ namespace Nop.Web.Factories
             //subscription                
             if (_forumService.IsCustomerAllowedToSubscribe(_workContext.CurrentCustomer))
             {
-                model.WatchForumText = _localizationService.GetResource("Forum.WatchForum");
+                model.WatchForumText = await _localizationService.GetResource("Forum.WatchForum");
 
                 var forumSubscription = _forumService.GetAllSubscriptions(_workContext.CurrentCustomer.Id, forum.Id, 0, 0, 1).FirstOrDefault();
                 if (forumSubscription != null)
                 {
-                    model.WatchForumText = _localizationService.GetResource("Forum.UnwatchForum");
+                    model.WatchForumText = await _localizationService.GetResource("Forum.UnwatchForum");
                 }
             }
 
@@ -368,12 +368,12 @@ namespace Nop.Web.Factories
 
             if (model.IsCustomerAllowedToSubscribe)
             {
-                model.WatchTopicText = _localizationService.GetResource("Forum.WatchTopic");
+                model.WatchTopicText = await _localizationService.GetResource("Forum.WatchTopic");
 
                 var forumTopicSubscription = _forumService.GetAllSubscriptions(_workContext.CurrentCustomer.Id, 0, forumTopic.Id, 0, 1).FirstOrDefault();
                 if (forumTopicSubscription != null)
                 {
-                    model.WatchTopicText = _localizationService.GetResource("Forum.UnwatchTopic");
+                    model.WatchTopicText = await _localizationService.GetResource("Forum.UnwatchTopic");
                 }
             }
             model.PostsPageIndex = posts.PageIndex;
@@ -394,7 +394,7 @@ namespace Nop.Web.Factories
                     CustomerName = _customerService.FormatUsername(post.Customer),
                     IsCustomerForumModerator = post.Customer.IsForumModerator(),
                     ShowCustomersPostCount = _forumSettings.ShowCustomersPostCount,
-                    ForumPostCount = _genericAttributeService.GetAttribute<int>(post.Customer, NopCustomerDefaults.ForumPostCountAttribute),
+                    ForumPostCount = await _genericAttributeService.GetAttribute<int>(post.Customer, NopCustomerDefaults.ForumPostCountAttribute),
                     ShowCustomersJoinDate = _customerSettings.ShowCustomersJoinDate && !post.Customer.IsGuest(),
                     CustomerJoinDate = post.Customer.CreatedOnUtc,
                     AllowPrivateMessages = _forumSettings.AllowPrivateMessages && !post.Customer.IsGuest(),
@@ -406,7 +406,7 @@ namespace Nop.Web.Factories
                 if (_forumSettings.RelativeDateTimeFormattingEnabled)
                 {
                     var postCreatedAgo = post.CreatedOnUtc.RelativeFormat(languageCode);
-                    forumPostModel.PostCreatedOnStr = string.Format(_localizationService.GetResource("Common.RelativeDateTime.Past"), postCreatedAgo);
+                    forumPostModel.PostCreatedOnStr = string.Format(await _localizationService.GetResource("Common.RelativeDateTime.Past"), postCreatedAgo);
                 }
                 else
                     forumPostModel.PostCreatedOnStr =
@@ -424,9 +424,9 @@ namespace Nop.Web.Factories
                 forumPostModel.ShowCustomersLocation = _customerSettings.ShowCustomersLocation && !post.Customer.IsGuest();
                 if (_customerSettings.ShowCustomersLocation)
                 {
-                    var countryId = _genericAttributeService.GetAttribute<int>(post.Customer, NopCustomerDefaults.CountryIdAttribute);
+                    var countryId = await _genericAttributeService.GetAttribute<int>(post.Customer, NopCustomerDefaults.CountryIdAttribute);
                     var country = _countryService.GetCountryById(countryId);
-                    forumPostModel.CustomerLocation = country != null ? _localizationService.GetLocalized(country, x => x.Name) : string.Empty;
+                    forumPostModel.CustomerLocation = country != null ? await _localizationService.GetLocalized(country, x => x.Name) : string.Empty;
                 }
 
                 //votes
@@ -473,7 +473,7 @@ namespace Nop.Web.Factories
         /// </summary>
         /// <param name="forum">Forum</param>
         /// <param name="model">Edit forum topic model</param>
-        public virtual void PrepareTopicCreateModel(Forum forum, EditForumTopicModel model)
+        public async virtual Task PrepareTopicCreateModel(Forum forum, EditForumTopicModel model)
         {
             if (forum == null)
                 throw new ArgumentNullException(nameof(forum));
@@ -498,7 +498,7 @@ namespace Nop.Web.Factories
         /// <param name="forumTopic">Forum topic</param>
         /// <param name="model">Edit forum topic model</param>
         /// <param name="excludeProperties">Whether to exclude populating of model properties from the entity</param>
-        public virtual void PrepareTopicEditModel(ForumTopic forumTopic, EditForumTopicModel model, bool excludeProperties)
+        public async virtual Task PrepareTopicEditModel(ForumTopic forumTopic, EditForumTopicModel model, bool excludeProperties)
         {
             if (forumTopic == null)
                 throw new ArgumentNullException(nameof(forumTopic));
@@ -668,42 +668,42 @@ namespace Nop.Web.Factories
             {
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.AllResults"),
+                    Text = await _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.AllResults"),
                     Value = "0"
                 },
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.1day"),
+                    Text = await _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.1day"),
                     Value = "1"
                 },
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.7days"),
+                    Text = await _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.7days"),
                     Value = "7"
                 },
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.2weeks"),
+                    Text = await _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.2weeks"),
                     Value = "14"
                 },
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.1month"),
+                    Text = await _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.1month"),
                     Value = "30"
                 },
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.3months"),
+                    Text = await _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.3months"),
                     Value = "92"
                 },
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.6months"),
+                    Text = await _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.6months"),
                     Value = "183"
                 },
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.1year"),
+                    Text = await _localizationService.GetResource("Forum.Search.LimitResultsToPrevious.1year"),
                     Value = "365"
                 }
             };
@@ -714,7 +714,7 @@ namespace Nop.Web.Factories
             {
                 new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Forum.Search.SearchInForum.All"),
+                    Text = await _localizationService.GetResource("Forum.Search.SearchInForum.All"),
                     Value = "0",
                     Selected = true,
                 }
@@ -746,17 +746,17 @@ namespace Nop.Web.Factories
                 new SelectListItem
                 {
                     Value = ((int) ForumSearchType.All).ToString(),
-                    Text = _localizationService.GetResource("Forum.Search.SearchWithin.All")
+                    Text = await _localizationService.GetResource("Forum.Search.SearchWithin.All")
                 },
                 new SelectListItem
                 {
                     Value = ((int) ForumSearchType.TopicTitlesOnly).ToString(),
-                    Text = _localizationService.GetResource("Forum.Search.SearchWithin.TopicTitlesOnly")
+                    Text = await _localizationService.GetResource("Forum.Search.SearchWithin.TopicTitlesOnly")
                 },
                 new SelectListItem
                 {
                     Value = ((int) ForumSearchType.PostTextOnly).ToString(),
-                    Text = _localizationService.GetResource("Forum.Search.SearchWithin.PostTextOnly")
+                    Text = await _localizationService.GetResource("Forum.Search.SearchWithin.PostTextOnly")
                 }
             };
             model.WithinList = withinList;
@@ -788,7 +788,7 @@ namespace Nop.Web.Factories
 
                     if (searchterms.Length < searchTermMinimumLength)
                     {
-                        throw new NopException(string.Format(_localizationService.GetResource("Forum.SearchTermMinimumLengthIsNCharacters"),
+                        throw new NopException(string.Format(await _localizationService.GetResource("Forum.SearchTermMinimumLengthIsNCharacters"),
                             searchTermMinimumLength));
                     }
 
@@ -865,7 +865,7 @@ namespace Nop.Web.Factories
             if (_forumSettings.RelativeDateTimeFormattingEnabled)
             {
                 var postCreatedAgo = forumPost.CreatedOnUtc.RelativeFormat(languageCode);
-                model.PostCreatedOnStr = string.Format(_localizationService.GetResource("Common.RelativeDateTime.Past"), postCreatedAgo);
+                model.PostCreatedOnStr = string.Format(await _localizationService.GetResource("Common.RelativeDateTime.Past"), postCreatedAgo);
             }
             else
                 model.PostCreatedOnStr = _dateTimeHelper.ConvertToUserTime(forumPost.CreatedOnUtc, DateTimeKind.Utc).ToString("f");

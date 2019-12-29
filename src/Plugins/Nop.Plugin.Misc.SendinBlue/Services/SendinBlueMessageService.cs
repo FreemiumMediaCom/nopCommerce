@@ -100,13 +100,13 @@ namespace Nop.Plugin.Misc.SendinBlue.Services
                 return;
 
             //get text with replaced tokens
-            var text = _genericAttributeService.GetAttribute<string>(messageTemplate, SendinBlueDefaults.SmsTextAttribute);
+            var text = await _genericAttributeService.GetAttribute<string>(messageTemplate, SendinBlueDefaults.SmsTextAttribute);
             if (!string.IsNullOrEmpty(text))
                 text = _tokenizer.Replace(text, tokens, false);
 
             //get phone number send to
             var phoneNumberTo = string.Empty;
-            var phoneType = _genericAttributeService.GetAttribute<int>(messageTemplate, SendinBlueDefaults.PhoneTypeAttribute);
+            var phoneType = await _genericAttributeService.GetAttribute<int>(messageTemplate, SendinBlueDefaults.PhoneTypeAttribute);
             switch (phoneType)
             {
                 case 0:
@@ -158,7 +158,7 @@ namespace Nop.Plugin.Misc.SendinBlue.Services
                 return null;
 
             //whether to send email by the passed message template
-            var templateId = _genericAttributeService.GetAttribute<int?>(messageTemplate, SendinBlueDefaults.TemplateIdAttribute);
+            var templateId = await _genericAttributeService.GetAttribute<int?>(messageTemplate, SendinBlueDefaults.TemplateIdAttribute);
             var sendEmailForThisMessageTemplate = templateId.HasValue;
             if (!sendEmailForThisMessageTemplate)
                 return null;

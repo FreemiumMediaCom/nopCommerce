@@ -61,7 +61,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageEmailAccounts))
                 return AccessDeniedView();
@@ -73,7 +73,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(EmailAccountSearchModel searchModel)
+        public async virtual Task<IActionResult> List(EmailAccountSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageEmailAccounts))
                 return AccessDeniedDataTablesJson();
@@ -84,7 +84,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult MarkAsDefaultEmail(int id)
+        public async virtual Task<IActionResult> MarkAsDefaultEmail(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageEmailAccounts))
                 return AccessDeniedView();
@@ -99,7 +99,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageEmailAccounts))
                 return AccessDeniedView();
@@ -111,7 +111,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(EmailAccountModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(EmailAccountModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageEmailAccounts))
                 return AccessDeniedView();
@@ -126,9 +126,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewEmailAccount",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewEmailAccount"), emailAccount.Id), emailAccount);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewEmailAccount"), emailAccount.Id), emailAccount);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.EmailAccounts.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.EmailAccounts.Added"));
 
                 return continueEditing ? RedirectToAction("Edit", new { id = emailAccount.Id }) : RedirectToAction("List");
             }
@@ -140,7 +140,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageEmailAccounts))
                 return AccessDeniedView();
@@ -158,7 +158,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(EmailAccountModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(EmailAccountModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageEmailAccounts))
                 return AccessDeniedView();
@@ -175,9 +175,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditEmailAccount",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditEmailAccount"), emailAccount.Id), emailAccount);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditEmailAccount"), emailAccount.Id), emailAccount);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.EmailAccounts.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.EmailAccounts.Updated"));
 
                 return continueEditing ? RedirectToAction("Edit", new { id = emailAccount.Id }) : RedirectToAction("List");
             }
@@ -191,7 +191,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("changepassword")]
-        public virtual IActionResult ChangePassword(EmailAccountModel model)
+        public async virtual Task<IActionResult> ChangePassword(EmailAccountModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageEmailAccounts))
                 return AccessDeniedView();
@@ -205,14 +205,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             emailAccount.Password = model.Password;
             _emailAccountService.UpdateEmailAccount(emailAccount);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.EmailAccounts.Fields.Password.PasswordChanged"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.EmailAccounts.Fields.Password.PasswordChanged"));
 
             return RedirectToAction("Edit", new { id = emailAccount.Id });
         }
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("sendtestemail")]
-        public virtual IActionResult SendTestEmail(EmailAccountModel model)
+        public async virtual Task<IActionResult> SendTestEmail(EmailAccountModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageEmailAccounts))
                 return AccessDeniedView();
@@ -224,7 +224,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             if (!CommonHelper.IsValidEmail(model.SendTestEmailTo))
             {
-                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Common.WrongEmail"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Common.WrongEmail"));
                 return View(model);
             }
 
@@ -237,7 +237,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 var body = "Email works fine.";
                 _emailSender.SendEmail(emailAccount, subject, body, emailAccount.Email, emailAccount.DisplayName, model.SendTestEmailTo, null);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.EmailAccounts.SendTestEmail.Success"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.EmailAccounts.SendTestEmail.Success"));
             }
             catch (Exception exc)
             {
@@ -252,7 +252,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageEmailAccounts))
                 return AccessDeniedView();
@@ -268,9 +268,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("DeleteEmailAccount",
-                    string.Format(_localizationService.GetResource("ActivityLog.DeleteEmailAccount"), emailAccount.Id), emailAccount);
+                    string.Format(await _localizationService.GetResource("ActivityLog.DeleteEmailAccount"), emailAccount.Id), emailAccount);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.EmailAccounts.Deleted"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.EmailAccounts.Deleted"));
 
                 return RedirectToAction("List");
             }

@@ -179,7 +179,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult ApplyVendor()
+        public async virtual Task<IActionResult> ApplyVendor()
         {
             if (!_vendorSettings.AllowCustomersToApplyForVendorAccount)
                 return RedirectToRoute("Homepage");
@@ -195,7 +195,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("ApplyVendor")]
         [PublicAntiForgery]
         [ValidateCaptcha]
-        public virtual IActionResult ApplyVendorSubmit(ApplyVendorModel model, bool captchaValid, IFormFile uploadedFile, IFormCollection form)
+        public async virtual Task<IActionResult> ApplyVendorSubmit(ApplyVendorModel model, bool captchaValid, IFormFile uploadedFile, IFormCollection form)
         {
             if (!_vendorSettings.AllowCustomersToApplyForVendorAccount)
                 return RedirectToRoute("Homepage");
@@ -206,7 +206,7 @@ namespace Nop.Web.Controllers
             //validate CAPTCHA
             if (_captchaSettings.Enabled && _captchaSettings.ShowOnApplyVendorPage && !captchaValid)
             {
-                ModelState.AddModelError("", _localizationService.GetResource("Common.WrongCaptchaMessage"));
+                ModelState.AddModelError("", await _localizationService.GetResource("Common.WrongCaptchaMessage"));
             }
 
             var pictureId = 0;
@@ -224,7 +224,7 @@ namespace Nop.Web.Controllers
                 }
                 catch (Exception)
                 {
-                    ModelState.AddModelError("", _localizationService.GetResource("Vendors.ApplyAccount.Picture.ErrorMessage"));
+                    ModelState.AddModelError("", await _localizationService.GetResource("Vendors.ApplyAccount.Picture.ErrorMessage"));
                 }
             }
 
@@ -270,7 +270,7 @@ namespace Nop.Web.Controllers
                     vendor, _localizationSettings.DefaultAdminLanguageId);
 
                 model.DisableFormInput = true;
-                model.Result = _localizationService.GetResource("Vendors.ApplyAccount.Submitted");
+                model.Result = await _localizationService.GetResource("Vendors.ApplyAccount.Submitted");
                 return View(model);
             }
 
@@ -280,7 +280,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult Info()
+        public async virtual Task<IActionResult> Info()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -296,7 +296,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("Info")]
         [PublicAntiForgery]
         [FormValueRequired("save-info-button")]
-        public virtual IActionResult Info(VendorInfoModel model, IFormFile uploadedFile, IFormCollection form)
+        public async virtual Task<IActionResult> Info(VendorInfoModel model, IFormFile uploadedFile, IFormCollection form)
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();
@@ -316,7 +316,7 @@ namespace Nop.Web.Controllers
                 }
                 catch (Exception)
                 {
-                    ModelState.AddModelError("", _localizationService.GetResource("Account.VendorInfo.Picture.ErrorMessage"));
+                    ModelState.AddModelError("", await _localizationService.GetResource("Account.VendorInfo.Picture.ErrorMessage"));
                 }
             }
 
@@ -367,7 +367,7 @@ namespace Nop.Web.Controllers
         [HttpPost, ActionName("Info")]
         [PublicAntiForgery]
         [FormValueRequired("remove-picture")]
-        public virtual IActionResult RemovePicture()
+        public async virtual Task<IActionResult> RemovePicture()
         {
             if (!_workContext.CurrentCustomer.IsRegistered())
                 return Challenge();

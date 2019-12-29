@@ -88,7 +88,7 @@ namespace Nop.Web.Factories
             {
                 Id = orderItem.Id,
                 ProductId = orderItem.Product.Id,
-                ProductName = _localizationService.GetLocalized(orderItem.Product, x => x.Name),
+                ProductName = await _localizationService.GetLocalized(orderItem.Product, x => x.Name),
                 ProductSeName = _urlRecordService.GetSeName(orderItem.Product),
                 AttributeInfo = orderItem.AttributeDescription,
                 Quantity = orderItem.Quantity
@@ -138,7 +138,7 @@ namespace Nop.Web.Factories
                         reasons.Add(new SubmitReturnRequestModel.ReturnRequestReasonModel
                         {
                             Id = rrr.Id,
-                            Name = _localizationService.GetLocalized(rrr, x => x.Name)
+                            Name = await _localizationService.GetLocalized(rrr, x => x.Name)
                         });
                     return reasons;
                 });
@@ -152,7 +152,7 @@ namespace Nop.Web.Factories
                         actions.Add(new SubmitReturnRequestModel.ReturnRequestActionModel
                         {
                             Id = rra.Id,
-                            Name = _localizationService.GetLocalized(rra, x => x.Name)
+                            Name = await _localizationService.GetLocalized(rra, x => x.Name)
                         });
                     return actions;
                 });
@@ -179,7 +179,7 @@ namespace Nop.Web.Factories
             var returnRequests = _returnRequestService.SearchReturnRequests(_storeContext.CurrentStore.Id, _workContext.CurrentCustomer.Id);
             foreach (var returnRequest in returnRequests)
             {
-                var orderItem = _orderService.GetOrderItemById(returnRequest.OrderItemId);
+                var orderItem = await _orderService.GetOrderItemById(returnRequest.OrderItemId);
                 if (orderItem != null)
                 {
                     var product = orderItem.Product;
@@ -189,9 +189,9 @@ namespace Nop.Web.Factories
                     {
                         Id = returnRequest.Id,
                         CustomNumber = returnRequest.CustomNumber,
-                        ReturnRequestStatus = _localizationService.GetLocalizedEnum(returnRequest.ReturnRequestStatus),
+                        ReturnRequestStatus = await _localizationService.GetLocalizedEnum(returnRequest.ReturnRequestStatus),
                         ProductId = product.Id,
-                        ProductName = _localizationService.GetLocalized(product, x => x.Name),
+                        ProductName = await _localizationService.GetLocalized(product, x => x.Name),
                         ProductSeName = _urlRecordService.GetSeName(product),
                         Quantity = returnRequest.Quantity,
                         ReturnAction = returnRequest.RequestedAction,

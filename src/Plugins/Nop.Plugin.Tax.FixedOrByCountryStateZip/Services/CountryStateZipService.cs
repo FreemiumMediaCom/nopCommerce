@@ -47,7 +47,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Services
         /// Deletes a tax rate
         /// </summary>
         /// <param name="taxRate">Tax rate</param>
-        public virtual void DeleteTaxRate(TaxRate taxRate)
+        public async virtual Task DeleteTaxRate(TaxRate taxRate)
         {
             if (taxRate == null)
                 throw new ArgumentNullException(nameof(taxRate));
@@ -92,7 +92,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Services
         /// Inserts a tax rate
         /// </summary>
         /// <param name="taxRate">Tax rate</param>
-        public virtual void InsertTaxRate(TaxRate taxRate)
+        public async virtual Task InsertTaxRate(TaxRate taxRate)
         {
             if (taxRate == null)
                 throw new ArgumentNullException(nameof(taxRate));
@@ -107,7 +107,7 @@ namespace Nop.Plugin.Tax.FixedOrByCountryStateZip.Services
         /// Updates the tax rate
         /// </summary>
         /// <param name="taxRate">Tax rate</param>
-        public virtual void UpdateTaxRate(TaxRate taxRate)
+        public async virtual Task UpdateTaxRate(TaxRate taxRate)
         {
             if (taxRate == null)
                 throw new ArgumentNullException(nameof(taxRate));

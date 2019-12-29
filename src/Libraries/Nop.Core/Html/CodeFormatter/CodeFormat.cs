@@ -1,4 +1,4 @@
-#region Copyright � 2001-2003 Jean-Claude Manoli [jc@manoli.net]
+﻿#region Copyright © 2001-2003 Jean-Claude Manoli [jc@manoli.net]
 /*
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the author(s) be held liable for any damages arising from
@@ -23,6 +23,7 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Nop.Core.Html.CodeFormatter
 {

@@ -134,7 +134,7 @@ namespace Nop.Web.Areas.Admin.Models.Catalog
         public string ManufacturerPartNumber { get; set; }
 
         [NopResourceDisplayName("Admin.Catalog.Products.Fields.GTIN")]
-        public virtual string Gtin { get; set; }
+        public async virtual Task<string> Gtin { get; set; }
 
         [NopResourceDisplayName("Admin.Catalog.Products.Fields.IsGiftCard")]
         public bool IsGiftCard { get; set; }

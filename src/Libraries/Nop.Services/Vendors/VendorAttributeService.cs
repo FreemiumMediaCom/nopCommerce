@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Vendors;
@@ -60,25 +61,25 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorAttributeId">Vendor attribute identifier</param>
         /// <returns>Vendor attribute</returns>
-        public virtual VendorAttribute GetVendorAttributeById(int vendorAttributeId)
+        public async virtual Task<VendorAttribute> GetVendorAttributeById(int vendorAttributeId)
         {
             if (vendorAttributeId == 0)
                 return null;
 
             var key = string.Format(NopVendorsServiceDefaults.VendorAttributesByIdCacheKey, vendorAttributeId);
-            return _cacheManager.Get(key, () => _vendorAttributeRepository.GetById(vendorAttributeId));
+            return await _cacheManager.Get(key, async () => await _vendorAttributeRepository.GetById(vendorAttributeId));
         }
 
         /// <summary>
         /// Inserts a vendor attribute
         /// </summary>
         /// <param name="vendorAttribute">Vendor attribute</param>
-        public virtual void InsertVendorAttribute(VendorAttribute vendorAttribute)
+        public async virtual Task InsertVendorAttribute(VendorAttribute vendorAttribute)
         {
             if (vendorAttribute == null)
                 throw new ArgumentNullException(nameof(vendorAttribute));
 
-            _vendorAttributeRepository.Insert(vendorAttribute);
+            await _vendorAttributeRepository.Insert(vendorAttribute);
 
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributeValuesPrefixCacheKey);
@@ -91,12 +92,12 @@ namespace Nop.Services.Vendors
         /// Updates a vendor attribute
         /// </summary>
         /// <param name="vendorAttribute">Vendor attribute</param>
-        public virtual void UpdateVendorAttribute(VendorAttribute vendorAttribute)
+        public async virtual Task UpdateVendorAttribute(VendorAttribute vendorAttribute)
         {
             if (vendorAttribute == null)
                 throw new ArgumentNullException(nameof(vendorAttribute));
 
-            _vendorAttributeRepository.Update(vendorAttribute);
+            await _vendorAttributeRepository.Update(vendorAttribute);
 
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributeValuesPrefixCacheKey);
@@ -109,12 +110,12 @@ namespace Nop.Services.Vendors
         /// Deletes a vendor attribute
         /// </summary>
         /// <param name="vendorAttribute">Vendor attribute</param>
-        public virtual void DeleteVendorAttribute(VendorAttribute vendorAttribute)
+        public async virtual Task DeleteVendorAttribute(VendorAttribute vendorAttribute)
         {
             if (vendorAttribute == null)
                 throw new ArgumentNullException(nameof(vendorAttribute));
 
-            _vendorAttributeRepository.Delete(vendorAttribute);
+            await _vendorAttributeRepository.Delete(vendorAttribute);
 
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributeValuesPrefixCacheKey);
@@ -149,25 +150,25 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorAttributeValueId">Vendor attribute value identifier</param>
         /// <returns>Vendor attribute value</returns>
-        public virtual VendorAttributeValue GetVendorAttributeValueById(int vendorAttributeValueId)
+        public async virtual Task<VendorAttributeValue> GetVendorAttributeValueById(int vendorAttributeValueId)
         {
             if (vendorAttributeValueId == 0)
                 return null;
 
             var key = string.Format(NopVendorsServiceDefaults.VendorAttributeValuesByIdCacheKey, vendorAttributeValueId);
-            return _cacheManager.Get(key, () => _vendorAttributeValueRepository.GetById(vendorAttributeValueId));
+            return await _cacheManager.Get(key, async () => await _vendorAttributeValueRepository.GetById(vendorAttributeValueId));
         }
 
         /// <summary>
         /// Inserts a vendor attribute value
         /// </summary>
         /// <param name="vendorAttributeValue">Vendor attribute value</param>
-        public virtual void InsertVendorAttributeValue(VendorAttributeValue vendorAttributeValue)
+        public async virtual Task InsertVendorAttributeValue(VendorAttributeValue vendorAttributeValue)
         {
             if (vendorAttributeValue == null)
                 throw new ArgumentNullException(nameof(vendorAttributeValue));
 
-            _vendorAttributeValueRepository.Insert(vendorAttributeValue);
+            await _vendorAttributeValueRepository.Insert(vendorAttributeValue);
 
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributeValuesPrefixCacheKey);
@@ -180,12 +181,12 @@ namespace Nop.Services.Vendors
         /// Updates the vendor attribute value
         /// </summary>
         /// <param name="vendorAttributeValue">Vendor attribute value</param>
-        public virtual void UpdateVendorAttributeValue(VendorAttributeValue vendorAttributeValue)
+        public async virtual Task UpdateVendorAttributeValue(VendorAttributeValue vendorAttributeValue)
         {
             if (vendorAttributeValue == null)
                 throw new ArgumentNullException(nameof(vendorAttributeValue));
 
-            _vendorAttributeValueRepository.Update(vendorAttributeValue);
+            await _vendorAttributeValueRepository.Update(vendorAttributeValue);
 
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributeValuesPrefixCacheKey);
@@ -198,12 +199,12 @@ namespace Nop.Services.Vendors
         /// Deletes a vendor attribute value
         /// </summary>
         /// <param name="vendorAttributeValue">Vendor attribute value</param>
-        public virtual void DeleteVendorAttributeValue(VendorAttributeValue vendorAttributeValue)
+        public async virtual Task DeleteVendorAttributeValue(VendorAttributeValue vendorAttributeValue)
         {
             if (vendorAttributeValue == null)
                 throw new ArgumentNullException(nameof(vendorAttributeValue));
 
-            _vendorAttributeValueRepository.Delete(vendorAttributeValue);
+            await _vendorAttributeValueRepository.Delete(vendorAttributeValue);
 
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopVendorsServiceDefaults.VendorAttributeValuesPrefixCacheKey);

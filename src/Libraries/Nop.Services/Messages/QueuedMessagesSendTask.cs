@@ -35,7 +35,7 @@ namespace Nop.Services.Messages
         /// <summary>
         /// Executes a task
         /// </summary>
-        public virtual void Execute()
+        public async virtual System.Threading.Tasks.Task Execute()
         {
             var maxTries = 3;
             var queuedEmails = _queuedEmailService.SearchEmails(null, null, null, null,
@@ -51,7 +51,7 @@ namespace Nop.Services.Messages
 
                 try
                 {
-                    _emailSender.SendEmail(queuedEmail.EmailAccount,
+                    await _emailSender.SendEmail(queuedEmail.EmailAccount,
                         queuedEmail.Subject,
                         queuedEmail.Body,
                        queuedEmail.From,
@@ -70,12 +70,12 @@ namespace Nop.Services.Messages
                 }
                 catch (Exception exc)
                 {
-                    _logger.Error($"Error sending e-mail. {exc.Message}", exc);
+                    await _logger.Error($"Error sending e-mail. {exc.Message}", exc);
                 }
                 finally
                 {
                     queuedEmail.SentTries = queuedEmail.SentTries + 1;
-                    _queuedEmailService.UpdateQueuedEmail(queuedEmail);
+                    await _queuedEmailService.UpdateQueuedEmail(queuedEmail);
                 }
             }
         }

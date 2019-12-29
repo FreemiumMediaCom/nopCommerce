@@ -200,7 +200,7 @@ namespace Nop.Web.Models.Catalog
             /// <param name="priceRangeStr">Price range in string format</param>
             /// <param name="webHelper">Web helper</param>
             /// <param name="priceFormatter">Price formatter</param>
-            public virtual void LoadPriceRangeFilters(string priceRangeStr, IWebHelper webHelper, IPriceFormatter priceFormatter)
+            public async virtual Task LoadPriceRangeFilters(string priceRangeStr, IWebHelper webHelper, IPriceFormatter priceFormatter)
             {
                 var priceRangeList = GetPriceRangeList(priceRangeStr);
                 if (priceRangeList.Any())
@@ -373,7 +373,7 @@ namespace Nop.Web.Models.Catalog
             /// <param name="webHelper">Web helper</param>
             /// <param name="workContext">Work context</param>
             /// <param name="cacheManager">Cache manager</param>
-            public virtual void PrepareSpecsFilters(IList<int> alreadyFilteredSpecOptionIds,
+            public async virtual Task PrepareSpecsFilters(IList<int> alreadyFilteredSpecOptionIds,
                 int[] filterableSpecificationAttributeOptionIds,
                 ISpecificationAttributeService specificationAttributeService, ILocalizationService localizationService,
                 IWebHelper webHelper, IWorkContext workContext, ICacheManager cacheManager)

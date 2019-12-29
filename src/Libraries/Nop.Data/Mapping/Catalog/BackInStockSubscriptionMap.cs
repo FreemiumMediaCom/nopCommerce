@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nop.Core.Domain.Catalog;
+using System.Threading.Tasks;
 
 namespace Nop.Data.Mapping.Catalog
 {
@@ -30,7 +31,7 @@ namespace Nop.Data.Mapping.Catalog
                 .HasForeignKey(subscription => subscription.CustomerId)
                 .IsRequired();
 
-            base.Configure(builder);
+             base.Configure(builder);
         }
 
         #endregion

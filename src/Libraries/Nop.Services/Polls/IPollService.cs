@@ -1,3 +1,4 @@
+﻿using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Polls;
 
@@ -13,7 +14,7 @@ namespace Nop.Services.Polls
         /// </summary>
         /// <param name="pollId">The poll identifier</param>
         /// <returns>Poll</returns>
-        Poll GetPollById(int pollId);
+        Task<Poll> GetPollById(int pollId);
 
         /// <summary>
         /// Gets polls
@@ -34,32 +35,32 @@ namespace Nop.Services.Polls
         /// Deletes a poll
         /// </summary>
         /// <param name="poll">The poll</param>
-        void DeletePoll(Poll poll);
+        Task DeletePoll(Poll poll);
 
         /// <summary>
         /// Inserts a poll
         /// </summary>
         /// <param name="poll">Poll</param>
-        void InsertPoll(Poll poll);
+        Task InsertPoll(Poll poll);
 
         /// <summary>
         /// Updates the poll
         /// </summary>
         /// <param name="poll">Poll</param>
-        void UpdatePoll(Poll poll);
+        Task UpdatePoll(Poll poll);
         
         /// <summary>
         /// Gets a poll answer
         /// </summary>
         /// <param name="pollAnswerId">Poll answer identifier</param>
         /// <returns>Poll answer</returns>
-        PollAnswer GetPollAnswerById(int pollAnswerId);
+        Task<PollAnswer> GetPollAnswerById(int pollAnswerId);
         
         /// <summary>
         /// Deletes a poll answer
         /// </summary>
         /// <param name="pollAnswer">Poll answer</param>
-        void DeletePollAnswer(PollAnswer pollAnswer);
+        Task DeletePollAnswer(PollAnswer pollAnswer);
 
         /// <summary>
         /// Gets a value indicating whether customer already voted for this poll

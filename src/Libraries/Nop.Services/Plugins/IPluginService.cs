@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Customers;
 
 namespace Nop.Services.Plugins
@@ -68,24 +69,24 @@ namespace Nop.Services.Plugins
         /// <param name="systemName">Plugin system name</param>
         /// <param name="customer">Customer</param>
         /// <param name="checkDependencies">Specifies whether to check plugin dependencies</param>
-        void PreparePluginToInstall(string systemName, Customer customer = null, bool checkDependencies = true);
+        Task PreparePluginToInstall(string systemName, Customer customer = null, bool checkDependencies = true);
 
         /// <summary>
         /// Prepare plugin to the uninstallation
         /// </summary>
         /// <param name="systemName">Plugin system name</param>
-        void PreparePluginToUninstall(string systemName);
+        Task PreparePluginToUninstall(string systemName);
 
         /// <summary>
         /// Prepare plugin to the removing
         /// </summary>
         /// <param name="systemName">Plugin system name</param>
-        void PreparePluginToDelete(string systemName);
+        Task PreparePluginToDelete(string systemName);
 
         /// <summary>
         /// Reset changes
         /// </summary>
-        void ResetChanges();
+        Task ResetChanges();
 
         /// <summary>
         /// Clear installed plugins list
@@ -95,17 +96,17 @@ namespace Nop.Services.Plugins
         /// <summary>
         /// Install plugins
         /// </summary>
-        void InstallPlugins();
+        Task InstallPlugins();
 
         /// <summary>
         /// Uninstall plugins
         /// </summary>
-        void UninstallPlugins();
+        Task UninstallPlugins();
 
         /// <summary>
         /// Delete plugins
         /// </summary>
-        void DeletePlugins();
+        Task DeletePlugins();
 
         /// <summary>
         /// Check whether application restart is required to apply changes to plugins

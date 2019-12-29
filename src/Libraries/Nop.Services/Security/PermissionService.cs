@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -56,10 +58,10 @@ namespace Nop.Services.Security
         /// </summary>
         /// <param name="customerRoleId">Customer role identifier</param>
         /// <returns>Permissions</returns>
-        protected virtual IList<PermissionRecord> GetPermissionRecordsByCustomerRoleId(int customerRoleId)
+        protected async virtual Task<IList<PermissionRecord>> GetPermissionRecordsByCustomerRoleId(int customerRoleId)
         {
             var key = string.Format(NopSecurityDefaults.PermissionsAllByCustomerRoleIdCacheKey, customerRoleId);
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async () =>
             {
                 var query = from pr in _permissionRecordRepository.Table
                             join prcrm in _permissionRecordCustomerRoleMappingRepository.Table on pr.Id equals prcrm.PermissionRecordId
@@ -67,7 +69,7 @@ namespace Nop.Services.Security
                             orderby pr.Id
                             select pr;
 
-                return query.ToList();
+                return await query.ToListAsync();
             });
         }
 
@@ -77,15 +79,15 @@ namespace Nop.Services.Security
         /// <param name="permissionRecordSystemName">Permission record system name</param>
         /// <param name="customerRoleId">Customer role identifier</param>
         /// <returns>true - authorized; otherwise, false</returns>
-        protected virtual bool Authorize(string permissionRecordSystemName, int customerRoleId)
+        protected async virtual Task<bool> Authorize(string permissionRecordSystemName, int customerRoleId)
         {
             if (string.IsNullOrEmpty(permissionRecordSystemName))
                 return false;
 
             var key = string.Format(NopSecurityDefaults.PermissionsAllowedCacheKey, customerRoleId, permissionRecordSystemName);
-            return _staticCacheManager.Get(key, () =>
+            return await _staticCacheManager.Get(key, async () =>
             {
-                var permissions = GetPermissionRecordsByCustomerRoleId(customerRoleId);
+                var permissions = await GetPermissionRecordsByCustomerRoleId(customerRoleId);
                 foreach (var permission1 in permissions)
                     if (permission1.SystemName.Equals(permissionRecordSystemName, StringComparison.InvariantCultureIgnoreCase))
                         return true;
@@ -102,12 +104,12 @@ namespace Nop.Services.Security
         /// Delete a permission
         /// </summary>
         /// <param name="permission">Permission</param>
-        public virtual void DeletePermissionRecord(PermissionRecord permission)
+        public async virtual Task DeletePermissionRecord(PermissionRecord permission)
         {
             if (permission == null)
                 throw new ArgumentNullException(nameof(permission));
 
-            _permissionRecordRepository.Delete(permission);
+            await _permissionRecordRepository.Delete(permission);
 
             _cacheManager.RemoveByPrefix(NopSecurityDefaults.PermissionsPrefixCacheKey);
             _staticCacheManager.RemoveByPrefix(NopSecurityDefaults.PermissionsPrefixCacheKey);
@@ -118,12 +120,12 @@ namespace Nop.Services.Security
         /// </summary>
         /// <param name="permissionId">Permission identifier</param>
         /// <returns>Permission</returns>
-        public virtual PermissionRecord GetPermissionRecordById(int permissionId)
+        public async virtual Task<PermissionRecord> GetPermissionRecordById(int permissionId)
         {
             if (permissionId == 0)
                 return null;
 
-            return _permissionRecordRepository.GetById(permissionId);
+            return await _permissionRecordRepository.GetById(permissionId);
         }
 
         /// <summary>
@@ -131,7 +133,7 @@ namespace Nop.Services.Security
         /// </summary>
         /// <param name="systemName">Permission system name</param>
         /// <returns>Permission</returns>
-        public virtual PermissionRecord GetPermissionRecordBySystemName(string systemName)
+        public async virtual Task<PermissionRecord> GetPermissionRecordBySystemName(string systemName)
         {
             if (string.IsNullOrWhiteSpace(systemName))
                 return null;
@@ -141,7 +143,7 @@ namespace Nop.Services.Security
                         orderby pr.Id
                         select pr;
 
-            var permissionRecord = query.FirstOrDefault();
+            var permissionRecord = await query.FirstOrDefaultAsync();
             return permissionRecord;
         }
 
@@ -149,12 +151,12 @@ namespace Nop.Services.Security
         /// Gets all permissions
         /// </summary>
         /// <returns>Permissions</returns>
-        public virtual IList<PermissionRecord> GetAllPermissionRecords()
+        public async virtual Task<IList<PermissionRecord>> GetAllPermissionRecords()
         {
             var query = from pr in _permissionRecordRepository.Table
                         orderby pr.Name
                         select pr;
-            var permissions = query.ToList();
+            var permissions = await query.ToListAsync();
             return permissions;
         }
 
@@ -162,12 +164,12 @@ namespace Nop.Services.Security
         /// Inserts a permission
         /// </summary>
         /// <param name="permission">Permission</param>
-        public virtual void InsertPermissionRecord(PermissionRecord permission)
+        public async virtual Task InsertPermissionRecord(PermissionRecord permission)
         {
             if (permission == null)
                 throw new ArgumentNullException(nameof(permission));
 
-            _permissionRecordRepository.Insert(permission);
+            await _permissionRecordRepository.Insert(permission);
 
             _cacheManager.RemoveByPrefix(NopSecurityDefaults.PermissionsPrefixCacheKey);
             _staticCacheManager.RemoveByPrefix(NopSecurityDefaults.PermissionsPrefixCacheKey);
@@ -177,12 +179,12 @@ namespace Nop.Services.Security
         /// Updates the permission
         /// </summary>
         /// <param name="permission">Permission</param>
-        public virtual void UpdatePermissionRecord(PermissionRecord permission)
+        public async virtual Task UpdatePermissionRecord(PermissionRecord permission)
         {
             if (permission == null)
                 throw new ArgumentNullException(nameof(permission));
 
-            _permissionRecordRepository.Update(permission);
+            await _permissionRecordRepository.Update(permission);
 
             _cacheManager.RemoveByPrefix(NopSecurityDefaults.PermissionsPrefixCacheKey);
             _staticCacheManager.RemoveByPrefix(NopSecurityDefaults.PermissionsPrefixCacheKey);
@@ -192,7 +194,7 @@ namespace Nop.Services.Security
         /// Install permissions
         /// </summary>
         /// <param name="permissionProvider">Permission provider</param>
-        public virtual void InstallPermissions(IPermissionProvider permissionProvider)
+        public async virtual Task InstallPermissions(IPermissionProvider permissionProvider)
         {
             //install new permissions
             var permissions = permissionProvider.GetPermissions();
@@ -201,7 +203,7 @@ namespace Nop.Services.Security
 
             foreach (var permission in permissions)
             {
-                var permission1 = GetPermissionRecordBySystemName(permission.SystemName);
+                var permission1 = await GetPermissionRecordBySystemName(permission.SystemName);
                 if (permission1 != null)
                     continue;
 
@@ -215,7 +217,7 @@ namespace Nop.Services.Security
 
                 foreach (var defaultPermission in defaultPermissions)
                 {
-                    var customerRole = _customerService.GetCustomerRoleBySystemName(defaultPermission.CustomerRoleSystemName);
+                    var customerRole = await _customerService.GetCustomerRoleBySystemName(defaultPermission.CustomerRoleSystemName);
                     if (customerRole == null)
                     {
                         //new role (save it)
@@ -225,7 +227,7 @@ namespace Nop.Services.Security
                             Active = true,
                             SystemName = defaultPermission.CustomerRoleSystemName
                         };
-                        _customerService.InsertCustomerRole(customerRole);
+                        await _customerService.InsertCustomerRole(customerRole);
                     }
 
                     var defaultMappingProvided = (from p in defaultPermission.PermissionRecords
@@ -242,10 +244,10 @@ namespace Nop.Services.Security
                 }
 
                 //save new permission
-                InsertPermissionRecord(permission1);
+                await InsertPermissionRecord(permission1);
 
                 //save localization
-                _localizationService.SaveLocalizedPermissionName(permission1);
+                await _localizationService.SaveLocalizedPermissionName(permission1);
             }
         }
 
@@ -253,19 +255,19 @@ namespace Nop.Services.Security
         /// Uninstall permissions
         /// </summary>
         /// <param name="permissionProvider">Permission provider</param>
-        public virtual void UninstallPermissions(IPermissionProvider permissionProvider)
+        public async virtual Task UninstallPermissions(IPermissionProvider permissionProvider)
         {
             var permissions = permissionProvider.GetPermissions();
             foreach (var permission in permissions)
             {
-                var permission1 = GetPermissionRecordBySystemName(permission.SystemName);
+                var permission1 = await GetPermissionRecordBySystemName(permission.SystemName);
                 if (permission1 == null) 
                     continue;
 
-                DeletePermissionRecord(permission1);
+                await DeletePermissionRecord(permission1);
 
                 //delete permission locales
-                _localizationService.DeleteLocalizedPermissionName(permission1);
+                await _localizationService.DeleteLocalizedPermissionName(permission1);
             }
         }
 
@@ -274,9 +276,9 @@ namespace Nop.Services.Security
         /// </summary>
         /// <param name="permission">Permission record</param>
         /// <returns>true - authorized; otherwise, false</returns>
-        public virtual bool Authorize(PermissionRecord permission)
+        public async virtual Task<bool> Authorize(PermissionRecord permission)
         {
-            return Authorize(permission, _workContext.CurrentCustomer);
+            return await Authorize(permission, _workContext.CurrentCustomer);
         }
 
         /// <summary>
@@ -285,7 +287,7 @@ namespace Nop.Services.Security
         /// <param name="permission">Permission record</param>
         /// <param name="customer">Customer</param>
         /// <returns>true - authorized; otherwise, false</returns>
-        public virtual bool Authorize(PermissionRecord permission, Customer customer)
+        public async virtual Task<bool> Authorize(PermissionRecord permission, Customer customer)
         {
             if (permission == null)
                 return false;
@@ -302,7 +304,7 @@ namespace Nop.Services.Security
 
             //return false;
 
-            return Authorize(permission.SystemName, customer);
+            return await Authorize(permission.SystemName, customer);
         }
 
         /// <summary>
@@ -310,9 +312,9 @@ namespace Nop.Services.Security
         /// </summary>
         /// <param name="permissionRecordSystemName">Permission record system name</param>
         /// <returns>true - authorized; otherwise, false</returns>
-        public virtual bool Authorize(string permissionRecordSystemName)
+        public async virtual Task<bool> Authorize(string permissionRecordSystemName)
         {
-            return Authorize(permissionRecordSystemName, _workContext.CurrentCustomer);
+            return await Authorize(permissionRecordSystemName, _workContext.CurrentCustomer);
         }
 
         /// <summary>
@@ -321,14 +323,14 @@ namespace Nop.Services.Security
         /// <param name="permissionRecordSystemName">Permission record system name</param>
         /// <param name="customer">Customer</param>
         /// <returns>true - authorized; otherwise, false</returns>
-        public virtual bool Authorize(string permissionRecordSystemName, Customer customer)
+        public async virtual Task<bool> Authorize(string permissionRecordSystemName, Customer customer)
         {
             if (string.IsNullOrEmpty(permissionRecordSystemName))
                 return false;
 
             var customerRoles = customer.CustomerRoles.Where(cr => cr.Active);
             foreach (var role in customerRoles)
-                if (Authorize(permissionRecordSystemName, role.Id))
+                if (await Authorize(permissionRecordSystemName, role.Id))
                     //yes, we have such permission
                     return true;
 

@@ -40,7 +40,7 @@ namespace Nop.Plugin.Payments.Qualpay.Controllers
         #region Methods
 
         [HttpPost]
-        public IActionResult CreateQualpayCustomer(int customerId)
+        public async Task<IActionResult> CreateQualpayCustomer(int customerId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -57,7 +57,7 @@ namespace Nop.Plugin.Payments.Qualpay.Controllers
         }
 
         [HttpPost]
-        public IActionResult QualpayCustomerCardList(QualpayCustomerCardSearchModel searchModel)
+        public async Task<IActionResult> QualpayCustomerCardList(QualpayCustomerCardSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -73,7 +73,7 @@ namespace Nop.Plugin.Payments.Qualpay.Controllers
         }
 
         [HttpPost]
-        public IActionResult QualpayCustomerCardDelete(string id, int customerId)
+        public async Task<IActionResult> QualpayCustomerCardDelete(string id, int customerId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();

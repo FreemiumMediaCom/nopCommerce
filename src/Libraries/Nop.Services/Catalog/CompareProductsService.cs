@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Http;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Http;
@@ -103,13 +105,13 @@ namespace Nop.Services.Catalog
         /// Gets a "compare products" list
         /// </summary>
         /// <returns>"Compare products" list</returns>
-        public virtual IList<Product> GetComparedProducts()
+        public async virtual Task<IList<Product>> GetComparedProducts()
         {
             //get list of compared product identifiers
             var productIds = GetComparedProductIds();
 
             //return list of product
-            return _productService.GetProductsByIds(productIds.ToArray())
+            return (await _productService.GetProductsByIds(productIds.ToArray()))
                 .Where(product => product.Published && !product.Deleted).ToList();
         }
 

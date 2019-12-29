@@ -131,7 +131,7 @@ namespace Nop.Web.Factories
         public virtual CustomerOrderListModel PrepareCustomerOrderListModel()
         {
             var model = new CustomerOrderListModel();
-            var orders = _orderService.SearchOrders(storeId: _storeContext.CurrentStore.Id,
+            var orders = await _orderService.SearchOrders(storeId: _storeContext.CurrentStore.Id,
                 customerId: _workContext.CurrentCustomer.Id);
             foreach (var order in orders)
             {
@@ -140,9 +140,9 @@ namespace Nop.Web.Factories
                     Id = order.Id,
                     CreatedOn = _dateTimeHelper.ConvertToUserTime(order.CreatedOnUtc, DateTimeKind.Utc),
                     OrderStatusEnum = order.OrderStatus,
-                    OrderStatus = _localizationService.GetLocalizedEnum(order.OrderStatus),
-                    PaymentStatus = _localizationService.GetLocalizedEnum(order.PaymentStatus),
-                    ShippingStatus = _localizationService.GetLocalizedEnum(order.ShippingStatus),
+                    OrderStatus = await _localizationService.GetLocalizedEnum(order.OrderStatus),
+                    PaymentStatus = await _localizationService.GetLocalizedEnum(order.PaymentStatus),
+                    ShippingStatus = await _localizationService.GetLocalizedEnum(order.ShippingStatus),
                     IsReturnRequestAllowed = _orderProcessingService.IsReturnRequestAllowed(order),
                     CustomOrderNumber = order.CustomOrderNumber
                 };
@@ -152,7 +152,7 @@ namespace Nop.Web.Factories
                 model.Orders.Add(orderModel);
             }
 
-            var recurringPayments = _orderService.SearchRecurringPayments(_storeContext.CurrentStore.Id,
+            var recurringPayments = await _orderService.SearchRecurringPayments(_storeContext.CurrentStore.Id,
                 _workContext.CurrentCustomer.Id);
             foreach (var recurringPayment in recurringPayments)
             {
@@ -189,14 +189,14 @@ namespace Nop.Web.Factories
             {
                 Id = order.Id,
                 CreatedOn = _dateTimeHelper.ConvertToUserTime(order.CreatedOnUtc, DateTimeKind.Utc),
-                OrderStatus = _localizationService.GetLocalizedEnum(order.OrderStatus),
+                OrderStatus = await _localizationService.GetLocalizedEnum(order.OrderStatus),
                 IsReOrderAllowed = _orderSettings.IsReOrderAllowed,
                 IsReturnRequestAllowed = _orderProcessingService.IsReturnRequestAllowed(order),
                 PdfInvoiceDisabled = _pdfSettings.DisablePdfInvoicesForPendingOrders && order.OrderStatus == OrderStatus.Pending,
                 CustomOrderNumber = order.CustomOrderNumber,
 
                 //shipping info
-                ShippingStatus = _localizationService.GetLocalizedEnum(order.ShippingStatus)
+                ShippingStatus = await _localizationService.GetLocalizedEnum(order.ShippingStatus)
             };
             if (order.ShippingStatus != ShippingStatus.ShippingNotRequired)
             {
@@ -250,7 +250,7 @@ namespace Nop.Web.Factories
             //payment method
             var paymentMethod = _paymentPluginManager.LoadPluginBySystemName(order.PaymentMethodSystemName);
             model.PaymentMethod = paymentMethod != null ? _localizationService.GetLocalizedFriendlyName(paymentMethod, _workContext.WorkingLanguage.Id) : order.PaymentMethodSystemName;
-            model.PaymentMethodStatus = _localizationService.GetLocalizedEnum(order.PaymentStatus);
+            model.PaymentMethodStatus = await _localizationService.GetLocalizedEnum(order.PaymentStatus);
             model.CanRePostProcessPayment = _paymentService.CanRePostProcessPayment(order);
             //custom values
             model.CustomValues = _paymentService.DeserializeCustomValues(order);
@@ -323,7 +323,7 @@ namespace Nop.Web.Factories
                 }
                 else
                 {
-                    var taxRates = _orderService.ParseTaxRates(order, order.TaxRates);
+                    var taxRates = await _orderService.ParseTaxRates(order, order.TaxRates);
                     displayTaxRates = _taxSettings.DisplayTaxRates && taxRates.Any();
                     displayTax = !displayTaxRates;
 
@@ -386,7 +386,7 @@ namespace Nop.Web.Factories
                 {
                     Id = orderNote.Id,
                     HasDownload = orderNote.DownloadId > 0,
-                    Note = _orderService.FormatOrderNoteText(orderNote),
+                    Note = await _orderService.FormatOrderNoteText(orderNote),
                     CreatedOn = _dateTimeHelper.ConvertToUserTime(orderNote.CreatedOnUtc, DateTimeKind.Utc)
                 });
             }
@@ -408,7 +408,7 @@ namespace Nop.Web.Factories
                     Sku = _productService.FormatSku(orderItem.Product, orderItem.AttributesXml),
                     VendorName = vendors.FirstOrDefault(v => v.Id == orderItem.Product.VendorId)?.Name ?? string.Empty,
                     ProductId = orderItem.Product.Id,
-                    ProductName = _localizationService.GetLocalized(orderItem.Product, x => x.Name),
+                    ProductName = await _localizationService.GetLocalized(orderItem.Product, x => x.Name),
                     ProductSeName = _urlRecordService.GetSeName(orderItem.Product),
                     Quantity = orderItem.Quantity,
                     AttributeInfo = orderItem.AttributeDescription,
@@ -420,7 +420,7 @@ namespace Nop.Web.Factories
                         ? _productService.FormatRentalDate(orderItem.Product, orderItem.RentalStartDateUtc.Value) : "";
                     var rentalEndDate = orderItem.RentalEndDateUtc.HasValue
                         ? _productService.FormatRentalDate(orderItem.Product, orderItem.RentalEndDateUtc.Value) : "";
-                    orderItemModel.RentalInfo = string.Format(_localizationService.GetResource("Order.Rental.FormattedDate"),
+                    orderItemModel.RentalInfo = string.Format(await _localizationService.GetResource("Order.Rental.FormattedDate"),
                         rentalStartDate, rentalEndDate);
                 }
                 model.Items.Add(orderItemModel);
@@ -494,7 +494,7 @@ namespace Nop.Web.Factories
                                 var shipmentStatusEventModel = new ShipmentDetailsModel.ShipmentStatusEventModel();
                                 var shipmentEventCountry = _countryService.GetCountryByTwoLetterIsoCode(shipmentEvent.CountryCode);
                                 shipmentStatusEventModel.Country = shipmentEventCountry != null
-                                    ? _localizationService.GetLocalized(shipmentEventCountry, x => x.Name) : shipmentEvent.CountryCode;
+                                    ? await _localizationService.GetLocalized(shipmentEventCountry, x => x.Name) : shipmentEvent.CountryCode;
                                 shipmentStatusEventModel.Date = shipmentEvent.Date;
                                 shipmentStatusEventModel.EventName = shipmentEvent.EventName;
                                 shipmentStatusEventModel.Location = shipmentEvent.Location;
@@ -508,7 +508,7 @@ namespace Nop.Web.Factories
             model.ShowSku = _catalogSettings.ShowSkuOnProductDetailsPage;
             foreach (var shipmentItem in shipment.ShipmentItems)
             {
-                var orderItem = _orderService.GetOrderItemById(shipmentItem.OrderItemId);
+                var orderItem = await _orderService.GetOrderItemById(shipmentItem.OrderItemId);
                 if (orderItem == null)
                     continue;
 
@@ -517,7 +517,7 @@ namespace Nop.Web.Factories
                     Id = shipmentItem.Id,
                     Sku = _productService.FormatSku(orderItem.Product, orderItem.AttributesXml),
                     ProductId = orderItem.Product.Id,
-                    ProductName = _localizationService.GetLocalized(orderItem.Product, x => x.Name),
+                    ProductName = await _localizationService.GetLocalized(orderItem.Product, x => x.Name),
                     ProductSeName = _urlRecordService.GetSeName(orderItem.Product),
                     AttributeInfo = orderItem.AttributeDescription,
                     QuantityOrdered = orderItem.Quantity,
@@ -530,7 +530,7 @@ namespace Nop.Web.Factories
                         ? _productService.FormatRentalDate(orderItem.Product, orderItem.RentalStartDateUtc.Value) : "";
                     var rentalEndDate = orderItem.RentalEndDateUtc.HasValue
                         ? _productService.FormatRentalDate(orderItem.Product, orderItem.RentalEndDateUtc.Value) : "";
-                    shipmentItemModel.RentalInfo = string.Format(_localizationService.GetResource("Order.Rental.FormattedDate"),
+                    shipmentItemModel.RentalInfo = string.Format(await _localizationService.GetResource("Order.Rental.FormattedDate"),
                         rentalStartDate, rentalEndDate);
                 }
                 model.Items.Add(shipmentItemModel);
@@ -564,7 +564,7 @@ namespace Nop.Web.Factories
                 {
                     Points = historyEntry.Points,
                     PointsBalance = historyEntry.PointsBalance.HasValue ? historyEntry.PointsBalance.ToString()
-                        : string.Format(_localizationService.GetResource("RewardPoints.ActivatedLater"), activatingDate),
+                        : string.Format(await _localizationService.GetResource("RewardPoints.ActivatedLater"), activatingDate),
                     Message = historyEntry.Message,
                     CreatedOn = activatingDate,
                     EndDate = !historyEntry.EndDateUtc.HasValue ? null :

@@ -39,7 +39,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         /// <summary>
         /// Create configuration file for RoxyFileman
         /// </summary>
-        public virtual void CreateConfiguration()
+        public async virtual Task CreateConfiguration()
         {
             _roxyFilemanService.CreateConfiguration();
         }
@@ -47,7 +47,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         /// <summary>
         /// Process request
         /// </summary>
-        public virtual void ProcessRequest()
+        public async virtual Task ProcessRequest()
         {
             //async requests are disabled in the js code, so use .Wait() method here
             ProcessRequestAsync().Wait();

@@ -248,7 +248,7 @@ namespace Nop.Web.Framework.Controllers
         /// Access denied view
         /// </summary>
         /// <returns>Access denied view</returns>
-        protected virtual IActionResult AccessDeniedView()
+        protected async virtual Task<IActionResult> AccessDeniedView()
         {
             var webHelper = EngineContext.Current.Resolve<IWebHelper>();
 
@@ -275,7 +275,7 @@ namespace Nop.Web.Framework.Controllers
         /// </summary>
         /// <param name="panelName">Panel name to save</param>
         /// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request. Pass null to ignore</param>
-        public virtual void SaveSelectedPanelName(string tabName, bool persistForTheNextRequest = true)
+        public async virtual Task SaveSelectedPanelName(string tabName, bool persistForTheNextRequest = true)
         {
             //keep this method synchronized with
             //"GetSelectedPanelName" method of \Nop.Web.Framework\Extensions\HtmlExtensions.cs
@@ -298,7 +298,7 @@ namespace Nop.Web.Framework.Controllers
         /// </summary>
         /// <param name="tabName">Tab name to save; empty to automatically detect it</param>
         /// <param name="persistForTheNextRequest">A value indicating whether a message should be persisted for the next request. Pass null to ignore</param>
-        public virtual void SaveSelectedTabName(string tabName = "", bool persistForTheNextRequest = true)
+        public async virtual Task SaveSelectedTabName(string tabName = "", bool persistForTheNextRequest = true)
         {
             //default root tab
             SaveSelectedTabName(tabName, "selected-tab-name", null, persistForTheNextRequest);

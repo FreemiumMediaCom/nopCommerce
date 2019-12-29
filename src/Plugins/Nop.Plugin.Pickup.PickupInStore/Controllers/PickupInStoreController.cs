@@ -66,7 +66,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
 
         #region Methods
 
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -79,7 +79,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult List(StorePickupPointSearchModel searchModel)
+        public async Task<IActionResult> List(StorePickupPointSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedDataTablesJson();
@@ -90,7 +90,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
             return Json(model);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -107,7 +107,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
                 }
             };
 
-            model.Address.AvailableCountries.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Address.SelectCountry"), Value = "0" });
+            model.Address.AvailableCountries.Add(new SelectListItem { Text = await _localizationService.GetResource("Admin.Address.SelectCountry"), Value = "0" });
             foreach (var country in _countryService.GetAllCountries(showHidden: true))
                 model.Address.AvailableCountries.Add(new SelectListItem { Text = country.Name, Value = country.Id.ToString() });
 
@@ -115,14 +115,14 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
                 : _stateProvinceService.GetStateProvincesByCountryId(model.Address.CountryId.Value, showHidden: true);
             if (states.Any())
             {
-                model.Address.AvailableStates.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Address.SelectState"), Value = "0" });
+                model.Address.AvailableStates.Add(new SelectListItem { Text = await _localizationService.GetResource("Admin.Address.SelectState"), Value = "0" });
                 foreach (var state in states)
                     model.Address.AvailableStates.Add(new SelectListItem { Text = state.Name, Value = state.Id.ToString() });
             }
             else
-                model.Address.AvailableStates.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Address.OtherNonUS"), Value = "0" });
+                model.Address.AvailableStates.Add(new SelectListItem { Text = await _localizationService.GetResource("Admin.Address.OtherNonUS"), Value = "0" });
 
-            model.AvailableStores.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Configuration.Settings.StoreScope.AllStores"), Value = "0" });
+            model.AvailableStores.Add(new SelectListItem { Text = await _localizationService.GetResource("Admin.Configuration.Settings.StoreScope.AllStores"), Value = "0" });
             foreach (var store in _storeService.GetAllStores())
                 model.AvailableStores.Add(new SelectListItem { Text = store.Name, Value = store.Id.ToString() });
 
@@ -131,7 +131,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult Create(StorePickupPointModel model)
+        public async Task<IActionResult> Create(StorePickupPointModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -165,7 +165,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
             return View("~/Plugins/Pickup.PickupInStore/Views/Create.cshtml", model);
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -206,7 +206,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
                 };
             }
 
-            model.Address.AvailableCountries.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Address.SelectCountry"), Value = "0" });
+            model.Address.AvailableCountries.Add(new SelectListItem { Text = await _localizationService.GetResource("Admin.Address.SelectCountry"), Value = "0" });
             foreach (var country in _countryService.GetAllCountries(showHidden: true))
                 model.Address.AvailableCountries.Add(new SelectListItem { Text = country.Name, Value = country.Id.ToString(), Selected = (address != null && country.Id == address.CountryId) });
 
@@ -214,14 +214,14 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
                 : _stateProvinceService.GetStateProvincesByCountryId(model.Address.CountryId.Value, showHidden: true);
             if (states.Any())
             {
-                model.Address.AvailableStates.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Address.SelectState"), Value = "0" });
+                model.Address.AvailableStates.Add(new SelectListItem { Text = await _localizationService.GetResource("Admin.Address.SelectState"), Value = "0" });
                 foreach (var state in states)
                     model.Address.AvailableStates.Add(new SelectListItem { Text = state.Name, Value = state.Id.ToString(), Selected = (address != null && state.Id == address.StateProvinceId) });
             }
             else
-                model.Address.AvailableStates.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Address.OtherNonUS"), Value = "0" });
+                model.Address.AvailableStates.Add(new SelectListItem { Text = await _localizationService.GetResource("Admin.Address.OtherNonUS"), Value = "0" });
 
-            model.AvailableStores.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Configuration.Settings.StoreScope.AllStores"), Value = "0" });
+            model.AvailableStores.Add(new SelectListItem { Text = await _localizationService.GetResource("Admin.Configuration.Settings.StoreScope.AllStores"), Value = "0" });
             foreach (var store in _storeService.GetAllStores())
                 model.AvailableStores.Add(new SelectListItem { Text = store.Name, Value = store.Id.ToString(), Selected = store.Id == model.StoreId });
 
@@ -230,7 +230,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult Edit(StorePickupPointModel model)
+        public async Task<IActionResult> Edit(StorePickupPointModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -272,7 +272,7 @@ namespace Nop.Plugin.Pickup.PickupInStore.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();

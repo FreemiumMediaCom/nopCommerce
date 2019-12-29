@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Runtime.Serialization;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -328,7 +329,7 @@ namespace Nop.Services.Plugins
         /// Upload favicon and app icons archive
         /// </summary>
         /// <param name="archivefile">Archive file which contains a set of special icons for different OS and devices</param>
-        public virtual void UploadIconsArchive(IFormFile archivefile)
+        public async virtual Task UploadIconsArchive(IFormFile archivefile)
         {
             if (archivefile == null)
                 throw new ArgumentNullException(nameof(archivefile));
@@ -357,7 +358,7 @@ namespace Nop.Services.Plugins
 
                 zipFilePath = _fileProvider.Combine(storeIconsPath, archivefile.FileName);
                 using (var fileStream = new FileStream(zipFilePath, FileMode.Create))
-                    archivefile.CopyTo(fileStream);
+                    await archivefile.CopyToAsync(fileStream);
 
                 ZipFile.ExtractToDirectory(zipFilePath, storeIconsPath);
             }

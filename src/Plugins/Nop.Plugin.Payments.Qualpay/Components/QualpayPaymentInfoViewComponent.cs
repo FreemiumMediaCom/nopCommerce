@@ -65,7 +65,7 @@ namespace Nop.Plugin.Payments.Qualpay.Components
         /// <param name="widgetZone">Widget zone name</param>
         /// <param name="additionalData">Additional data</param>
         /// <returns>View component result</returns>
-        public IViewComponentResult Invoke(string widgetZone, object additionalData)
+        public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
             //prepare payment model
             var model = new PaymentInfoModel();
@@ -92,7 +92,7 @@ namespace Nop.Plugin.Payments.Qualpay.Components
                     //Qualpay Embedded Fields cannot be invoked without a transient key
                     _qualpaySettings.UseEmbeddedFields = false;
                     _settingService.SaveSetting(_qualpaySettings);
-                    _logger.Warning(_localizationService.GetResource("Plugins.Payments.Qualpay.Fields.UseEmbeddedFields.TransientKey.Required"));
+                    _logger.Warning(await _localizationService.GetResource("Plugins.Payments.Qualpay.Fields.UseEmbeddedFields.TransientKey.Required"));
                 }
                 else
                     model.TransientKey = key;
@@ -112,7 +112,7 @@ namespace Nop.Plugin.Payments.Qualpay.Components
                     model.BillingCardId = model.BillingCards.FirstOrDefault().Value;
 
                     //add the special item for 'select card' with empty GUID value 
-                    var selectCardText = _localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card.Select");
+                    var selectCardText = await _localizationService.GetResource("Plugins.Payments.Qualpay.Customer.Card.Select");
                     model.BillingCards.Insert(0, new SelectListItem { Text = selectCardText, Value = Guid.Empty.ToString() });
                 }
 

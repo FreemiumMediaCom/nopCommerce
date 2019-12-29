@@ -103,7 +103,7 @@ namespace Nop.Plugin.Pickup.PickupInStore
             }
 
             if (!result.PickupPoints.Any())
-                result.AddError(_localizationService.GetResource("Plugins.Pickup.PickupInStore.NoPickupPoints"));
+                result.AddError(await _localizationService.GetResource("Plugins.Pickup.PickupInStore.NoPickupPoints"));
 
             return result;
         }

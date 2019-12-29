@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Messages;
 
@@ -14,39 +15,39 @@ namespace Nop.Services.Messages
         /// Inserts a queued email
         /// </summary>
         /// <param name="queuedEmail">Queued email</param>
-        void InsertQueuedEmail(QueuedEmail queuedEmail);
+        Task InsertQueuedEmail(QueuedEmail queuedEmail);
 
         /// <summary>
         /// Updates a queued email
         /// </summary>
         /// <param name="queuedEmail">Queued email</param>
-        void UpdateQueuedEmail(QueuedEmail queuedEmail);
+        Task UpdateQueuedEmail(QueuedEmail queuedEmail);
 
         /// <summary>
         /// Deleted a queued email
         /// </summary>
         /// <param name="queuedEmail">Queued email</param>
-        void DeleteQueuedEmail(QueuedEmail queuedEmail);
+        Task DeleteQueuedEmail(QueuedEmail queuedEmail);
 
         /// <summary>
         /// Deleted a queued emails
         /// </summary>
         /// <param name="queuedEmails">Queued emails</param>
-        void DeleteQueuedEmails(IList<QueuedEmail> queuedEmails);
+        Task DeleteQueuedEmails(IList<QueuedEmail> queuedEmails);
 
         /// <summary>
         /// Gets a queued email by identifier
         /// </summary>
         /// <param name="queuedEmailId">Queued email identifier</param>
         /// <returns>Queued email</returns>
-        QueuedEmail GetQueuedEmailById(int queuedEmailId);
+        Task<QueuedEmail> GetQueuedEmailById(int queuedEmailId);
 
         /// <summary>
         /// Get queued emails by identifiers
         /// </summary>
         /// <param name="queuedEmailIds">queued email identifiers</param>
         /// <returns>Queued emails</returns>
-        IList<QueuedEmail> GetQueuedEmailsByIds(int[] queuedEmailIds);
+        Task<IList<QueuedEmail>> GetQueuedEmailsByIds(int[] queuedEmailIds);
 
         /// <summary>
         /// Search queued emails
@@ -70,6 +71,6 @@ namespace Nop.Services.Messages
         /// <summary>
         /// Delete all queued emails
         /// </summary>
-        void DeleteAllEmails();
+        Task DeleteAllEmails();
     }
 }

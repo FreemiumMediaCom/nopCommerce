@@ -66,7 +66,7 @@ namespace Nop.Web.Factories
                     result.Add(new StateProvinceModel
                     {
                         id = state.Id,
-                        name = _localizationService.GetLocalized(state, x => x.Name)
+                        name = await _localizationService.GetLocalized(state, x => x.Name)
                     });
 
                 if (country == null)
@@ -77,7 +77,7 @@ namespace Nop.Web.Factories
                         result.Insert(0, new StateProvinceModel
                         {
                             id = 0,
-                            name = _localizationService.GetResource("Address.SelectState")
+                            name = await _localizationService.GetResource("Address.SelectState")
                         });
                     }
                     else
@@ -85,7 +85,7 @@ namespace Nop.Web.Factories
                         result.Insert(0, new StateProvinceModel
                         {
                             id = 0,
-                            name = _localizationService.GetResource("Address.OtherNonUS")
+                            name = await _localizationService.GetResource("Address.OtherNonUS")
                         });
                     }
                 }
@@ -98,7 +98,7 @@ namespace Nop.Web.Factories
                         result.Insert(0, new StateProvinceModel
                         {
                             id = 0,
-                            name = _localizationService.GetResource("Address.OtherNonUS")
+                            name = await _localizationService.GetResource("Address.OtherNonUS")
                         });
                     }
                     else
@@ -109,7 +109,7 @@ namespace Nop.Web.Factories
                             result.Insert(0, new StateProvinceModel
                             {
                                 id = 0,
-                                name = _localizationService.GetResource("Address.SelectState")
+                                name = await _localizationService.GetResource("Address.SelectState")
                             });
                         }
                     }

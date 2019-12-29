@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
 using Nop.Core.Domain.Customers;
 
 namespace Nop.Services.Plugins
@@ -41,12 +43,12 @@ namespace Nop.Services.Plugins
         /// <param name="customer">Filter by customer; pass null to load all plugins</param>
         /// <param name="storeId">Filter by store; pass 0 to load all plugins</param>
         /// <returns>List of plugins</returns>
-        public virtual IList<TPlugin> LoadAllPlugins(Customer customer = null, int storeId = 0)
+        public virtual  IList<TPlugin> LoadAllPlugins(Customer customer = null, int storeId = 0)
         {
             //get plugins and put them into the dictionary to avoid further loading
             var key = string.Format(KEY_FORMAT, null, customer?.CustomerGuid ?? default(Guid), storeId);
             if (!_plugins.ContainsKey(key))
-                _plugins.Add(key, _pluginService.GetPlugins<TPlugin>(customer: customer, storeId: storeId).ToList());
+                _plugins.Add(key, ( _pluginService.GetPlugins<TPlugin>(customer: customer, storeId: storeId)).ToList());
 
             return _plugins[key];
         }
@@ -69,9 +71,9 @@ namespace Nop.Services.Plugins
                 return _plugins[key].FirstOrDefault();
 
             //or get it from list of all loaded plugins, or load it for the first time
-            var pluginBySystemName = LoadAllPlugins(customer, storeId)
+            var pluginBySystemName = (LoadAllPlugins(customer, storeId))
                 .FirstOrDefault(plugin => plugin.PluginDescriptor.SystemName.Equals(systemName, StringComparison.InvariantCultureIgnoreCase))
-                ?? _pluginService.GetPluginDescriptorBySystemName<TPlugin>(systemName, customer: customer, storeId: storeId)?.Instance<TPlugin>();
+                ?? ( _pluginService.GetPluginDescriptorBySystemName<TPlugin>(systemName, customer: customer, storeId: storeId))?.Instance<TPlugin>();
             _plugins.Add(key, new List<TPlugin> { pluginBySystemName });
 
             return pluginBySystemName;
@@ -88,7 +90,7 @@ namespace Nop.Services.Plugins
         {
             //try to get a plugin by system name or return the first loaded one (it's necessary to have a primary active plugin)
             var plugin = LoadPluginBySystemName(systemName, customer, storeId)
-                ?? LoadAllPlugins(customer, storeId).FirstOrDefault();
+                ?? (LoadAllPlugins(customer, storeId)).FirstOrDefault();
 
             return plugin;
         }
@@ -106,7 +108,7 @@ namespace Nop.Services.Plugins
                 return new List<TPlugin>();
 
             //get loaded plugins according to passed system names
-            return LoadAllPlugins(customer, storeId)
+            return (LoadAllPlugins(customer, storeId))
                 .Where(plugin => systemNames.Contains(plugin.PluginDescriptor.SystemName, StringComparer.InvariantCultureIgnoreCase))
                 .ToList();
         }

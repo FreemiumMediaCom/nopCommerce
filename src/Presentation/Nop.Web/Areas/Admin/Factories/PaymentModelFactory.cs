@@ -97,7 +97,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     paymentMethodModel.IsActive = _paymentPluginManager.IsPluginActive(method);
                     paymentMethodModel.ConfigurationUrl = method.GetConfigurationPageUrl();
                     paymentMethodModel.LogoUrl = _paymentPluginManager.GetPluginLogoUrl(method);
-                    paymentMethodModel.RecurringPaymentType = _localizationService.GetLocalizedEnum(method.RecurringPaymentType);
+                    paymentMethodModel.RecurringPaymentType = await _localizationService.GetLocalizedEnum(method.RecurringPaymentType);
 
                     return paymentMethodModel;
                 });
@@ -128,7 +128,7 @@ namespace Nop.Web.Areas.Admin.Factories
             foreach (var method in _paymentPluginManager.LoadAllPlugins())
             {
                 var paymentMethodModel = method.ToPluginModel<PaymentMethodModel>();
-                paymentMethodModel.RecurringPaymentType = _localizationService.GetLocalizedEnum(method.RecurringPaymentType);
+                paymentMethodModel.RecurringPaymentType = await _localizationService.GetLocalizedEnum(method.RecurringPaymentType);
 
                 model.AvailablePaymentMethods.Add(paymentMethodModel);
 

@@ -4,6 +4,8 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Common;
@@ -72,12 +74,12 @@ namespace Nop.Services.Common
         /// </summary>
         /// <typeparam name="T">Entity</typeparam>
         /// <returns>Integer identity; null if cannot get the result</returns>
-        public virtual int? GetTableIdent<T>() where T : BaseEntity
+        public async virtual Task<int?> GetTableIdent<T>() where T : BaseEntity
         {
             var tableName = _dbContext.GetTableName<T>();
-            var result = _dbContext
+            var result = await _dbContext
                 .QueryFromSql<DecimalQueryType>($"SELECT IDENT_CURRENT('[{tableName}]') as Value")
-                .Select(decimalValue => decimalValue.Value).FirstOrDefault();
+                .Select(decimalValue => decimalValue.Value).FirstOrDefaultAsync();
             return result.HasValue ? Convert.ToInt32(result) : 1;
         }
 
@@ -86,14 +88,14 @@ namespace Nop.Services.Common
         /// </summary>
         /// <typeparam name="T">Entity</typeparam>
         /// <param name="ident">Identity value</param>
-        public virtual void SetTableIdent<T>(int ident) where T : BaseEntity
+        public async virtual Task SetTableIdent<T>(int ident) where T : BaseEntity
         {
-            var currentIdent = GetTableIdent<T>();
-            if (!currentIdent.HasValue || ident <= currentIdent.Value) 
+            var currentIdent = await GetTableIdent<T>();
+            if (!currentIdent.HasValue || ident <= currentIdent.Value)
                 return;
 
             var tableName = _dbContext.GetTableName<T>();
-            _dbContext.ExecuteSqlCommand($"DBCC CHECKIDENT([{tableName}], RESEED, {ident})");
+            await _dbContext.ExecuteSqlCommand($"DBCC CHECKIDENT([{tableName}], RESEED, {ident})");
         }
 
         /// <summary>

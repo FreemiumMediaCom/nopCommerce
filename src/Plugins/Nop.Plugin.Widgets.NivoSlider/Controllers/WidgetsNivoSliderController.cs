@@ -38,7 +38,7 @@ namespace Nop.Plugin.Widgets.NivoSlider.Controllers
             _storeContext = storeContext;
         }
 
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageWidgets))
                 return AccessDeniedView();
@@ -99,7 +99,7 @@ namespace Nop.Plugin.Widgets.NivoSlider.Controllers
         }
 
         [HttpPost]
-        public IActionResult Configure(ConfigurationModel model)
+        public async Task<IActionResult> Configure(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageWidgets))
                 return AccessDeniedView();
@@ -184,7 +184,7 @@ namespace Nop.Plugin.Widgets.NivoSlider.Controllers
                     _pictureService.DeletePicture(previousPicture);
             }
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Plugins.Saved"));
             return Configure();
         }
     }

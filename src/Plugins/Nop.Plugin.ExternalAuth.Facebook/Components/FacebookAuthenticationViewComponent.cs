@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Framework.Components;
 
 namespace Nop.Plugin.ExternalAuth.Facebook.Components
@@ -15,7 +16,7 @@ namespace Nop.Plugin.ExternalAuth.Facebook.Components
         /// <param name="widgetZone">Widget zone name</param>
         /// <param name="additionalData">Additional data</param>
         /// <returns>View component result</returns>
-        public IViewComponentResult Invoke(string widgetZone, object additionalData)
+        public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
             return View("~/Plugins/ExternalAuth.Facebook/Views/PublicInfo.cshtml");
         }

@@ -230,7 +230,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.FriendlyName = _localizationService.GetLocalizedFriendlyName(plugin, languageId, false);
+                    locale.FriendlyName = await _localizationService.GetLocalizedFriendlyName(plugin, languageId, false);
                 };
             }
 
@@ -259,7 +259,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
             //prepare available versions
             var pluginVersions = _officialFeedManager.GetVersions();
-            searchModel.AvailableVersions.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
+            searchModel.AvailableVersions.Add(new SelectListItem { Text = await _localizationService.GetResource("Admin.Common.All"), Value = "0" });
             foreach (var version in pluginVersions)
                 searchModel.AvailableVersions.Add(new SelectListItem { Text = version.Name, Value = version.Id.ToString() });
 
@@ -274,7 +274,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
             //prepare available plugin categories
             var pluginCategories = _officialFeedManager.GetCategories();
-            searchModel.AvailableCategories.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
+            searchModel.AvailableCategories.Add(new SelectListItem { Text = await _localizationService.GetResource("Admin.Common.All"), Value = "0" });
             foreach (var pluginCategory in pluginCategories)
             {
                 var pluginCategoryNames = new List<string>();
@@ -298,17 +298,17 @@ namespace Nop.Web.Areas.Admin.Factories
             searchModel.AvailablePrices.Add(new SelectListItem
             {
                 Value = "0",
-                Text = _localizationService.GetResource("Admin.Common.All")
+                Text = await _localizationService.GetResource("Admin.Common.All")
             });
             searchModel.AvailablePrices.Add(new SelectListItem
             {
                 Value = "10",
-                Text = _localizationService.GetResource("Admin.Configuration.Plugins.OfficialFeed.Price.Free")
+                Text = await _localizationService.GetResource("Admin.Configuration.Plugins.OfficialFeed.Price.Free")
             });
             searchModel.AvailablePrices.Add(new SelectListItem
             {
                 Value = "20",
-                Text = _localizationService.GetResource("Admin.Configuration.Plugins.OfficialFeed.Price.Commercial")
+                Text = await _localizationService.GetResource("Admin.Configuration.Plugins.OfficialFeed.Price.Commercial")
             });
 
             //prepare page parameters

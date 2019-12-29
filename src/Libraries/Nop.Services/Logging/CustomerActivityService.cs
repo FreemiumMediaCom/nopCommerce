@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -114,12 +116,12 @@ namespace Nop.Services.Logging
         /// Inserts an activity log type item
         /// </summary>
         /// <param name="activityLogType">Activity log type item</param>
-        public virtual void InsertActivityType(ActivityLogType activityLogType)
+        public async virtual Task InsertActivityType(ActivityLogType activityLogType)
         {
             if (activityLogType == null)
                 throw new ArgumentNullException(nameof(activityLogType));
 
-            _activityLogTypeRepository.Insert(activityLogType);
+            await _activityLogTypeRepository.Insert(activityLogType);
             _cacheManager.RemoveByPrefix(NopLoggingDefaults.ActivityTypePrefixCacheKey);
         }
 
@@ -127,12 +129,12 @@ namespace Nop.Services.Logging
         /// Updates an activity log type item
         /// </summary>
         /// <param name="activityLogType">Activity log type item</param>
-        public virtual void UpdateActivityType(ActivityLogType activityLogType)
+        public async virtual Task UpdateActivityType(ActivityLogType activityLogType)
         {
             if (activityLogType == null)
                 throw new ArgumentNullException(nameof(activityLogType));
 
-            _activityLogTypeRepository.Update(activityLogType);
+            await _activityLogTypeRepository.Update(activityLogType);
             _cacheManager.RemoveByPrefix(NopLoggingDefaults.ActivityTypePrefixCacheKey);
         }
 
@@ -140,12 +142,12 @@ namespace Nop.Services.Logging
         /// Deletes an activity log type item
         /// </summary>
         /// <param name="activityLogType">Activity log type</param>
-        public virtual void DeleteActivityType(ActivityLogType activityLogType)
+        public async virtual Task DeleteActivityType(ActivityLogType activityLogType)
         {
             if (activityLogType == null)
                 throw new ArgumentNullException(nameof(activityLogType));
 
-            _activityLogTypeRepository.Delete(activityLogType);
+            await _activityLogTypeRepository.Delete(activityLogType);
             _cacheManager.RemoveByPrefix(NopLoggingDefaults.ActivityTypePrefixCacheKey);
         }
 
@@ -153,12 +155,12 @@ namespace Nop.Services.Logging
         /// Gets all activity log type items
         /// </summary>
         /// <returns>Activity log type items</returns>
-        public virtual IList<ActivityLogType> GetAllActivityTypes()
+        public async virtual Task<IList<ActivityLogType>> GetAllActivityTypes()
         {
             var query = from alt in _activityLogTypeRepository.Table
                         orderby alt.Name
                         select alt;
-            var activityLogTypes = query.ToList();
+            var activityLogTypes = await query.ToListAsync();
             return activityLogTypes;
         }
 
@@ -167,12 +169,12 @@ namespace Nop.Services.Logging
         /// </summary>
         /// <param name="activityLogTypeId">Activity log type identifier</param>
         /// <returns>Activity log type item</returns>
-        public virtual ActivityLogType GetActivityTypeById(int activityLogTypeId)
+        public async virtual Task<ActivityLogType> GetActivityTypeById(int activityLogTypeId)
         {
             if (activityLogTypeId == 0)
                 return null;
 
-            return _activityLogTypeRepository.GetById(activityLogTypeId);
+            return await _activityLogTypeRepository.GetById(activityLogTypeId);
         }
 
         /// <summary>
@@ -182,9 +184,9 @@ namespace Nop.Services.Logging
         /// <param name="comment">Comment</param>
         /// <param name="entity">Entity</param>
         /// <returns>Activity log item</returns>
-        public virtual ActivityLog InsertActivity(string systemKeyword, string comment, BaseEntity entity = null)
+        public async virtual Task<ActivityLog> InsertActivity(string systemKeyword, string comment, BaseEntity entity = null)
         {
-            return InsertActivity(_workContext.CurrentCustomer, systemKeyword, comment, entity);
+            return await InsertActivity(_workContext.CurrentCustomer, systemKeyword, comment, entity);
         }
 
         /// <summary>
@@ -195,7 +197,7 @@ namespace Nop.Services.Logging
         /// <param name="comment">Comment</param>
         /// <param name="entity">Entity</param>
         /// <returns>Activity log item</returns>
-        public virtual ActivityLog InsertActivity(Customer customer, string systemKeyword, string comment, BaseEntity entity = null)
+        public async virtual Task<ActivityLog> InsertActivity(Customer customer, string systemKeyword, string comment, BaseEntity entity = null)
         {
             if (customer == null)
                 return null;
@@ -216,7 +218,7 @@ namespace Nop.Services.Logging
                 CreatedOnUtc = DateTime.UtcNow,
                 IpAddress = _webHelper.GetCurrentIpAddress()
             };
-            _activityLogRepository.Insert(logItem);
+            await _activityLogRepository.Insert(logItem);
 
             return logItem;
         }
@@ -225,12 +227,12 @@ namespace Nop.Services.Logging
         /// Deletes an activity log item
         /// </summary>
         /// <param name="activityLog">Activity log type</param>
-        public virtual void DeleteActivity(ActivityLog activityLog)
+        public async virtual Task DeleteActivity(ActivityLog activityLog)
         {
             if (activityLog == null)
                 throw new ArgumentNullException(nameof(activityLog));
 
-            _activityLogRepository.Delete(activityLog);
+            await _activityLogRepository.Delete(activityLog);
         }
 
         /// <summary>
@@ -286,22 +288,22 @@ namespace Nop.Services.Logging
         /// </summary>
         /// <param name="activityLogId">Activity log identifier</param>
         /// <returns>Activity log item</returns>
-        public virtual ActivityLog GetActivityById(int activityLogId)
+        public async virtual Task<ActivityLog> GetActivityById(int activityLogId)
         {
             if (activityLogId == 0)
                 return null;
 
-            return _activityLogRepository.GetById(activityLogId);
+            return await _activityLogRepository.GetById(activityLogId);
         }
 
         /// <summary>
         /// Clears activity log
         /// </summary>
-        public virtual void ClearAllActivities()
+        public async virtual Task ClearAllActivities()
         {
             //do all databases support "Truncate command"?
             var activityLogTableName = _dbContext.GetTableName<ActivityLog>();
-            _dbContext.ExecuteSqlCommand($"TRUNCATE TABLE [{activityLogTableName}]");
+            await _dbContext.ExecuteSqlCommand($"TRUNCATE TABLE [{activityLogTableName}]");
 
             //var activityLog = _activityLogRepository.Table.ToList();
             //foreach (var activityLogItem in activityLog)

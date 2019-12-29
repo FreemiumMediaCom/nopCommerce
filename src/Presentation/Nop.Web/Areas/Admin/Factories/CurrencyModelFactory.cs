@@ -183,7 +183,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(currency, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(currency, entity => entity.Name, languageId, false, false);
                 };
             }
 

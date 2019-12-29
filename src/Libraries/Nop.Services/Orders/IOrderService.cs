@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Orders;
 
@@ -17,34 +18,34 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="orderId">The order identifier</param>
         /// <returns>Order</returns>
-        Order GetOrderById(int orderId);
+        Task<Order> GetOrderById(int orderId);
 
         /// <summary>
         /// Gets an order
         /// </summary>
         /// <param name="customOrderNumber">The custom order number</param>
         /// <returns>Order</returns>
-        Order GetOrderByCustomOrderNumber(string customOrderNumber);
+        Task<Order> GetOrderByCustomOrderNumber(string customOrderNumber);
 
         /// <summary>
         /// Get orders by identifiers
         /// </summary>
         /// <param name="orderIds">Order identifiers</param>
         /// <returns>Order</returns>
-        IList<Order> GetOrdersByIds(int[] orderIds);
+        Task<IList<Order>> GetOrdersByIds(int[] orderIds);
 
         /// <summary>
         /// Gets an order
         /// </summary>
         /// <param name="orderGuid">The order identifier</param>
         /// <returns>Order</returns>
-        Order GetOrderByGuid(Guid orderGuid);
+        Task<Order> GetOrderByGuid(Guid orderGuid);
 
         /// <summary>
         /// Deletes an order
         /// </summary>
         /// <param name="order">The order</param>
-        void DeleteOrder(Order order);
+        Task DeleteOrder(Order order);
 
         /// <summary>
         /// Search orders
@@ -70,7 +71,7 @@ namespace Nop.Services.Orders
         /// <param name="pageSize">Page size</param>
         /// <param name="getOnlyTotalCount">A value in indicating whether you want to load only total number of records. Set to "true" if you don't want to load data from database</param>
         /// <returns>Orders</returns>
-        IPagedList<Order> SearchOrders(int storeId = 0,
+        Task<IPagedList<Order>> SearchOrders(int storeId = 0,
             int vendorId = 0, int customerId = 0,
             int productId = 0, int affiliateId = 0, int warehouseId = 0,
             int billingCountryId = 0, string paymentMethodSystemName = null,
@@ -83,13 +84,13 @@ namespace Nop.Services.Orders
         /// Inserts an order
         /// </summary>
         /// <param name="order">Order</param>
-        void InsertOrder(Order order);
+        Task InsertOrder(Order order);
 
         /// <summary>
         /// Updates the order
         /// </summary>
         /// <param name="order">The order</param>
-        void UpdateOrder(Order order);
+        Task UpdateOrder(Order order);
 
         /// <summary>
         /// Get an order by authorization transaction ID and payment method system name
@@ -97,7 +98,7 @@ namespace Nop.Services.Orders
         /// <param name="authorizationTransactionId">Authorization transaction ID</param>
         /// <param name="paymentMethodSystemName">Payment method system name</param>
         /// <returns>Order</returns>
-        Order GetOrderByAuthorizationTransactionIdAndPaymentMethod(string authorizationTransactionId, string paymentMethodSystemName);
+        Task<Order> GetOrderByAuthorizationTransactionIdAndPaymentMethod(string authorizationTransactionId, string paymentMethodSystemName);
 
         /// <summary>
         /// Parse tax rates
@@ -137,27 +138,27 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="orderItemId">Order item identifier</param>
         /// <returns>Order item</returns>
-        OrderItem GetOrderItemById(int orderItemId);
+        Task<OrderItem> GetOrderItemById(int orderItemId);
 
         /// <summary>
         /// Gets an order item
         /// </summary>
         /// <param name="orderItemGuid">Order item identifier</param>
         /// <returns>Order item</returns>
-        OrderItem GetOrderItemByGuid(Guid orderItemGuid);
+        Task<OrderItem> GetOrderItemByGuid(Guid orderItemGuid);
 
         /// <summary>
         /// Gets all downloadable order items
         /// </summary>
         /// <param name="customerId">Customer identifier; null to load all records</param>
         /// <returns>Order items</returns>
-        IList<OrderItem> GetDownloadableOrderItems(int customerId);
+        Task<IList<OrderItem>> GetDownloadableOrderItems(int customerId);
 
         /// <summary>
         /// Delete an order item
         /// </summary>
         /// <param name="orderItem">The order item</param>
-        void DeleteOrderItem(OrderItem orderItem);
+        Task DeleteOrderItem(OrderItem orderItem);
 
         /// <summary>
         /// Gets a total number of items in all shipments
@@ -203,13 +204,13 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="orderNoteId">The order note identifier</param>
         /// <returns>Order note</returns>
-        OrderNote GetOrderNoteById(int orderNoteId);
+        Task<OrderNote> GetOrderNoteById(int orderNoteId);
 
         /// <summary>
         /// Deletes an order note
         /// </summary>
         /// <param name="orderNote">The order note</param>
-        void DeleteOrderNote(OrderNote orderNote);
+        Task DeleteOrderNote(OrderNote orderNote);
 
         /// <summary>
         /// Formats the order note text
@@ -226,26 +227,26 @@ namespace Nop.Services.Orders
         /// Deletes a recurring payment
         /// </summary>
         /// <param name="recurringPayment">Recurring payment</param>
-        void DeleteRecurringPayment(RecurringPayment recurringPayment);
+        Task DeleteRecurringPayment(RecurringPayment recurringPayment);
 
         /// <summary>
         /// Gets a recurring payment
         /// </summary>
         /// <param name="recurringPaymentId">The recurring payment identifier</param>
         /// <returns>Recurring payment</returns>
-        RecurringPayment GetRecurringPaymentById(int recurringPaymentId);
+        Task<RecurringPayment> GetRecurringPaymentById(int recurringPaymentId);
 
         /// <summary>
         /// Inserts a recurring payment
         /// </summary>
         /// <param name="recurringPayment">Recurring payment</param>
-        void InsertRecurringPayment(RecurringPayment recurringPayment);
+        Task InsertRecurringPayment(RecurringPayment recurringPayment);
 
         /// <summary>
         /// Updates the recurring payment
         /// </summary>
         /// <param name="recurringPayment">Recurring payment</param>
-        void UpdateRecurringPayment(RecurringPayment recurringPayment);
+        Task UpdateRecurringPayment(RecurringPayment recurringPayment);
 
         /// <summary>
         /// Search recurring payments

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -23,7 +24,7 @@ namespace Nop.Services.Media
         /// </summary>
         /// <param name="picture">Picture</param>
         /// <returns>Picture binary</returns>
-        byte[] LoadPictureBinary(Picture picture);
+        Task<byte[]> LoadPictureBinary(Picture picture);
 
         /// <summary>
         /// Get picture SEO friendly name
@@ -52,7 +53,7 @@ namespace Nop.Services.Media
         /// <param name="storeLocation">Store location URL; null to use determine the current store location automatically</param>
         /// <param name="defaultPictureType">Default picture type</param>
         /// <returns>Picture URL</returns>
-        string GetPictureUrl(int pictureId,
+        Task<string> GetPictureUrl(int pictureId,
             int targetSize = 0,
             bool showDefaultPicture = true,
             string storeLocation = null,
@@ -67,7 +68,7 @@ namespace Nop.Services.Media
         /// <param name="storeLocation">Store location URL; null to use determine the current store location automatically</param>
         /// <param name="defaultPictureType">Default picture type</param>
         /// <returns>Picture URL</returns>
-        string GetPictureUrl(Picture picture,
+        Task<string> GetPictureUrl(Picture picture,
             int targetSize = 0,
             bool showDefaultPicture = true,
             string storeLocation = null,
@@ -80,20 +81,20 @@ namespace Nop.Services.Media
         /// <param name="targetSize">The target picture size (longest side)</param>
         /// <param name="showDefaultPicture">A value indicating whether the default picture is shown</param>
         /// <returns></returns>
-        string GetThumbLocalPath(Picture picture, int targetSize = 0, bool showDefaultPicture = true);
+        Task<string> GetThumbLocalPath(Picture picture, int targetSize = 0, bool showDefaultPicture = true);
 
         /// <summary>
         /// Gets a picture
         /// </summary>
         /// <param name="pictureId">Picture identifier</param>
         /// <returns>Picture</returns>
-        Picture GetPictureById(int pictureId);
+        Task<Picture> GetPictureById(int pictureId);
 
         /// <summary>
         /// Deletes a picture
         /// </summary>
         /// <param name="picture">Picture</param>
-        void DeletePicture(Picture picture);
+        Task DeletePicture(Picture picture);
 
         /// <summary>
         /// Gets a collection of pictures
@@ -110,7 +111,7 @@ namespace Nop.Services.Media
         /// <param name="productId">Product identifier</param>
         /// <param name="recordsToReturn">Number of records to return. 0 if you want to get all items</param>
         /// <returns>Pictures</returns>
-        IList<Picture> GetPicturesByProductId(int productId, int recordsToReturn = 0);
+        Task<IList<Picture>> GetPicturesByProductId(int productId, int recordsToReturn = 0);
 
         /// <summary>
         /// Inserts a picture
@@ -123,7 +124,7 @@ namespace Nop.Services.Media
         /// <param name="isNew">A value indicating whether the picture is new</param>
         /// <param name="validateBinary">A value indicating whether to validated provided picture binary</param>
         /// <returns>Picture</returns>
-        Picture InsertPicture(byte[] pictureBinary, string mimeType, string seoFilename,
+        Task<Picture> InsertPicture(byte[] pictureBinary, string mimeType, string seoFilename,
             string altAttribute = null, string titleAttribute = null,
             bool isNew = true, bool validateBinary = true);
 
@@ -134,7 +135,7 @@ namespace Nop.Services.Media
         /// <param name="defaultFileName">File name which will be use if IFormFile.FileName not present</param>
         /// <param name="virtualPath">Virtual path</param>
         /// <returns>Picture</returns>
-        Picture InsertPicture(IFormFile formFile, string defaultFileName = "", string virtualPath = "");
+        Task<Picture> InsertPicture(IFormFile formFile, string defaultFileName = "", string virtualPath = "");
 
         /// <summary>
         /// Updates the picture
@@ -148,7 +149,7 @@ namespace Nop.Services.Media
         /// <param name="isNew">A value indicating whether the picture is new</param>
         /// <param name="validateBinary">A value indicating whether to validated provided picture binary</param>
         /// <returns>Picture</returns>
-        Picture UpdatePicture(int pictureId, byte[] pictureBinary, string mimeType,
+        Task<Picture> UpdatePicture(int pictureId, byte[] pictureBinary, string mimeType,
             string seoFilename, string altAttribute = null, string titleAttribute = null,
             bool isNew = true, bool validateBinary = true);
 
@@ -157,7 +158,7 @@ namespace Nop.Services.Media
         /// </summary>
         /// <param name="picture">The picture to update</param>
         /// <returns>Picture</returns>
-        Picture UpdatePicture(Picture picture);
+        Task<Picture> UpdatePicture(Picture picture);
 
         /// <summary>
         /// Updates a SEO filename of a picture
@@ -165,7 +166,7 @@ namespace Nop.Services.Media
         /// <param name="pictureId">The picture identifier</param>
         /// <param name="seoFilename">The SEO filename</param>
         /// <returns>Picture</returns>
-        Picture SetSeoFilename(int pictureId, string seoFilename);
+        Task<Picture> SetSeoFilename(int pictureId, string seoFilename);
 
         /// <summary>
         /// Validates input picture dimensions
@@ -193,6 +194,6 @@ namespace Nop.Services.Media
         /// <param name="product">Product</param>
         /// <param name="attributesXml">Attributes (in XML format)</param>
         /// <returns>Picture</returns>
-        Picture GetProductPicture(Product product, string attributesXml);
+        Task<Picture> GetProductPicture(Product product, string attributesXml);
     }
 }

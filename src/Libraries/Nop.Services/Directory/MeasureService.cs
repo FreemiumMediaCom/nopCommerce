@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -49,12 +51,12 @@ namespace Nop.Services.Directory
         /// Deletes measure dimension
         /// </summary>
         /// <param name="measureDimension">Measure dimension</param>
-        public virtual void DeleteMeasureDimension(MeasureDimension measureDimension)
+        public async virtual Task DeleteMeasureDimension(MeasureDimension measureDimension)
         {
             if (measureDimension == null)
                 throw new ArgumentNullException(nameof(measureDimension));
 
-            _measureDimensionRepository.Delete(measureDimension);
+            await _measureDimensionRepository.Delete(measureDimension);
 
             _cacheManager.RemoveByPrefix(NopDirectoryDefaults.MeasureDimensionsPrefixCacheKey);
 
@@ -67,13 +69,13 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="measureDimensionId">Measure dimension identifier</param>
         /// <returns>Measure dimension</returns>
-        public virtual MeasureDimension GetMeasureDimensionById(int measureDimensionId)
+        public async virtual Task<MeasureDimension> GetMeasureDimensionById(int measureDimensionId)
         {
             if (measureDimensionId == 0)
                 return null;
 
             var key = string.Format(NopDirectoryDefaults.MeasureDimensionsByIdCacheKey, measureDimensionId);
-            return _cacheManager.Get(key, () => _measureDimensionRepository.GetById(measureDimensionId));
+            return await _cacheManager.Get(key, async () => await _measureDimensionRepository.GetById(measureDimensionId));
         }
 
         /// <summary>
@@ -81,12 +83,12 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="systemKeyword">The system keyword</param>
         /// <returns>Measure dimension</returns>
-        public virtual MeasureDimension GetMeasureDimensionBySystemKeyword(string systemKeyword)
+        public async virtual Task<MeasureDimension> GetMeasureDimensionBySystemKeyword(string systemKeyword)
         {
             if (string.IsNullOrEmpty(systemKeyword))
                 return null;
 
-            var measureDimensions = GetAllMeasureDimensions();
+            var measureDimensions = await GetAllMeasureDimensions();
             foreach (var measureDimension in measureDimensions)
                 if (measureDimension.SystemKeyword.ToLowerInvariant() == systemKeyword.ToLowerInvariant())
                     return measureDimension;
@@ -97,14 +99,14 @@ namespace Nop.Services.Directory
         /// Gets all measure dimensions
         /// </summary>
         /// <returns>Measure dimensions</returns>
-        public virtual IList<MeasureDimension> GetAllMeasureDimensions()
+        public async virtual Task<IList<MeasureDimension>> GetAllMeasureDimensions()
         {
-            return _cacheManager.Get(NopDirectoryDefaults.MeasureDimensionsAllCacheKey, () =>
+            return await _cacheManager.Get(NopDirectoryDefaults.MeasureDimensionsAllCacheKey, async () =>
             {
                 var query = from md in _measureDimensionRepository.Table
                             orderby md.DisplayOrder, md.Id
                             select md;
-                var measureDimensions = query.ToList();
+                var measureDimensions = await query.ToListAsync();
                 return measureDimensions;
             });
         }
@@ -113,12 +115,12 @@ namespace Nop.Services.Directory
         /// Inserts a measure dimension
         /// </summary>
         /// <param name="measure">Measure dimension</param>
-        public virtual void InsertMeasureDimension(MeasureDimension measure)
+        public async virtual Task InsertMeasureDimension(MeasureDimension measure)
         {
             if (measure == null)
                 throw new ArgumentNullException(nameof(measure));
 
-            _measureDimensionRepository.Insert(measure);
+            await _measureDimensionRepository.Insert(measure);
 
             _cacheManager.RemoveByPrefix(NopDirectoryDefaults.MeasureDimensionsPrefixCacheKey);
 
@@ -130,12 +132,12 @@ namespace Nop.Services.Directory
         /// Updates the measure dimension
         /// </summary>
         /// <param name="measure">Measure dimension</param>
-        public virtual void UpdateMeasureDimension(MeasureDimension measure)
+        public async virtual Task UpdateMeasureDimension(MeasureDimension measure)
         {
             if (measure == null)
                 throw new ArgumentNullException(nameof(measure));
 
-            _measureDimensionRepository.Update(measure);
+            await _measureDimensionRepository.Update(measure);
 
             _cacheManager.RemoveByPrefix(NopDirectoryDefaults.MeasureDimensionsPrefixCacheKey);
 
@@ -231,12 +233,12 @@ namespace Nop.Services.Directory
         /// Deletes measure weight
         /// </summary>
         /// <param name="measureWeight">Measure weight</param>
-        public virtual void DeleteMeasureWeight(MeasureWeight measureWeight)
+        public async virtual Task DeleteMeasureWeight(MeasureWeight measureWeight)
         {
             if (measureWeight == null)
                 throw new ArgumentNullException(nameof(measureWeight));
 
-            _measureWeightRepository.Delete(measureWeight);
+            await _measureWeightRepository.Delete(measureWeight);
 
             _cacheManager.RemoveByPrefix(NopDirectoryDefaults.MeasureWeightsPrefixCacheKey);
 
@@ -249,13 +251,13 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="measureWeightId">Measure weight identifier</param>
         /// <returns>Measure weight</returns>
-        public virtual MeasureWeight GetMeasureWeightById(int measureWeightId)
+        public async virtual Task<MeasureWeight> GetMeasureWeightById(int measureWeightId)
         {
             if (measureWeightId == 0)
                 return null;
 
             var key = string.Format(NopDirectoryDefaults.MeasureWeightsByIdCacheKey, measureWeightId);
-            return _cacheManager.Get(key, () => _measureWeightRepository.GetById(measureWeightId));
+            return await _cacheManager.Get(key, async () => await _measureWeightRepository.GetById(measureWeightId));
         }
 
         /// <summary>
@@ -263,12 +265,12 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="systemKeyword">The system keyword</param>
         /// <returns>Measure weight</returns>
-        public virtual MeasureWeight GetMeasureWeightBySystemKeyword(string systemKeyword)
+        public async virtual Task<MeasureWeight> GetMeasureWeightBySystemKeyword(string systemKeyword)
         {
             if (string.IsNullOrEmpty(systemKeyword))
                 return null;
 
-            var measureWeights = GetAllMeasureWeights();
+            var measureWeights = await GetAllMeasureWeights();
             foreach (var measureWeight in measureWeights)
                 if (measureWeight.SystemKeyword.ToLowerInvariant() == systemKeyword.ToLowerInvariant())
                     return measureWeight;
@@ -279,14 +281,14 @@ namespace Nop.Services.Directory
         /// Gets all measure weights
         /// </summary>
         /// <returns>Measure weights</returns>
-        public virtual IList<MeasureWeight> GetAllMeasureWeights()
+        public async virtual Task<IList<MeasureWeight>> GetAllMeasureWeights()
         {
-            return _cacheManager.Get(NopDirectoryDefaults.MeasureWeightsAllCacheKey, () =>
+            return await _cacheManager.Get(NopDirectoryDefaults.MeasureWeightsAllCacheKey, async () =>
             {
                 var query = from mw in _measureWeightRepository.Table
                             orderby mw.DisplayOrder, mw.Id
                             select mw;
-                var measureWeights = query.ToList();
+                var measureWeights = await query.ToListAsync();
                 return measureWeights;
             });
         }
@@ -295,12 +297,12 @@ namespace Nop.Services.Directory
         /// Inserts a measure weight
         /// </summary>
         /// <param name="measure">Measure weight</param>
-        public virtual void InsertMeasureWeight(MeasureWeight measure)
+        public async virtual Task InsertMeasureWeight(MeasureWeight measure)
         {
             if (measure == null)
                 throw new ArgumentNullException(nameof(measure));
 
-            _measureWeightRepository.Insert(measure);
+            await _measureWeightRepository.Insert(measure);
 
             _cacheManager.RemoveByPrefix(NopDirectoryDefaults.MeasureWeightsPrefixCacheKey);
 
@@ -312,12 +314,12 @@ namespace Nop.Services.Directory
         /// Updates the measure weight
         /// </summary>
         /// <param name="measure">Measure weight</param>
-        public virtual void UpdateMeasureWeight(MeasureWeight measure)
+        public async virtual Task UpdateMeasureWeight(MeasureWeight measure)
         {
             if (measure == null)
                 throw new ArgumentNullException(nameof(measure));
 
-            _measureWeightRepository.Update(measure);
+            await _measureWeightRepository.Update(measure);
 
             _cacheManager.RemoveByPrefix(NopDirectoryDefaults.MeasureWeightsPrefixCacheKey);
 

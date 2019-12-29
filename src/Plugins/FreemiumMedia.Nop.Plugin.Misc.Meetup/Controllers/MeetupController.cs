@@ -52,7 +52,7 @@ namespace FreemiumMedia.Nop.Plugin.Misc.Meetup.Controllers
 
         #region Methods
 
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             //whether user has the authority to manage configuration
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
@@ -70,7 +70,7 @@ namespace FreemiumMedia.Nop.Plugin.Misc.Meetup.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult Configure(MeetupSettings model)
+        public async Task<IActionResult> Configure(MeetupSettings model)
         {
             //whether user has the authority to manage configuration
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
@@ -86,7 +86,7 @@ namespace FreemiumMedia.Nop.Plugin.Misc.Meetup.Controllers
 
             _settingService.SaveSetting(_meetupSettings);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Plugins.Saved"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Plugins.Saved"));
 
             return Configure();
         }

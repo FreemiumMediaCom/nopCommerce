@@ -204,7 +204,7 @@ namespace Nop.Plugin.Tax.Avalara.Factories
             order.ShippingAddress = _workContext.CurrentCustomer.ShippingAddress;
             if (_shippingSettings.AllowPickupInStore)
             {
-                var pickupPoint = _genericAttributeService.GetAttribute<PickupPoint>(_workContext.CurrentCustomer,
+                var pickupPoint = await _genericAttributeService.GetAttribute<PickupPoint>(_workContext.CurrentCustomer,
                     NopCustomerDefaults.SelectedPickupPointAttribute, _storeContext.CurrentStore.Id);
                 if (pickupPoint != null)
                 {
@@ -222,17 +222,17 @@ namespace Nop.Plugin.Tax.Avalara.Factories
             }
 
             //checkout attributes
-            order.CheckoutAttributesXml = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
+            order.CheckoutAttributesXml = await _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
                 NopCustomerDefaults.CheckoutAttributes, _storeContext.CurrentStore.Id);
 
             //shipping method
             var shippingRateComputationMethods = _shippingPluginManager.LoadActivePlugins(_workContext.CurrentCustomer, _storeContext.CurrentStore.Id);
             order.OrderShippingExclTax = _orderTotalCalculationService.GetShoppingCartShippingTotal(cart, false, shippingRateComputationMethods) ?? 0;
-            order.ShippingMethod = _genericAttributeService.GetAttribute<ShippingOption>(_workContext.CurrentCustomer,
+            order.ShippingMethod = await _genericAttributeService.GetAttribute<ShippingOption>(_workContext.CurrentCustomer,
                 NopCustomerDefaults.SelectedShippingOptionAttribute, _storeContext.CurrentStore.Id)?.Name;
 
             //payment method
-            var paymentMethod = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
+            var paymentMethod = await _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer,
                 NopCustomerDefaults.SelectedPaymentMethodAttribute, _storeContext.CurrentStore.Id);
             var paymentFee = _paymentService.GetAdditionalHandlingFee(cart, paymentMethod);
             order.PaymentMethodAdditionalFeeExclTax = _taxService.GetPaymentMethodAdditionalFee(paymentFee, false, _workContext.CurrentCustomer);
@@ -331,7 +331,7 @@ namespace Nop.Plugin.Tax.Avalara.Factories
                         model.Shipping = _priceFormatter.FormatShippingPrice(shoppingCartShipping, true);
 
                         //selected shipping method
-                        var shippingOption = _genericAttributeService.GetAttribute<ShippingOption>(_workContext.CurrentCustomer,
+                        var shippingOption = await _genericAttributeService.GetAttribute<ShippingOption>(_workContext.CurrentCustomer,
                             NopCustomerDefaults.SelectedShippingOptionAttribute, _storeContext.CurrentStore.Id);
                         if (shippingOption != null)
                             model.SelectedShippingMethod = shippingOption.Name;
@@ -343,7 +343,7 @@ namespace Nop.Plugin.Tax.Avalara.Factories
                 }
 
                 //payment method fee
-                var paymentMethodSystemName = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedPaymentMethodAttribute, _storeContext.CurrentStore.Id);
+                var paymentMethodSystemName = await _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer, NopCustomerDefaults.SelectedPaymentMethodAttribute, _storeContext.CurrentStore.Id);
                 var paymentMethodAdditionalFee = _paymentService.GetAdditionalHandlingFee(cart, paymentMethodSystemName);
                 var paymentMethodAdditionalFeeWithTaxBase = _taxService.GetPaymentMethodAdditionalFee(paymentMethodAdditionalFee, _workContext.CurrentCustomer);
                 if (paymentMethodAdditionalFeeWithTaxBase > decimal.Zero)

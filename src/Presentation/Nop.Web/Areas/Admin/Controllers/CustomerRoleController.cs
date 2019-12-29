@@ -56,12 +56,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -73,7 +73,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(CustomerRoleSearchModel searchModel)
+        public async virtual Task<IActionResult> List(CustomerRoleSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -84,7 +84,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
@@ -96,7 +96,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(CustomerRoleModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(CustomerRoleModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
@@ -108,9 +108,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewCustomerRole",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewCustomerRole"), customerRole.Name), customerRole);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewCustomerRole"), customerRole.Name), customerRole);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.CustomerRoles.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.CustomerRoles.Added"));
 
                 return continueEditing ? RedirectToAction("Edit", new { id = customerRole.Id }) : RedirectToAction("List");
             }
@@ -122,7 +122,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
@@ -139,7 +139,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(CustomerRoleModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(CustomerRoleModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
@@ -154,23 +154,23 @@ namespace Nop.Web.Areas.Admin.Controllers
                 if (ModelState.IsValid)
                 {
                     if (customerRole.IsSystemRole && !model.Active)
-                        throw new NopException(_localizationService.GetResource("Admin.Customers.CustomerRoles.Fields.Active.CantEditSystem"));
+                        throw new NopException(await _localizationService.GetResource("Admin.Customers.CustomerRoles.Fields.Active.CantEditSystem"));
 
                     if (customerRole.IsSystemRole && !customerRole.SystemName.Equals(model.SystemName, StringComparison.InvariantCultureIgnoreCase))
-                        throw new NopException(_localizationService.GetResource("Admin.Customers.CustomerRoles.Fields.SystemName.CantEditSystem"));
+                        throw new NopException(await _localizationService.GetResource("Admin.Customers.CustomerRoles.Fields.SystemName.CantEditSystem"));
 
                     if (NopCustomerDefaults.RegisteredRoleName.Equals(customerRole.SystemName, StringComparison.InvariantCultureIgnoreCase) &&
                         model.PurchasedWithProductId > 0)
-                        throw new NopException(_localizationService.GetResource("Admin.Customers.CustomerRoles.Fields.PurchasedWithProduct.Registered"));
+                        throw new NopException(await _localizationService.GetResource("Admin.Customers.CustomerRoles.Fields.PurchasedWithProduct.Registered"));
 
                     customerRole = model.ToEntity(customerRole);
                     _customerService.UpdateCustomerRole(customerRole);
 
                     //activity log
                     _customerActivityService.InsertActivity("EditCustomerRole",
-                        string.Format(_localizationService.GetResource("ActivityLog.EditCustomerRole"), customerRole.Name), customerRole);
+                        string.Format(await _localizationService.GetResource("ActivityLog.EditCustomerRole"), customerRole.Name), customerRole);
 
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.CustomerRoles.Updated"));
+                    _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.CustomerRoles.Updated"));
 
                     return continueEditing ? RedirectToAction("Edit", new { id = customerRole.Id }) : RedirectToAction("List");
                 }
@@ -189,7 +189,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
@@ -205,9 +205,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("DeleteCustomerRole",
-                    string.Format(_localizationService.GetResource("ActivityLog.DeleteCustomerRole"), customerRole.Name), customerRole);
+                    string.Format(await _localizationService.GetResource("ActivityLog.DeleteCustomerRole"), customerRole.Name), customerRole);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.CustomerRoles.Deleted"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.CustomerRoles.Deleted"));
 
                 return RedirectToAction("List");
             }
@@ -218,7 +218,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
-        public virtual IActionResult AssociateProductToCustomerRolePopup()
+        public async virtual Task<IActionResult> AssociateProductToCustomerRolePopup()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
@@ -230,7 +230,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AssociateProductToCustomerRolePopupList(CustomerRoleProductSearchModel searchModel)
+        public async virtual Task<IActionResult> AssociateProductToCustomerRolePopupList(CustomerRoleProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedDataTablesJson();
@@ -243,7 +243,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult AssociateProductToCustomerRolePopup([Bind(Prefix = nameof(AddProductToCustomerRoleModel))] AddProductToCustomerRoleModel model)
+        public async virtual Task<IActionResult> AssociateProductToCustomerRolePopup([Bind(Prefix = nameof(AddProductToCustomerRoleModel))] AddProductToCustomerRoleModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();

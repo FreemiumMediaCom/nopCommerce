@@ -155,12 +155,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region List
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTopics))
                 return AccessDeniedView();
@@ -172,7 +172,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(TopicSearchModel searchModel)
+        public async virtual Task<IActionResult> List(TopicSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTopics))
                 return AccessDeniedDataTablesJson();
@@ -187,7 +187,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Create / Edit / Delete
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTopics))
                 return AccessDeniedView();
@@ -199,7 +199,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(TopicModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(TopicModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTopics))
                 return AccessDeniedView();
@@ -225,11 +225,11 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(topic, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.Topics.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.Topics.Added"));
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewTopic",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewTopic"), topic.Title ?? topic.SystemName), topic);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewTopic"), topic.Title ?? topic.SystemName), topic);
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -244,7 +244,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTopics))
                 return AccessDeniedView();
@@ -261,7 +261,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(TopicModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(TopicModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTopics))
                 return AccessDeniedView();
@@ -292,11 +292,11 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(topic, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.Topics.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.Topics.Updated"));
 
                 //activity log
                 _customerActivityService.InsertActivity("EditTopic",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditTopic"), topic.Title ?? topic.SystemName), topic);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditTopic"), topic.Title ?? topic.SystemName), topic);
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -312,7 +312,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTopics))
                 return AccessDeniedView();
@@ -324,11 +324,11 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             _topicService.DeleteTopic(topic);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.Topics.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.Topics.Deleted"));
 
             //activity log
             _customerActivityService.InsertActivity("DeleteTopic",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteTopic"), topic.Title ?? topic.SystemName), topic);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteTopic"), topic.Title ?? topic.SystemName), topic);
 
             return RedirectToAction("List");
         }

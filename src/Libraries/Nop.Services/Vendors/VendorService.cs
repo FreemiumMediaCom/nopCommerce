@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Vendors;
@@ -42,25 +44,25 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorId">Vendor identifier</param>
         /// <returns>Vendor</returns>
-        public virtual Vendor GetVendorById(int vendorId)
+        public async virtual Task<Vendor> GetVendorById(int vendorId)
         {
             if (vendorId == 0)
                 return null;
 
-            return _vendorRepository.GetById(vendorId);
+            return await _vendorRepository.GetById(vendorId);
         }
 
         /// <summary>
         /// Delete a vendor
         /// </summary>
         /// <param name="vendor">Vendor</param>
-        public virtual void DeleteVendor(Vendor vendor)
+        public async virtual Task DeleteVendor(Vendor vendor)
         {
             if (vendor == null)
                 throw new ArgumentNullException(nameof(vendor));
 
             vendor.Deleted = true;
-            UpdateVendor(vendor);
+            await UpdateVendor(vendor);
 
             //event notification
             _eventPublisher.EntityDeleted(vendor);
@@ -94,25 +96,25 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorIds">Vendor identifiers</param>
         /// <returns>Vendors</returns>
-        public virtual IList<Vendor> GetVendorsByIds(int[] vendorIds)
+        public async virtual Task<IList<Vendor>> GetVendorsByIds(int[] vendorIds)
         {
             var query = _vendorRepository.Table;
             if (vendorIds != null)
                 query = query.Where(v => vendorIds.Contains(v.Id));
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
         /// <summary>
         /// Inserts a vendor
         /// </summary>
         /// <param name="vendor">Vendor</param>
-        public virtual void InsertVendor(Vendor vendor)
+        public async virtual Task InsertVendor(Vendor vendor)
         {
             if (vendor == null)
                 throw new ArgumentNullException(nameof(vendor));
 
-            _vendorRepository.Insert(vendor);
+            await _vendorRepository.Insert(vendor);
 
             //event notification
             _eventPublisher.EntityInserted(vendor);
@@ -122,12 +124,12 @@ namespace Nop.Services.Vendors
         /// Updates the vendor
         /// </summary>
         /// <param name="vendor">Vendor</param>
-        public virtual void UpdateVendor(Vendor vendor)
+        public async virtual Task UpdateVendor(Vendor vendor)
         {
             if (vendor == null)
                 throw new ArgumentNullException(nameof(vendor));
 
-            _vendorRepository.Update(vendor);
+            await _vendorRepository.Update(vendor);
 
             //event notification
             _eventPublisher.EntityUpdated(vendor);
@@ -138,24 +140,24 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorNoteId">The vendor note identifier</param>
         /// <returns>Vendor note</returns>
-        public virtual VendorNote GetVendorNoteById(int vendorNoteId)
+        public async virtual Task<VendorNote> GetVendorNoteById(int vendorNoteId)
         {
             if (vendorNoteId == 0)
                 return null;
 
-            return _vendorNoteRepository.GetById(vendorNoteId);
+            return await _vendorNoteRepository.GetById(vendorNoteId);
         }
 
         /// <summary>
         /// Deletes a vendor note
         /// </summary>
         /// <param name="vendorNote">The vendor note</param>
-        public virtual void DeleteVendorNote(VendorNote vendorNote)
+        public async virtual Task DeleteVendorNote(VendorNote vendorNote)
         {
             if (vendorNote == null)
                 throw new ArgumentNullException(nameof(vendorNote));
 
-            _vendorNoteRepository.Delete(vendorNote);
+            await _vendorNoteRepository.Delete(vendorNote);
 
             //event notification
             _eventPublisher.EntityDeleted(vendorNote);

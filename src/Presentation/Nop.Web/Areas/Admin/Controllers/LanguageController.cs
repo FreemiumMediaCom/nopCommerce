@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -99,12 +100,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Languages
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -116,7 +117,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(LanguageSearchModel searchModel)
+        public async virtual Task<IActionResult> List(LanguageSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedDataTablesJson();
@@ -127,7 +128,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -139,7 +140,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(LanguageModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(LanguageModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -151,12 +152,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewLanguage",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewLanguage"), language.Id), language);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewLanguage"), language.Id), language);
 
                 //Stores
                 SaveStoreMappings(language, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Languages.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Languages.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -171,7 +172,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -188,7 +189,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(LanguageModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(LanguageModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -204,7 +205,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 var allLanguages = _languageService.GetAllLanguages(loadCacheableCopy: false);
                 if (allLanguages.Count == 1 && allLanguages[0].Id == language.Id && !model.Published)
                 {
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Configuration.Languages.PublishedLanguageRequired"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Configuration.Languages.PublishedLanguageRequired"));
                     return RedirectToAction("Edit", new { id = language.Id });
                 }
 
@@ -214,13 +215,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditLanguage",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditLanguage"), language.Id), language);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditLanguage"), language.Id), language);
 
                 //Stores
                 SaveStoreMappings(language, model);
 
                 //notification
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Languages.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Languages.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -236,7 +237,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -250,7 +251,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             var allLanguages = _languageService.GetAllLanguages(loadCacheableCopy: false);
             if (allLanguages.Count == 1 && allLanguages[0].Id == language.Id)
             {
-                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Configuration.Languages.PublishedLanguageRequired"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Configuration.Languages.PublishedLanguageRequired"));
                 return RedirectToAction("Edit", new { id = language.Id });
             }
 
@@ -259,10 +260,10 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteLanguage",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteLanguage"), language.Id), language);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteLanguage"), language.Id), language);
 
             //notification
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Languages.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Languages.Deleted"));
 
             return RedirectToAction("List");
         }
@@ -292,7 +293,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Resources
 
         [HttpPost]
-        public virtual IActionResult Resources(LocaleResourceSearchModel searchModel)
+        public async virtual Task<IActionResult> Resources(LocaleResourceSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedDataTablesJson();
@@ -310,7 +311,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         //ValidateAttribute is used to force model validation
         [HttpPost]
-        public virtual IActionResult ResourceUpdate([Validate] LocaleResourceModel model)
+        public async virtual Task<IActionResult> ResourceUpdate([Validate] LocaleResourceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -325,14 +326,14 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return ErrorJson(ModelState.SerializeErrors());
             }
 
-            var resource = _localizationService.GetLocaleStringResourceById(model.Id);
+            var resource = await _localizationService.GetLocaleStringResourceById(model.Id);
             // if the resourceName changed, ensure it isn't being used by another resource
             if (!resource.ResourceName.Equals(model.ResourceName, StringComparison.InvariantCultureIgnoreCase))
             {
-                var res = _localizationService.GetLocaleStringResourceByName(model.ResourceName, model.LanguageId, false);
+                var res = await _localizationService.GetLocaleStringResourceByName(model.ResourceName, model.LanguageId, false);
                 if (res != null && res.Id != resource.Id)
                 {
-                    return ErrorJson(string.Format(_localizationService.GetResource("Admin.Configuration.Languages.Resources.NameAlreadyExists"), res.ResourceName));
+                    return ErrorJson(string.Format(await _localizationService.GetResource("Admin.Configuration.Languages.Resources.NameAlreadyExists"), res.ResourceName));
                 }
             }
 
@@ -346,7 +347,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         //ValidateAttribute is used to force model validation
         [HttpPost]
-        public virtual IActionResult ResourceAdd(int languageId, [Validate] LocaleResourceModel model)
+        public async virtual Task<IActionResult> ResourceAdd(int languageId, [Validate] LocaleResourceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -361,7 +362,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return ErrorJson(ModelState.SerializeErrors());
             }
 
-            var res = _localizationService.GetLocaleStringResourceByName(model.ResourceName, model.LanguageId, false);
+            var res = await _localizationService.GetLocaleStringResourceByName(model.ResourceName, model.LanguageId, false);
             if (res == null)
             {
                 //fill entity from model
@@ -373,20 +374,20 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
             else
             {
-                return ErrorJson(string.Format(_localizationService.GetResource("Admin.Configuration.Languages.Resources.NameAlreadyExists"), model.ResourceName));
+                return ErrorJson(string.Format(await _localizationService.GetResource("Admin.Configuration.Languages.Resources.NameAlreadyExists"), model.ResourceName));
             }
 
             return Json(new { Result = true });
         }
 
         [HttpPost]
-        public virtual IActionResult ResourceDelete(int id)
+        public async virtual Task<IActionResult> ResourceDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
 
             //try to get a locale resource with the specified id
-            var resource = _localizationService.GetLocaleStringResourceById(id)
+            var resource = await _localizationService.GetLocaleStringResourceById(id)
                 ?? throw new ArgumentException("No resource found with the specified id", nameof(id));
 
             _localizationService.DeleteLocaleStringResource(resource);
@@ -398,7 +399,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Export / Import
 
-        public virtual IActionResult ExportXml(int id)
+        public async virtual Task<IActionResult> ExportXml(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -410,7 +411,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             try
             {
-                var xml = _localizationService.ExportResourcesToXml(language);
+                var xml = await _localizationService.ExportResourcesToXml(language);
                 return File(Encoding.UTF8.GetBytes(xml), "application/xml", "language_pack.xml");
             }
             catch (Exception exc)
@@ -421,7 +422,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ImportXml(int id, IFormFile importxmlfile)
+        public async virtual Task<IActionResult> ImportXml(int id, IFormFile importxmlfile)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageLanguages))
                 return AccessDeniedView();
@@ -442,11 +443,11 @@ namespace Nop.Web.Areas.Admin.Controllers
                 }
                 else
                 {
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Common.UploadFile"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Common.UploadFile"));
                     return RedirectToAction("Edit", new { id = language.Id });
                 }
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Languages.Imported"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Languages.Imported"));
                 return RedirectToAction("Edit", new { id = language.Id });
             }
             catch (Exception exc)

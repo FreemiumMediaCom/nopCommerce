@@ -12,7 +12,7 @@ using Nop.Web.Framework.Mvc;
 
 namespace Nop.Web.Areas.Admin.Controllers
 {
-    public partial class ActivityLogController : BaseAdminController
+    public async partial class ActivityLogController : BaseAdminController
     {
         #region Fields
 
@@ -43,7 +43,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult ActivityTypes()
+        public async virtual Task<IActionResult> ActivityTypes()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedView();
@@ -55,13 +55,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ActionName("SaveTypes")]
-        public virtual IActionResult SaveTypes(IFormCollection form)
+        public async virtual Task<IActionResult> SaveTypes(IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedView();
 
             //activity log
-            _customerActivityService.InsertActivity("EditActivityLogTypes", _localizationService.GetResource("ActivityLog.EditActivityLogTypes"));
+            _customerActivityService.InsertActivity("EditActivityLogTypes", await _localizationService.GetResource("ActivityLog.EditActivityLogTypes"));
 
             //get identifiers of selected activity types
             var selectedActivityTypesIds = form["checkbox_activity_types"]
@@ -77,12 +77,12 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _customerActivityService.UpdateActivityType(activityType);
             }
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.ActivityLog.ActivityLogType.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.ActivityLog.ActivityLogType.Updated"));
 
             return RedirectToAction("ActivityTypes");
         }
 
-        public virtual IActionResult ActivityLogs()
+        public async virtual Task<IActionResult> ActivityLogs()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedView();
@@ -94,7 +94,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ListLogs(ActivityLogSearchModel searchModel)
+        public async virtual Task<IActionResult> ListLogs(ActivityLogSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedDataTablesJson();
@@ -106,7 +106,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ActivityLogDelete(int id)
+        public async virtual Task<IActionResult> ActivityLogDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedView();
@@ -124,7 +124,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult ClearAll()
+        public async virtual Task<IActionResult> ClearAll()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedView();
@@ -132,7 +132,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _customerActivityService.ClearAllActivities();
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteActivityLog", _localizationService.GetResource("ActivityLog.DeleteActivityLog"));
+            _customerActivityService.InsertActivity("DeleteActivityLog", await _localizationService.GetResource("ActivityLog.DeleteActivityLog"));
 
             return RedirectToAction("ActivityLogs");
         }

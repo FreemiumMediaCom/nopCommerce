@@ -78,12 +78,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Specification attributes
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -95,7 +95,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(SpecificationAttributeSearchModel searchModel)
+        public async virtual Task<IActionResult> List(SpecificationAttributeSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedDataTablesJson();
@@ -106,7 +106,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -118,7 +118,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(SpecificationAttributeModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(SpecificationAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -131,9 +131,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewSpecAttribute",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewSpecAttribute"), specificationAttribute.Name), specificationAttribute);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewSpecAttribute"), specificationAttribute.Name), specificationAttribute);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.SpecificationAttributes.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Catalog.Attributes.SpecificationAttributes.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -149,7 +149,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         //edit
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -166,7 +166,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(SpecificationAttributeModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(SpecificationAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -185,9 +185,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditSpecAttribute",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditSpecAttribute"), specificationAttribute.Name), specificationAttribute);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditSpecAttribute"), specificationAttribute.Name), specificationAttribute);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.SpecificationAttributes.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Catalog.Attributes.SpecificationAttributes.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -203,7 +203,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -217,9 +217,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteSpecAttribute",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteSpecAttribute"), specificationAttribute.Name), specificationAttribute);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteSpecAttribute"), specificationAttribute.Name), specificationAttribute);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Attributes.SpecificationAttributes.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Catalog.Attributes.SpecificationAttributes.Deleted"));
 
             return RedirectToAction("List");
         }
@@ -229,7 +229,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Specification attribute options
 
         [HttpPost]
-        public virtual IActionResult OptionList(SpecificationAttributeOptionSearchModel searchModel)
+        public async virtual Task<IActionResult> OptionList(SpecificationAttributeOptionSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedDataTablesJson();
@@ -244,7 +244,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult OptionCreatePopup(int specificationAttributeId)
+        public async virtual Task<IActionResult> OptionCreatePopup(int specificationAttributeId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -262,7 +262,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult OptionCreatePopup(SpecificationAttributeOptionModel model)
+        public async virtual Task<IActionResult> OptionCreatePopup(SpecificationAttributeOptionModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -296,7 +296,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult OptionEditPopup(int id)
+        public async virtual Task<IActionResult> OptionEditPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -320,7 +320,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult OptionEditPopup(SpecificationAttributeOptionModel model)
+        public async virtual Task<IActionResult> OptionEditPopup(SpecificationAttributeOptionModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -362,7 +362,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult OptionDelete(int id, int specificationAttributeId)
+        public async virtual Task<IActionResult> OptionDelete(int id, int specificationAttributeId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -377,7 +377,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public virtual IActionResult GetOptionsByAttributeId(string attributeId)
+        public async virtual Task<IActionResult> GetOptionsByAttributeId(string attributeId)
         {
             //do not make any permission validation here 
             //because this method could be used on some other pages (such as product editing)
@@ -399,7 +399,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Mapped products
 
         [HttpPost]
-        public virtual IActionResult UsedByProducts(SpecificationAttributeProductSearchModel searchModel)
+        public async virtual Task<IActionResult> UsedByProducts(SpecificationAttributeProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedDataTablesJson();

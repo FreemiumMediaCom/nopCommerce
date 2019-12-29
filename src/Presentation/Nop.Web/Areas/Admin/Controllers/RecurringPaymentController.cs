@@ -47,12 +47,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();
@@ -64,7 +64,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(RecurringPaymentSearchModel searchModel)
+        public async virtual Task<IActionResult> List(RecurringPaymentSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedDataTablesJson();
@@ -75,13 +75,13 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();
 
             //try to get a recurring payment with the specified id
-            var payment = _orderService.GetRecurringPaymentById(id);
+            var payment = await _orderService.GetRecurringPaymentById(id);
             if (payment == null || payment.Deleted)
                 return RedirectToAction("List");
 
@@ -93,13 +93,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(RecurringPaymentModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(RecurringPaymentModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();
 
             //try to get a recurring payment with the specified id
-            var payment = _orderService.GetRecurringPaymentById(model.Id);
+            var payment = await _orderService.GetRecurringPaymentById(model.Id);
             if (payment == null || payment.Deleted)
                 return RedirectToAction("List");
 
@@ -108,7 +108,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 payment = model.ToEntity(payment);
                 _orderService.UpdateRecurringPayment(payment);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.RecurringPayments.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.RecurringPayments.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -124,31 +124,31 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();
 
             //try to get a recurring payment with the specified id
-            var payment = _orderService.GetRecurringPaymentById(id);
+            var payment = await _orderService.GetRecurringPaymentById(id);
             if (payment == null)
                 return RedirectToAction("List");
 
             _orderService.DeleteRecurringPayment(payment);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.RecurringPayments.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.RecurringPayments.Deleted"));
 
             return RedirectToAction("List");
         }
 
         [HttpPost]
-        public virtual IActionResult HistoryList(RecurringPaymentHistorySearchModel searchModel)
+        public async virtual Task<IActionResult> HistoryList(RecurringPaymentHistorySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedDataTablesJson();
 
             //try to get a recurring payment with the specified id
-            var payment = _orderService.GetRecurringPaymentById(searchModel.RecurringPaymentId)
+            var payment = await _orderService.GetRecurringPaymentById(searchModel.RecurringPaymentId)
                 ?? throw new ArgumentException("No recurring payment found with the specified id");
 
             //prepare model
@@ -159,13 +159,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("processnextpayment")]
-        public virtual IActionResult ProcessNextPayment(int id)
+        public async virtual Task<IActionResult> ProcessNextPayment(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();
 
             //try to get a recurring payment with the specified id
-            var payment = _orderService.GetRecurringPaymentById(id);
+            var payment = await _orderService.GetRecurringPaymentById(id);
             if (payment == null)
                 return RedirectToAction("List");
 
@@ -175,7 +175,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 if (errors.Any())
                     errors.ForEach(error => _notificationService.ErrorNotification(error));
                 else
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.RecurringPayments.NextPaymentProcessed"));
+                    _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.RecurringPayments.NextPaymentProcessed"));
 
                 //prepare model
                 var model = _recurringPaymentModelFactory.PrepareRecurringPaymentModel(null, payment);
@@ -201,13 +201,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("cancelpayment")]
-        public virtual IActionResult CancelRecurringPayment(int id)
+        public async virtual Task<IActionResult> CancelRecurringPayment(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();
 
             //try to get a recurring payment with the specified id
-            var payment = _orderService.GetRecurringPaymentById(id);
+            var payment = await _orderService.GetRecurringPaymentById(id);
             if (payment == null)
                 return RedirectToAction("List");
 
@@ -220,7 +220,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                         _notificationService.ErrorNotification(error);
                 }
                 else
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.RecurringPayments.Cancelled"));
+                    _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.RecurringPayments.Cancelled"));
 
                 //prepare model
                 var model = _recurringPaymentModelFactory.PrepareRecurringPaymentModel(null, payment);

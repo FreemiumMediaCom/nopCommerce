@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nop.Core.Domain.Forums;
+using System.Threading.Tasks;
 
 namespace Nop.Data.Mapping.Forums
 {

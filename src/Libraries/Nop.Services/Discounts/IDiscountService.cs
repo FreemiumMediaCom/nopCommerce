@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
@@ -18,14 +19,14 @@ namespace Nop.Services.Discounts
         /// Delete discount
         /// </summary>
         /// <param name="discount">Discount</param>
-        void DeleteDiscount(Discount discount);
+        Task DeleteDiscount(Discount discount);
 
         /// <summary>
         /// Gets a discount
         /// </summary>
         /// <param name="discountId">Discount identifier</param>
         /// <returns>Discount</returns>
-        Discount GetDiscountById(int discountId);
+        Task<Discount> GetDiscountById(int discountId);
 
         /// <summary>
         /// Gets all discounts
@@ -37,7 +38,7 @@ namespace Nop.Services.Discounts
         /// <param name="startDateUtc">Discount start date; pass null to load all records</param>
         /// <param name="endDateUtc">Discount end date; pass null to load all records</param>
         /// <returns>Discounts</returns>
-        IList<Discount> GetAllDiscounts(DiscountType? discountType = null,
+        Task<IList<Discount>> GetAllDiscounts(DiscountType? discountType = null,
             string couponCode = null, string discountName = null, bool showHidden = false,
             DateTime? startDateUtc = null, DateTime? endDateUtc = null);
 
@@ -45,13 +46,13 @@ namespace Nop.Services.Discounts
         /// Inserts a discount
         /// </summary>
         /// <param name="discount">Discount</param>
-        void InsertDiscount(Discount discount);
+        Task InsertDiscount(Discount discount);
 
         /// <summary>
         /// Updates the discount
         /// </summary>
         /// <param name="discount">Discount</param>
-        void UpdateDiscount(Discount discount);
+        Task UpdateDiscount(Discount discount);
 
         /// <summary>
         /// Get categories for which a discount is applied
@@ -98,7 +99,7 @@ namespace Nop.Services.Discounts
         /// <param name="discountName">Discount name; pass null or empty to load all records</param>
         /// <param name="showHidden">A value indicating whether to show expired and not started discounts</param>
         /// <returns>Discounts</returns>
-        IList<DiscountForCaching> GetAllDiscountsForCaching(DiscountType? discountType = null,
+        Task<IList<DiscountForCaching>> GetAllDiscountsForCaching(DiscountType? discountType = null,
             string couponCode = null, string discountName = null, bool showHidden = false);
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace Nop.Services.Discounts
         /// <param name="discount">Discount</param>
         /// <param name="customer">Customer</param>
         /// <returns>Category identifiers</returns>
-        IList<int> GetAppliedCategoryIds(DiscountForCaching discount, Customer customer);
+        Task<IList<int>> GetAppliedCategoryIds(DiscountForCaching discount, Customer customer);
 
         /// <summary>
         /// Get manufacturer identifiers to which a discount is applied
@@ -148,7 +149,7 @@ namespace Nop.Services.Discounts
         /// <param name="discounts">A list of discounts</param>
         /// <param name="discount">Discount to check</param>
         /// <returns>Result</returns>
-        bool ContainsDiscount(IList<DiscountForCaching> discounts, DiscountForCaching discount);
+        Task<bool> ContainsDiscount(IList<DiscountForCaching> discounts, DiscountForCaching discount);
 
         #endregion
 
@@ -160,13 +161,13 @@ namespace Nop.Services.Discounts
         /// <param name="discountId">Discount identifier</param>
         /// <param name="topLevelOnly">Whether to load top-level requirements only (without parent identifier)</param>
         /// <returns>Requirements</returns>
-        IList<DiscountRequirement> GetAllDiscountRequirements(int discountId = 0, bool topLevelOnly = false);
+        Task<IList<DiscountRequirement>> GetAllDiscountRequirements(int discountId = 0, bool topLevelOnly = false);
 
         /// <summary>
         /// Delete discount requirement
         /// </summary>
         /// <param name="discountRequirement">Discount requirement</param>
-        void DeleteDiscountRequirement(DiscountRequirement discountRequirement);
+        Task DeleteDiscountRequirement(DiscountRequirement discountRequirement);
 
         #endregion
 
@@ -178,7 +179,7 @@ namespace Nop.Services.Discounts
         /// <param name="discount">Discount</param>
         /// <param name="customer">Customer</param>
         /// <returns>Discount validation result</returns>
-        DiscountValidationResult ValidateDiscount(Discount discount, Customer customer);
+        Task<DiscountValidationResult> ValidateDiscount(Discount discount, Customer customer);
 
         /// <summary>
         /// Validate discount
@@ -187,7 +188,7 @@ namespace Nop.Services.Discounts
         /// <param name="customer">Customer</param>
         /// <param name="couponCodesToValidate">Coupon codes to validate</param>
         /// <returns>Discount validation result</returns>
-        DiscountValidationResult ValidateDiscount(Discount discount, Customer customer, string[] couponCodesToValidate);
+        Task<DiscountValidationResult> ValidateDiscount(Discount discount, Customer customer, string[] couponCodesToValidate);
 
         /// <summary>
         /// Validate discount
@@ -195,7 +196,7 @@ namespace Nop.Services.Discounts
         /// <param name="discount">Discount</param>
         /// <param name="customer">Customer</param>
         /// <returns>Discount validation result</returns>
-        DiscountValidationResult ValidateDiscount(DiscountForCaching discount, Customer customer);
+        Task<DiscountValidationResult> ValidateDiscount(DiscountForCaching discount, Customer customer);
 
         /// <summary>
         /// Validate discount
@@ -204,7 +205,7 @@ namespace Nop.Services.Discounts
         /// <param name="customer">Customer</param>
         /// <param name="couponCodesToValidate">Coupon codes to validate</param>
         /// <returns>Discount validation result</returns>
-        DiscountValidationResult ValidateDiscount(DiscountForCaching discount, Customer customer, string[] couponCodesToValidate);
+        Task<DiscountValidationResult> ValidateDiscount(DiscountForCaching discount, Customer customer, string[] couponCodesToValidate);
 
         #endregion
 
@@ -215,7 +216,7 @@ namespace Nop.Services.Discounts
         /// </summary>
         /// <param name="discountUsageHistoryId">Discount usage history record identifier</param>
         /// <returns>Discount usage history</returns>
-        DiscountUsageHistory GetDiscountUsageHistoryById(int discountUsageHistoryId);
+        Task<DiscountUsageHistory> GetDiscountUsageHistoryById(int discountUsageHistoryId);
 
         /// <summary>
         /// Gets all discount usage history records
@@ -234,19 +235,19 @@ namespace Nop.Services.Discounts
         /// Insert discount usage history record
         /// </summary>
         /// <param name="discountUsageHistory">Discount usage history record</param>
-        void InsertDiscountUsageHistory(DiscountUsageHistory discountUsageHistory);
+        Task InsertDiscountUsageHistory(DiscountUsageHistory discountUsageHistory);
 
         /// <summary>
         /// Update discount usage history record
         /// </summary>
         /// <param name="discountUsageHistory">Discount usage history record</param>
-        void UpdateDiscountUsageHistory(DiscountUsageHistory discountUsageHistory);
+        Task UpdateDiscountUsageHistory(DiscountUsageHistory discountUsageHistory);
 
         /// <summary>
         /// Delete discount usage history record
         /// </summary>
         /// <param name="discountUsageHistory">Discount usage history record</param>
-        void DeleteDiscountUsageHistory(DiscountUsageHistory discountUsageHistory);
+        Task DeleteDiscountUsageHistory(DiscountUsageHistory discountUsageHistory);
 
         #endregion
     }

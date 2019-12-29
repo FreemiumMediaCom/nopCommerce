@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Data;
 using Nop.Core.Domain.Tasks;
 
@@ -32,12 +34,12 @@ namespace Nop.Services.Tasks
         /// Deletes a task
         /// </summary>
         /// <param name="task">Task</param>
-        public virtual void DeleteTask(ScheduleTask task)
+        public async virtual System.Threading.Tasks.Task DeleteTask(ScheduleTask task)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
 
-            _taskRepository.Delete(task);
+            await _taskRepository.Delete(task);
         }
 
         /// <summary>
@@ -45,12 +47,12 @@ namespace Nop.Services.Tasks
         /// </summary>
         /// <param name="taskId">Task identifier</param>
         /// <returns>Task</returns>
-        public virtual ScheduleTask GetTaskById(int taskId)
+        public async virtual Task<ScheduleTask> GetTaskById(int taskId)
         {
             if (taskId == 0)
                 return null;
 
-            return _taskRepository.GetById(taskId);
+            return await _taskRepository.GetById(taskId);
         }
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace Nop.Services.Tasks
         /// </summary>
         /// <param name="type">Task type</param>
         /// <returns>Task</returns>
-        public virtual ScheduleTask GetTaskByType(string type)
+        public async virtual Task<ScheduleTask> GetTaskByType(string type)
         {
             if (string.IsNullOrWhiteSpace(type))
                 return null;
@@ -67,7 +69,7 @@ namespace Nop.Services.Tasks
             query = query.Where(st => st.Type == type);
             query = query.OrderByDescending(t => t.Id);
 
-            var task = query.FirstOrDefault();
+            var task = await query.FirstOrDefaultAsync();
             return task;
         }
 
@@ -76,7 +78,7 @@ namespace Nop.Services.Tasks
         /// </summary>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Tasks</returns>
-        public virtual IList<ScheduleTask> GetAllTasks(bool showHidden = false)
+        public async virtual Task<IList<ScheduleTask>> GetAllTasks(bool showHidden = false)
         {
             var query = _taskRepository.Table;
             if (!showHidden)
@@ -86,7 +88,7 @@ namespace Nop.Services.Tasks
 
             query = query.OrderByDescending(t => t.Seconds);
 
-            var tasks = query.ToList();
+            var tasks = await query.ToListAsync();
             return tasks;
         }
 
@@ -94,24 +96,24 @@ namespace Nop.Services.Tasks
         /// Inserts a task
         /// </summary>
         /// <param name="task">Task</param>
-        public virtual void InsertTask(ScheduleTask task)
+        public async virtual System.Threading.Tasks.Task InsertTask(ScheduleTask task)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
 
-            _taskRepository.Insert(task);
+            await _taskRepository.Insert(task);
         }
 
         /// <summary>
         /// Updates the task
         /// </summary>
         /// <param name="task">Task</param>
-        public virtual void UpdateTask(ScheduleTask task)
+        public async virtual System.Threading.Tasks.Task UpdateTask(ScheduleTask task)
         {
             if (task == null)
                 throw new ArgumentNullException(nameof(task));
 
-            _taskRepository.Update(task);
+            await _taskRepository.Update(task);
         }
 
         #endregion

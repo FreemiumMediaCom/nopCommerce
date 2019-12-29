@@ -30,7 +30,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Low stock
 
-        public virtual IActionResult LowStock()
+        public async virtual Task<IActionResult> LowStock()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -42,7 +42,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult LowStockList(LowStockProductSearchModel searchModel)
+        public async virtual Task<IActionResult> LowStockList(LowStockProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -57,7 +57,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Bestsellers
 
-        public virtual IActionResult Bestsellers()
+        public async virtual Task<IActionResult> Bestsellers()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -69,7 +69,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult BestsellersList(BestsellerSearchModel searchModel)
+        public async virtual Task<IActionResult> BestsellersList(BestsellerSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -84,7 +84,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Never Sold
 
-        public virtual IActionResult NeverSold()
+        public async virtual Task<IActionResult> NeverSold()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -96,7 +96,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult NeverSoldList(NeverSoldReportSearchModel searchModel)
+        public async virtual Task<IActionResult> NeverSoldList(NeverSoldReportSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -111,7 +111,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Country sales
 
-        public virtual IActionResult CountrySales()
+        public async virtual Task<IActionResult> CountrySales()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.OrderCountryReport))
                 return AccessDeniedView();
@@ -123,7 +123,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CountrySalesList(CountryReportSearchModel searchModel)
+        public async virtual Task<IActionResult> CountrySalesList(CountryReportSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.OrderCountryReport))
                 return AccessDeniedDataTablesJson();
@@ -138,7 +138,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Customer reports
 
-        public virtual IActionResult RegisteredCustomers()
+        public async virtual Task<IActionResult> RegisteredCustomers()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -149,7 +149,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult BestCustomersByOrderTotal()
+        public async virtual Task<IActionResult> BestCustomersByOrderTotal()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -160,7 +160,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult BestCustomersByNumberOfOrders()
+        public async virtual Task<IActionResult> BestCustomersByNumberOfOrders()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -172,7 +172,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ReportBestCustomersByOrderTotalList(BestCustomersReportSearchModel searchModel)
+        public async virtual Task<IActionResult> ReportBestCustomersByOrderTotalList(BestCustomersReportSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -184,7 +184,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ReportBestCustomersByNumberOfOrdersList(BestCustomersReportSearchModel searchModel)
+        public async virtual Task<IActionResult> ReportBestCustomersByNumberOfOrdersList(BestCustomersReportSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -196,7 +196,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ReportRegisteredCustomersList(RegisteredCustomersReportSearchModel searchModel)
+        public async virtual Task<IActionResult> ReportRegisteredCustomersList(RegisteredCustomersReportSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();

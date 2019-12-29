@@ -169,7 +169,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     var attributeModel = attribute.ToModel<CheckoutAttributeModel>();
 
                     //fill in additional values (not existing in the entity)
-                    attributeModel.AttributeControlTypeName = _localizationService.GetLocalizedEnum(attribute.AttributeControlType);
+                    attributeModel.AttributeControlTypeName = await _localizationService.GetLocalizedEnum(attribute.AttributeControlType);
 
                     return attributeModel;
                 });
@@ -201,9 +201,9 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(checkoutAttribute, entity => entity.Name, languageId, false, false);
-                    locale.TextPrompt = _localizationService.GetLocalized(checkoutAttribute, entity => entity.TextPrompt, languageId, false, false);
-                    locale.DefaultValue = _localizationService.GetLocalized(checkoutAttribute, entity => entity.DefaultValue, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(checkoutAttribute, entity => entity.Name, languageId, false, false);
+                    locale.TextPrompt = await _localizationService.GetLocalized(checkoutAttribute, entity => entity.TextPrompt, languageId, false, false);
+                    locale.DefaultValue = await _localizationService.GetLocalized(checkoutAttribute, entity => entity.DefaultValue, languageId, false, false);
                 };
 
                 //whether to fill in some of properties
@@ -294,7 +294,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.Name = _localizationService.GetLocalized(checkoutAttributeValue, entity => entity.Name, languageId, false, false);
+                    locale.Name = await _localizationService.GetLocalized(checkoutAttributeValue, entity => entity.Name, languageId, false, false);
                 };
             }
 

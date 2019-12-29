@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Messages;
@@ -42,12 +44,12 @@ namespace Nop.Services.Messages
         /// Inserts a queued email
         /// </summary>
         /// <param name="queuedEmail">Queued email</param>        
-        public virtual void InsertQueuedEmail(QueuedEmail queuedEmail)
+        public async virtual Task InsertQueuedEmail(QueuedEmail queuedEmail)
         {
             if (queuedEmail == null)
                 throw new ArgumentNullException(nameof(queuedEmail));
 
-            _queuedEmailRepository.Insert(queuedEmail);
+            await _queuedEmailRepository.Insert(queuedEmail);
 
             //event notification
             _eventPublisher.EntityInserted(queuedEmail);
@@ -57,12 +59,12 @@ namespace Nop.Services.Messages
         /// Updates a queued email
         /// </summary>
         /// <param name="queuedEmail">Queued email</param>
-        public virtual void UpdateQueuedEmail(QueuedEmail queuedEmail)
+        public async virtual Task UpdateQueuedEmail(QueuedEmail queuedEmail)
         {
             if (queuedEmail == null)
                 throw new ArgumentNullException(nameof(queuedEmail));
 
-            _queuedEmailRepository.Update(queuedEmail);
+            await _queuedEmailRepository.Update(queuedEmail);
 
             //event notification
             _eventPublisher.EntityUpdated(queuedEmail);
@@ -72,12 +74,12 @@ namespace Nop.Services.Messages
         /// Deleted a queued email
         /// </summary>
         /// <param name="queuedEmail">Queued email</param>
-        public virtual void DeleteQueuedEmail(QueuedEmail queuedEmail)
+        public async virtual Task DeleteQueuedEmail(QueuedEmail queuedEmail)
         {
             if (queuedEmail == null)
                 throw new ArgumentNullException(nameof(queuedEmail));
 
-            _queuedEmailRepository.Delete(queuedEmail);
+            await _queuedEmailRepository.Delete(queuedEmail);
 
             //event notification
             _eventPublisher.EntityDeleted(queuedEmail);
@@ -87,12 +89,12 @@ namespace Nop.Services.Messages
         /// Deleted a queued emails
         /// </summary>
         /// <param name="queuedEmails">Queued emails</param>
-        public virtual void DeleteQueuedEmails(IList<QueuedEmail> queuedEmails)
+        public async virtual Task DeleteQueuedEmails(IList<QueuedEmail> queuedEmails)
         {
             if (queuedEmails == null)
                 throw new ArgumentNullException(nameof(queuedEmails));
 
-            _queuedEmailRepository.Delete(queuedEmails);
+            await _queuedEmailRepository.Delete(queuedEmails);
 
             //event notification
             foreach (var queuedEmail in queuedEmails)
@@ -106,12 +108,12 @@ namespace Nop.Services.Messages
         /// </summary>
         /// <param name="queuedEmailId">Queued email identifier</param>
         /// <returns>Queued email</returns>
-        public virtual QueuedEmail GetQueuedEmailById(int queuedEmailId)
+        public async virtual Task<QueuedEmail> GetQueuedEmailById(int queuedEmailId)
         {
             if (queuedEmailId == 0)
                 return null;
 
-            return _queuedEmailRepository.GetById(queuedEmailId);
+            return await _queuedEmailRepository.GetById(queuedEmailId);
         }
 
         /// <summary>
@@ -119,7 +121,7 @@ namespace Nop.Services.Messages
         /// </summary>
         /// <param name="queuedEmailIds">queued email identifiers</param>
         /// <returns>Queued emails</returns>
-        public virtual IList<QueuedEmail> GetQueuedEmailsByIds(int[] queuedEmailIds)
+        public async virtual Task<IList<QueuedEmail>> GetQueuedEmailsByIds(int[] queuedEmailIds)
         {
             if (queuedEmailIds == null || queuedEmailIds.Length == 0)
                 return new List<QueuedEmail>();
@@ -127,7 +129,8 @@ namespace Nop.Services.Messages
             var query = from qe in _queuedEmailRepository.Table
                         where queuedEmailIds.Contains(qe.Id)
                         select qe;
-            var queuedEmails = query.ToList();
+            var queuedEmails = await query.ToListAsync();
+
             //sort by passed identifiers
             var sortedQueuedEmails = new List<QueuedEmail>();
             foreach (var id in queuedEmailIds)
@@ -193,11 +196,11 @@ namespace Nop.Services.Messages
         /// <summary>
         /// Delete all queued emails
         /// </summary>
-        public virtual void DeleteAllEmails()
+        public async virtual Task DeleteAllEmails()
         {
             //do all databases support "Truncate command"?
             var queuedEmailTableName = _dbContext.GetTableName<QueuedEmail>();
-            _dbContext.ExecuteSqlCommand($"TRUNCATE TABLE [{queuedEmailTableName}]");
+            await _dbContext.ExecuteSqlCommand($"TRUNCATE TABLE [{queuedEmailTableName}]");
 
             //var queuedEmails = _queuedEmailRepository.Table.ToList();
             //foreach (var qe in queuedEmails)

@@ -134,7 +134,7 @@ namespace Nop.Plugin.Misc.SendinBlue.Services
         public void HandleEvent(EntityTokensAddedEvent<Customer, Token> eventMessage)
         {
             //handle event
-            var phone = _genericAttributeService.GetAttribute<string>(eventMessage.Entity, NopCustomerDefaults.PhoneAttribute);
+            var phone = await _genericAttributeService.GetAttribute<string>(eventMessage.Entity, NopCustomerDefaults.PhoneAttribute);
             eventMessage.Tokens.Add(new Token("Customer.PhoneNumber", phone));
         }
 

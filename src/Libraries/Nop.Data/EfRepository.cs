@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
@@ -37,7 +38,7 @@ namespace Nop.Data
         /// </summary>
         /// <param name="exception">Exception</param>
         /// <returns>Error message</returns>
-        protected string GetFullErrorTextAndRollbackEntityChanges(DbUpdateException exception)
+        protected async virtual Task<string> GetFullErrorTextAndRollbackEntityChanges(DbUpdateException exception)
         {
             //rollback entity changes
             if (_context is DbContext dbContext)
@@ -57,17 +58,17 @@ namespace Nop.Data
                     }
                 });
             }
-            
+
             try
             {
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return exception.ToString();
             }
             catch (Exception ex)
             {
                 //if after the rollback of changes the context is still not saving,
                 //return the full text of the exception that occurred when saving
-                return ex.ToString(); 
+                return ex.ToString();
             }
         }
 
@@ -80,29 +81,29 @@ namespace Nop.Data
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns>Entity</returns>
-        public virtual TEntity GetById(object id)
+        public async virtual Task<TEntity> GetById(object id)
         {
-            return Entities.Find(id);
+            return await Entities.FindAsync(id);
         }
 
         /// <summary>
         /// Insert entity
         /// </summary>
         /// <param name="entity">Entity</param>
-        public virtual void Insert(TEntity entity)
+        public async virtual Task Insert(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
             try
             {
-                Entities.Add(entity);
-                _context.SaveChanges();
+                await Entities.AddAsync(entity);
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException exception)
             {
                 //ensure that the detailed error text is saved in the Log
-                throw new Exception(GetFullErrorTextAndRollbackEntityChanges(exception), exception);
+                throw new Exception(await GetFullErrorTextAndRollbackEntityChanges(exception), exception);
             }
         }
 
@@ -110,20 +111,20 @@ namespace Nop.Data
         /// Insert entities
         /// </summary>
         /// <param name="entities">Entities</param>
-        public virtual void Insert(IEnumerable<TEntity> entities)
+        public async virtual Task Insert(IEnumerable<TEntity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
 
             try
             {
-                Entities.AddRange(entities);
-                _context.SaveChanges();
+                await Entities.AddRangeAsync(entities);
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException exception)
             {
                 //ensure that the detailed error text is saved in the Log
-                throw new Exception(GetFullErrorTextAndRollbackEntityChanges(exception), exception);
+                throw new Exception(await GetFullErrorTextAndRollbackEntityChanges(exception), exception);
             }
         }
 
@@ -131,7 +132,7 @@ namespace Nop.Data
         /// Update entity
         /// </summary>
         /// <param name="entity">Entity</param>
-        public virtual void Update(TEntity entity)
+        public async virtual Task Update(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -139,12 +140,12 @@ namespace Nop.Data
             try
             {
                 Entities.Update(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException exception)
             {
                 //ensure that the detailed error text is saved in the Log
-                throw new Exception(GetFullErrorTextAndRollbackEntityChanges(exception), exception);
+                throw new Exception(await GetFullErrorTextAndRollbackEntityChanges(exception), exception);
             }
         }
 
@@ -152,7 +153,7 @@ namespace Nop.Data
         /// Update entities
         /// </summary>
         /// <param name="entities">Entities</param>
-        public virtual void Update(IEnumerable<TEntity> entities)
+        public async virtual Task Update(IEnumerable<TEntity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
@@ -160,12 +161,12 @@ namespace Nop.Data
             try
             {
                 Entities.UpdateRange(entities);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException exception)
             {
                 //ensure that the detailed error text is saved in the Log
-                throw new Exception(GetFullErrorTextAndRollbackEntityChanges(exception), exception);
+                throw new Exception(await GetFullErrorTextAndRollbackEntityChanges(exception), exception);
             }
         }
 
@@ -173,7 +174,7 @@ namespace Nop.Data
         /// Delete entity
         /// </summary>
         /// <param name="entity">Entity</param>
-        public virtual void Delete(TEntity entity)
+        public async virtual Task Delete(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -181,12 +182,12 @@ namespace Nop.Data
             try
             {
                 Entities.Remove(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException exception)
             {
                 //ensure that the detailed error text is saved in the Log
-                throw new Exception(GetFullErrorTextAndRollbackEntityChanges(exception), exception);
+                throw new Exception(await GetFullErrorTextAndRollbackEntityChanges(exception), exception);
             }
         }
 
@@ -194,7 +195,7 @@ namespace Nop.Data
         /// Delete entities
         /// </summary>
         /// <param name="entities">Entities</param>
-        public virtual void Delete(IEnumerable<TEntity> entities)
+        public async virtual Task Delete(IEnumerable<TEntity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
@@ -202,12 +203,12 @@ namespace Nop.Data
             try
             {
                 Entities.RemoveRange(entities);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException exception)
             {
                 //ensure that the detailed error text is saved in the Log
-                throw new Exception(GetFullErrorTextAndRollbackEntityChanges(exception), exception);
+                throw new Exception(await GetFullErrorTextAndRollbackEntityChanges(exception), exception);
             }
         }
 

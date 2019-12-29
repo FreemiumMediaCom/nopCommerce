@@ -88,12 +88,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageReturnRequests))
                 return AccessDeniedView();
@@ -105,7 +105,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(ReturnRequestSearchModel searchModel)
+        public async virtual Task<IActionResult> List(ReturnRequestSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageReturnRequests))
                 return AccessDeniedDataTablesJson();
@@ -116,7 +116,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageReturnRequests))
                 return AccessDeniedView();
@@ -134,7 +134,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(ReturnRequestModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(ReturnRequestModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageReturnRequests))
                 return AccessDeniedView();
@@ -152,9 +152,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditReturnRequest",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditReturnRequest"), returnRequest.Id), returnRequest);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditReturnRequest"), returnRequest.Id), returnRequest);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ReturnRequests.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ReturnRequests.Updated"));
 
                 return continueEditing ? RedirectToAction("Edit", new { id = returnRequest.Id }) : RedirectToAction("List");
             }
@@ -168,7 +168,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("notify-customer")]
-        public virtual IActionResult NotifyCustomer(ReturnRequestModel model)
+        public async virtual Task<IActionResult> NotifyCustomer(ReturnRequestModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageReturnRequests))
                 return AccessDeniedView();
@@ -178,22 +178,22 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (returnRequest == null)
                 return RedirectToAction("List");
 
-            var orderItem = _orderService.GetOrderItemById(returnRequest.OrderItemId);
+            var orderItem = await _orderService.GetOrderItemById(returnRequest.OrderItemId);
             if (orderItem == null)
             {
-                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.ReturnRequests.OrderItemDeleted"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.ReturnRequests.OrderItemDeleted"));
                 return RedirectToAction("Edit", new { id = returnRequest.Id });
             }
 
             var queuedEmailIds = _workflowMessageService.SendReturnRequestStatusChangedCustomerNotification(returnRequest, orderItem, orderItem.Order.CustomerLanguageId);
             if (queuedEmailIds.Any())
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ReturnRequests.Notified"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ReturnRequests.Notified"));
 
             return RedirectToAction("Edit", new { id = returnRequest.Id });
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageReturnRequests))
                 return AccessDeniedView();
@@ -207,16 +207,16 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteReturnRequest",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteReturnRequest"), returnRequest.Id), returnRequest);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteReturnRequest"), returnRequest.Id), returnRequest);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ReturnRequests.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ReturnRequests.Deleted"));
 
             return RedirectToAction("List");
         }
 
         #region Return request reasons
 
-        public virtual IActionResult ReturnRequestReasonList()
+        public async virtual Task<IActionResult> ReturnRequestReasonList()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -229,7 +229,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ReturnRequestReasonList(ReturnRequestReasonSearchModel searchModel)
+        public async virtual Task<IActionResult> ReturnRequestReasonList(ReturnRequestReasonSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedDataTablesJson();
@@ -240,7 +240,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult ReturnRequestReasonCreate()
+        public async virtual Task<IActionResult> ReturnRequestReasonCreate()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -252,7 +252,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult ReturnRequestReasonCreate(ReturnRequestReasonModel model, bool continueEditing)
+        public async virtual Task<IActionResult> ReturnRequestReasonCreate(ReturnRequestReasonModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -265,7 +265,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(returnRequestReason, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestReasons.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestReasons.Added"));
 
                 return continueEditing 
                     ? RedirectToAction("ReturnRequestReasonEdit", new { id = returnRequestReason.Id })
@@ -279,7 +279,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ReturnRequestReasonEdit(int id)
+        public async virtual Task<IActionResult> ReturnRequestReasonEdit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -296,7 +296,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult ReturnRequestReasonEdit(ReturnRequestReasonModel model, bool continueEditing)
+        public async virtual Task<IActionResult> ReturnRequestReasonEdit(ReturnRequestReasonModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -314,7 +314,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(returnRequestReason, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestReasons.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestReasons.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("ReturnRequestReasonList");
@@ -330,7 +330,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ReturnRequestReasonDelete(int id)
+        public async virtual Task<IActionResult> ReturnRequestReasonDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -341,7 +341,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             _returnRequestService.DeleteReturnRequestReason(returnRequestReason);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestReasons.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestReasons.Deleted"));
 
             return RedirectToAction("ReturnRequestReasonList");
         }
@@ -350,7 +350,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Return request actions
 
-        public virtual IActionResult ReturnRequestActionList()
+        public async virtual Task<IActionResult> ReturnRequestActionList()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -363,7 +363,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ReturnRequestActionList(ReturnRequestActionSearchModel searchModel)
+        public async virtual Task<IActionResult> ReturnRequestActionList(ReturnRequestActionSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedDataTablesJson();
@@ -374,7 +374,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult ReturnRequestActionCreate()
+        public async virtual Task<IActionResult> ReturnRequestActionCreate()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -386,7 +386,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult ReturnRequestActionCreate(ReturnRequestActionModel model, bool continueEditing)
+        public async virtual Task<IActionResult> ReturnRequestActionCreate(ReturnRequestActionModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -399,7 +399,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(returnRequestAction, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestActions.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestActions.Added"));
 
                 return continueEditing 
                     ? RedirectToAction("ReturnRequestActionEdit", new { id = returnRequestAction.Id }) 
@@ -413,7 +413,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ReturnRequestActionEdit(int id)
+        public async virtual Task<IActionResult> ReturnRequestActionEdit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -430,7 +430,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult ReturnRequestActionEdit(ReturnRequestActionModel model, bool continueEditing)
+        public async virtual Task<IActionResult> ReturnRequestActionEdit(ReturnRequestActionModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -448,7 +448,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(returnRequestAction, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestActions.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestActions.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("ReturnRequestActionList");
@@ -464,7 +464,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ReturnRequestActionDelete(int id)
+        public async virtual Task<IActionResult> ReturnRequestActionDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -475,7 +475,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             _returnRequestService.DeleteReturnRequestAction(returnRequestAction);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestActions.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.Order.ReturnRequestActions.Deleted"));
 
             return RedirectToAction("ReturnRequestActionList");
         }

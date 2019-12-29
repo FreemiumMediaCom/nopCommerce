@@ -40,7 +40,7 @@ namespace Nop.Data
             //create tables
             //EngineContext.Current.Resolve<IRelationalDatabaseCreator>().CreateTables();
             //(context as DbContext).Database.EnsureCreated();
-           await context.ExecuteSqlScript(context.GenerateCreateScript());
+            await context.ExecuteSqlScript(context.GenerateCreateScript());
 
             //create indexes
             await context.ExecuteSqlScriptFromFile(fileProvider.MapPath(NopDataDefaults.SqlServerIndexesFilePath));

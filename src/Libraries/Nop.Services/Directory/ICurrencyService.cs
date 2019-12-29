@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Directory;
 
 namespace Nop.Services.Directory
@@ -14,7 +15,7 @@ namespace Nop.Services.Directory
         /// Deletes currency
         /// </summary>
         /// <param name="currency">Currency</param>
-        void DeleteCurrency(Currency currency);
+        Task DeleteCurrency(Currency currency);
 
         /// <summary>
         /// Gets a currency
@@ -22,7 +23,7 @@ namespace Nop.Services.Directory
         /// <param name="currencyId">Currency identifier</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Currency</returns>
-        Currency GetCurrencyById(int currencyId, bool loadCacheableCopy = true);
+        Task<Currency> GetCurrencyById(int currencyId, bool loadCacheableCopy = true);
 
         /// <summary>
         /// Gets a currency by code
@@ -30,7 +31,7 @@ namespace Nop.Services.Directory
         /// <param name="currencyCode">Currency code</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Currency</returns>
-        Currency GetCurrencyByCode(string currencyCode, bool loadCacheableCopy = true);
+        Task<Currency> GetCurrencyByCode(string currencyCode, bool loadCacheableCopy = true);
 
         /// <summary>
         /// Gets all currencies
@@ -39,19 +40,19 @@ namespace Nop.Services.Directory
         /// <param name="storeId">Load records allowed only in a specified store; pass 0 to load all records</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Currencies</returns>
-        IList<Currency> GetAllCurrencies(bool showHidden = false, int storeId = 0, bool loadCacheableCopy = true);
+        Task<IList<Currency>> GetAllCurrencies(bool showHidden = false, int storeId = 0, bool loadCacheableCopy = true);
 
         /// <summary>
         /// Inserts a currency
         /// </summary>
         /// <param name="currency">Currency</param>
-        void InsertCurrency(Currency currency);
+        Task InsertCurrency(Currency currency);
 
         /// <summary>
         /// Updates the currency
         /// </summary>
         /// <param name="currency">Currency</param>
-        void UpdateCurrency(Currency currency);
+        Task UpdateCurrency(Currency currency);
 
         #endregion
 
@@ -62,7 +63,7 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="currencyCode">Currency code; pass null to use primary exchange rate currency</param>
         /// <returns>Exchange rates</returns>
-        IList<ExchangeRate> GetCurrencyLiveRates(string currencyCode = null);
+        Task<IList<ExchangeRate>> GetCurrencyLiveRates(string currencyCode = null);
 
         /// <summary>
         /// Converts currency
@@ -79,7 +80,7 @@ namespace Nop.Services.Directory
         /// <param name="sourceCurrencyCode">Source currency code</param>
         /// <param name="targetCurrencyCode">Target currency code</param>
         /// <returns>Converted value</returns>
-        decimal ConvertCurrency(decimal amount, Currency sourceCurrencyCode, Currency targetCurrencyCode);
+        Task<decimal> ConvertCurrency(decimal amount, Currency sourceCurrencyCode, Currency targetCurrencyCode);
 
         /// <summary>
         /// Converts to primary exchange rate currency 
@@ -87,7 +88,7 @@ namespace Nop.Services.Directory
         /// <param name="amount">Amount</param>
         /// <param name="sourceCurrencyCode">Source currency code</param>
         /// <returns>Converted value</returns>
-        decimal ConvertToPrimaryExchangeRateCurrency(decimal amount, Currency sourceCurrencyCode);
+        Task<decimal> ConvertToPrimaryExchangeRateCurrency(decimal amount, Currency sourceCurrencyCode);
 
         /// <summary>
         /// Converts from primary exchange rate currency
@@ -95,7 +96,7 @@ namespace Nop.Services.Directory
         /// <param name="amount">Amount</param>
         /// <param name="targetCurrencyCode">Target currency code</param>
         /// <returns>Converted value</returns>
-        decimal ConvertFromPrimaryExchangeRateCurrency(decimal amount, Currency targetCurrencyCode);
+        Task<decimal> ConvertFromPrimaryExchangeRateCurrency(decimal amount, Currency targetCurrencyCode);
 
         /// <summary>
         /// Converts to primary store currency 
@@ -103,7 +104,7 @@ namespace Nop.Services.Directory
         /// <param name="amount">Amount</param>
         /// <param name="sourceCurrencyCode">Source currency code</param>
         /// <returns>Converted value</returns>
-        decimal ConvertToPrimaryStoreCurrency(decimal amount, Currency sourceCurrencyCode);
+        Task<decimal> ConvertToPrimaryStoreCurrency(decimal amount, Currency sourceCurrencyCode);
 
         /// <summary>
         /// Converts from primary store currency
@@ -111,7 +112,7 @@ namespace Nop.Services.Directory
         /// <param name="amount">Amount</param>
         /// <param name="targetCurrencyCode">Target currency code</param>
         /// <returns>Converted value</returns>
-        decimal ConvertFromPrimaryStoreCurrency(decimal amount, Currency targetCurrencyCode);
+        Task<decimal> ConvertFromPrimaryStoreCurrency(decimal amount, Currency targetCurrencyCode);
 
         #endregion
     }

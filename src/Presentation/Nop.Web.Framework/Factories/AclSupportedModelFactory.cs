@@ -39,7 +39,7 @@ namespace Nop.Web.Framework.Factories
         /// </summary>
         /// <typeparam name="TModel">ACL supported model type</typeparam>
         /// <param name="model">Model</param>
-        public virtual void PrepareModelCustomerRoles<TModel>(TModel model) where TModel : IAclSupportedModel
+        public async virtual Task PrepareModelCustomerRoles<TModel>(TModel model) where TModel : IAclSupportedModel
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -62,7 +62,7 @@ namespace Nop.Web.Framework.Factories
         /// <param name="model">Model</param>
         /// <param name="entity">Entity</param>
         /// <param name="ignoreAclMappings">Whether to ignore existing ACL mappings</param>
-        public virtual void PrepareModelCustomerRoles<TModel, TEntity>(TModel model, TEntity entity, bool ignoreAclMappings)
+        public async virtual Task PrepareModelCustomerRoles<TModel, TEntity>(TModel model, TEntity entity, bool ignoreAclMappings)
             where TModel : IAclSupportedModel where TEntity : BaseEntity, IAclSupported
         {
             if (model == null)

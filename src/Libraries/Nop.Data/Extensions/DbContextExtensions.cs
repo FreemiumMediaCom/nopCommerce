@@ -142,7 +142,7 @@ namespace Nop.Data.Extensions
             //drop the table
             var dbScript = $"IF OBJECT_ID('{tableName}', 'U') IS NOT NULL DROP TABLE [{tableName}]";
             await context.ExecuteSqlCommand(dbScript);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
         /// <summary>

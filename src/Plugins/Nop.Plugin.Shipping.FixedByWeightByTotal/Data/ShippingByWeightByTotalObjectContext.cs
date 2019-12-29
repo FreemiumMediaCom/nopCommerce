@@ -52,7 +52,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Data
         /// Generate a script to create all tables for the current model
         /// </summary>
         /// <returns>A SQL script</returns>
-        public virtual string GenerateCreateScript()
+        public async virtual Task<string> GenerateCreateScript()
         {
             return Database.GenerateCreateScript();
         }
@@ -105,7 +105,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Data
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
         /// <param name="entity">Entity</param>
-        public virtual void Detach<TEntity>(TEntity entity) where TEntity : BaseEntity
+        public async virtual Task Detach<TEntity>(TEntity entity) where TEntity : BaseEntity
         {
             throw new NotImplementedException();
         }

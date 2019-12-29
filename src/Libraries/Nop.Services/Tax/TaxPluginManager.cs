@@ -2,6 +2,8 @@
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Tax;
 using Nop.Services.Plugins;
+using System.Threading.Tasks;
+
 
 namespace Nop.Services.Tax
 {
@@ -56,7 +58,7 @@ namespace Nop.Services.Tax
         /// <param name="customer">Filter by customer; pass null to load all plugins</param>
         /// <param name="storeId">Filter by store; pass 0 to load all plugins</param>
         /// <returns>Result</returns>
-        public virtual bool IsPluginActive(string systemName, Customer customer = null, int storeId = 0)
+        public  virtual bool IsPluginActive(string systemName, Customer customer = null, int storeId = 0)
         {
             var taxProvider = LoadPluginBySystemName(systemName, customer, storeId);
             return IsPluginActive(taxProvider);

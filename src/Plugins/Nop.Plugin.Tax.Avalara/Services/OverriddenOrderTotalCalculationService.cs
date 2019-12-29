@@ -117,7 +117,7 @@ namespace Nop.Plugin.Tax.Avalara.Services
             var paymentMethodSystemName = string.Empty;
             if (customer != null)
             {
-                paymentMethodSystemName = _genericAttributeService.GetAttribute<string>(customer,
+                paymentMethodSystemName = await _genericAttributeService.GetAttribute<string>(customer,
                     NopCustomerDefaults.SelectedPaymentMethodAttribute, _storeContext.CurrentStore.Id);
             }
 

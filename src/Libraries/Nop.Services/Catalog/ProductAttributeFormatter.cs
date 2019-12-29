@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
@@ -68,10 +69,10 @@ namespace Nop.Services.Catalog
         /// <param name="product">Product</param>
         /// <param name="attributesXml">Attributes in XML format</param>
         /// <returns>Attributes</returns>
-        public virtual string FormatAttributes(Product product, string attributesXml)
+        public async virtual Task<string> FormatAttributes(Product product, string attributesXml)
         {
             var customer = _workContext.CurrentCustomer;
-            return FormatAttributes(product, attributesXml, customer);
+            return await FormatAttributes(product, attributesXml, customer);
         }
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace Nop.Services.Catalog
         /// <param name="renderGiftCardAttributes">A value indicating whether to render gift card attributes</param>
         /// <param name="allowHyperlinks">A value indicating whether to HTML hyperink tags could be rendered (if required)</param>
         /// <returns>Attributes</returns>
-        public virtual string FormatAttributes(Product product, string attributesXml,
+        public async virtual Task<string> FormatAttributes(Product product, string attributesXml,
             Customer customer, string separator = "<br />", bool htmlEncode = true, bool renderPrices = true,
             bool renderProductAttributes = true, bool renderGiftCardAttributes = true,
             bool allowHyperlinks = true)
@@ -97,7 +98,7 @@ namespace Nop.Services.Catalog
             //attributes
             if (renderProductAttributes)
             {
-                foreach (var attribute in _productAttributeParser.ParseProductAttributeMappings(attributesXml))
+                foreach (var attribute in await _productAttributeParser.ParseProductAttributeMappings(attributesXml))
                 {
                     //attributes without values
                     if (!attribute.ShouldHaveValues())
@@ -108,7 +109,7 @@ namespace Nop.Services.Catalog
                             if (attribute.AttributeControlType == AttributeControlType.MultilineTextbox)
                             {
                                 //multiline textbox
-                                var attributeName = _localizationService.GetLocalized(attribute.ProductAttribute, a => a.Name, _workContext.WorkingLanguage.Id);
+                                var attributeName = await _localizationService.GetLocalized(attribute.ProductAttribute, a => a.Name, _workContext.WorkingLanguage.Id);
 
                                 //encode (if required)
                                 if (htmlEncode)
@@ -121,7 +122,7 @@ namespace Nop.Services.Catalog
                             {
                                 //file upload
                                 Guid.TryParse(value, out var downloadGuid);
-                                var download = _downloadService.GetDownloadByGuid(downloadGuid);
+                                var download = await _downloadService.GetDownloadByGuid(downloadGuid);
                                 if (download != null)
                                 {
                                     var fileName = $"{download.Filename ?? download.DownloadGuid.ToString()}{download.Extension}";
@@ -134,7 +135,7 @@ namespace Nop.Services.Catalog
                                     var attributeText = allowHyperlinks ? $"<a href=\"{_webHelper.GetStoreLocation(false)}download/getfileupload/?downloadId={download.DownloadGuid}\" class=\"fileuploadattribute\">{fileName}</a>"
                                         : fileName;
 
-                                    var attributeName = _localizationService.GetLocalized(attribute.ProductAttribute, a => a.Name, _workContext.WorkingLanguage.Id);
+                                    var attributeName = await _localizationService.GetLocalized(attribute.ProductAttribute, a => a.Name, _workContext.WorkingLanguage.Id);
 
                                     //encode (if required)
                                     if (htmlEncode)
@@ -164,9 +165,9 @@ namespace Nop.Services.Catalog
                     //product attribute values
                     else
                     {
-                        foreach (var attributeValue in _productAttributeParser.ParseProductAttributeValues(attributesXml, attribute.Id))
+                        foreach (var attributeValue in await _productAttributeParser.ParseProductAttributeValues(attributesXml, attribute.Id))
                         {
-                            var formattedAttribute = $"{_localizationService.GetLocalized(attribute.ProductAttribute, a => a.Name, _workContext.WorkingLanguage.Id)}: {_localizationService.GetLocalized(attributeValue, a => a.Name, _workContext.WorkingLanguage.Id)}";
+                            var formattedAttribute = $"{await _localizationService.GetLocalized(attribute.ProductAttribute, a => a.Name, _workContext.WorkingLanguage.Id)}: {await _localizationService.GetLocalized(attributeValue, a => a.Name, _workContext.WorkingLanguage.Id)}";
 
                             if (renderPrices)
                             {
@@ -174,13 +175,13 @@ namespace Nop.Services.Catalog
                                 {
                                     if (attributeValue.PriceAdjustment > decimal.Zero)
                                     {
-                                        formattedAttribute += string.Format(
+                                        formattedAttribute += string.Format(await 
                                                 _localizationService.GetResource("FormattedAttributes.PriceAdjustment"),
                                                 "+", attributeValue.PriceAdjustment.ToString("G29"), "%");
                                     }
                                     else if (attributeValue.PriceAdjustment < decimal.Zero)
                                     {
-                                        formattedAttribute += string.Format(
+                                        formattedAttribute += string.Format(await 
                                                 _localizationService.GetResource("FormattedAttributes.PriceAdjustment"),
                                                 string.Empty, attributeValue.PriceAdjustment.ToString("G29"), "%");
                                     }
@@ -189,17 +190,17 @@ namespace Nop.Services.Catalog
                                 {
                                     var attributeValuePriceAdjustment = _priceCalculationService.GetProductAttributeValuePriceAdjustment(attributeValue, customer);
                                     var priceAdjustmentBase = _taxService.GetProductPrice(product, attributeValuePriceAdjustment, customer, out var _);
-                                    var priceAdjustment = _currencyService.ConvertFromPrimaryStoreCurrency(priceAdjustmentBase, _workContext.WorkingCurrency);
+                                    var priceAdjustment = await _currencyService.ConvertFromPrimaryStoreCurrency(priceAdjustmentBase, _workContext.WorkingCurrency);
 
                                     if (priceAdjustmentBase > decimal.Zero)
                                     {
-                                        formattedAttribute += string.Format(
+                                        formattedAttribute += string.Format(await
                                                 _localizationService.GetResource("FormattedAttributes.PriceAdjustment"),
                                                 "+", _priceFormatter.FormatPrice(priceAdjustment, false, false), string.Empty);
                                     }
                                     else if (priceAdjustmentBase < decimal.Zero)
                                     {
-                                        formattedAttribute += string.Format(
+                                        formattedAttribute += string.Format(await 
                                                 _localizationService.GetResource("FormattedAttributes.PriceAdjustment"),
                                                 "-", _priceFormatter.FormatPrice(-priceAdjustment, false, false), string.Empty);
                                     }
@@ -211,7 +212,7 @@ namespace Nop.Services.Catalog
                             {
                                 //render only when more than 1
                                 if (attributeValue.Quantity > 1)
-                                    formattedAttribute += string.Format(_localizationService.GetResource("ProductAttributes.Quantity"), attributeValue.Quantity);
+                                    formattedAttribute += string.Format(await _localizationService.GetResource("ProductAttributes.Quantity"), attributeValue.Quantity);
                             }
 
                             //encode (if required)
@@ -240,12 +241,12 @@ namespace Nop.Services.Catalog
 
             //sender
             var giftCardFrom = product.GiftCardType == GiftCardType.Virtual ?
-                string.Format(_localizationService.GetResource("GiftCardAttribute.From.Virtual"), giftCardSenderName, giftCardSenderEmail) :
-                string.Format(_localizationService.GetResource("GiftCardAttribute.From.Physical"), giftCardSenderName);
+                string.Format(await _localizationService.GetResource("GiftCardAttribute.From.Virtual"), giftCardSenderName, giftCardSenderEmail) :
+                string.Format(await _localizationService.GetResource("GiftCardAttribute.From.Physical"), giftCardSenderName);
             //recipient
             var giftCardFor = product.GiftCardType == GiftCardType.Virtual ?
-                string.Format(_localizationService.GetResource("GiftCardAttribute.For.Virtual"), giftCardRecipientName, giftCardRecipientEmail) :
-                string.Format(_localizationService.GetResource("GiftCardAttribute.For.Physical"), giftCardRecipientName);
+                string.Format(await _localizationService.GetResource("GiftCardAttribute.For.Virtual"), giftCardRecipientName, giftCardRecipientEmail) :
+                string.Format(await _localizationService.GetResource("GiftCardAttribute.For.Physical"), giftCardRecipientName);
 
             //encode (if required)
             if (htmlEncode)

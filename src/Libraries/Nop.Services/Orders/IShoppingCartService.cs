@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
@@ -17,7 +18,7 @@ namespace Nop.Services.Orders
         /// <param name="shoppingCartItem">Shopping cart item</param>
         /// <param name="resetCheckoutData">A value indicating whether to reset checkout data</param>
         /// <param name="ensureOnlyActiveCheckoutAttributes">A value indicating whether to ensure that only active checkout attributes are attached to the current customer</param>
-        void DeleteShoppingCartItem(ShoppingCartItem shoppingCartItem, bool resetCheckoutData = true,
+        Task DeleteShoppingCartItem(ShoppingCartItem shoppingCartItem, bool resetCheckoutData = true,
             bool ensureOnlyActiveCheckoutAttributes = false);
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace Nop.Services.Orders
         /// <param name="shoppingCartItemId">Shopping cart item ID</param>
         /// <param name="resetCheckoutData">A value indicating whether to reset checkout data</param>
         /// <param name="ensureOnlyActiveCheckoutAttributes">A value indicating whether to ensure that only active checkout attributes are attached to the current customer</param>
-        void DeleteShoppingCartItem(int shoppingCartItemId, bool resetCheckoutData = true,
+        Task DeleteShoppingCartItem(int shoppingCartItemId, bool resetCheckoutData = true,
             bool ensureOnlyActiveCheckoutAttributes = false);
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="olderThanUtc">Older than date and time</param>
         /// <returns>Number of deleted items</returns>
-        int DeleteExpiredShoppingCartItems(DateTime olderThanUtc);
+        Task<int> DeleteExpiredShoppingCartItems(DateTime olderThanUtc);
 
         /// <summary>
         /// Validates required products (products which require some other products to be added to the cart)
@@ -47,7 +48,7 @@ namespace Nop.Services.Orders
         /// <param name="addRequiredProducts">Whether to add required products</param>
         /// <param name="shoppingCartItemId">Shopping cart identifier; pass 0 if it's a new item</param>
         /// <returns>Warnings</returns>
-        IList<string> GetRequiredProductWarnings(Customer customer, ShoppingCartType shoppingCartType, Product product,
+        Task<IList<string>> GetRequiredProductWarnings(Customer customer, ShoppingCartType shoppingCartType, Product product,
             int storeId, int quantity, bool addRequiredProducts, int shoppingCartItemId);
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace Nop.Services.Orders
         /// <param name="customerEnteredPrice">Customer entered price</param>
         /// <param name="quantity">Quantity</param>
         /// <returns>Warnings</returns>
-        IList<string> GetStandardWarnings(Customer customer, ShoppingCartType shoppingCartType,
+        Task<IList<string>> GetStandardWarnings(Customer customer, ShoppingCartType shoppingCartType,
             Product product, string attributesXml,
             decimal customerEnteredPrice, int quantity);
 
@@ -88,7 +89,7 @@ namespace Nop.Services.Orders
         /// <param name="ignoreNonCombinableAttributes">A value indicating whether we should ignore non-combinable attributes</param>
         /// <param name="ignoreConditionMet">A value indicating whether we should ignore filtering by "is condition met" property</param>
         /// <returns>Warnings</returns>
-        IList<string> GetShoppingCartItemAttributeWarnings(Customer customer,
+        Task<IList<string>> GetShoppingCartItemAttributeWarnings(Customer customer,
             ShoppingCartType shoppingCartType,
             Product product,
             int quantity = 1,
@@ -103,7 +104,7 @@ namespace Nop.Services.Orders
         /// <param name="product">Product</param>
         /// <param name="attributesXml">Attributes in XML format</param>
         /// <returns>Warnings</returns>
-        IList<string> GetShoppingCartItemGiftCardWarnings(ShoppingCartType shoppingCartType,
+        Task<IList<string>> GetShoppingCartItemGiftCardWarnings(ShoppingCartType shoppingCartType,
             Product product, string attributesXml);
 
         /// <summary>
@@ -113,7 +114,7 @@ namespace Nop.Services.Orders
         /// <param name="rentalStartDate">Rental start date</param>
         /// <param name="rentalEndDate">Rental end date</param>
         /// <returns>Warnings</returns>
-        IList<string> GetRentalProductWarnings(Product product,
+        Task<IList<string>> GetRentalProductWarnings(Product product,
             DateTime? rentalStartDate = null, DateTime? rentalEndDate = null);
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace Nop.Services.Orders
         /// <param name="getRequiredProductWarnings">A value indicating whether we should validate required products (products which require other products to be added to the cart)</param>
         /// <param name="getRentalWarnings">A value indicating whether we should validate rental properties</param>
         /// <returns>Warnings</returns>
-        IList<string> GetShoppingCartItemWarnings(Customer customer, ShoppingCartType shoppingCartType,
+        Task<IList<string>> GetShoppingCartItemWarnings(Customer customer, ShoppingCartType shoppingCartType,
             Product product, int storeId,
             string attributesXml, decimal customerEnteredPrice,
             DateTime? rentalStartDate = null, DateTime? rentalEndDate = null,
@@ -152,7 +153,7 @@ namespace Nop.Services.Orders
         /// <param name="checkoutAttributesXml">Checkout attributes in XML format</param>
         /// <param name="validateCheckoutAttributes">A value indicating whether to validate checkout attributes</param>
         /// <returns>Warnings</returns>
-        IList<string> GetShoppingCartWarnings(IList<ShoppingCartItem> shoppingCart,
+        Task<IList<string>> GetShoppingCartWarnings(IList<ShoppingCartItem> shoppingCart,
             string checkoutAttributesXml, bool validateCheckoutAttributes);
 
         /// <summary>
@@ -188,7 +189,7 @@ namespace Nop.Services.Orders
         /// <param name="quantity">Quantity</param>
         /// <param name="addRequiredProducts">Whether to add required products</param>
         /// <returns>Warnings</returns>
-        IList<string> AddToCart(Customer customer, Product product,
+        Task<IList<string>> AddToCart(Customer customer, Product product,
             ShoppingCartType shoppingCartType, int storeId, string attributesXml = null,
             decimal customerEnteredPrice = decimal.Zero,
             DateTime? rentalStartDate = null, DateTime? rentalEndDate = null,
@@ -206,7 +207,7 @@ namespace Nop.Services.Orders
         /// <param name="quantity">New shopping cart item quantity</param>
         /// <param name="resetCheckoutData">A value indicating whether to reset checkout data</param>
         /// <returns>Warnings</returns>
-        IList<string> UpdateShoppingCartItem(Customer customer,
+        Task<IList<string>> UpdateShoppingCartItem(Customer customer,
             int shoppingCartItemId, string attributesXml,
             decimal customerEnteredPrice,
             DateTime? rentalStartDate = null, DateTime? rentalEndDate = null,
@@ -218,7 +219,7 @@ namespace Nop.Services.Orders
         /// <param name="fromCustomer">From customer</param>
         /// <param name="toCustomer">To customer</param>
         /// <param name="includeCouponCodes">A value indicating whether to coupon codes (discount and gift card) should be also re-applied</param>
-        void MigrateShoppingCart(Customer fromCustomer, Customer toCustomer, bool includeCouponCodes);
+        Task MigrateShoppingCart(Customer fromCustomer, Customer toCustomer, bool includeCouponCodes);
 
         /// <summary>
         /// Indicates whether the shopping cart requires shipping

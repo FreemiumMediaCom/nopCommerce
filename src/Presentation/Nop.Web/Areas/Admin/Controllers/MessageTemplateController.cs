@@ -117,12 +117,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageTemplates))
                 return AccessDeniedView();
@@ -134,7 +134,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(MessageTemplateSearchModel searchModel)
+        public async virtual Task<IActionResult> List(MessageTemplateSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageTemplates))
                 return AccessDeniedDataTablesJson();
@@ -145,7 +145,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageTemplates))
                 return AccessDeniedView();
@@ -163,7 +163,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(MessageTemplateModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(MessageTemplateModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageTemplates))
                 return AccessDeniedView();
@@ -186,7 +186,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditMessageTemplate",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditMessageTemplate"), messageTemplate.Id), messageTemplate);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditMessageTemplate"), messageTemplate.Id), messageTemplate);
 
                 //stores
                 SaveStoreMappings(messageTemplate, model);
@@ -194,7 +194,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales
                 UpdateLocales(messageTemplate, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.MessageTemplates.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.MessageTemplates.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -210,7 +210,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageTemplates))
                 return AccessDeniedView();
@@ -224,16 +224,16 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteMessageTemplate",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteMessageTemplate"), messageTemplate.Id), messageTemplate);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteMessageTemplate"), messageTemplate.Id), messageTemplate);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.MessageTemplates.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.MessageTemplates.Deleted"));
 
             return RedirectToAction("List");
         }
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("message-template-copy")]
-        public virtual IActionResult CopyTemplate(MessageTemplateModel model)
+        public async virtual Task<IActionResult> CopyTemplate(MessageTemplateModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageTemplates))
                 return AccessDeniedView();
@@ -247,7 +247,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             {
                 var newMessageTemplate = _messageTemplateService.CopyMessageTemplate(messageTemplate);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.MessageTemplates.Copied"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.MessageTemplates.Copied"));
 
                 return RedirectToAction("Edit", new { id = newMessageTemplate.Id });
             }
@@ -258,7 +258,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
-        public virtual IActionResult TestTemplate(int id, int languageId = 0)
+        public async virtual Task<IActionResult> TestTemplate(int id, int languageId = 0)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageTemplates))
                 return AccessDeniedView();
@@ -277,7 +277,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("TestTemplate")]
         [FormValueRequired("send-test")]
-        public virtual IActionResult TestTemplate(TestMessageTemplateModel model, IFormCollection form)
+        public async virtual Task<IActionResult> TestTemplate(TestMessageTemplateModel model, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageTemplates))
                 return AccessDeniedView();
@@ -312,7 +312,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.MessageTemplates.Test.Success"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.ContentManagement.MessageTemplates.Test.Success"));
             }
 
             return RedirectToAction("Edit", new { id = messageTemplate.Id });

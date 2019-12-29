@@ -9,13 +9,13 @@ namespace Nop.Tests
         protected MockRepository mocks;
 
         [SetUp]
-        public virtual void SetUp()
+        public async virtual Task SetUp()
         {
             mocks = new MockRepository(MockBehavior.Loose);
         }
 
         [TearDown]
-        public virtual void TearDown()
+        public async virtual Task TearDown()
         {
             mocks?.VerifyAll();
         }

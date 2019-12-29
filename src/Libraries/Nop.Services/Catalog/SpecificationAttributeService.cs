@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -13,7 +15,7 @@ namespace Nop.Services.Catalog
     /// Specification attribute service
     /// </summary>
     public partial class SpecificationAttributeService : ISpecificationAttributeService
-    {
+    {   
         #region Fields
 
         private readonly ICacheManager _cacheManager;
@@ -50,12 +52,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="specificationAttributeId">The specification attribute identifier</param>
         /// <returns>Specification attribute</returns>
-        public virtual SpecificationAttribute GetSpecificationAttributeById(int specificationAttributeId)
+        public async virtual Task<SpecificationAttribute> GetSpecificationAttributeById(int specificationAttributeId)
         {
             if (specificationAttributeId == 0)
                 return null;
 
-            return _specificationAttributeRepository.GetById(specificationAttributeId);
+            return await _specificationAttributeRepository.GetById(specificationAttributeId);
         }
 
         /// <summary>
@@ -88,12 +90,12 @@ namespace Nop.Services.Catalog
         /// Deletes a specification attribute
         /// </summary>
         /// <param name="specificationAttribute">The specification attribute</param>
-        public virtual void DeleteSpecificationAttribute(SpecificationAttribute specificationAttribute)
+        public async virtual Task DeleteSpecificationAttribute(SpecificationAttribute specificationAttribute)
         {
             if (specificationAttribute == null)
                 throw new ArgumentNullException(nameof(specificationAttribute));
 
-            _specificationAttributeRepository.Delete(specificationAttribute);
+            await _specificationAttributeRepository.Delete(specificationAttribute);
 
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ProductSpecificationAttributePrefixCacheKey);
 
@@ -105,12 +107,12 @@ namespace Nop.Services.Catalog
         /// Inserts a specification attribute
         /// </summary>
         /// <param name="specificationAttribute">The specification attribute</param>
-        public virtual void InsertSpecificationAttribute(SpecificationAttribute specificationAttribute)
+        public async virtual Task InsertSpecificationAttribute(SpecificationAttribute specificationAttribute)
         {
             if (specificationAttribute == null)
                 throw new ArgumentNullException(nameof(specificationAttribute));
 
-            _specificationAttributeRepository.Insert(specificationAttribute);
+            await _specificationAttributeRepository.Insert(specificationAttribute);
 
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ProductSpecificationAttributePrefixCacheKey);
 
@@ -122,12 +124,12 @@ namespace Nop.Services.Catalog
         /// Updates the specification attribute
         /// </summary>
         /// <param name="specificationAttribute">The specification attribute</param>
-        public virtual void UpdateSpecificationAttribute(SpecificationAttribute specificationAttribute)
+        public async virtual Task UpdateSpecificationAttribute(SpecificationAttribute specificationAttribute)
         {
             if (specificationAttribute == null)
                 throw new ArgumentNullException(nameof(specificationAttribute));
 
-            _specificationAttributeRepository.Update(specificationAttribute);
+            await _specificationAttributeRepository.Update(specificationAttribute);
 
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ProductSpecificationAttributePrefixCacheKey);
 
@@ -144,12 +146,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="specificationAttributeOptionId">The specification attribute option identifier</param>
         /// <returns>Specification attribute option</returns>
-        public virtual SpecificationAttributeOption GetSpecificationAttributeOptionById(int specificationAttributeOptionId)
+        public async virtual Task<SpecificationAttributeOption> GetSpecificationAttributeOptionById(int specificationAttributeOptionId)
         {
             if (specificationAttributeOptionId == 0)
                 return null;
 
-            return _specificationAttributeOptionRepository.GetById(specificationAttributeOptionId);
+            return await _specificationAttributeOptionRepository.GetById(specificationAttributeOptionId);
         }
 
         /// <summary>
@@ -157,7 +159,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="specificationAttributeOptionIds">Identifiers</param>
         /// <returns>Specification attribute options</returns>
-        public virtual IList<SpecificationAttributeOption> GetSpecificationAttributeOptionsByIds(int[] specificationAttributeOptionIds)
+        public async virtual Task<IList<SpecificationAttributeOption>> GetSpecificationAttributeOptionsByIds(int[] specificationAttributeOptionIds)
         {
             if (specificationAttributeOptionIds == null || specificationAttributeOptionIds.Length == 0)
                 return new List<SpecificationAttributeOption>();
@@ -165,7 +167,7 @@ namespace Nop.Services.Catalog
             var query = from sao in _specificationAttributeOptionRepository.Table
                         where specificationAttributeOptionIds.Contains(sao.Id)
                         select sao;
-            var specificationAttributeOptions = query.ToList();
+            var specificationAttributeOptions = await query.ToListAsync();
             //sort by passed identifiers
             var sortedSpecificationAttributeOptions = new List<SpecificationAttributeOption>();
             foreach (var id in specificationAttributeOptionIds)
@@ -183,13 +185,13 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="specificationAttributeId">The specification attribute identifier</param>
         /// <returns>Specification attribute option</returns>
-        public virtual IList<SpecificationAttributeOption> GetSpecificationAttributeOptionsBySpecificationAttribute(int specificationAttributeId)
+        public async virtual Task<IList<SpecificationAttributeOption>> GetSpecificationAttributeOptionsBySpecificationAttribute(int specificationAttributeId)
         {
             var query = from sao in _specificationAttributeOptionRepository.Table
                         orderby sao.DisplayOrder, sao.Id
                         where sao.SpecificationAttributeId == specificationAttributeId
                         select sao;
-            var specificationAttributeOptions = query.ToList();
+            var specificationAttributeOptions = await query.ToListAsync();
             return specificationAttributeOptions;
         }
 
@@ -197,12 +199,12 @@ namespace Nop.Services.Catalog
         /// Deletes a specification attribute option
         /// </summary>
         /// <param name="specificationAttributeOption">The specification attribute option</param>
-        public virtual void DeleteSpecificationAttributeOption(SpecificationAttributeOption specificationAttributeOption)
+        public async virtual Task DeleteSpecificationAttributeOption(SpecificationAttributeOption specificationAttributeOption)
         {
             if (specificationAttributeOption == null)
                 throw new ArgumentNullException(nameof(specificationAttributeOption));
 
-            _specificationAttributeOptionRepository.Delete(specificationAttributeOption);
+            await _specificationAttributeOptionRepository.Delete(specificationAttributeOption);
 
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ProductSpecificationAttributePrefixCacheKey);
 
@@ -214,12 +216,12 @@ namespace Nop.Services.Catalog
         /// Inserts a specification attribute option
         /// </summary>
         /// <param name="specificationAttributeOption">The specification attribute option</param>
-        public virtual void InsertSpecificationAttributeOption(SpecificationAttributeOption specificationAttributeOption)
+        public async virtual Task InsertSpecificationAttributeOption(SpecificationAttributeOption specificationAttributeOption)
         {
             if (specificationAttributeOption == null)
                 throw new ArgumentNullException(nameof(specificationAttributeOption));
 
-            _specificationAttributeOptionRepository.Insert(specificationAttributeOption);
+            await _specificationAttributeOptionRepository.Insert(specificationAttributeOption);
 
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ProductSpecificationAttributePrefixCacheKey);
 
@@ -231,12 +233,12 @@ namespace Nop.Services.Catalog
         /// Updates the specification attribute
         /// </summary>
         /// <param name="specificationAttributeOption">The specification attribute option</param>
-        public virtual void UpdateSpecificationAttributeOption(SpecificationAttributeOption specificationAttributeOption)
+        public async virtual Task UpdateSpecificationAttributeOption(SpecificationAttributeOption specificationAttributeOption)
         {
             if (specificationAttributeOption == null)
                 throw new ArgumentNullException(nameof(specificationAttributeOption));
 
-            _specificationAttributeOptionRepository.Update(specificationAttributeOption);
+            await _specificationAttributeOptionRepository.Update(specificationAttributeOption);
 
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ProductSpecificationAttributePrefixCacheKey);
 
@@ -249,14 +251,14 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="attributeOptionIds">The IDs of the attribute options to check</param>
         /// <returns>List of IDs not existing specification attribute options</returns>
-        public virtual int[] GetNotExistingSpecificationAttributeOptions(int[] attributeOptionIds)
+        public async virtual Task<int[]> GetNotExistingSpecificationAttributeOptions(int[] attributeOptionIds)
         {
             if (attributeOptionIds == null)
                 throw new ArgumentNullException(nameof(attributeOptionIds));
 
             var query = _specificationAttributeOptionRepository.Table;
             var queryFilter = attributeOptionIds.Distinct().ToArray();
-            var filter = query.Select(a => a.Id).Where(m => queryFilter.Contains(m)).ToList();
+            var filter = await query.Select(a => a.Id).Where(m => queryFilter.Contains(m)).ToListAsync();
             return queryFilter.Except(filter).ToArray();
         }
 
@@ -268,12 +270,12 @@ namespace Nop.Services.Catalog
         /// Deletes a product specification attribute mapping
         /// </summary>
         /// <param name="productSpecificationAttribute">Product specification attribute</param>
-        public virtual void DeleteProductSpecificationAttribute(ProductSpecificationAttribute productSpecificationAttribute)
+        public async virtual Task DeleteProductSpecificationAttribute(ProductSpecificationAttribute productSpecificationAttribute)
         {
             if (productSpecificationAttribute == null)
                 throw new ArgumentNullException(nameof(productSpecificationAttribute));
 
-            _productSpecificationAttributeRepository.Delete(productSpecificationAttribute);
+            await _productSpecificationAttributeRepository.Delete(productSpecificationAttribute);
 
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ProductSpecificationAttributePrefixCacheKey);
 
@@ -289,7 +291,7 @@ namespace Nop.Services.Catalog
         /// <param name="allowFiltering">0 to load attributes with AllowFiltering set to false, 1 to load attributes with AllowFiltering set to true, null to load all attributes</param>
         /// <param name="showOnProductPage">0 to load attributes with ShowOnProductPage set to false, 1 to load attributes with ShowOnProductPage set to true, null to load all attributes</param>
         /// <returns>Product specification attribute mapping collection</returns>
-        public virtual IList<ProductSpecificationAttribute> GetProductSpecificationAttributes(int productId = 0,
+        public async virtual Task<IList<ProductSpecificationAttribute>> GetProductSpecificationAttributes(int productId = 0,
             int specificationAttributeOptionId = 0, bool? allowFiltering = null, bool? showOnProductPage = null)
         {
             var allowFilteringCacheStr = allowFiltering.HasValue ? allowFiltering.ToString() : "null";
@@ -297,7 +299,7 @@ namespace Nop.Services.Catalog
             var key = string.Format(NopCatalogDefaults.ProductSpecificationAttributeAllByProductIdCacheKey,
                 productId, specificationAttributeOptionId, allowFilteringCacheStr, showOnProductPageCacheStr);
 
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async () =>
             {
                 var query = _productSpecificationAttributeRepository.Table;
                 if (productId > 0)
@@ -310,7 +312,7 @@ namespace Nop.Services.Catalog
                     query = query.Where(psa => psa.ShowOnProductPage == showOnProductPage.Value);
                 query = query.OrderBy(psa => psa.DisplayOrder).ThenBy(psa => psa.Id);
 
-                var productSpecificationAttributes = query.ToList();
+                var productSpecificationAttributes = await query.ToListAsync();
                 return productSpecificationAttributes;
             });
         }
@@ -320,24 +322,24 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productSpecificationAttributeId">Product specification attribute mapping identifier</param>
         /// <returns>Product specification attribute mapping</returns>
-        public virtual ProductSpecificationAttribute GetProductSpecificationAttributeById(int productSpecificationAttributeId)
+        public async virtual Task<ProductSpecificationAttribute> GetProductSpecificationAttributeById(int productSpecificationAttributeId)
         {
             if (productSpecificationAttributeId == 0)
                 return null;
 
-            return _productSpecificationAttributeRepository.GetById(productSpecificationAttributeId);
+            return await _productSpecificationAttributeRepository.GetById(productSpecificationAttributeId);
         }
 
         /// <summary>
         /// Inserts a product specification attribute mapping
         /// </summary>
         /// <param name="productSpecificationAttribute">Product specification attribute mapping</param>
-        public virtual void InsertProductSpecificationAttribute(ProductSpecificationAttribute productSpecificationAttribute)
+        public async virtual Task InsertProductSpecificationAttribute(ProductSpecificationAttribute productSpecificationAttribute)
         {
             if (productSpecificationAttribute == null)
                 throw new ArgumentNullException(nameof(productSpecificationAttribute));
 
-            _productSpecificationAttributeRepository.Insert(productSpecificationAttribute);
+            await _productSpecificationAttributeRepository.Insert(productSpecificationAttribute);
 
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ProductSpecificationAttributePrefixCacheKey);
 
@@ -349,12 +351,12 @@ namespace Nop.Services.Catalog
         /// Updates the product specification attribute mapping
         /// </summary>
         /// <param name="productSpecificationAttribute">Product specification attribute mapping</param>
-        public virtual void UpdateProductSpecificationAttribute(ProductSpecificationAttribute productSpecificationAttribute)
+        public async virtual Task UpdateProductSpecificationAttribute(ProductSpecificationAttribute productSpecificationAttribute)
         {
             if (productSpecificationAttribute == null)
                 throw new ArgumentNullException(nameof(productSpecificationAttribute));
 
-            _productSpecificationAttributeRepository.Update(productSpecificationAttribute);
+            await _productSpecificationAttributeRepository.Update(productSpecificationAttribute);
 
             _cacheManager.RemoveByPrefix(NopCatalogDefaults.ProductSpecificationAttributePrefixCacheKey);
 
@@ -368,7 +370,7 @@ namespace Nop.Services.Catalog
         /// <param name="productId">Product identifier; 0 to load all records</param>
         /// <param name="specificationAttributeOptionId">The specification attribute option identifier; 0 to load all records</param>
         /// <returns>Count</returns>
-        public virtual int GetProductSpecificationAttributeCount(int productId = 0, int specificationAttributeOptionId = 0)
+        public async virtual Task<int> GetProductSpecificationAttributeCount(int productId = 0, int specificationAttributeOptionId = 0)
         {
             var query = _productSpecificationAttributeRepository.Table;
             if (productId > 0)
@@ -376,7 +378,7 @@ namespace Nop.Services.Catalog
             if (specificationAttributeOptionId > 0)
                 query = query.Where(psa => psa.SpecificationAttributeOptionId == specificationAttributeOptionId);
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
         /// <summary>

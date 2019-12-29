@@ -18,7 +18,7 @@ namespace Nop.Plugin.Payments.Qualpay.Infrastructure
         /// <param name="builder">Container builder</param>
         /// <param name="typeFinder">Type finder</param>
         /// <param name="config">Config</param>
-        public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder, NopConfig config)
+        public async virtual Task Register(ContainerBuilder builder, ITypeFinder typeFinder, NopConfig config)
         {
             //register service manager
             builder.RegisterType<QualpayManager>().AsSelf().InstancePerLifetimeScope();

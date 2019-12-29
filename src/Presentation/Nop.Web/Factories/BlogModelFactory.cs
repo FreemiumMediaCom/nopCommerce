@@ -111,7 +111,7 @@ namespace Nop.Web.Factories
         /// <param name="model">Blog post model</param>
         /// <param name="blogPost">Blog post entity</param>
         /// <param name="prepareComments">Whether to prepare blog comments</param>
-        public virtual void PrepareBlogPostModel(BlogPostModel model, BlogPost blogPost, bool prepareComments)
+        public async virtual Task PrepareBlogPostModel(BlogPostModel model, BlogPost blogPost, bool prepareComments)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));

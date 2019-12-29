@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
@@ -384,7 +386,7 @@ namespace Nop.Services.Orders
         /// <param name="visibleIndividuallyOnly">A values indicating whether to load only products marked as "visible individually"; "false" to load all records; "true" to load "visible individually" only</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>Products</returns>
-        public virtual int[] GetAlsoPurchasedProductsIds(int storeId, int productId,
+        public async virtual Task<int[]> GetAlsoPurchasedProductsIds(int storeId, int productId,
             int recordsToReturn = 5, bool visibleIndividuallyOnly = true, bool showHidden = false)
         {
             if (productId == 0)
@@ -418,7 +420,7 @@ namespace Nop.Services.Orders
             if (recordsToReturn > 0)
                 query3 = query3.Take(recordsToReturn);
 
-            var report = query3.ToList();
+            var report = await query3.ToListAsync();
 
             var ids = new List<int>();
             foreach (var reportLine in report)

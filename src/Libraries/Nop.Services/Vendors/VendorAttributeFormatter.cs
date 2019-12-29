@@ -1,5 +1,6 @@
-using System.Net;
+﻿using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Html;
@@ -45,7 +46,7 @@ namespace Nop.Services.Vendors
         /// <param name="separator">Separator</param>
         /// <param name="htmlEncode">A value indicating whether to encode (HTML) values</param>
         /// <returns>Formatted attributes</returns>
-        public virtual string FormatAttributes(string attributesXml, string separator = "<br />", bool htmlEncode = true)
+        public async virtual Task<string> FormatAttributes(string attributesXml, string separator = "<br />", bool htmlEncode = true)
         {
             var result = new StringBuilder();
 
@@ -64,7 +65,7 @@ namespace Nop.Services.Vendors
                         if (attribute.AttributeControlType == AttributeControlType.MultilineTextbox)
                         {
                             //multiline textbox
-                            var attributeName = _localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id);
+                            var attributeName = await _localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id);
                             //encode (if required)
                             if (htmlEncode)
                                 attributeName = WebUtility.HtmlEncode(attributeName);

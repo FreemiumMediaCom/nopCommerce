@@ -197,11 +197,11 @@ namespace Nop.Services.Media.RoxyFileman
         /// <summary>
         /// Initial service configuration
         /// </summary>
-        public virtual void Configure()
+        public async virtual Task Configure()
         {
-            CreateConfiguration();
+            await CreateConfiguration();
 
-            var existingText = _fileProvider.ReadAllText(GetConfigurationFilePath(), Encoding.UTF8);
+            var existingText = await _fileProvider.ReadAllText(GetConfigurationFilePath(), Encoding.UTF8);
             var config = JsonConvert.DeserializeObject<Dictionary<string, string>>(existingText);
             _fileRootPath = _fileProvider.GetAbsolutePath(config["FILES_ROOT"]);
         }
@@ -215,21 +215,21 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source directory</param>
         /// <param name="destinationPath">Path to the destination directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task CopyDirectoryAsync(string sourcePath, string destinationPath)
         {
-            var directoryPath = GetFullPath(GetVirtualPath(sourcePath));
+            var directoryPath = GetFullPath(await GetVirtualPath(sourcePath));
 
             if (!_fileProvider.DirectoryExists(directoryPath))
-                throw new Exception(GetLanguageResource("E_CopyDirInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_CopyDirInvalidPath"));
 
-            var newDirectoryPath = GetFullPath(GetVirtualPath($"{destinationPath.TrimEnd('/')}/{_fileProvider.GetDirectoryNameOnly(directoryPath)}"));
+            var newDirectoryPath = GetFullPath(await GetVirtualPath($"{destinationPath.TrimEnd('/')}/{_fileProvider.GetDirectoryNameOnly(directoryPath)}"));
 
             if (_fileProvider.DirectoryExists(newDirectoryPath))
-                throw new Exception(GetLanguageResource("E_DirAlreadyExists"));
+                throw new Exception(await GetLanguageResource("E_DirAlreadyExists"));
 
             if (!IsPathAllowed(directoryPath) || !IsPathAllowed(newDirectoryPath))
-                throw new Exception(GetLanguageResource("E_CopyDirInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_CopyDirInvalidPath"));
 
             CopyDirectory(directoryPath, newDirectoryPath);
 
@@ -241,15 +241,15 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="parentDirectoryPath">Path to the parent directory</param>
         /// <param name="name">Name of the new directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task CreateDirectoryAsync(string parentDirectoryPath, string name)
         {
-            parentDirectoryPath = GetFullPath(GetVirtualPath(parentDirectoryPath));
+            parentDirectoryPath = GetFullPath(await GetVirtualPath(parentDirectoryPath));
             if (!_fileProvider.DirectoryExists(parentDirectoryPath))
-                throw new Exception(GetLanguageResource("E_CreateDirInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_CreateDirInvalidPath"));
 
             if (!IsPathAllowed(parentDirectoryPath))
-                throw new Exception(GetLanguageResource("E_CreateDirInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_CreateDirInvalidPath"));
 
             try
             {
@@ -260,7 +260,7 @@ namespace Nop.Services.Media.RoxyFileman
             }
             catch
             {
-                throw new Exception(GetLanguageResource("E_CreateDirFailed"));
+                throw new Exception(await GetLanguageResource("E_CreateDirFailed"));
             }
         }
 
@@ -268,22 +268,22 @@ namespace Nop.Services.Media.RoxyFileman
         /// Delete the directory
         /// </summary>
         /// <param name="path">Path to the directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task DeleteDirectoryAsync(string path)
         {
-            path = GetVirtualPath(path);
-            if (path == GetRootDirectory())
-                throw new Exception(GetLanguageResource("E_CannotDeleteRoot"));
+            path = await GetVirtualPath(path);
+            if (path == await GetRootDirectory())
+                throw new Exception(await GetLanguageResource("E_CannotDeleteRoot"));
 
             path = GetFullPath(path);
             if (!_fileProvider.DirectoryExists(path))
-                throw new Exception(GetLanguageResource("E_DeleteDirInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_DeleteDirInvalidPath"));
 
             if (_fileProvider.GetDirectories(path).Length > 0 || _fileProvider.GetFiles(path).Length > 0)
-                throw new Exception(GetLanguageResource("E_DeleteNonEmpty"));
+                throw new Exception(await GetLanguageResource("E_DeleteNonEmpty"));
 
             if (!IsPathAllowed(path))
-                throw new Exception(GetLanguageResource("E_DeleteDirInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_DeleteDirInvalidPath"));
 
             try
             {
@@ -292,7 +292,7 @@ namespace Nop.Services.Media.RoxyFileman
             }
             catch
             {
-                throw new Exception(GetLanguageResource("E_CannotDeleteDir"));
+                throw new Exception(await GetLanguageResource("E_CannotDeleteDir"));
             }
         }
 
@@ -300,21 +300,21 @@ namespace Nop.Services.Media.RoxyFileman
         /// Download the directory from the server as a zip archive
         /// </summary>
         /// <param name="path">Path to the directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public async Task DownloadDirectoryAsync(string path)
         {
-            path = GetVirtualPath(path).TrimEnd('/');
+            path = (await GetVirtualPath(path)).TrimEnd('/');
             var fullPath = GetFullPath(path);
             if (!_fileProvider.DirectoryExists(fullPath))
-                throw new Exception(GetLanguageResource("E_CreateArchive"));
+                throw new Exception(await GetLanguageResource("E_CreateArchive"));
 
             if (!IsPathAllowed(fullPath))
-                throw new Exception(GetLanguageResource("E_CreateArchive"));
+                throw new Exception(await GetLanguageResource("E_CreateArchive"));
 
             var zipName = _fileProvider.GetFileName(fullPath) + ".zip";
             var zipPath = $"/{zipName}";
-            if (path != GetRootDirectory())
-                zipPath = GetVirtualPath(zipPath);
+            if (path != await GetRootDirectory())
+                zipPath = await GetVirtualPath(zipPath);
             zipPath = GetFullPath(zipPath);
 
             if (_fileProvider.FileExists(zipPath))
@@ -334,10 +334,10 @@ namespace Nop.Services.Media.RoxyFileman
         /// Get all available directories as a directory tree
         /// </summary>
         /// <param name="type">Type of the file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task GetDirectoriesAsync(string type)
         {
-            var rootDirectoryPath = GetFullPath(GetVirtualPath(null));
+            var rootDirectoryPath = GetFullPath(await GetVirtualPath(null));
 
             if (!_fileProvider.DirectoryExists(rootDirectoryPath))
                 throw new Exception("Invalid files root directory. Check your configuration.");
@@ -363,24 +363,24 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source directory</param>
         /// <param name="destinationPath">Path to the destination directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task MoveDirectoryAsync(string sourcePath, string destinationPath)
         {
-            var fullSourcePath = GetFullPath(GetVirtualPath(sourcePath));
+            var fullSourcePath = GetFullPath(await GetVirtualPath(sourcePath));
 
-            destinationPath = GetFullPath(GetVirtualPath(_fileProvider.Combine(destinationPath, _fileProvider.GetDirectoryNameOnly(fullSourcePath))));
+            destinationPath = GetFullPath(await GetVirtualPath(_fileProvider.Combine(destinationPath, _fileProvider.GetDirectoryNameOnly(fullSourcePath))));
 
             if (destinationPath.IndexOf(fullSourcePath, StringComparison.InvariantCulture) == 0)
-                throw new Exception(GetLanguageResource("E_CannotMoveDirToChild"));
+                throw new Exception(await GetLanguageResource("E_CannotMoveDirToChild"));
 
             if (!_fileProvider.DirectoryExists(fullSourcePath))
-                throw new Exception(GetLanguageResource("E_MoveDirInvalisPath"));
+                throw new Exception(await GetLanguageResource("E_MoveDirInvalisPath"));
 
             if (_fileProvider.DirectoryExists(destinationPath))
-                throw new Exception(GetLanguageResource("E_DirAlreadyExists"));
+                throw new Exception(await GetLanguageResource("E_DirAlreadyExists"));
 
             if (!IsPathAllowed(fullSourcePath) || !IsPathAllowed(destinationPath))
-                throw new Exception(GetLanguageResource("E_MoveDirInvalisPath"));
+                throw new Exception(await GetLanguageResource("E_MoveDirInvalisPath"));
 
             try
             {
@@ -389,7 +389,7 @@ namespace Nop.Services.Media.RoxyFileman
             }
             catch
             {
-                throw new Exception($"{GetLanguageResource("E_MoveDir")} \"{sourcePath}\"");
+                throw new Exception($"{await GetLanguageResource("E_MoveDir")} \"{sourcePath}\"");
             }
         }
 
@@ -398,27 +398,27 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source directory</param>
         /// <param name="newName">New name of the directory</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task RenameDirectoryAsync(string sourcePath, string newName)
         {
-            var fullSourcePath = GetFullPath(GetVirtualPath(sourcePath));
+            var fullSourcePath = GetFullPath(await GetVirtualPath(sourcePath));
 
             if (!IsPathAllowed(fullSourcePath))
-                throw new Exception(GetLanguageResource("E_RenameDirInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_RenameDirInvalidPath"));
 
             var destinationDirectory = _fileProvider.Combine(_fileProvider.GetParentDirectory(fullSourcePath), newName);
 
             if (GetVirtualPath(sourcePath) == GetRootDirectory())
-                throw new Exception(GetLanguageResource("E_CannotRenameRoot"));
+                throw new Exception(await GetLanguageResource("E_CannotRenameRoot"));
 
             if (!_fileProvider.DirectoryExists(fullSourcePath))
-                throw new Exception(GetLanguageResource("E_RenameDirInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_RenameDirInvalidPath"));
 
             if (_fileProvider.DirectoryExists(destinationDirectory))
-                throw new Exception(GetLanguageResource("E_DirAlreadyExists"));
+                throw new Exception(await GetLanguageResource("E_DirAlreadyExists"));
 
             if (!IsPathAllowed(destinationDirectory))
-                throw new Exception(GetLanguageResource("E_RenameDirInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_RenameDirInvalidPath"));
 
             try
             {
@@ -427,7 +427,7 @@ namespace Nop.Services.Media.RoxyFileman
             }
             catch
             {
-                throw new Exception($"{GetLanguageResource("E_RenameDir")} \"{sourcePath}\"");
+                throw new Exception($"{await GetLanguageResource("E_RenameDir")} \"{sourcePath}\"");
             }
         }
 
@@ -440,18 +440,18 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source file</param>
         /// <param name="destinationPath">Path to the destination file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task CopyFileAsync(string sourcePath, string destinationPath)
         {
-            var filePath = GetFullPath(GetVirtualPath(sourcePath));
+            var filePath = GetFullPath(await GetVirtualPath(sourcePath));
 
             if (!_fileProvider.FileExists(filePath))
-                throw new Exception(GetLanguageResource("E_CopyFileInvalisPath"));
+                throw new Exception(await GetLanguageResource("E_CopyFileInvalisPath"));
 
-            destinationPath = GetFullPath(GetVirtualPath(destinationPath));
+            destinationPath = GetFullPath(await GetVirtualPath(destinationPath));
 
             if (!IsPathAllowed(filePath) || !IsPathAllowed(destinationPath))
-                throw new Exception(GetLanguageResource("E_CopyFileInvalisPath"));
+                throw new Exception(await GetLanguageResource("E_CopyFileInvalisPath"));
 
             var newFileName = GetUniqueFileName(destinationPath, _fileProvider.GetFileName(filePath));
             try
@@ -461,7 +461,7 @@ namespace Nop.Services.Media.RoxyFileman
             }
             catch
             {
-                throw new Exception(GetLanguageResource("E_CopyFile"));
+                throw new Exception(await GetLanguageResource("E_CopyFile"));
             }
         }
 
@@ -469,15 +469,15 @@ namespace Nop.Services.Media.RoxyFileman
         /// Delete the file
         /// </summary>
         /// <param name="path">Path to the file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task DeleteFileAsync(string path)
         {
-            path = GetFullPath(GetVirtualPath(path));
+            path = GetFullPath(await GetVirtualPath(path));
             if (!_fileProvider.FileExists(path))
-                throw new Exception(GetLanguageResource("E_DeleteFileInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_DeleteFileInvalidPath"));
 
             if (!IsPathAllowed(path))
-                throw new Exception(GetLanguageResource("E_DeleteFileInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_DeleteFileInvalidPath"));
 
             try
             {
@@ -486,7 +486,7 @@ namespace Nop.Services.Media.RoxyFileman
             }
             catch
             {
-                throw new Exception(GetLanguageResource("E_DeletеFile"));
+                throw new Exception(await GetLanguageResource("E_DeletеFile"));
             }
         }
 
@@ -494,13 +494,13 @@ namespace Nop.Services.Media.RoxyFileman
         /// Download the file from the server
         /// </summary>
         /// <param name="path">Path to the file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task DownloadFileAsync(string path)
         {
-            var filePath = GetFullPath(GetVirtualPath(path));
+            var filePath = GetFullPath(await GetVirtualPath(path));
 
             if (!IsPathAllowed(path))
-                throw new Exception(GetLanguageResource("E_ActionDisabled"));
+                throw new Exception(await GetLanguageResource("E_ActionDisabled"));
 
             if (_fileProvider.FileExists(filePath))
             {
@@ -516,10 +516,10 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="directoryPath">Path to the files directory</param>
         /// <param name="type">Type of the files</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task GetFilesAsync(string directoryPath, string type)
         {
-            directoryPath = GetVirtualPath(directoryPath);
+            directoryPath = await GetVirtualPath(directoryPath);
             var files = GetFiles(GetFullPath(directoryPath), type);
 
             await GetHttpContext().Response.WriteAsync("[");
@@ -555,24 +555,24 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source file</param>
         /// <param name="destinationPath">Path to the destination file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task MoveFileAsync(string sourcePath, string destinationPath)
         {
-            var fullSourcePath = GetFullPath(GetVirtualPath(sourcePath));
+            var fullSourcePath = GetFullPath(await GetVirtualPath(sourcePath));
 
             if (!_fileProvider.FileExists(fullSourcePath))
-                throw new Exception(GetLanguageResource("E_MoveFileInvalisPath"));
+                throw new Exception(await GetLanguageResource("E_MoveFileInvalisPath"));
 
-            destinationPath = GetFullPath(GetVirtualPath(destinationPath));
+            destinationPath = GetFullPath(await GetVirtualPath(destinationPath));
 
             if (_fileProvider.FileExists(destinationPath))
-                throw new Exception(GetLanguageResource("E_MoveFileAlreadyExists"));
+                throw new Exception(await GetLanguageResource("E_MoveFileAlreadyExists"));
 
-            if (!CanHandleFile(_fileProvider.GetFileName(destinationPath)))
-                throw new Exception(GetLanguageResource("E_FileExtensionForbidden"));
+            if (!await CanHandleFile(_fileProvider.GetFileName(destinationPath)))
+                throw new Exception(await GetLanguageResource("E_FileExtensionForbidden"));
 
             if (!IsPathAllowed(fullSourcePath) || !IsPathAllowed(destinationPath))
-                throw new Exception(GetLanguageResource("E_MoveFileInvalisPath"));
+                throw new Exception(await GetLanguageResource("E_MoveFileInvalisPath"));
 
             try
             {
@@ -581,7 +581,7 @@ namespace Nop.Services.Media.RoxyFileman
             }
             catch
             {
-                throw new Exception($"{GetLanguageResource("E_MoveFile")} \"{sourcePath}\"");
+                throw new Exception($"{await GetLanguageResource("E_MoveFile")} \"{sourcePath}\"");
             }
         }
 
@@ -590,20 +590,20 @@ namespace Nop.Services.Media.RoxyFileman
         /// </summary>
         /// <param name="sourcePath">Path to the source file</param>
         /// <param name="newName">New name of the file</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task RenameFileAsync(string sourcePath, string newName)
         {
-            var fullSourcePath = GetFullPath(GetVirtualPath(sourcePath));
+            var fullSourcePath = GetFullPath(await GetVirtualPath(sourcePath));
             if (!_fileProvider.FileExists(fullSourcePath))
-                throw new Exception(GetLanguageResource("E_RenameFileInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_RenameFileInvalidPath"));
 
-            if (!CanHandleFile(newName))
-                throw new Exception(GetLanguageResource("E_FileExtensionForbidden"));
+            if (!await CanHandleFile(newName))
+                throw new Exception(await GetLanguageResource("E_FileExtensionForbidden"));
 
             var destinationPath = _fileProvider.Combine(_fileProvider.GetDirectoryName(fullSourcePath), newName);
 
             if (!IsPathAllowed(fullSourcePath) || !IsPathAllowed(destinationPath))
-                throw new Exception(GetLanguageResource("E_RenameFileInvalidPath"));
+                throw new Exception(await GetLanguageResource("E_RenameFileInvalidPath"));
 
             try
             {
@@ -613,7 +613,7 @@ namespace Nop.Services.Media.RoxyFileman
             }
             catch
             {
-                throw new Exception($"{GetLanguageResource("E_RenameFile")} \"{sourcePath}\"");
+                throw new Exception($"{await GetLanguageResource("E_RenameFile")} \"{sourcePath}\"");
             }
         }
 
@@ -621,42 +621,42 @@ namespace Nop.Services.Media.RoxyFileman
         /// Upload files to a directory on passed path
         /// </summary>
         /// <param name="directoryPath">Path to directory to upload files</param>
-        /// <returns>A task that represents the completion of the operation</returns>
+        /// <returns>A void that represents the completion of the operation</returns>
         public virtual async Task UploadFilesAsync(string directoryPath)
         {
             var result = GetSuccessResponse();
             var hasErrors = false;
 
-            directoryPath = GetFullPath(GetVirtualPath(directoryPath));
+            directoryPath = GetFullPath(await GetVirtualPath(directoryPath));
 
             if (!IsPathAllowed(directoryPath))
-                throw new Exception(GetLanguageResource("E_UploadNotAll"));
+                throw new Exception(await GetLanguageResource("E_UploadNotAll"));
 
             try
             {
                 foreach (var formFile in GetHttpContext().Request.Form.Files)
                 {
                     var fileName = formFile.FileName;
-                    if (CanHandleFile(fileName))
+                    if (await CanHandleFile(fileName))
                     {
                         var uniqueFileName = GetUniqueFileName(directoryPath, _fileProvider.GetFileName(fileName));
                         var destinationFile = _fileProvider.Combine(directoryPath, uniqueFileName);
                         using (var stream = new FileStream(destinationFile, FileMode.OpenOrCreate))
                         {
-                            formFile.CopyTo(stream);
+                            await formFile.CopyToAsync(stream);
                         }
 
                         if (GetFileType(new FileInfo(uniqueFileName).Extension) != "image")
                             continue;
 
-                        int.TryParse(GetSetting("MAX_IMAGE_WIDTH"), out var w);
-                        int.TryParse(GetSetting("MAX_IMAGE_HEIGHT"), out var h);
+                        int.TryParse(await GetSetting("MAX_IMAGE_WIDTH"), out var w);
+                        int.TryParse(await GetSetting("MAX_IMAGE_HEIGHT"), out var h);
                         ImageResize(destinationFile, destinationFile, w, h);
                     }
                     else
                     {
                         hasErrors = true;
-                        result = GetErrorResponse(GetLanguageResource("E_UploadNotAll"));
+                        result = GetErrorResponse(await GetLanguageResource("E_UploadNotAll"));
                     }
                 }
             }
@@ -668,7 +668,7 @@ namespace Nop.Services.Media.RoxyFileman
             if (IsAjaxRequest())
             {
                 if (hasErrors)
-                    result = GetErrorResponse(GetLanguageResource("E_UploadNotAll"));
+                    result = GetErrorResponse(await GetLanguageResource("E_UploadNotAll"));
 
                 await GetHttpContext().Response.WriteAsync(result);
             }
@@ -684,9 +684,9 @@ namespace Nop.Services.Media.RoxyFileman
         /// Create the thumbnail of the image and write it to the response
         /// </summary>
         /// <param name="path">Path to the image</param>
-        public virtual void CreateImageThumbnail(string path)
+        public async virtual Task CreateImageThumbnail(string path)
         {
-            path = GetFullPath(GetVirtualPath(path));
+            path = GetFullPath(await GetVirtualPath(path));
             int.TryParse(GetHttpContext().Request.Query["width"].ToString().Replace("px", string.Empty), out var width);
             int.TryParse(GetHttpContext().Request.Query["height"].ToString().Replace("px", string.Empty), out var height);
 
@@ -742,7 +742,7 @@ namespace Nop.Services.Media.RoxyFileman
         /// Flush all images on disk
         /// </summary>
         /// <param name="removeOriginal">Specifies whether to delete original images</param>
-        public virtual void FlushAllImagesOnDisk(bool removeOriginal = true)
+        public async virtual Task FlushAllImagesOnDisk(bool removeOriginal = true)
         {
             //do nothing
         }
@@ -751,7 +751,7 @@ namespace Nop.Services.Media.RoxyFileman
         /// Flush images on disk
         /// </summary>
         /// <param name="directoryPath">Directory path to flush images</param>
-        public virtual void FlushImagesOnDisk(string directoryPath)
+        public async virtual Task FlushImagesOnDisk(string directoryPath)
         {
             //do nothing
         }

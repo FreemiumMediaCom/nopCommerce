@@ -78,7 +78,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
 
         #region Methods
 
-        public IActionResult Configure()
+        public async Task<IActionResult> Configure()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -115,7 +115,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult Configure(ConfigurationModel model)
+        public async Task<IActionResult> Configure(ConfigurationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return Content("Access denied");
@@ -128,7 +128,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveMode(bool value)
+        public async Task<IActionResult> SaveMode(bool value)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return Content("Access denied");
@@ -143,7 +143,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
         #region Fixed rate
 
         [HttpPost]
-        public IActionResult FixedShippingRateList(ConfigurationModel searchModel)
+        public async Task<IActionResult> FixedShippingRateList(ConfigurationModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedDataTablesJson();
@@ -166,7 +166,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult UpdateFixedShippingRate(FixedRateModel model)
+        public async Task<IActionResult> UpdateFixedShippingRate(FixedRateModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return Content("Access denied");
@@ -182,7 +182,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult RateByWeightByTotalList(ConfigurationModel searchModel, ConfigurationModel filter)
+        public async Task<IActionResult> RateByWeightByTotalList(ConfigurationModel searchModel, ConfigurationModel filter)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedDataTablesJson();
@@ -276,7 +276,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
             return Json(gridModel);
         }
 
-        public IActionResult AddRateByWeightByTotalPopup()
+        public async Task<IActionResult> AddRateByWeightByTotalPopup()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -317,7 +317,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
         
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult AddRateByWeightByTotalPopup(ShippingByWeightByTotalModel model)
+        public async Task<IActionResult> AddRateByWeightByTotalPopup(ShippingByWeightByTotalModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -345,7 +345,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
             return View("~/Plugins/Shipping.FixedByWeightByTotal/Views/AddRateByWeightByTotalPopup.cshtml", model);
         }
         
-        public IActionResult EditRateByWeightByTotalPopup(int id)
+        public async Task<IActionResult> EditRateByWeightByTotalPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -412,7 +412,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult EditRateByWeightByTotalPopup(ShippingByWeightByTotalModel model)
+        public async Task<IActionResult> EditRateByWeightByTotalPopup(ShippingByWeightByTotalModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -446,7 +446,7 @@ namespace Nop.Plugin.Shipping.FixedByWeightByTotal.Controllers
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult DeleteRateByWeightByTotal(int id)
+        public async Task<IActionResult> DeleteRateByWeightByTotal(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return Content("Access denied");

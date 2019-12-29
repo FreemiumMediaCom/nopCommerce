@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Vendors;
 
@@ -14,13 +15,13 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorId">Vendor identifier</param>
         /// <returns>Vendor</returns>
-        Vendor GetVendorById(int vendorId);
+        Task<Vendor> GetVendorById(int vendorId);
 
         /// <summary>
         /// Delete a vendor
         /// </summary>
         /// <param name="vendor">Vendor</param>
-        void DeleteVendor(Vendor vendor);
+        Task DeleteVendor(Vendor vendor);
 
         /// <summary>
         /// Gets all vendors
@@ -37,32 +38,32 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorIds">Vendor identifiers</param>
         /// <returns>Vendors</returns>
-        IList<Vendor> GetVendorsByIds(int[] vendorIds);
+        Task<IList<Vendor>> GetVendorsByIds(int[] vendorIds);
 
         /// <summary>
         /// Inserts a vendor
         /// </summary>
         /// <param name="vendor">Vendor</param>
-        void InsertVendor(Vendor vendor);
+        Task InsertVendor(Vendor vendor);
 
         /// <summary>
         /// Updates the vendor
         /// </summary>
         /// <param name="vendor">Vendor</param>
-        void UpdateVendor(Vendor vendor);
+        Task UpdateVendor(Vendor vendor);
 
         /// <summary>
         /// Gets a vendor note
         /// </summary>
         /// <param name="vendorNoteId">The vendor note identifier</param>
         /// <returns>Vendor note</returns>
-        VendorNote GetVendorNoteById(int vendorNoteId);
+        Task<VendorNote> GetVendorNoteById(int vendorNoteId);
 
         /// <summary>
         /// Deletes a vendor note
         /// </summary>
         /// <param name="vendorNote">The vendor note</param>
-        void DeleteVendorNote(VendorNote vendorNote);
+        Task DeleteVendorNote(VendorNote vendorNote);
 
         /// <summary>
         /// Formats the vendor note text

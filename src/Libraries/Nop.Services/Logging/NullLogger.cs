@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Logging;
@@ -18,7 +19,7 @@ namespace Nop.Services.Logging
         /// </summary>
         /// <param name="level">Log level</param>
         /// <returns>Result</returns>
-        public virtual bool IsEnabled(LogLevel level)
+        public async virtual Task<bool> IsEnabled(LogLevel level)
         {
             return false;
         }
@@ -27,7 +28,7 @@ namespace Nop.Services.Logging
         /// Deletes a log item
         /// </summary>
         /// <param name="log">Log item</param>
-        public virtual void DeleteLog(Log log)
+        public async virtual Task DeleteLog(Log log)
         {
         }
 
@@ -35,14 +36,14 @@ namespace Nop.Services.Logging
         /// Deletes a log items
         /// </summary>
         /// <param name="logs">Log items</param>
-        public virtual void DeleteLogs(IList<Log> logs)
+        public async virtual Task DeleteLogs(IList<Log> logs)
         {
         }
 
         /// <summary>
         /// Clears a log
         /// </summary>
-        public virtual void ClearLog()
+        public async virtual Task ClearLog()
         {
         }
 
@@ -68,7 +69,7 @@ namespace Nop.Services.Logging
         /// </summary>
         /// <param name="logId">Log item identifier</param>
         /// <returns>Log item</returns>
-        public virtual Log GetLogById(int logId)
+        public async virtual Task<Log> GetLogById(int logId)
         {
             return null;
         }
@@ -78,7 +79,7 @@ namespace Nop.Services.Logging
         /// </summary>
         /// <param name="logIds">Log item identifiers</param>
         /// <returns>Log items</returns>
-        public virtual IList<Log> GetLogByIds(int[] logIds)
+        public async virtual Task<IList<Log>> GetLogByIds(int[] logIds)
         {
             return new List<Log>();
         }
@@ -91,7 +92,7 @@ namespace Nop.Services.Logging
         /// <param name="fullMessage">The full message</param>
         /// <param name="customer">The customer to associate log record with</param>
         /// <returns>A log item</returns>
-        public virtual Log InsertLog(LogLevel logLevel, string shortMessage, string fullMessage = "", Customer customer = null)
+        public async virtual Task<Log> InsertLog(LogLevel logLevel, string shortMessage, string fullMessage = "", Customer customer = null)
         {
             return null;
         }
@@ -102,7 +103,7 @@ namespace Nop.Services.Logging
         /// <param name="message">Message</param>
         /// <param name="exception">Exception</param>
         /// <param name="customer">Customer</param>
-        public virtual void Information(string message, Exception exception = null, Customer customer = null)
+        public async virtual Task Information(string message, Exception exception = null, Customer customer = null)
         {
         }
 
@@ -112,7 +113,7 @@ namespace Nop.Services.Logging
         /// <param name="message">Message</param>
         /// <param name="exception">Exception</param>
         /// <param name="customer">Customer</param>
-        public virtual void Warning(string message, Exception exception = null, Customer customer = null)
+        public async virtual Task Warning(string message, Exception exception = null, Customer customer = null)
         {
         }
 
@@ -122,7 +123,7 @@ namespace Nop.Services.Logging
         /// <param name="message">Message</param>
         /// <param name="exception">Exception</param>
         /// <param name="customer">Customer</param>
-        public virtual void Error(string message, Exception exception = null, Customer customer = null)
+        public async virtual Task Error(string message, Exception exception = null, Customer customer = null)
         {
         }
 

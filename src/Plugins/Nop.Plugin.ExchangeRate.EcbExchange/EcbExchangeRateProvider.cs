@@ -105,7 +105,7 @@ namespace Nop.Plugin.ExchangeRate.EcbExchange
             //use only currencies that are supported by ECB
             var exchangeRateCurrency = ratesToEuro.FirstOrDefault(rate => rate.CurrencyCode.Equals(exchangeRateCurrencyCode, StringComparison.InvariantCultureIgnoreCase));
             if (exchangeRateCurrency == null)
-                throw new NopException(_localizationService.GetResource("Plugins.ExchangeRate.EcbExchange.Error"));
+                throw new NopException(await _localizationService.GetResource("Plugins.ExchangeRate.EcbExchange.Error"));
 
             //return result for the selected (not euro) currency
             return ratesToEuro.Select(rate => new Core.Domain.Directory.ExchangeRate

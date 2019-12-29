@@ -28,7 +28,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Methods
 
         [HttpPost]
-        public virtual IActionResult SavePreference(string name, bool value)
+        public async virtual Task<IActionResult> SavePreference(string name, bool value)
         {
             //permission validation is not required here
             if (string.IsNullOrEmpty(name))

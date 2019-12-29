@@ -17,7 +17,7 @@ namespace Nop.Plugin.Shipping.UPS.Infrastructure
         /// <param name="builder">Container builder</param>
         /// <param name="typeFinder">Type finder</param>
         /// <param name="config">Config</param>
-        public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder, NopConfig config)
+        public async virtual Task Register(ContainerBuilder builder, ITypeFinder typeFinder, NopConfig config)
         {
             //register UPSService
             builder.RegisterType<UPSService>().AsSelf().InstancePerLifetimeScope();

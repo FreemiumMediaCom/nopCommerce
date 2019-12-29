@@ -14,7 +14,7 @@ namespace Nop.Web.Components
             _forumModelFactory = forumModelFactory;
         }
 
-        public IViewComponentResult Invoke()
+public async Task<IViewComponentResult> InvokeAsync()
         {
             var model = _forumModelFactory.PrepareActiveDiscussionsModel();
             if (!model.ForumTopics.Any())

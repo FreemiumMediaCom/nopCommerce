@@ -97,7 +97,7 @@ namespace Nop.Web.Framework.Localization
         /// <summary>
         /// Clear _seoFriendlyUrlsForLanguagesEnabled cached value
         /// </summary>
-        public virtual void ClearSeoFriendlyUrlsCachedValue()
+        public async virtual Task ClearSeoFriendlyUrlsCachedValue()
         {
             _seoFriendlyUrlsForLanguagesEnabled = null;
         }

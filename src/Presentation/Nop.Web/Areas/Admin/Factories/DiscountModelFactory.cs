@@ -232,7 +232,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     var discountModel = discount.ToModel<DiscountModel>();
 
                     //fill in additional values (not existing in the entity)
-                    discountModel.DiscountTypeName = _localizationService.GetLocalizedEnum(discount.DiscountType);
+                    discountModel.DiscountTypeName = await _localizationService.GetLocalizedEnum(discount.DiscountType);
                     discountModel.PrimaryStoreCurrencyCode = _currencyService
                         .GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId)?.CurrencyCode;
                     discountModel.TimesUsed = _discountService.GetAllDiscountUsageHistory(discount.Id, pageSize: 1).TotalCount;
@@ -271,13 +271,13 @@ namespace Nop.Web.Areas.Admin.Factories
 
                 model.AvailableDiscountRequirementRules.Insert(0, new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Admin.Promotions.Discounts.Requirements.DiscountRequirementType.AddGroup"),
+                    Text = await _localizationService.GetResource("Admin.Promotions.Discounts.Requirements.DiscountRequirementType.AddGroup"),
                     Value = "AddGroup"
                 });
 
                 model.AvailableDiscountRequirementRules.Insert(0, new SelectListItem
                 {
-                    Text = _localizationService.GetResource("Admin.Promotions.Discounts.Requirements.DiscountRequirementType.Select"),
+                    Text = await _localizationService.GetResource("Admin.Promotions.Discounts.Requirements.DiscountRequirementType.Select"),
                     Value = string.Empty
                 });
 
@@ -396,7 +396,7 @@ namespace Nop.Web.Areas.Admin.Factories
                     discountUsageHistoryModel.CreatedOn = _dateTimeHelper.ConvertToUserTime(historyEntry.CreatedOnUtc, DateTimeKind.Utc);
 
                     //fill in additional values (not existing in the entity)
-                    var order = _orderService.GetOrderById(historyEntry.OrderId);
+                    var order = await _orderService.GetOrderById(historyEntry.OrderId);
                     if (order != null)
                     {
                         discountUsageHistoryModel.OrderTotal = _priceFormatter.FormatPrice(order.OrderTotal, true, false);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Customers;
 using Nop.Services.Plugins;
 
@@ -55,10 +56,10 @@ namespace Nop.Services.Authentication.External
         /// <param name="customer">Filter by customer; pass null to load all plugins</param>
         /// <param name="storeId">Filter by store; pass 0 to load all plugins</param>
         /// <returns>Result</returns>
-        public virtual bool IsPluginActive(string systemName, Customer customer = null, int storeId = 0)
+        public async virtual Task<bool> IsPluginActive(string systemName, Customer customer = null, int storeId = 0)
         {
             var authenticationMethod = LoadPluginBySystemName(systemName, customer, storeId);
-            return IsPluginActive(authenticationMethod);
+            return await IsPluginActive(authenticationMethod);
         }
 
         #endregion

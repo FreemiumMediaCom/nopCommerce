@@ -13,7 +13,7 @@ namespace Nop.Web.Components
             _commonModelFactory = commonModelFactory;
         }
 
-        public IViewComponentResult Invoke()
+public async Task<IViewComponentResult> InvokeAsync()
         {
             var model = _commonModelFactory.PrepareSocialModel();
             return View(model);

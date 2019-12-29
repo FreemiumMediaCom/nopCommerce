@@ -92,17 +92,17 @@ namespace Nop.Web.Areas.Admin.Factories
             searchModel.ActivatedList.Add(new SelectListItem
             {
                 Value = "0",
-                Text = _localizationService.GetResource("Admin.GiftCards.List.Activated.All")
+                Text = await _localizationService.GetResource("Admin.GiftCards.List.Activated.All")
             });
             searchModel.ActivatedList.Add(new SelectListItem
             {
                 Value = "1",
-                Text = _localizationService.GetResource("Admin.GiftCards.List.Activated.ActivatedOnly")
+                Text = await _localizationService.GetResource("Admin.GiftCards.List.Activated.ActivatedOnly")
             });
             searchModel.ActivatedList.Add(new SelectListItem
             {
                 Value = "2",
-                Text = _localizationService.GetResource("Admin.GiftCards.List.Activated.DeactivatedOnly")
+                Text = await _localizationService.GetResource("Admin.GiftCards.List.Activated.DeactivatedOnly")
             });
 
             //prepare page parameters

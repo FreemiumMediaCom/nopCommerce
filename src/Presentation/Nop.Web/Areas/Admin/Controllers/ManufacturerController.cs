@@ -190,12 +190,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region List
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -207,7 +207,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(ManufacturerSearchModel searchModel)
+        public async virtual Task<IActionResult> List(ManufacturerSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedDataTablesJson();
@@ -222,7 +222,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Create / Edit / Delete
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -234,7 +234,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(ManufacturerModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(ManufacturerModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -275,9 +275,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewManufacturer",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewManufacturer"), manufacturer.Name), manufacturer);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewManufacturer"), manufacturer.Name), manufacturer);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Manufacturers.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Catalog.Manufacturers.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -292,7 +292,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -309,7 +309,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(ManufacturerModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(ManufacturerModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -373,9 +373,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditManufacturer",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditManufacturer"), manufacturer.Name), manufacturer);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditManufacturer"), manufacturer.Name), manufacturer);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Manufacturers.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Catalog.Manufacturers.Updated"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -391,7 +391,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -405,9 +405,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteManufacturer",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteManufacturer"), manufacturer.Name), manufacturer);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteManufacturer"), manufacturer.Name), manufacturer);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Manufacturers.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Catalog.Manufacturers.Deleted"));
 
             return RedirectToAction("List");
         }
@@ -416,7 +416,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Export / Import
 
-        public virtual IActionResult ExportXml()
+        public async virtual Task<IActionResult> ExportXml()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -434,7 +434,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
-        public virtual IActionResult ExportXlsx()
+        public async virtual Task<IActionResult> ExportXlsx()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -453,7 +453,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ImportFromXlsx(IFormFile importexcelfile)
+        public async virtual Task<IActionResult> ImportFromXlsx(IFormFile importexcelfile)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -470,11 +470,11 @@ namespace Nop.Web.Areas.Admin.Controllers
                 }
                 else
                 {
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Common.UploadFile"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Common.UploadFile"));
                     return RedirectToAction("List");
                 }
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Catalog.Manufacturers.Imported"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Catalog.Manufacturers.Imported"));
                 return RedirectToAction("List");
             }
             catch (Exception exc)
@@ -489,7 +489,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Products
 
         [HttpPost]
-        public virtual IActionResult ProductList(ManufacturerProductSearchModel searchModel)
+        public async virtual Task<IActionResult> ProductList(ManufacturerProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedDataTablesJson();
@@ -505,7 +505,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductUpdate(ManufacturerProductModel model)
+        public async virtual Task<IActionResult> ProductUpdate(ManufacturerProductModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -522,7 +522,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductDelete(int id)
+        public async virtual Task<IActionResult> ProductDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -536,7 +536,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult ProductAddPopup(int manufacturerId)
+        public async virtual Task<IActionResult> ProductAddPopup(int manufacturerId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();
@@ -548,7 +548,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductAddPopupList(AddProductToManufacturerSearchModel searchModel)
+        public async virtual Task<IActionResult> ProductAddPopupList(AddProductToManufacturerSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedDataTablesJson();
@@ -561,7 +561,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult ProductAddPopup(AddProductToManufacturerModel model)
+        public async virtual Task<IActionResult> ProductAddPopup(AddProductToManufacturerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageManufacturers))
                 return AccessDeniedView();

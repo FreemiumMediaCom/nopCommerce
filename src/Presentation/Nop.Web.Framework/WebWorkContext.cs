@@ -324,7 +324,7 @@ namespace Nop.Web.Framework
                 if (detectedLanguage == null && _localizationSettings.AutomaticallyDetectLanguage)
                 {
                     //whether language already detected by this way
-                    var alreadyDetected = _genericAttributeService.GetAttribute<bool>(CurrentCustomer,
+                    var alreadyDetected = await _genericAttributeService.GetAttribute<bool>(CurrentCustomer,
                         NopCustomerDefaults.LanguageAutomaticallyDetectedAttribute, _storeContext.CurrentStore.Id);
 
                     //if not, try to get language from the request
@@ -344,7 +344,7 @@ namespace Nop.Web.Framework
                 if (detectedLanguage != null)
                 {
                     //get current saved language identifier
-                    var currentLanguageId = _genericAttributeService.GetAttribute<int>(CurrentCustomer,
+                    var currentLanguageId = await _genericAttributeService.GetAttribute<int>(CurrentCustomer,
                         NopCustomerDefaults.LanguageIdAttribute, _storeContext.CurrentStore.Id);
 
                     //save the detected language identifier if it differs from the current one
@@ -356,7 +356,7 @@ namespace Nop.Web.Framework
                 }
 
                 //get current customer language identifier
-                var customerLanguageId = _genericAttributeService.GetAttribute<int>(CurrentCustomer,
+                var customerLanguageId = await _genericAttributeService.GetAttribute<int>(CurrentCustomer,
                     NopCustomerDefaults.LanguageIdAttribute, _storeContext.CurrentStore.Id);
 
                 var allStoreLanguages = _languageService.GetAllLanguages(storeId: _storeContext.CurrentStore.Id);
@@ -419,7 +419,7 @@ namespace Nop.Web.Framework
                 }
 
                 //find a currency previously selected by a customer
-                var customerCurrencyId = _genericAttributeService.GetAttribute<int>(CurrentCustomer,
+                var customerCurrencyId = await _genericAttributeService.GetAttribute<int>(CurrentCustomer,
                     NopCustomerDefaults.CurrencyIdAttribute, _storeContext.CurrentStore.Id);
 
                 var allStoreCurrencies = _currencyService.GetAllCurrencies(storeId: _storeContext.CurrentStore.Id);
@@ -476,7 +476,7 @@ namespace Nop.Web.Framework
                 if (_taxSettings.AllowCustomersToSelectTaxDisplayType && CurrentCustomer != null)
                 {
                     //try to get previously saved tax display type
-                    var taxDisplayTypeId = _genericAttributeService.GetAttribute<int?>(CurrentCustomer,
+                    var taxDisplayTypeId = await _genericAttributeService.GetAttribute<int?>(CurrentCustomer,
                         NopCustomerDefaults.TaxDisplayTypeIdAttribute, _storeContext.CurrentStore.Id);
                     if (taxDisplayTypeId.HasValue)
                     {
@@ -531,7 +531,7 @@ namespace Nop.Web.Framework
         /// <summary>
         /// Gets or sets value indicating whether we're in admin area
         /// </summary>
-        public virtual bool IsAdmin { get; set; }
+        public async virtual Task<bool> IsAdmin { get; set; }
 
         #endregion
     }

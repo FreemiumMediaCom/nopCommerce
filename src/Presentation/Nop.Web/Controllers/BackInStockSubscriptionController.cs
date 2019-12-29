@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
@@ -53,7 +54,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         // Product details page > back in stock subscribe
-        public virtual IActionResult SubscribePopup(int productId)
+        public async virtual Task<IActionResult> SubscribePopup(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null || product.Deleted)
@@ -62,7 +63,7 @@ namespace Nop.Web.Controllers
             var model = new BackInStockSubscribeModel
             {
                 ProductId = product.Id,
-                ProductName = _localizationService.GetLocalized(product, x => x.Name),
+                ProductName = await _localizationService.GetLocalized(product, x => x.Name),
                 ProductSeName = _urlRecordService.GetSeName(product),
                 IsCurrentCustomerRegistered = _workContext.CurrentCustomer.IsRegistered(),
                 MaximumBackInStockSubscriptions = _catalogSettings.MaximumBackInStockSubscriptions,
@@ -84,14 +85,14 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult SubscribePopupPOST(int productId)
+        public async virtual Task<IActionResult> SubscribePopupPOST(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null || product.Deleted)
                 throw new ArgumentException("No product found with the specified id");
 
             if (!_workContext.CurrentCustomer.IsRegistered())
-                return Content(_localizationService.GetResource("BackInStockSubscriptions.OnlyRegistered"));
+                return Content(await _localizationService.GetResource("BackInStockSubscriptions.OnlyRegistered"));
 
             if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
                 product.BackorderMode == BackorderMode.NoBackorders &&
@@ -121,7 +122,7 @@ namespace Nop.Web.Controllers
                 {
                     return Json(new
                     {
-                        result = string.Format(_localizationService.GetResource("BackInStockSubscriptions.MaxSubscriptions"), _catalogSettings.MaximumBackInStockSubscriptions)
+                        result = string.Format(await _localizationService.GetResource("BackInStockSubscriptions.MaxSubscriptions"), _catalogSettings.MaximumBackInStockSubscriptions)
                     });
                 }
                 subscription = new BackInStockSubscription
@@ -140,11 +141,11 @@ namespace Nop.Web.Controllers
             }
 
             //subscription not possible
-            return Content(_localizationService.GetResource("BackInStockSubscriptions.NotAllowed"));
+            return Content(await _localizationService.GetResource("BackInStockSubscriptions.NotAllowed"));
         }
 
         // My account / Back in stock subscriptions
-        public virtual IActionResult CustomerSubscriptions(int? pageNumber)
+        public async virtual Task<IActionResult> CustomerSubscriptions(int? pageNumber)
         {
             if (_customerSettings.HideBackInStockSubscriptionsTab)
             {
@@ -174,7 +175,7 @@ namespace Nop.Web.Controllers
                     {
                         Id = subscription.Id,
                         ProductId = product.Id,
-                        ProductName = _localizationService.GetLocalized(product, x => x.Name),
+                        ProductName = await _localizationService.GetLocalized(product, x => x.Name),
                         SeName = _urlRecordService.GetSeName(product),
                     };
                     model.Subscriptions.Add(subscriptionModel);
@@ -196,7 +197,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost, ActionName("CustomerSubscriptions")]
-        public virtual IActionResult CustomerSubscriptionsPOST(IFormCollection formCollection)
+        public async virtual Task<IActionResult> CustomerSubscriptionsPOST(IFormCollection formCollection)
         {
             foreach (var key in formCollection.Keys)
             {

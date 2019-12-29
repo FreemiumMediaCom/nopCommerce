@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
@@ -33,6 +34,6 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="days">Customers registered in the last days</param>
         /// <returns>Number of registered customers</returns>
-        int GetRegisteredCustomersReport(int days);
+        Task<int> GetRegisteredCustomersReport(int days);
     }
 }

@@ -81,7 +81,7 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Components
 
         private Order GetLastOrder()
         {
-            var order = _orderService.SearchOrders(storeId: _storeContext.CurrentStore.Id,
+            var order = await _orderService.SearchOrders(storeId: _storeContext.CurrentStore.Id,
                 customerId: _workContext.CurrentCustomer.Id, pageSize: 1).FirstOrDefault();
             return order;
         }
@@ -178,7 +178,7 @@ namespace Nop.Plugin.Widgets.GoogleAnalytics.Components
 
         #region Methods
 
-        public IViewComponentResult Invoke(string widgetZone, object additionalData)
+        public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
             string script = "";
             var routeData = Url.ActionContext.RouteData;

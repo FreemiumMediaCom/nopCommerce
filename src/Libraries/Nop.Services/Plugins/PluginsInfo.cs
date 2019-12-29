@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Nop.Core.Infrastructure;
 
@@ -25,7 +26,7 @@ namespace Nop.Services.Plugins
         /// Get system names of installed plugins from obsolete file
         /// </summary>
         /// <returns>List of plugin system names</returns>
-        protected virtual IList<string> GetObsoleteInstalledPluginNames()
+        protected async virtual Task<IList<string>> GetObsoleteInstalledPluginNames()
         {
             //check whether file exists
             var filePath = _fileProvider.MapPath(NopPluginDefaults.InstalledPluginsFilePath);
@@ -38,7 +39,7 @@ namespace Nop.Services.Plugins
 
                 //get plugin system names from the old txt file
                 var pluginSystemNames = new List<string>();
-                using (var reader = new StringReader(_fileProvider.ReadAllText(filePath, Encoding.UTF8)))
+                using (var reader = new StringReader(await _fileProvider.ReadAllText(filePath, Encoding.UTF8)))
                 {
                     string pluginName;
                     while ((pluginName = reader.ReadLine()) != null)
@@ -54,7 +55,7 @@ namespace Nop.Services.Plugins
                 return pluginSystemNames;
             }
 
-            var text = _fileProvider.ReadAllText(filePath, Encoding.UTF8);
+            var text = await _fileProvider.ReadAllText(filePath, Encoding.UTF8);
             if (string.IsNullOrEmpty(text))
                 return new List<string>();
 
@@ -99,34 +100,34 @@ namespace Nop.Services.Plugins
         /// <summary>
         /// Save plugins info to the file
         /// </summary>
-        public virtual void Save()
+        public async virtual Task Save()
         {
             //save the file
             var filePath = _fileProvider.MapPath(NopPluginDefaults.PluginsInfoFilePath);
             var text = JsonConvert.SerializeObject(this, Formatting.Indented);
-            _fileProvider.WriteAllText(filePath, text, Encoding.UTF8);
+            await _fileProvider.WriteAllText(filePath, text, Encoding.UTF8);
         }
 
         /// <summary>
         /// Get plugins info
         /// </summary>
         /// <returns>True if data are loaded, otherwise False</returns>
-        public virtual bool LoadPluginInfo()
+        public async virtual Task<bool> LoadPluginInfo()
         {
             //check whether plugins info file exists
             var filePath = _fileProvider.MapPath(NopPluginDefaults.PluginsInfoFilePath);
             if (!_fileProvider.FileExists(filePath))
             {
                 //file doesn't exist, so try to get only installed plugin names from the obsolete file
-                InstalledPluginNames = GetObsoleteInstalledPluginNames();
+                InstalledPluginNames = await GetObsoleteInstalledPluginNames();
 
                 //and save info into a new file if need
                 if(InstalledPluginNames.Any())
-                    Save();
+                    await Save();
             }
 
             //try to get plugin info from the JSON file
-            var text = _fileProvider.FileExists(filePath) ? _fileProvider.ReadAllText(filePath, Encoding.UTF8) : string.Empty;
+            var text = _fileProvider.FileExists(filePath) ? await _fileProvider.ReadAllText(filePath, Encoding.UTF8) : string.Empty;
             return !string.IsNullOrEmpty(text) && DeserializePluginInfo(text);
         }
 

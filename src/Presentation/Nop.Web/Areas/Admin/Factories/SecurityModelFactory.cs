@@ -55,7 +55,7 @@ namespace Nop.Web.Areas.Admin.Factories
             {
                 model.AvailablePermissions.Add(new PermissionRecordModel
                 {
-                    Name = _localizationService.GetLocalizedPermissionName(permissionRecord),
+                    Name = await _localizationService.GetLocalizedPermissionName(permissionRecord),
                     SystemName = permissionRecord.SystemName
                 });
 

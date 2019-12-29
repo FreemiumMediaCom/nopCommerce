@@ -264,12 +264,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Customers
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -281,7 +281,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CustomerList(CustomerSearchModel searchModel)
+        public async virtual Task<IActionResult> CustomerList(CustomerSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -292,7 +292,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -305,7 +305,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Create(CustomerModel model, bool continueEditing, IFormCollection form)
+        public async virtual Task<IActionResult> Create(CustomerModel model, bool continueEditing, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -336,9 +336,9 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (newCustomerRoles.Any() && newCustomerRoles.FirstOrDefault(c => c.SystemName == NopCustomerDefaults.RegisteredRoleName) != null &&
                 !CommonHelper.IsValidEmail(model.Email))
             {
-                ModelState.AddModelError(string.Empty, _localizationService.GetResource("Admin.Customers.Customers.ValidEmailRequiredRegisteredRole"));
+                ModelState.AddModelError(string.Empty, await _localizationService.GetResource("Admin.Customers.Customers.ValidEmailRequiredRegisteredRole"));
 
-                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.ValidEmailRequiredRegisteredRole"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.ValidEmailRequiredRegisteredRole"));
             }
 
             //custom customer attributes
@@ -463,7 +463,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     customer.VendorId = 0;
                     _customerService.UpdateCustomer(customer);
 
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.AdminCouldNotbeVendor"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.AdminCouldNotbeVendor"));
                 }
 
                 //ensure that a customer in the Vendors role has a vendor account associated.
@@ -478,13 +478,13 @@ namespace Nop.Web.Areas.Admin.Controllers
                         customer.CustomerCustomerRoleMappings.FirstOrDefault(mapping => mapping.CustomerRoleId == vendorRole.Id));
                     _customerService.UpdateCustomer(customer);
 
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.CannotBeInVendoRoleWithoutVendorAssociated"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.CannotBeInVendoRoleWithoutVendorAssociated"));
                 }
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewCustomer",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewCustomer"), customer.Id), customer);
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.Added"));
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewCustomer"), customer.Id), customer);
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.Customers.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -499,7 +499,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -517,7 +517,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(CustomerModel model, bool continueEditing, IFormCollection form)
+        public async virtual Task<IActionResult> Edit(CustomerModel model, bool continueEditing, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -544,8 +544,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (newCustomerRoles.Any() && newCustomerRoles.FirstOrDefault(c => c.SystemName == NopCustomerDefaults.RegisteredRoleName) != null &&
                 !CommonHelper.IsValidEmail(model.Email))
             {
-                ModelState.AddModelError(string.Empty, _localizationService.GetResource("Admin.Customers.Customers.ValidEmailRequiredRegisteredRole"));
-                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.ValidEmailRequiredRegisteredRole"));
+                ModelState.AddModelError(string.Empty, await _localizationService.GetResource("Admin.Customers.Customers.ValidEmailRequiredRegisteredRole"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.ValidEmailRequiredRegisteredRole"));
             }
 
             //custom customer attributes
@@ -570,7 +570,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     if (!customer.IsAdmin() || model.Active || SecondAdminAccountExists(customer))
                         customer.Active = model.Active;
                     else
-                        _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.AdminAccountShouldExists.Deactivate"));
+                        _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.AdminAccountShouldExists.Deactivate"));
 
                     //email
                     if (!string.IsNullOrWhiteSpace(model.Email))
@@ -590,7 +590,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     //VAT number
                     if (_taxSettings.EuVatEnabled)
                     {
-                        var prevVatNumber = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.VatNumberAttribute);
+                        var prevVatNumber = await _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.VatNumberAttribute);
 
                         _genericAttributeService.SaveAttribute(customer, NopCustomerDefaults.VatNumberAttribute, model.VatNumber);
                         //set VAT number status
@@ -702,7 +702,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                             //prevent attempts to delete the administrator role from the user, if the user is the last active administrator
                             if (customerRole.SystemName == NopCustomerDefaults.AdministratorsRoleName && !SecondAdminAccountExists(customer))
                             {
-                                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.AdminAccountShouldExists.DeleteRole"));
+                                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.AdminAccountShouldExists.DeleteRole"));
                                 continue;
                             }
 
@@ -724,7 +724,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     {
                         customer.VendorId = 0;
                         _customerService.UpdateCustomer(customer);
-                        _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.AdminCouldNotbeVendor"));
+                        _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.AdminCouldNotbeVendor"));
                     }
 
                     //ensure that a customer in the Vendors role has a vendor account associated.
@@ -738,14 +738,14 @@ namespace Nop.Web.Areas.Admin.Controllers
                         customer.RemoveCustomerRoleMapping(
                             customer.CustomerCustomerRoleMappings.FirstOrDefault(mapping => mapping.CustomerRoleId == vendorRole.Id));
                         _customerService.UpdateCustomer(customer);
-                        _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.CannotBeInVendoRoleWithoutVendorAssociated"));
+                        _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.CannotBeInVendoRoleWithoutVendorAssociated"));
                     }
 
                     //activity log
                     _customerActivityService.InsertActivity("EditCustomer",
-                        string.Format(_localizationService.GetResource("ActivityLog.EditCustomer"), customer.Id), customer);
+                        string.Format(await _localizationService.GetResource("ActivityLog.EditCustomer"), customer.Id), customer);
 
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.Updated"));
+                    _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.Customers.Updated"));
 
                     if (!continueEditing)
                         return RedirectToAction("List");
@@ -767,7 +767,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("changepassword")]
-        public virtual IActionResult ChangePassword(CustomerModel model)
+        public async virtual Task<IActionResult> ChangePassword(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -780,7 +780,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             //ensure that the current customer cannot change passwords of "Administrators" if he's not an admin himself
             if (customer.IsAdmin() && !_workContext.CurrentCustomer.IsAdmin())
             {
-                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.OnlyAdminCanChangePassword"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.OnlyAdminCanChangePassword"));
                 return RedirectToAction("Edit", new { id = customer.Id });
             }
 
@@ -791,7 +791,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 false, _customerSettings.DefaultPasswordFormat, model.Password);
             var changePassResult = _customerRegistrationService.ChangePassword(changePassRequest);
             if (changePassResult.Success)
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.PasswordChanged"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.Customers.PasswordChanged"));
             else
                 foreach (var error in changePassResult.Errors)
                     _notificationService.ErrorNotification(error);
@@ -801,7 +801,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("markVatNumberAsValid")]
-        public virtual IActionResult MarkVatNumberAsValid(CustomerModel model)
+        public async virtual Task<IActionResult> MarkVatNumberAsValid(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -820,7 +820,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("markVatNumberAsInvalid")]
-        public virtual IActionResult MarkVatNumberAsInvalid(CustomerModel model)
+        public async virtual Task<IActionResult> MarkVatNumberAsInvalid(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -839,7 +839,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("remove-affiliate")]
-        public virtual IActionResult RemoveAffiliate(CustomerModel model)
+        public async virtual Task<IActionResult> RemoveAffiliate(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -856,7 +856,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -871,14 +871,14 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //prevent attempts to delete the user, if it is the last active administrator
                 if (customer.IsAdmin() && !SecondAdminAccountExists(customer))
                 {
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.AdminAccountShouldExists.DeleteAdministrator"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.AdminAccountShouldExists.DeleteAdministrator"));
                     return RedirectToAction("Edit", new { id = customer.Id });
                 }
 
                 //ensure that the current customer cannot delete "Administrators" if he's not an admin himself
                 if (customer.IsAdmin() && !_workContext.CurrentCustomer.IsAdmin())
                 {
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.OnlyAdminCanDeleteAdmin"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.OnlyAdminCanDeleteAdmin"));
                     return RedirectToAction("Edit", new { id = customer.Id });
                 }
 
@@ -895,9 +895,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("DeleteCustomer",
-                    string.Format(_localizationService.GetResource("ActivityLog.DeleteCustomer"), customer.Id), customer);
+                    string.Format(await _localizationService.GetResource("ActivityLog.DeleteCustomer"), customer.Id), customer);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.Deleted"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.Customers.Deleted"));
 
                 return RedirectToAction("List");
             }
@@ -910,7 +910,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("impersonate")]
-        public virtual IActionResult Impersonate(int id)
+        public async virtual Task<IActionResult> Impersonate(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.AllowCustomerImpersonation))
                 return AccessDeniedView();
@@ -931,15 +931,15 @@ namespace Nop.Web.Areas.Admin.Controllers
             //otherwise, that user can simply impersonate as an administrator and gain additional administrative privileges
             if (!_workContext.CurrentCustomer.IsAdmin() && customer.IsAdmin())
             {
-                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.NonAdminNotImpersonateAsAdminError"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.NonAdminNotImpersonateAsAdminError"));
                 return RedirectToAction("Edit", customer.Id);
             }
 
             //activity log
             _customerActivityService.InsertActivity("Impersonation.Started",
-                string.Format(_localizationService.GetResource("ActivityLog.Impersonation.Started.StoreOwner"), customer.Email, customer.Id), customer);
+                string.Format(await _localizationService.GetResource("ActivityLog.Impersonation.Started.StoreOwner"), customer.Email, customer.Id), customer);
             _customerActivityService.InsertActivity(customer, "Impersonation.Started",
-                string.Format(_localizationService.GetResource("ActivityLog.Impersonation.Started.Customer"), _workContext.CurrentCustomer.Email, _workContext.CurrentCustomer.Id), _workContext.CurrentCustomer);
+                string.Format(await _localizationService.GetResource("ActivityLog.Impersonation.Started.Customer"), _workContext.CurrentCustomer.Email, _workContext.CurrentCustomer.Id), _workContext.CurrentCustomer);
 
             //ensure login is not required
             customer.RequireReLogin = false;
@@ -951,7 +951,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("send-welcome-message")]
-        public virtual IActionResult SendWelcomeMessage(CustomerModel model)
+        public async virtual Task<IActionResult> SendWelcomeMessage(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -963,14 +963,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             _workflowMessageService.SendCustomerWelcomeMessage(customer, _workContext.WorkingLanguage.Id);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.SendWelcomeMessage.Success"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.Customers.SendWelcomeMessage.Success"));
 
             return RedirectToAction("Edit", new { id = customer.Id });
         }
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("resend-activation-message")]
-        public virtual IActionResult ReSendActivationMessage(CustomerModel model)
+        public async virtual Task<IActionResult> ReSendActivationMessage(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -984,12 +984,12 @@ namespace Nop.Web.Areas.Admin.Controllers
             _genericAttributeService.SaveAttribute(customer, NopCustomerDefaults.AccountActivationTokenAttribute, Guid.NewGuid().ToString());
             _workflowMessageService.SendCustomerEmailValidationMessage(customer, _workContext.WorkingLanguage.Id);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.ReSendActivationMessage.Success"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.Customers.ReSendActivationMessage.Success"));
 
             return RedirectToAction("Edit", new { id = customer.Id });
         }
 
-        public virtual IActionResult SendEmail(CustomerModel model)
+        public async virtual Task<IActionResult> SendEmail(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1031,7 +1031,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 };
                 _queuedEmailService.InsertQueuedEmail(email);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.SendEmail.Queued"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.Customers.SendEmail.Queued"));
             }
             catch (Exception exc)
             {
@@ -1041,7 +1041,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("Edit", new { id = customer.Id });
         }
 
-        public virtual IActionResult SendPm(CustomerModel model)
+        public async virtual Task<IActionResult> SendPm(CustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1077,7 +1077,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 _forumService.InsertPrivateMessage(privateMessage);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.SendPM.Sent"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.Customers.SendPM.Sent"));
             }
             catch (Exception exc)
             {
@@ -1092,7 +1092,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Reward points history
 
         [HttpPost]
-        public virtual IActionResult RewardPointsHistorySelect(CustomerRewardPointsSearchModel searchModel)
+        public async virtual Task<IActionResult> RewardPointsHistorySelect(CustomerRewardPointsSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1107,14 +1107,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult RewardPointsHistoryAdd(AddRewardPointsToCustomerModel model)
+        public async virtual Task<IActionResult> RewardPointsHistoryAdd(AddRewardPointsToCustomerModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
 
             //prevent adding a new row with zero value
             if (model.Points == 0)
-                return ErrorJson(_localizationService.GetResource("Admin.Customers.Customers.RewardPoints.AddingZeroValueNotAllowed"));
+                return ErrorJson(await _localizationService.GetResource("Admin.Customers.Customers.RewardPoints.AddingZeroValueNotAllowed"));
 
             //try to get a customer with the specified id
             var customer = _customerService.GetCustomerById(model.CustomerId);
@@ -1147,7 +1147,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Addresses
 
         [HttpPost]
-        public virtual IActionResult AddressesSelect(CustomerAddressSearchModel searchModel)
+        public async virtual Task<IActionResult> AddressesSelect(CustomerAddressSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1163,7 +1163,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AddressDelete(int id, int customerId)
+        public async virtual Task<IActionResult> AddressDelete(int id, int customerId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1186,7 +1186,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult AddressCreate(int customerId)
+        public async virtual Task<IActionResult> AddressCreate(int customerId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1203,7 +1203,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AddressCreate(CustomerAddressModel model, IFormCollection form)
+        public async virtual Task<IActionResult> AddressCreate(CustomerAddressModel model, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1236,7 +1236,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 customer.CustomerAddressMappings.Add(new CustomerAddressMapping { Address = address });
                 _customerService.UpdateCustomer(customer);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.Addresses.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.Customers.Addresses.Added"));
 
                 return RedirectToAction("AddressEdit", new { addressId = address.Id, customerId = model.CustomerId });
             }
@@ -1248,7 +1248,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult AddressEdit(int addressId, int customerId)
+        public async virtual Task<IActionResult> AddressEdit(int addressId, int customerId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1270,7 +1270,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AddressEdit(CustomerAddressModel model, IFormCollection form)
+        public async virtual Task<IActionResult> AddressEdit(CustomerAddressModel model, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1299,7 +1299,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 address.CustomAttributes = customAttributes;
                 _addressService.UpdateAddress(address);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.Addresses.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.Customers.Addresses.Updated"));
 
                 return RedirectToAction("AddressEdit", new { addressId = model.Address.Id, customerId = model.CustomerId });
             }
@@ -1316,7 +1316,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Orders
 
         [HttpPost]
-        public virtual IActionResult OrderList(CustomerOrderSearchModel searchModel)
+        public async virtual Task<IActionResult> OrderList(CustomerOrderSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1335,7 +1335,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Customer
 
-        public virtual IActionResult LoadCustomerStatistics(string period)
+        public async virtual Task<IActionResult> LoadCustomerStatistics(string period)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return Content(string.Empty);
@@ -1424,7 +1424,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Current shopping cart/ wishlist
 
         [HttpPost]
-        public virtual IActionResult GetCartList(CustomerShoppingCartSearchModel searchModel)
+        public async virtual Task<IActionResult> GetCartList(CustomerShoppingCartSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1444,7 +1444,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Activity log
 
         [HttpPost]
-        public virtual IActionResult ListActivityLog(CustomerActivityLogSearchModel searchModel)
+        public async virtual Task<IActionResult> ListActivityLog(CustomerActivityLogSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1464,7 +1464,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Back in stock subscriptions
 
         [HttpPost]
-        public virtual IActionResult BackInStockSubscriptionList(CustomerBackInStockSubscriptionSearchModel searchModel)
+        public async virtual Task<IActionResult> BackInStockSubscriptionList(CustomerBackInStockSubscriptionSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1483,7 +1483,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region GDPR
 
-        public virtual IActionResult GdprLog()
+        public async virtual Task<IActionResult> GdprLog()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1495,7 +1495,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult GdprLogList(GdprLogSearchModel searchModel)
+        public async virtual Task<IActionResult> GdprLogList(GdprLogSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -1507,7 +1507,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult GdprDelete(int id)
+        public async virtual Task<IActionResult> GdprDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1525,14 +1525,14 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //prevent attempts to delete the user, if it is the last active administrator
                 if (customer.IsAdmin() && !SecondAdminAccountExists(customer))
                 {
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.AdminAccountShouldExists.DeleteAdministrator"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.AdminAccountShouldExists.DeleteAdministrator"));
                     return RedirectToAction("Edit", new { id = customer.Id });
                 }
 
                 //ensure that the current customer cannot delete "Administrators" if he's not an admin himself
                 if (customer.IsAdmin() && !_workContext.CurrentCustomer.IsAdmin())
                 {
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.OnlyAdminCanDeleteAdmin"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Customers.Customers.OnlyAdminCanDeleteAdmin"));
                     return RedirectToAction("Edit", new { id = customer.Id });
                 }
 
@@ -1541,9 +1541,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("DeleteCustomer",
-                    string.Format(_localizationService.GetResource("ActivityLog.DeleteCustomer"), customer.Id), customer);
+                    string.Format(await _localizationService.GetResource("ActivityLog.DeleteCustomer"), customer.Id), customer);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.Deleted"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.Customers.Deleted"));
 
                 return RedirectToAction("List");
             }
@@ -1554,7 +1554,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
-        public virtual IActionResult GdprExport(int id)
+        public async virtual Task<IActionResult> GdprExport(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1567,7 +1567,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             try
             {
                 //log
-                //_gdprService.InsertLog(customer, 0, GdprRequestType.ExportData, _localizationService.GetResource("Gdpr.Exported"));
+                //_gdprService.InsertLog(customer, 0, GdprRequestType.ExportData, await _localizationService.GetResource("Gdpr.Exported"));
                 //export
                 //export
                 var bytes = _exportManager.ExportCustomerGdprInfoToXlsx(customer, _storeContext.CurrentStore.Id);
@@ -1586,7 +1586,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("exportexcel-all")]
-        public virtual IActionResult ExportExcelAll(CustomerSearchModel model)
+        public async virtual Task<IActionResult> ExportExcelAll(CustomerSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1615,7 +1615,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ExportExcelSelected(string selectedIds)
+        public async virtual Task<IActionResult> ExportExcelSelected(string selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1644,7 +1644,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("exportxml-all")]
-        public virtual IActionResult ExportXmlAll(CustomerSearchModel model)
+        public async virtual Task<IActionResult> ExportXmlAll(CustomerSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -1673,7 +1673,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ExportXmlSelected(string selectedIds)
+        public async virtual Task<IActionResult> ExportXmlSelected(string selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();

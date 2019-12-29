@@ -38,7 +38,7 @@ namespace Nop.Web.Framework.Factories
         /// </summary>
         /// <typeparam name="TModel">Store mapping supported model type</typeparam>
         /// <param name="model">Model</param>
-        public virtual void PrepareModelStores<TModel>(TModel model) where TModel : IStoreMappingSupportedModel
+        public async virtual Task PrepareModelStores<TModel>(TModel model) where TModel : IStoreMappingSupportedModel
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -61,7 +61,7 @@ namespace Nop.Web.Framework.Factories
         /// <param name="model">Model</param>
         /// <param name="entity">Entity</param>
         /// <param name="ignoreStoreMappings">Whether to ignore existing store mappings</param>
-        public virtual void PrepareModelStores<TModel, TEntity>(TModel model, TEntity entity, bool ignoreStoreMappings)
+        public async virtual Task PrepareModelStores<TModel, TEntity>(TModel model, TEntity entity, bool ignoreStoreMappings)
             where TModel : IStoreMappingSupportedModel where TEntity : BaseEntity, IStoreMappingSupported
         {
             if (model == null)

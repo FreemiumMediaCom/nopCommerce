@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Directory;
 
 namespace Nop.Services.Directory
@@ -12,39 +13,39 @@ namespace Nop.Services.Directory
         /// Deletes measure dimension
         /// </summary>
         /// <param name="measureDimension">Measure dimension</param>
-        void DeleteMeasureDimension(MeasureDimension measureDimension);
+        Task DeleteMeasureDimension(MeasureDimension measureDimension);
 
         /// <summary>
         /// Gets a measure dimension by identifier
         /// </summary>
         /// <param name="measureDimensionId">Measure dimension identifier</param>
         /// <returns>Measure dimension</returns>
-        MeasureDimension GetMeasureDimensionById(int measureDimensionId);
+        Task<MeasureDimension> GetMeasureDimensionById(int measureDimensionId);
 
         /// <summary>
         /// Gets a measure dimension by system keyword
         /// </summary>
         /// <param name="systemKeyword">The system keyword</param>
         /// <returns>Measure dimension</returns>
-        MeasureDimension GetMeasureDimensionBySystemKeyword(string systemKeyword);
+        Task<MeasureDimension> GetMeasureDimensionBySystemKeyword(string systemKeyword);
 
         /// <summary>
         /// Gets all measure dimensions
         /// </summary>
         /// <returns>Measure dimensions</returns>
-        IList<MeasureDimension> GetAllMeasureDimensions();
+        Task<IList<MeasureDimension>> GetAllMeasureDimensions();
 
         /// <summary>
         /// Inserts a measure dimension
         /// </summary>
         /// <param name="measure">Measure dimension</param>
-        void InsertMeasureDimension(MeasureDimension measure);
+        Task InsertMeasureDimension(MeasureDimension measure);
 
         /// <summary>
         /// Updates the measure dimension
         /// </summary>
         /// <param name="measure">Measure dimension</param>
-        void UpdateMeasureDimension(MeasureDimension measure);
+        Task UpdateMeasureDimension(MeasureDimension measure);
 
         /// <summary>
         /// Converts dimension
@@ -79,39 +80,39 @@ namespace Nop.Services.Directory
         /// Deletes measure weight
         /// </summary>
         /// <param name="measureWeight">Measure weight</param>
-        void DeleteMeasureWeight(MeasureWeight measureWeight);
+        Task DeleteMeasureWeight(MeasureWeight measureWeight);
 
         /// <summary>
         /// Gets a measure weight by identifier
         /// </summary>
         /// <param name="measureWeightId">Measure weight identifier</param>
         /// <returns>Measure weight</returns>
-        MeasureWeight GetMeasureWeightById(int measureWeightId);
+        Task<MeasureWeight> GetMeasureWeightById(int measureWeightId);
 
         /// <summary>
         /// Gets a measure weight by system keyword
         /// </summary>
         /// <param name="systemKeyword">The system keyword</param>
         /// <returns>Measure weight</returns>
-        MeasureWeight GetMeasureWeightBySystemKeyword(string systemKeyword);
+        Task<MeasureWeight> GetMeasureWeightBySystemKeyword(string systemKeyword);
 
         /// <summary>
         /// Gets all measure weights
         /// </summary>
         /// <returns>Measure weights</returns>
-        IList<MeasureWeight> GetAllMeasureWeights();
+        Task<IList<MeasureWeight>> GetAllMeasureWeights();
 
         /// <summary>
         /// Inserts a measure weight
         /// </summary>
         /// <param name="measure">Measure weight</param>
-        void InsertMeasureWeight(MeasureWeight measure);
+        Task InsertMeasureWeight(MeasureWeight measure);
 
         /// <summary>
         /// Updates the measure weight
         /// </summary>
         /// <param name="measure">Measure weight</param>
-        void UpdateMeasureWeight(MeasureWeight measure);
+        Task UpdateMeasureWeight(MeasureWeight measure);
 
         /// <summary>
         /// Converts weight

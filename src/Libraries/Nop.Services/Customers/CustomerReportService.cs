@@ -1,5 +1,7 @@
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Customers;
@@ -114,7 +116,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="days">Customers registered in the last days</param>
         /// <returns>Number of registered customers</returns>
-        public virtual int GetRegisteredCustomersReport(int days)
+        public async virtual Task<int> GetRegisteredCustomersReport(int days)
         {
             var date = _dateTimeHelper.ConvertToUserTime(DateTime.Now).AddDays(-days);
 
@@ -130,7 +132,7 @@ namespace Nop.Services.Customers
                         //&& c.CreatedOnUtc <= DateTime.UtcNow
                         select c;
 
-            var count = query.Count();
+            var count = await query.CountAsync();
             return count;
         }
 

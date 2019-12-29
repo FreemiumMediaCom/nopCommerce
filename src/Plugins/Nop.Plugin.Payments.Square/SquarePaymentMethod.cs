@@ -243,11 +243,11 @@ namespace Nop.Plugin.Payments.Square
             );
 
             //try to get previously stored card details
-            var storedCardKey = _localizationService.GetResource("Plugins.Payments.Square.Fields.StoredCard.Key");
+            var storedCardKey = await _localizationService.GetResource("Plugins.Payments.Square.Fields.StoredCard.Key");
             if (paymentRequest.CustomValues.TryGetValue(storedCardKey, out var storedCardId) && !storedCardId.ToString().Equals(Guid.Empty.ToString()))
             {
                 //check whether customer exists
-                var customerId = _genericAttributeService.GetAttribute<string>(customer, SquarePaymentDefaults.CustomerIdAttribute);
+                var customerId = await _genericAttributeService.GetAttribute<string>(customer, SquarePaymentDefaults.CustomerIdAttribute);
                 var squareCustomer = _squarePaymentManager.GetCustomer(customerId);
                 if (squareCustomer == null)
                     throw new NopException("Failed to retrieve customer");
@@ -259,11 +259,11 @@ namespace Nop.Plugin.Payments.Square
             }
 
             //or try to get the card nonce and verification token if exists
-            var tokenKey = _localizationService.GetResource("Plugins.Payments.Square.Fields.Token.Key");
+            var tokenKey = await _localizationService.GetResource("Plugins.Payments.Square.Fields.Token.Key");
             if ((!paymentRequest.CustomValues.TryGetValue(tokenKey, out var token) || string.IsNullOrEmpty(token?.ToString())) && _squarePaymentSettings.Use3ds)
                 throw new NopException("Failed to get the verification token");
 
-            var cardNonceKey = _localizationService.GetResource("Plugins.Payments.Square.Fields.CardNonce.Key");
+            var cardNonceKey = await _localizationService.GetResource("Plugins.Payments.Square.Fields.CardNonce.Key");
             if (!paymentRequest.CustomValues.TryGetValue(cardNonceKey, out var cardNonce) || string.IsNullOrEmpty(cardNonce?.ToString()))
                 throw new NopException("Failed to get the card nonce");
 
@@ -272,7 +272,7 @@ namespace Nop.Plugin.Payments.Square
             paymentRequest.CustomValues.Remove(tokenKey);
 
             //whether to save card details for the future purchasing
-            var saveCardKey = _localizationService.GetResource("Plugins.Payments.Square.Fields.SaveCard.Key");
+            var saveCardKey = await _localizationService.GetResource("Plugins.Payments.Square.Fields.SaveCard.Key");
             if (paymentRequest.CustomValues.TryGetValue(saveCardKey, out var saveCardValue) && saveCardValue is bool saveCard && saveCard && !customer.IsGuest())
             {
                 //remove the value from payment custom values, since it is no longer needed
@@ -281,7 +281,7 @@ namespace Nop.Plugin.Payments.Square
                 try
                 {
                     //check whether customer exists
-                    var customerId = _genericAttributeService.GetAttribute<string>(customer, SquarePaymentDefaults.CustomerIdAttribute);
+                    var customerId = await _genericAttributeService.GetAttribute<string>(customer, SquarePaymentDefaults.CustomerIdAttribute);
                     var squareCustomer = _squarePaymentManager.GetCustomer(customerId);
 
                     if (squareCustomer == null)
@@ -320,7 +320,7 @@ namespace Nop.Plugin.Payments.Square
                     }
 
                     //set postal code
-                    var postalCodeKey = _localizationService.GetResource("Plugins.Payments.Square.Fields.PostalCode.Key");
+                    var postalCodeKey = await _localizationService.GetResource("Plugins.Payments.Square.Fields.PostalCode.Key");
                     if (paymentRequest.CustomValues.TryGetValue(postalCodeKey, out var postalCode) && !string.IsNullOrEmpty(postalCode.ToString()))
                     {
                         //remove the value from payment custom values, since it is no longer needed
@@ -590,19 +590,19 @@ namespace Nop.Plugin.Payments.Square
 
             //pass custom values to payment processor
             if (form.TryGetValue(nameof(PaymentInfoModel.Token), out var token) && !StringValues.IsNullOrEmpty(token))
-                paymentRequest.CustomValues.Add(_localizationService.GetResource("Plugins.Payments.Square.Fields.Token.Key"), token.ToString());
+                paymentRequest.CustomValues.Add(await _localizationService.GetResource("Plugins.Payments.Square.Fields.Token.Key"), token.ToString());
 
             if (form.TryGetValue(nameof(PaymentInfoModel.CardNonce), out var cardNonce) && !StringValues.IsNullOrEmpty(cardNonce))
-                paymentRequest.CustomValues.Add(_localizationService.GetResource("Plugins.Payments.Square.Fields.CardNonce.Key"), cardNonce.ToString());
+                paymentRequest.CustomValues.Add(await _localizationService.GetResource("Plugins.Payments.Square.Fields.CardNonce.Key"), cardNonce.ToString());
 
             if (form.TryGetValue(nameof(PaymentInfoModel.StoredCardId), out var storedCardId) && !StringValues.IsNullOrEmpty(storedCardId) && !storedCardId.Equals(Guid.Empty.ToString()))
-                paymentRequest.CustomValues.Add(_localizationService.GetResource("Plugins.Payments.Square.Fields.StoredCard.Key"), storedCardId.ToString());
+                paymentRequest.CustomValues.Add(await _localizationService.GetResource("Plugins.Payments.Square.Fields.StoredCard.Key"), storedCardId.ToString());
 
             if (form.TryGetValue(nameof(PaymentInfoModel.SaveCard), out var saveCardValue) && !StringValues.IsNullOrEmpty(saveCardValue) && bool.TryParse(saveCardValue[0], out var saveCard) && saveCard)
-                paymentRequest.CustomValues.Add(_localizationService.GetResource("Plugins.Payments.Square.Fields.SaveCard.Key"), saveCard);
+                paymentRequest.CustomValues.Add(await _localizationService.GetResource("Plugins.Payments.Square.Fields.SaveCard.Key"), saveCard);
 
             if (form.TryGetValue(nameof(PaymentInfoModel.PostalCode), out var postalCode) && !StringValues.IsNullOrEmpty(postalCode))
-                paymentRequest.CustomValues.Add(_localizationService.GetResource("Plugins.Payments.Square.Fields.PostalCode.Key"), postalCode.ToString());
+                paymentRequest.CustomValues.Add(await _localizationService.GetResource("Plugins.Payments.Square.Fields.PostalCode.Key"), postalCode.ToString());
 
             return paymentRequest;
         }

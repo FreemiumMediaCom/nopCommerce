@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Tax;
@@ -40,12 +42,12 @@ namespace Nop.Services.Tax
         /// Deletes a tax category
         /// </summary>
         /// <param name="taxCategory">Tax category</param>
-        public virtual void DeleteTaxCategory(TaxCategory taxCategory)
+        public async virtual Task DeleteTaxCategory(TaxCategory taxCategory)
         {
             if (taxCategory == null)
                 throw new ArgumentNullException(nameof(taxCategory));
 
-            _taxCategoryRepository.Delete(taxCategory);
+            await _taxCategoryRepository.Delete(taxCategory);
 
             _cacheManager.RemoveByPrefix(NopTaxDefaults.TaxCategoriesPrefixCacheKey);
 
@@ -57,14 +59,14 @@ namespace Nop.Services.Tax
         /// Gets all tax categories
         /// </summary>
         /// <returns>Tax categories</returns>
-        public virtual IList<TaxCategory> GetAllTaxCategories()
+        public async virtual Task<IList<TaxCategory>> GetAllTaxCategories()
         {
-            return _cacheManager.Get(NopTaxDefaults.TaxCategoriesAllCacheKey, () =>
+            return await _cacheManager.Get(NopTaxDefaults.TaxCategoriesAllCacheKey, async () =>
             {
                 var query = from tc in _taxCategoryRepository.Table
                             orderby tc.DisplayOrder, tc.Id
                             select tc;
-                var taxCategories = query.ToList();
+                var taxCategories = await query.ToListAsync();
                 return taxCategories;
             });
         }
@@ -74,25 +76,25 @@ namespace Nop.Services.Tax
         /// </summary>
         /// <param name="taxCategoryId">Tax category identifier</param>
         /// <returns>Tax category</returns>
-        public virtual TaxCategory GetTaxCategoryById(int taxCategoryId)
+        public async virtual Task<TaxCategory> GetTaxCategoryById(int taxCategoryId)
         {
             if (taxCategoryId == 0)
                 return null;
 
             var key = string.Format(NopTaxDefaults.TaxCategoriesByIdCacheKey, taxCategoryId);
-            return _cacheManager.Get(key, () => _taxCategoryRepository.GetById(taxCategoryId));
+            return await _cacheManager.Get(key, async () => await _taxCategoryRepository.GetById(taxCategoryId));
         }
 
         /// <summary>
         /// Inserts a tax category
         /// </summary>
         /// <param name="taxCategory">Tax category</param>
-        public virtual void InsertTaxCategory(TaxCategory taxCategory)
+        public async virtual Task InsertTaxCategory(TaxCategory taxCategory)
         {
             if (taxCategory == null)
                 throw new ArgumentNullException(nameof(taxCategory));
 
-            _taxCategoryRepository.Insert(taxCategory);
+            await _taxCategoryRepository.Insert(taxCategory);
 
             _cacheManager.RemoveByPrefix(NopTaxDefaults.TaxCategoriesPrefixCacheKey);
 
@@ -104,12 +106,12 @@ namespace Nop.Services.Tax
         /// Updates the tax category
         /// </summary>
         /// <param name="taxCategory">Tax category</param>
-        public virtual void UpdateTaxCategory(TaxCategory taxCategory)
+        public async virtual Task UpdateTaxCategory(TaxCategory taxCategory)
         {
             if (taxCategory == null)
                 throw new ArgumentNullException(nameof(taxCategory));
 
-            _taxCategoryRepository.Update(taxCategory);
+            await _taxCategoryRepository.Update(taxCategory);
 
             _cacheManager.RemoveByPrefix(NopTaxDefaults.TaxCategoriesPrefixCacheKey);
 

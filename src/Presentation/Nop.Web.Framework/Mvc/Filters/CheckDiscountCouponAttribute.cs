@@ -120,7 +120,7 @@ namespace Nop.Web.Framework.Mvc.Filters
                 foreach (var validCouponCode in validCouponCodes.Distinct())
                 {
                     _notificationService.SuccessNotification(
-                        string.Format(_localizationService.GetResource("ShoppingCart.DiscountCouponCode.Activated"),
+                        string.Format(await _localizationService.GetResource("ShoppingCart.DiscountCouponCode.Activated"),
                             validCouponCode));
                 }
 
@@ -129,7 +129,7 @@ namespace Nop.Web.Framework.Mvc.Filters
                     validCouponCodes.Distinct()))
                 {
                     _notificationService.WarningNotification(
-                        string.Format(_localizationService.GetResource("ShoppingCart.DiscountCouponCode.Invalid"),
+                        string.Format(await _localizationService.GetResource("ShoppingCart.DiscountCouponCode.Invalid"),
                             invalidCouponCode));
                 }
 

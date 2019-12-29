@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core.Domain.Catalog;
@@ -138,7 +139,7 @@ namespace Nop.Services.ExportImport.Help
         /// <param name="row">Row index</param>
         /// <param name="cellOffset">Cell offset</param>
         /// <param name="fWorksheet">Filters worksheet</param>
-        public virtual void WriteToXlsx(ExcelWorksheet worksheet, int row, int cellOffset = 0, ExcelWorksheet fWorksheet = null)
+        public async virtual Task WriteToXlsx(ExcelWorksheet worksheet, int row, int cellOffset = 0, ExcelWorksheet fWorksheet = null)
         {
             if (CurrentObject == null)
                 return;
@@ -193,7 +194,7 @@ namespace Nop.Services.ExportImport.Help
         /// <param name="worksheet">worksheet</param>
         /// <param name="row">Row index</param>
         /// /// <param name="cellOffset">Cell offset</param>
-        public virtual void ReadFromXlsx(ExcelWorksheet worksheet, int row, int cellOffset = 0)
+        public async virtual Task ReadFromXlsx(ExcelWorksheet worksheet, int row, int cellOffset = 0)
         {
             if (worksheet?.Cells == null)
                 return;
@@ -210,7 +211,7 @@ namespace Nop.Services.ExportImport.Help
         /// <param name="worksheet">worksheet</param>
         /// <param name="row">Row number</param>
         /// <param name="cellOffset">Cell offset</param>
-        public virtual void WriteCaption(ExcelWorksheet worksheet, int row = 1, int cellOffset = 0)
+        public async virtual Task WriteCaption(ExcelWorksheet worksheet, int row = 1, int cellOffset = 0)
         {
             foreach (var caption in _properties.Values)
             {

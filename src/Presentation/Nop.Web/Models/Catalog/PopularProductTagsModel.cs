@@ -67,7 +67,7 @@ namespace Nop.Web.Models.Catalog
 
         #region Methods
 
-        public virtual int GetFontSize(ProductTagModel productTag)
+        public async virtual Task<int> GetFontSize(ProductTagModel productTag)
         {
             var itemWeights = new List<double>();
             foreach (var tag in Tags)

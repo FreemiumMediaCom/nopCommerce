@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Customers;
@@ -43,12 +45,12 @@ namespace Nop.Services.Customers
         /// Deletes a customer attribute
         /// </summary>
         /// <param name="customerAttribute">Customer attribute</param>
-        public virtual void DeleteCustomerAttribute(CustomerAttribute customerAttribute)
+        public async virtual Task DeleteCustomerAttribute(CustomerAttribute customerAttribute)
         {
             if (customerAttribute == null)
                 throw new ArgumentNullException(nameof(customerAttribute));
 
-            _customerAttributeRepository.Delete(customerAttribute);
+            await _customerAttributeRepository.Delete(customerAttribute);
 
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributeValuesPrefixCacheKey);
@@ -61,14 +63,14 @@ namespace Nop.Services.Customers
         /// Gets all customer attributes
         /// </summary>
         /// <returns>Customer attributes</returns>
-        public virtual IList<CustomerAttribute> GetAllCustomerAttributes()
+        public async virtual Task<IList<CustomerAttribute>> GetAllCustomerAttributes()
         {
-            return _cacheManager.Get(NopCustomerServiceDefaults.CustomerAttributesAllCacheKey, () =>
+            return await _cacheManager.Get(NopCustomerServiceDefaults.CustomerAttributesAllCacheKey, async () =>
             {
                 var query = from ca in _customerAttributeRepository.Table
                             orderby ca.DisplayOrder, ca.Id
                             select ca;
-                return query.ToList();
+                return await query.ToListAsync();
             });
         }
 
@@ -77,25 +79,25 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerAttributeId">Customer attribute identifier</param>
         /// <returns>Customer attribute</returns>
-        public virtual CustomerAttribute GetCustomerAttributeById(int customerAttributeId)
+        public async virtual Task<CustomerAttribute> GetCustomerAttributeById(int customerAttributeId)
         {
             if (customerAttributeId == 0)
                 return null;
 
             var key = string.Format(NopCustomerServiceDefaults.CustomerAttributesByIdCacheKey, customerAttributeId);
-            return _cacheManager.Get(key, () => _customerAttributeRepository.GetById(customerAttributeId));
+            return await _cacheManager.Get(key, async () => await _customerAttributeRepository.GetById(customerAttributeId));
         }
 
         /// <summary>
         /// Inserts a customer attribute
         /// </summary>
         /// <param name="customerAttribute">Customer attribute</param>
-        public virtual void InsertCustomerAttribute(CustomerAttribute customerAttribute)
+        public async virtual Task InsertCustomerAttribute(CustomerAttribute customerAttribute)
         {
             if (customerAttribute == null)
                 throw new ArgumentNullException(nameof(customerAttribute));
 
-            _customerAttributeRepository.Insert(customerAttribute);
+            await _customerAttributeRepository.Insert(customerAttribute);
 
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributeValuesPrefixCacheKey);
@@ -108,12 +110,12 @@ namespace Nop.Services.Customers
         /// Updates the customer attribute
         /// </summary>
         /// <param name="customerAttribute">Customer attribute</param>
-        public virtual void UpdateCustomerAttribute(CustomerAttribute customerAttribute)
+        public async virtual Task UpdateCustomerAttribute(CustomerAttribute customerAttribute)
         {
             if (customerAttribute == null)
                 throw new ArgumentNullException(nameof(customerAttribute));
 
-            _customerAttributeRepository.Update(customerAttribute);
+            await _customerAttributeRepository.Update(customerAttribute);
 
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributeValuesPrefixCacheKey);
@@ -126,12 +128,12 @@ namespace Nop.Services.Customers
         /// Deletes a customer attribute value
         /// </summary>
         /// <param name="customerAttributeValue">Customer attribute value</param>
-        public virtual void DeleteCustomerAttributeValue(CustomerAttributeValue customerAttributeValue)
+        public async virtual Task DeleteCustomerAttributeValue(CustomerAttributeValue customerAttributeValue)
         {
             if (customerAttributeValue == null)
                 throw new ArgumentNullException(nameof(customerAttributeValue));
 
-            _customerAttributeValueRepository.Delete(customerAttributeValue);
+            await _customerAttributeValueRepository.Delete(customerAttributeValue);
 
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributeValuesPrefixCacheKey);
@@ -145,16 +147,16 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerAttributeId">The customer attribute identifier</param>
         /// <returns>Customer attribute values</returns>
-        public virtual IList<CustomerAttributeValue> GetCustomerAttributeValues(int customerAttributeId)
+        public async virtual Task<IList<CustomerAttributeValue>> GetCustomerAttributeValues(int customerAttributeId)
         {
             var key = string.Format(NopCustomerServiceDefaults.CustomerAttributeValuesAllCacheKey, customerAttributeId);
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async () =>
             {
                 var query = from cav in _customerAttributeValueRepository.Table
                             orderby cav.DisplayOrder, cav.Id
                             where cav.CustomerAttributeId == customerAttributeId
                             select cav;
-                var customerAttributeValues = query.ToList();
+                var customerAttributeValues = await query.ToListAsync();
                 return customerAttributeValues;
             });
         }
@@ -164,25 +166,25 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerAttributeValueId">Customer attribute value identifier</param>
         /// <returns>Customer attribute value</returns>
-        public virtual CustomerAttributeValue GetCustomerAttributeValueById(int customerAttributeValueId)
+        public async virtual Task<CustomerAttributeValue> GetCustomerAttributeValueById(int customerAttributeValueId)
         {
             if (customerAttributeValueId == 0)
                 return null;
 
             var key = string.Format(NopCustomerServiceDefaults.CustomerAttributeValuesByIdCacheKey, customerAttributeValueId);
-            return _cacheManager.Get(key, () => _customerAttributeValueRepository.GetById(customerAttributeValueId));
+            return await _cacheManager.Get(key, async () => await _customerAttributeValueRepository.GetById(customerAttributeValueId));
         }
 
         /// <summary>
         /// Inserts a customer attribute value
         /// </summary>
         /// <param name="customerAttributeValue">Customer attribute value</param>
-        public virtual void InsertCustomerAttributeValue(CustomerAttributeValue customerAttributeValue)
+        public async virtual Task InsertCustomerAttributeValue(CustomerAttributeValue customerAttributeValue)
         {
             if (customerAttributeValue == null)
                 throw new ArgumentNullException(nameof(customerAttributeValue));
 
-            _customerAttributeValueRepository.Insert(customerAttributeValue);
+            await _customerAttributeValueRepository.Insert(customerAttributeValue);
 
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributeValuesPrefixCacheKey);
@@ -195,12 +197,12 @@ namespace Nop.Services.Customers
         /// Updates the customer attribute value
         /// </summary>
         /// <param name="customerAttributeValue">Customer attribute value</param>
-        public virtual void UpdateCustomerAttributeValue(CustomerAttributeValue customerAttributeValue)
+        public async virtual Task UpdateCustomerAttributeValue(CustomerAttributeValue customerAttributeValue)
         {
             if (customerAttributeValue == null)
                 throw new ArgumentNullException(nameof(customerAttributeValue));
 
-            _customerAttributeValueRepository.Update(customerAttributeValue);
+            await _customerAttributeValueRepository.Update(customerAttributeValue);
 
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributesPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopCustomerServiceDefaults.CustomerAttributeValuesPrefixCacheKey);

@@ -141,10 +141,10 @@ namespace Nop.Web.Areas.Admin.Factories
                 //define localized model configuration action
                 localizedModelConfiguration = (locale, languageId) =>
                 {
-                    locale.BccEmailAddresses = _localizationService.GetLocalized(messageTemplate, entity => entity.BccEmailAddresses, languageId, false, false);
-                    locale.Subject = _localizationService.GetLocalized(messageTemplate, entity => entity.Subject, languageId, false, false);
-                    locale.Body = _localizationService.GetLocalized(messageTemplate, entity => entity.Body, languageId, false, false);
-                    locale.EmailAccountId = _localizationService.GetLocalized(messageTemplate, entity => entity.EmailAccountId, languageId, false, false);
+                    locale.BccEmailAddresses = await _localizationService.GetLocalized(messageTemplate, entity => entity.BccEmailAddresses, languageId, false, false);
+                    locale.Subject = await _localizationService.GetLocalized(messageTemplate, entity => entity.Subject, languageId, false, false);
+                    locale.Body = await _localizationService.GetLocalized(messageTemplate, entity => entity.Body, languageId, false, false);
+                    locale.EmailAccountId = await _localizationService.GetLocalized(messageTemplate, entity => entity.EmailAccountId, languageId, false, false);
 
                     //prepare available email accounts
                     _baseAdminModelFactory.PrepareEmailAccounts(locale.AvailableEmailAccounts,
@@ -199,8 +199,8 @@ namespace Nop.Web.Areas.Admin.Factories
             model.LanguageId = languageId;
 
             //filter tokens to the current template
-            var subject = _localizationService.GetLocalized(messageTemplate, entity => entity.Subject, languageId);
-            var body = _localizationService.GetLocalized(messageTemplate, entity => entity.Body, languageId);
+            var subject = await _localizationService.GetLocalized(messageTemplate, entity => entity.Subject, languageId);
+            var body = await _localizationService.GetLocalized(messageTemplate, entity => entity.Body, languageId);
             model.Tokens = _messageTokenProvider.GetListOfAllowedTokens()
                 .Where(token => subject.Contains(token) || body.Contains(token)).ToList();
 

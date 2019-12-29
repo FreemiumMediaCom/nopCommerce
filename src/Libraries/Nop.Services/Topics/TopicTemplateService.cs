@@ -1,6 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Data;
 using Nop.Core.Domain.Topics;
 using Nop.Services.Events;
@@ -36,12 +38,12 @@ namespace Nop.Services.Topics
         /// Delete topic template
         /// </summary>
         /// <param name="topicTemplate">Topic template</param>
-        public virtual void DeleteTopicTemplate(TopicTemplate topicTemplate)
+        public async virtual Task DeleteTopicTemplate(TopicTemplate topicTemplate)
         {
             if (topicTemplate == null)
                 throw new ArgumentNullException(nameof(topicTemplate));
 
-            _topicTemplateRepository.Delete(topicTemplate);
+            await _topicTemplateRepository.Delete(topicTemplate);
 
             //event notification
             _eventPublisher.EntityDeleted(topicTemplate);
@@ -51,13 +53,13 @@ namespace Nop.Services.Topics
         /// Gets all topic templates
         /// </summary>
         /// <returns>Topic templates</returns>
-        public virtual IList<TopicTemplate> GetAllTopicTemplates()
+        public async virtual Task<IList<TopicTemplate>> GetAllTopicTemplates()
         {
             var query = from pt in _topicTemplateRepository.Table
                         orderby pt.DisplayOrder, pt.Id
                         select pt;
 
-            var templates = query.ToList();
+            var templates = await query.ToListAsync();
             return templates;
         }
 
@@ -66,24 +68,24 @@ namespace Nop.Services.Topics
         /// </summary>
         /// <param name="topicTemplateId">Topic template identifier</param>
         /// <returns>Topic template</returns>
-        public virtual TopicTemplate GetTopicTemplateById(int topicTemplateId)
+        public async virtual Task<TopicTemplate> GetTopicTemplateById(int topicTemplateId)
         {
             if (topicTemplateId == 0)
                 return null;
 
-            return _topicTemplateRepository.GetById(topicTemplateId);
+            return await _topicTemplateRepository.GetById(topicTemplateId);
         }
 
         /// <summary>
         /// Inserts topic template
         /// </summary>
         /// <param name="topicTemplate">Topic template</param>
-        public virtual void InsertTopicTemplate(TopicTemplate topicTemplate)
+        public async virtual Task InsertTopicTemplate(TopicTemplate topicTemplate)
         {
             if (topicTemplate == null)
                 throw new ArgumentNullException(nameof(topicTemplate));
 
-            _topicTemplateRepository.Insert(topicTemplate);
+            await _topicTemplateRepository.Insert(topicTemplate);
 
             //event notification
             _eventPublisher.EntityInserted(topicTemplate);
@@ -93,12 +95,12 @@ namespace Nop.Services.Topics
         /// Updates the topic template
         /// </summary>
         /// <param name="topicTemplate">Topic template</param>
-        public virtual void UpdateTopicTemplate(TopicTemplate topicTemplate)
+        public async virtual Task UpdateTopicTemplate(TopicTemplate topicTemplate)
         {
             if (topicTemplate == null)
                 throw new ArgumentNullException(nameof(topicTemplate));
 
-            _topicTemplateRepository.Update(topicTemplate);
+            await _topicTemplateRepository.Update(topicTemplate);
 
             //event notification
             _eventPublisher.EntityUpdated(topicTemplate);

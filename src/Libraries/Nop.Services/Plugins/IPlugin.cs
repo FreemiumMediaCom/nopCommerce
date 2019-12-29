@@ -1,4 +1,6 @@
-﻿namespace Nop.Services.Plugins
+﻿using System.Threading.Tasks;
+
+namespace Nop.Services.Plugins
 {
     /// <summary>
     /// Interface denoting plug-in attributes that are displayed throughout 
@@ -9,7 +11,7 @@
         /// <summary>
         /// Gets a configuration page URL
         /// </summary>
-        string GetConfigurationPageUrl();
+        Task<string> GetConfigurationPageUrl();
 
         /// <summary>
         /// Gets or sets the plugin descriptor
@@ -19,16 +21,16 @@
         /// <summary>
         /// Install plugin
         /// </summary>
-        void Install();
+        Task Install();
 
         /// <summary>
         /// Uninstall plugin
         /// </summary>
-        void Uninstall();
+        Task Uninstall();
 
         /// <summary>
         /// Prepare plugin to the uninstallation
         /// </summary>
-        void PreparePluginToUninstall();
+        Task PreparePluginToUninstall();
     }
 }

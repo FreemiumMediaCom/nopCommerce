@@ -77,12 +77,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Customer attributes
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -95,7 +95,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(CustomerAttributeSearchModel searchModel)
+        public async virtual Task<IActionResult> List(CustomerAttributeSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedDataTablesJson();
@@ -106,7 +106,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -118,7 +118,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(CustomerAttributeModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(CustomerAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -130,13 +130,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewCustomerAttribute",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewCustomerAttribute"), customerAttribute.Id),
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewCustomerAttribute"), customerAttribute.Id),
                     customerAttribute);
 
                 //locales
                 UpdateAttributeLocales(customerAttribute, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.CustomerAttributes.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.CustomerAttributes.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
@@ -151,7 +151,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -168,7 +168,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(CustomerAttributeModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(CustomerAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -187,13 +187,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("EditCustomerAttribute",
-                string.Format(_localizationService.GetResource("ActivityLog.EditCustomerAttribute"), customerAttribute.Id),
+                string.Format(await _localizationService.GetResource("ActivityLog.EditCustomerAttribute"), customerAttribute.Id),
                 customerAttribute);
 
             //locales
             UpdateAttributeLocales(customerAttribute, model);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.CustomerAttributes.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.CustomerAttributes.Updated"));
 
             if (!continueEditing)
                 return RedirectToAction("List");
@@ -202,7 +202,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -212,10 +212,10 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteCustomerAttribute",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteCustomerAttribute"), customerAttribute.Id),
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteCustomerAttribute"), customerAttribute.Id),
                 customerAttribute);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Customers.CustomerAttributes.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Customers.CustomerAttributes.Deleted"));
             return RedirectToAction("List");
         }
 
@@ -224,7 +224,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Customer attribute values
 
         [HttpPost]
-        public virtual IActionResult ValueList(CustomerAttributeValueSearchModel searchModel)
+        public async virtual Task<IActionResult> ValueList(CustomerAttributeValueSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedDataTablesJson();
@@ -239,7 +239,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult ValueCreatePopup(int customerAttributeId)
+        public async virtual Task<IActionResult> ValueCreatePopup(int customerAttributeId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -257,7 +257,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueCreatePopup(CustomerAttributeValueModel model)
+        public async virtual Task<IActionResult> ValueCreatePopup(CustomerAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -274,7 +274,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewCustomerAttributeValue",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewCustomerAttributeValue"), cav.Id), cav);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewCustomerAttributeValue"), cav.Id), cav);
 
                 UpdateValueLocales(cav, model);
 
@@ -290,7 +290,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ValueEditPopup(int id)
+        public async virtual Task<IActionResult> ValueEditPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -312,7 +312,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueEditPopup(CustomerAttributeValueModel model)
+        public async virtual Task<IActionResult> ValueEditPopup(CustomerAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -334,7 +334,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditCustomerAttributeValue",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditCustomerAttributeValue"), customerAttributeValue.Id),
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditCustomerAttributeValue"), customerAttributeValue.Id),
                     customerAttributeValue);
 
                 UpdateValueLocales(customerAttributeValue, model);
@@ -352,7 +352,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueDelete(int id)
+        public async virtual Task<IActionResult> ValueDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -365,7 +365,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteCustomerAttributeValue",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteCustomerAttributeValue"), customerAttributeValue.Id),
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteCustomerAttributeValue"), customerAttributeValue.Id),
                 customerAttributeValue);
 
             return new NullJsonResult();

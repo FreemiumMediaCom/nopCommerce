@@ -1,6 +1,8 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Nop.Core.Domain.Gdpr;
+using System.Threading.Tasks;
+
 
 namespace Nop.Data.Mapping.Gdpr
 {

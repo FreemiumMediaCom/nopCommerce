@@ -351,7 +351,7 @@ namespace Nop.Plugin.Misc.SendinBlue.Services
                 };
 
                 //get shopping cart GUID
-                var shoppingCartGuid = _genericAttributeService.GetAttribute<Guid?>(order,
+                var shoppingCartGuid = await _genericAttributeService.GetAttribute<Guid?>(order,
                     SendinBlueDefaults.ShoppingCartGuidAttribute) ?? Guid.NewGuid();
 
                 //create track event object
@@ -382,7 +382,7 @@ namespace Nop.Plugin.Misc.SendinBlue.Services
                 return;
 
             //copy shopping cart GUID to order
-            var shoppingCartGuid = _genericAttributeService.GetAttribute<Guid?>(order.Customer, SendinBlueDefaults.ShoppingCartGuidAttribute);
+            var shoppingCartGuid = await _genericAttributeService.GetAttribute<Guid?>(order.Customer, SendinBlueDefaults.ShoppingCartGuidAttribute);
             _genericAttributeService.SaveAttribute(order, SendinBlueDefaults.ShoppingCartGuidAttribute, shoppingCartGuid);
         }
 

@@ -159,7 +159,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult ChangeStoreScopeConfiguration(int storeid, string returnUrl = "")
+        public async virtual Task<IActionResult> ChangeStoreScopeConfiguration(int storeid, string returnUrl = "")
         {
             var store = _storeService.GetStoreById(storeid);
             if (store != null || storeid == 0)
@@ -179,7 +179,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Redirect(returnUrl);
         }
 
-        public virtual IActionResult Blog()
+        public async virtual Task<IActionResult> Blog()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -190,7 +190,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult Blog(BlogSettingsModel model)
+        public async virtual Task<IActionResult> Blog(BlogSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -216,14 +216,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("Blog");
         }
 
-        public virtual IActionResult Vendor()
+        public async virtual Task<IActionResult> Vendor()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -234,7 +234,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult Vendor(VendorSettingsModel model)
+        public async virtual Task<IActionResult> Vendor(VendorSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -263,14 +263,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("Vendor");
         }
 
-        public virtual IActionResult Forum()
+        public async virtual Task<IActionResult> Forum()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -281,7 +281,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult Forum(ForumSettingsModel model)
+        public async virtual Task<IActionResult> Forum(ForumSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -322,14 +322,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("Forum");
         }
 
-        public virtual IActionResult News()
+        public async virtual Task<IActionResult> News()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -340,7 +340,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult News(NewsSettingsModel model)
+        public async virtual Task<IActionResult> News(NewsSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -367,14 +367,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("News");
         }
 
-        public virtual IActionResult Shipping()
+        public async virtual Task<IActionResult> Shipping()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -385,7 +385,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult Shipping(ShippingSettingsModel model)
+        public async virtual Task<IActionResult> Shipping(ShippingSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -443,14 +443,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("Shipping");
         }
 
-        public virtual IActionResult Tax()
+        public async virtual Task<IActionResult> Tax()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -461,7 +461,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult Tax(TaxSettingsModel model)
+        public async virtual Task<IActionResult> Tax(TaxSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -527,14 +527,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("Tax");
         }
 
-        public virtual IActionResult Catalog()
+        public async virtual Task<IActionResult> Catalog()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -545,7 +545,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult Catalog(CatalogSettingsModel model)
+        public async virtual Task<IActionResult> Catalog(CatalogSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -637,14 +637,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("Catalog");
         }
         [HttpPost]
-        public virtual IActionResult SortOptionsList(SortOptionSearchModel searchModel)
+        public async virtual Task<IActionResult> SortOptionsList(SortOptionSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedDataTablesJson();
@@ -655,7 +655,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
         [HttpPost]
-        public virtual IActionResult SortOptionUpdate(SortOptionModel model)
+        public async virtual Task<IActionResult> SortOptionUpdate(SortOptionModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -674,7 +674,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult RewardPoints()
+        public async virtual Task<IActionResult> RewardPoints()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -685,7 +685,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult RewardPoints(RewardPointsSettingsModel model)
+        public async virtual Task<IActionResult> RewardPoints(RewardPointsSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -723,9 +723,9 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _settingService.ClearCache();
 
                 //activity log
-                _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+                _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
             }
             else
             {
@@ -738,7 +738,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("RewardPoints");
         }
 
-        public virtual IActionResult Order()
+        public async virtual Task<IActionResult> Order()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -749,7 +749,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult Order(OrderSettingsModel model)
+        public async virtual Task<IActionResult> Order(OrderSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -810,9 +810,9 @@ namespace Nop.Web.Areas.Admin.Controllers
                 }
 
                 //activity log
-                _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+                _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
             }
             else
             {
@@ -825,7 +825,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("Order");
         }
 
-        public virtual IActionResult ShoppingCart()
+        public async virtual Task<IActionResult> ShoppingCart()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -836,7 +836,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult ShoppingCart(ShoppingCartSettingsModel model)
+        public async virtual Task<IActionResult> ShoppingCart(ShoppingCartSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -873,14 +873,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("ShoppingCart");
         }
 
-        public virtual IActionResult Media()
+        public async virtual Task<IActionResult> Media()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -892,7 +892,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult Media(MediaSettingsModel model)
+        public async virtual Task<IActionResult> Media(MediaSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -925,15 +925,15 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("Media");
         }
         [HttpPost, ActionName("Media")]
         [FormValueRequired("change-picture-storage")]
-        public virtual IActionResult ChangePictureStorage()
+        public async virtual Task<IActionResult> ChangePictureStorage()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -952,14 +952,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("Media");
         }
 
-        public virtual IActionResult CustomerUser()
+        public async virtual Task<IActionResult> CustomerUser()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -970,7 +970,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult CustomerUser(CustomerUserSettingsModel model)
+        public async virtual Task<IActionResult> CustomerUser(CustomerUserSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1002,7 +1002,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     customerSettings.UsernameValidationEnabled = lastUsernameValidationEnabledValue;
                     customerSettings.UsernameValidationUseRegex = lastUsernameValidationUseRegexValue;
 
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Configuration.Settings.CustomerSettings.RegexValidationRule.Error"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Configuration.Settings.CustomerSettings.RegexValidationRule.Error"));
                 }
             }
 
@@ -1019,16 +1019,16 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.SaveSetting(externalAuthenticationSettings);
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("CustomerUser");
         }
 
         #region GDPR
 
-        public virtual IActionResult Gdpr()
+        public async virtual Task<IActionResult> Gdpr()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1039,7 +1039,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult Gdpr(GdprSettingsModel model)
+        public async virtual Task<IActionResult> Gdpr(GdprSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1061,14 +1061,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("Gdpr");
         }
         [HttpPost]
-        public virtual IActionResult GdprConsentList(GdprConsentSearchModel searchModel)
+        public async virtual Task<IActionResult> GdprConsentList(GdprConsentSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedDataTablesJson();
@@ -1078,7 +1078,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             return Json(model);
         }
-        public virtual IActionResult CreateGdprConsent()
+        public async virtual Task<IActionResult> CreateGdprConsent()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1090,7 +1090,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult CreateGdprConsent(GdprConsentModel model, bool continueEditing)
+        public async virtual Task<IActionResult> CreateGdprConsent(GdprConsentModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1103,7 +1103,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales                
                 UpdateGdprConsentLocales(gdprConsent, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.Gdpr.Consent.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.Gdpr.Consent.Added"));
 
                 return continueEditing ? RedirectToAction("EditGdprConsent", new { gdprConsent.Id }) : RedirectToAction("Gdpr");
             }
@@ -1114,7 +1114,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             //if we got this far, something failed, redisplay form
             return View(model);
         }
-        public virtual IActionResult EditGdprConsent(int id)
+        public async virtual Task<IActionResult> EditGdprConsent(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1130,7 +1130,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult EditGdprConsent(GdprConsentModel model, bool continueEditing)
+        public async virtual Task<IActionResult> EditGdprConsent(GdprConsentModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1148,7 +1148,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //locales                
                 UpdateGdprConsentLocales(gdprConsent, model);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.Gdpr.Consent.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.Gdpr.Consent.Updated"));
 
                 return continueEditing ? RedirectToAction("EditGdprConsent", gdprConsent.Id) : RedirectToAction("Gdpr");
             }
@@ -1160,7 +1160,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult DeleteGdprConsent(int id)
+        public async virtual Task<IActionResult> DeleteGdprConsent(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1172,14 +1172,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             _gdprService.DeleteConsent(gdprConsent);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.Gdpr.Consent.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.Gdpr.Consent.Deleted"));
 
             return RedirectToAction("Gdpr");
         }
 
         #endregion
 
-        public virtual IActionResult GeneralCommon()
+        public async virtual Task<IActionResult> GeneralCommon()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1189,13 +1189,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //notify admin that CSS bundling is not allowed in virtual directories
             if (model.MinificationSettings.EnableCssBundling && HttpContext.Request.PathBase.HasValue)
-                _notificationService.WarningNotification(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.EnableCssBundling.Warning"));
+                _notificationService.WarningNotification(await _localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.EnableCssBundling.Warning"));
 
             return View(model);
         }
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult GeneralCommon(GeneralCommonSettingsModel model)
+        public async virtual Task<IActionResult> GeneralCommon(GeneralCommonSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1363,7 +1363,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 (string.IsNullOrWhiteSpace(captchaSettings.ReCaptchaPublicKey) || string.IsNullOrWhiteSpace(captchaSettings.ReCaptchaPrivateKey)))
             {
                 //captcha is enabled but the keys are not entered
-                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.CaptchaAppropriateKeysNotEnteredError"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.CaptchaAppropriateKeysNotEnteredError"));
             }
 
             //PDF settings
@@ -1488,15 +1488,15 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.ClearCache();
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"));
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Updated"));
 
             return RedirectToAction("GeneralCommon");
         }
         [HttpPost, ActionName("GeneralCommon")]
         [FormValueRequired("changeencryptionkey")]
-        public virtual IActionResult ChangeEncryptionKey(GeneralCommonSettingsModel model)
+        public async virtual Task<IActionResult> ChangeEncryptionKey(GeneralCommonSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1513,14 +1513,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 var newEncryptionPrivateKey = model.SecuritySettings.EncryptionKey;
                 if (string.IsNullOrEmpty(newEncryptionPrivateKey) || newEncryptionPrivateKey.Length != 16)
-                    throw new NopException(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.EncryptionKey.TooShort"));
+                    throw new NopException(await _localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.EncryptionKey.TooShort"));
 
                 var oldEncryptionPrivateKey = securitySettings.EncryptionKey;
                 if (oldEncryptionPrivateKey == newEncryptionPrivateKey)
-                    throw new NopException(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.EncryptionKey.TheSame"));
+                    throw new NopException(await _localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.EncryptionKey.TheSame"));
 
                 //update encrypted order info
-                var orders = _orderService.SearchOrders();
+                var orders = await _orderService.SearchOrders();
                 foreach (var order in orders)
                 {
                     var decryptedCardType = _encryptionService.DecryptText(order.CardType, oldEncryptionPrivateKey);
@@ -1564,7 +1564,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 securitySettings.EncryptionKey = newEncryptionPrivateKey;
                 _settingService.SaveSetting(securitySettings);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.EncryptionKey.Changed"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.EncryptionKey.Changed"));
             }
             catch (Exception exc)
             {
@@ -1575,7 +1575,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
         [HttpPost, ActionName("GeneralCommon")]
         [FormValueRequired("togglefulltext")]
-        public virtual IActionResult ToggleFullText(GeneralCommonSettingsModel model)
+        public async virtual Task<IActionResult> ToggleFullText(GeneralCommonSettingsModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1585,7 +1585,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             try
             {
                 if (!_fulltextService.IsFullTextSupported())
-                    throw new NopException(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.FullTextSettings.NotSupported"));
+                    throw new NopException(await _localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.FullTextSettings.NotSupported"));
 
                 if (commonSettings.UseFullTextSearch)
                 {
@@ -1594,7 +1594,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     commonSettings.UseFullTextSearch = false;
                     _settingService.SaveSetting(commonSettings);
 
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.FullTextSettings.Disabled"));
+                    _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.FullTextSettings.Disabled"));
                 }
                 else
                 {
@@ -1603,7 +1603,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     commonSettings.UseFullTextSearch = true;
                     _settingService.SaveSetting(commonSettings);
 
-                    _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.FullTextSettings.Enabled"));
+                    _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.FullTextSettings.Enabled"));
                 }
             }
             catch (Exception exc)
@@ -1615,7 +1615,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult UploadIconsArchive(IFormFile archivefile)
+        public async virtual Task<IActionResult> UploadIconsArchive(IFormFile archivefile)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1624,7 +1624,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             {
                 if (archivefile == null || archivefile.Length == 0)
                 {
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Common.UploadFile"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Common.UploadFile"));
                     return RedirectToAction("GeneralCommon");
                 }
 
@@ -1638,7 +1638,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 if (!_fileProvider.FileExists(headCodePath))
                 {
-                    throw new Exception(string.Format(_localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.MissingFile"), NopCommonDefaults.HeadCodeFileName));
+                    throw new Exception(string.Format(await _localizationService.GetResource("Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.MissingFile"), NopCommonDefaults.HeadCodeFileName));
                 }
 
                 using (var sr = new StreamReader(headCodePath))
@@ -1656,8 +1656,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 }
 
                 //activity log
-                _customerActivityService.InsertActivity("UploadIconsArchive", string.Format(_localizationService.GetResource("ActivityLog.UploadNewIconsArchive"), _storeContext.ActiveStoreScopeConfiguration));
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.FaviconAndAppIcons.Uploaded"));
+                _customerActivityService.InsertActivity("UploadIconsArchive", string.Format(await _localizationService.GetResource("ActivityLog.UploadNewIconsArchive"), _storeContext.ActiveStoreScopeConfiguration));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Configuration.FaviconAndAppIcons.Uploaded"));
             }
             catch (Exception exc)
             {
@@ -1667,7 +1667,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("GeneralCommon");
         }
 
-        public virtual IActionResult AllSettings(string settingName)
+        public async virtual Task<IActionResult> AllSettings(string settingName)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1678,7 +1678,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public virtual IActionResult AllSettings(SettingSearchModel searchModel)
+        public async virtual Task<IActionResult> AllSettings(SettingSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedDataTablesJson();
@@ -1689,7 +1689,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
         [HttpPost]
-        public virtual IActionResult SettingUpdate(SettingModel model)
+        public async virtual Task<IActionResult> SettingUpdate(SettingModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1715,12 +1715,12 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.SetSetting(model.Name, model.Value, setting.StoreId);
 
             //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"), setting);
+            _customerActivityService.InsertActivity("EditSettings", await _localizationService.GetResource("ActivityLog.EditSettings"), setting);
 
             return new NullJsonResult();
         }
         [HttpPost]
-        public virtual IActionResult SettingAdd(SettingModel model)
+        public async virtual Task<IActionResult> SettingAdd(SettingModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1739,13 +1739,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("AddNewSetting",
-                string.Format(_localizationService.GetResource("ActivityLog.AddNewSetting"), model.Name),
+                string.Format(await _localizationService.GetResource("ActivityLog.AddNewSetting"), model.Name),
                 _settingService.GetSetting(model.Name, storeId));
 
             return Json(new { Result = true });
         }
         [HttpPost]
-        public virtual IActionResult SettingDelete(int id)
+        public async virtual Task<IActionResult> SettingDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -1758,20 +1758,20 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteSetting",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteSetting"), setting.Name), setting);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteSetting"), setting.Name), setting);
 
             return new NullJsonResult();
         }
 
         //action displaying notification (warning) to a store owner about a lot of traffic 
         //between the Redis server and the application when LoadAllLocaleRecordsOnStartup setting is set
-        public IActionResult RedisCacheHighTrafficWarning(bool loadAllLocaleRecordsOnStartup)
+        public async Task<IActionResult> RedisCacheHighTrafficWarning(bool loadAllLocaleRecordsOnStartup)
         {
             //LoadAllLocaleRecordsOnStartup is set and Redis cache is used, so display warning
             if (_config.RedisEnabled && _config.UseRedisForCaching && loadAllLocaleRecordsOnStartup)
                 return Json(new
                 {
-                    Result = _localizationService.GetResource(
+                    Result = await _localizationService.GetResource(
                         "Admin.Configuration.Settings.GeneralCommon.LoadAllLocaleRecordsOnStartup.Warning")
                 });
 

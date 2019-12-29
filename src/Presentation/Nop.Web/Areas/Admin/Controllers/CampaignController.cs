@@ -17,7 +17,7 @@ using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Web.Areas.Admin.Controllers
 {
-    public partial class CampaignController : BaseAdminController
+    public async partial class CampaignController : BaseAdminController
     {
         #region Fields
 
@@ -80,12 +80,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -97,7 +97,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(CampaignSearchModel searchModel)
+        public async virtual Task<IActionResult> List(CampaignSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedDataTablesJson();
@@ -108,7 +108,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -120,7 +120,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(CampaignModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Create(CampaignModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -137,9 +137,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewCampaign",
-                    string.Format(_localizationService.GetResource("ActivityLog.AddNewCampaign"), campaign.Id), campaign);
+                    string.Format(await _localizationService.GetResource("ActivityLog.AddNewCampaign"), campaign.Id), campaign);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Promotions.Campaigns.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Promotions.Campaigns.Added"));
 
                 return continueEditing ? RedirectToAction("Edit", new { id = campaign.Id }) : RedirectToAction("List");
             }
@@ -151,7 +151,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -170,7 +170,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         [HttpPost]
         [ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(CampaignModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(CampaignModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -191,9 +191,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //activity log
                 _customerActivityService.InsertActivity("EditCampaign",
-                    string.Format(_localizationService.GetResource("ActivityLog.EditCampaign"), campaign.Id), campaign);
+                    string.Format(await _localizationService.GetResource("ActivityLog.EditCampaign"), campaign.Id), campaign);
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Promotions.Campaigns.Updated"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Promotions.Campaigns.Updated"));
 
                 return continueEditing ? RedirectToAction("Edit", new { id = campaign.Id }) : RedirectToAction("List");
             }
@@ -207,7 +207,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("send-test-email")]
-        public virtual IActionResult SendTestEmail(CampaignModel model)
+        public async virtual Task<IActionResult> SendTestEmail(CampaignModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -223,7 +223,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             //ensure that the entered email is valid
             if (!CommonHelper.IsValidEmail(model.TestEmail))
             {
-                _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Common.WrongEmail"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Admin.Common.WrongEmail"));
                 return View(model);
             }
 
@@ -243,7 +243,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     _campaignService.SendCampaign(campaign, emailAccount, model.TestEmail);
                 }
 
-                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Promotions.Campaigns.TestEmailSentToCustomers"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Promotions.Campaigns.TestEmailSentToCustomers"));
 
                 return View(model);
             }
@@ -261,7 +261,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("send-mass-email")]
-        public virtual IActionResult SendMassEmail(CampaignModel model)
+        public async virtual Task<IActionResult> SendMassEmail(CampaignModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -285,7 +285,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     isActive: true);
                 var totalEmailsSent = _campaignService.SendCampaign(campaign, emailAccount, subscriptions);
 
-                _notificationService.SuccessNotification(string.Format(_localizationService.GetResource("Admin.Promotions.Campaigns.MassEmailSentToCustomers"), totalEmailsSent));
+                _notificationService.SuccessNotification(string.Format(await _localizationService.GetResource("Admin.Promotions.Campaigns.MassEmailSentToCustomers"), totalEmailsSent));
 
                 return View(model);
             }
@@ -302,7 +302,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -316,9 +316,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //activity log
             _customerActivityService.InsertActivity("DeleteCampaign",
-                string.Format(_localizationService.GetResource("ActivityLog.DeleteCampaign"), campaign.Id), campaign);
+                string.Format(await _localizationService.GetResource("ActivityLog.DeleteCampaign"), campaign.Id), campaign);
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Promotions.Campaigns.Deleted"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Admin.Promotions.Campaigns.Deleted"));
 
             return RedirectToAction("List");
         }

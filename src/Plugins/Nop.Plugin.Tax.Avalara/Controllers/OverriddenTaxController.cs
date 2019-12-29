@@ -96,13 +96,13 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
         }
 
         [HttpPost]
-        public IActionResult TaxCategoryUpdate(Models.Tax.TaxCategoryModel model)
+        public async Task<IActionResult> TaxCategoryUpdate(Models.Tax.TaxCategoryModel model)
         {
             return base.CategoryUpdate(model);
         }
 
         [HttpPost]
-        public IActionResult TaxCategoryAdd(Models.Tax.TaxCategoryModel model)
+        public async Task<IActionResult> TaxCategoryAdd(Models.Tax.TaxCategoryModel model)
         {
             //ensure that Avalara tax provider is active
             if (!_taxPluginManager.IsPluginActive(AvalaraTaxDefaults.SystemName))
@@ -151,7 +151,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
 
         [HttpPost, ActionName("Categories")]
         [FormValueRequired("importTaxCodes")]
-        public IActionResult ImportTaxCodes()
+        public async Task<IActionResult> ImportTaxCodes()
         {
             //ensure that Avalara tax provider is active
             if (!_taxPluginManager.IsPluginActive(AvalaraTaxDefaults.SystemName))
@@ -164,7 +164,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
             var systemTaxCodes = _avalaraTaxManager.GetSystemTaxCodes(true);
             if (!systemTaxCodes?.Any() ?? true)
             {
-                _notificationService.ErrorNotification(_localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Import.Error"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Import.Error"));
                 return Categories();
             }
 
@@ -194,7 +194,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
             }
 
             //successfully imported
-            var successMessage = _localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Import.Success");
+            var successMessage = await _localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Import.Success");
             _notificationService.SuccessNotification(string.Format(successMessage, importedTaxCodesNumber));
 
             return Categories();
@@ -202,7 +202,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
 
         [HttpPost, ActionName("Categories")]
         [FormValueRequired("exportTaxCodes")]
-        public IActionResult ExportTaxCodes()
+        public async Task<IActionResult> ExportTaxCodes()
         {
             //ensure that Avalara tax provider is active
             if (!_taxPluginManager.IsPluginActive(AvalaraTaxDefaults.SystemName))
@@ -240,19 +240,19 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
 
                 //display results
                 if (result.HasValue && result > 0)
-                    _notificationService.SuccessNotification(string.Format(_localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Export.Success"), result));
+                    _notificationService.SuccessNotification(string.Format(await _localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Export.Success"), result));
                 else
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Export.Error"));
+                    _notificationService.ErrorNotification(await _localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Export.Error"));
             }
             else
-                _notificationService.SuccessNotification(_localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Export.AlreadyExported"));
+                _notificationService.SuccessNotification(await _localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Export.AlreadyExported"));
 
             return Categories();
         }
 
         [HttpPost, ActionName("Categories")]
         [FormValueRequired("deleteTaxCodes")]
-        public IActionResult DeleteSystemTaxCodes()
+        public async Task<IActionResult> DeleteSystemTaxCodes()
         {
             //ensure that Avalara tax provider is active
             if (!_taxPluginManager.IsPluginActive(AvalaraTaxDefaults.SystemName))
@@ -265,7 +265,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
             var systemTaxCodes = _avalaraTaxManager.GetSystemTaxCodes(true)?.Select(taxCode => taxCode.taxCode).ToList();
             if (!systemTaxCodes?.Any() ?? true)
             {
-                _notificationService.ErrorNotification(_localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Delete.Error"));
+                _notificationService.ErrorNotification(await _localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Delete.Error"));
                 return Categories();
             }
 
@@ -283,7 +283,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
                 _taxCategoryService.DeleteTaxCategory(taxCategory);
             }
 
-            _notificationService.SuccessNotification(_localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Delete.Success"));
+            _notificationService.SuccessNotification(await _localizationService.GetResource("Plugins.Tax.Avalara.TaxCodes.Delete.Success"));
 
             return Categories();
         }

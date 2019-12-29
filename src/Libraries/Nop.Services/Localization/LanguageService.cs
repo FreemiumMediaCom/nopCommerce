@@ -1,7 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Localization;
@@ -52,7 +54,7 @@ namespace Nop.Services.Localization
         /// Deletes a language
         /// </summary>
         /// <param name="language">Language</param>
-        public virtual void DeleteLanguage(Language language)
+        public virtual async Task DeleteLanguage(Language language)
         {
             if (language == null)
                 throw new ArgumentNullException(nameof(language));
@@ -63,9 +65,9 @@ namespace Nop.Services.Localization
             //update default admin area language (if required)
             if (_localizationSettings.DefaultAdminLanguageId == language.Id)
             {
-                foreach (var activeLanguage in GetAllLanguages())
+                foreach (var activeLanguage in await GetAllLanguages())
                 {
-                    if (activeLanguage.Id == language.Id) 
+                    if (activeLanguage.Id == language.Id)
                         continue;
 
                     _localizationSettings.DefaultAdminLanguageId = activeLanguage.Id;
@@ -74,7 +76,7 @@ namespace Nop.Services.Localization
                 }
             }
 
-            _languageRepository.Delete(language);
+            await _languageRepository.Delete(language);
 
             //cache
             _cacheManager.RemoveByPrefix(NopLocalizationDefaults.LanguagesPrefixCacheKey);
@@ -90,14 +92,15 @@ namespace Nop.Services.Localization
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Languages</returns>
-        public virtual IList<Language> GetAllLanguages(bool showHidden = false, int storeId = 0, bool loadCacheableCopy = true)
+        public virtual async Task<IList<Language>> GetAllLanguages(bool showHidden = false, int storeId = 0, bool loadCacheableCopy = true)
         {
-            IList<Language> LoadLanguagesFunc()
+            async Task<IList<Language>> LoadLanguagesFunc()
             {
                 var query = _languageRepository.Table;
-                if (!showHidden) query = query.Where(l => l.Published);
+                if (!showHidden)
+                    query = query.Where(l => l.Published);
                 query = query.OrderBy(l => l.DisplayOrder).ThenBy(l => l.Id);
-                return query.ToList();
+                return await query.ToListAsync();
             }
 
             IList<Language> languages;
@@ -105,17 +108,17 @@ namespace Nop.Services.Localization
             {
                 //cacheable copy
                 var key = string.Format(NopLocalizationDefaults.LanguagesAllCacheKey, showHidden);
-                languages = _cacheManager.Get(key, () =>
+                languages = await _cacheManager.Get(key, async() =>
                 {
                     var result = new List<Language>();
-                    foreach (var language in LoadLanguagesFunc())
+                    foreach (var language in await LoadLanguagesFunc())
                         result.Add(new LanguageForCaching(language));
                     return result;
                 });
             }
             else
             {
-                languages = LoadLanguagesFunc();
+                languages = await LoadLanguagesFunc();
             }
 
             //store mapping
@@ -135,24 +138,20 @@ namespace Nop.Services.Localization
         /// <param name="languageId">Language identifier</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Language</returns>
-        public virtual Language GetLanguageById(int languageId, bool loadCacheableCopy = true)
+        public virtual async Task<Language> GetLanguageById(int languageId, bool loadCacheableCopy = true)
         {
             if (languageId == 0)
                 return null;
 
-            Language LoadLanguageFunc()
-            {
-                return _languageRepository.GetById(languageId);
-            }
-
-            if (!loadCacheableCopy) 
-                return LoadLanguageFunc();
+            if (!loadCacheableCopy)
+                return await _languageRepository.GetById(languageId);
 
             //cacheable copy
             var key = string.Format(NopLocalizationDefaults.LanguagesByIdCacheKey, languageId);
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async () =>
             {
-                var language = LoadLanguageFunc();
+                var language = await _languageRepository.GetById(languageId);
+
                 return language == null ? null : new LanguageForCaching(language);
             });
         }
@@ -161,7 +160,7 @@ namespace Nop.Services.Localization
         /// Inserts a language
         /// </summary>
         /// <param name="language">Language</param>
-        public virtual void InsertLanguage(Language language)
+        public virtual async Task InsertLanguage(Language language)
         {
             if (language == null)
                 throw new ArgumentNullException(nameof(language));
@@ -169,7 +168,7 @@ namespace Nop.Services.Localization
             if (language is IEntityForCaching)
                 throw new ArgumentException("Cacheable entities are not supported by Entity Framework");
 
-            _languageRepository.Insert(language);
+            await _languageRepository.Insert(language);
 
             //cache
             _cacheManager.RemoveByPrefix(NopLocalizationDefaults.LanguagesPrefixCacheKey);
@@ -182,7 +181,7 @@ namespace Nop.Services.Localization
         /// Updates a language
         /// </summary>
         /// <param name="language">Language</param>
-        public virtual void UpdateLanguage(Language language)
+        public virtual async Task UpdateLanguage(Language language)
         {
             if (language == null)
                 throw new ArgumentNullException(nameof(language));
@@ -191,7 +190,7 @@ namespace Nop.Services.Localization
                 throw new ArgumentException("Cacheable entities are not supported by Entity Framework");
 
             //update language
-            _languageRepository.Update(language);
+            await _languageRepository.Update(language);
 
             //cache
             _cacheManager.RemoveByPrefix(NopLocalizationDefaults.LanguagesPrefixCacheKey);
@@ -205,7 +204,7 @@ namespace Nop.Services.Localization
         /// </summary>
         /// <param name="language">Language</param>
         /// <returns>ISO language code</returns>
-        public virtual string GetTwoLetterIsoLanguageName(Language language)
+        public virtual async Task<string> GetTwoLetterIsoLanguageName(Language language)
         {
             if (language == null)
                 throw new ArgumentNullException(nameof(language));

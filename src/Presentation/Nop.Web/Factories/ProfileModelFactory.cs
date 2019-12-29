@@ -90,7 +90,7 @@ namespace Nop.Web.Factories
             }
 
             var name = _customerService.FormatUsername(customer);
-            var title = string.Format(_localizationService.GetResource("Profile.ProfileOf"), name);
+            var title = string.Format(await _localizationService.GetResource("Profile.ProfileOf"), name);
 
             var model = new ProfileIndexModel
             {
@@ -131,11 +131,11 @@ namespace Nop.Web.Factories
             {
                 locationEnabled = true;
 
-                var countryId = _genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.CountryIdAttribute);
+                var countryId = await _genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.CountryIdAttribute);
                 var country = _countryService.GetCountryById(countryId);
                 if (country != null)
                 {
-                    location = _localizationService.GetLocalized(country, x => x.Name);
+                    location = await _localizationService.GetLocalized(country, x => x.Name);
                 }
                 else
                 {
@@ -152,7 +152,7 @@ namespace Nop.Web.Factories
             if (_forumSettings.ForumsEnabled && _forumSettings.ShowCustomersPostCount)
             {
                 totalPostsEnabled = true;
-                totalPosts = _genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.ForumPostCountAttribute);
+                totalPosts = await _genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.ForumPostCountAttribute);
             }
 
             //registration date
@@ -170,7 +170,7 @@ namespace Nop.Web.Factories
             var dateOfBirth = string.Empty;
             if (_customerSettings.DateOfBirthEnabled)
             {
-                var dob = _genericAttributeService.GetAttribute<DateTime?>(customer, NopCustomerDefaults.DateOfBirthAttribute);
+                var dob = await _genericAttributeService.GetAttribute<DateTime?>(customer, NopCustomerDefaults.DateOfBirthAttribute);
                 if (dob.HasValue)
                 {
                     dateOfBirthEnabled = true;
@@ -225,7 +225,7 @@ namespace Nop.Web.Factories
                 {
                     var languageCode = _workContext.WorkingLanguage.LanguageCulture;
                     var postedAgo = forumPost.CreatedOnUtc.RelativeFormat(languageCode);
-                    posted = string.Format(_localizationService.GetResource("Common.RelativeDateTime.Past"), postedAgo);
+                    posted = string.Format(await _localizationService.GetResource("Common.RelativeDateTime.Past"), postedAgo);
                 }
                 else
                 {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Directory;
@@ -43,12 +45,12 @@ namespace Nop.Services.Directory
         /// Deletes a state/province
         /// </summary>
         /// <param name="stateProvince">The state/province</param>
-        public virtual void DeleteStateProvince(StateProvince stateProvince)
+        public async virtual Task DeleteStateProvince(StateProvince stateProvince)
         {
             if (stateProvince == null)
                 throw new ArgumentNullException(nameof(stateProvince));
 
-            _stateProvinceRepository.Delete(stateProvince);
+            await _stateProvinceRepository.Delete(stateProvince);
 
             _cacheManager.RemoveByPrefix(NopDirectoryDefaults.StateProvincesPrefixCacheKey);
 
@@ -61,12 +63,12 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="stateProvinceId">The state/province identifier</param>
         /// <returns>State/province</returns>
-        public virtual StateProvince GetStateProvinceById(int stateProvinceId)
+        public async virtual Task<StateProvince> GetStateProvinceById(int stateProvinceId)
         {
             if (stateProvinceId == 0)
                 return null;
 
-            return _stateProvinceRepository.GetById(stateProvinceId);
+            return await _stateProvinceRepository.GetById(stateProvinceId);
         }
 
         /// <summary>
@@ -75,13 +77,13 @@ namespace Nop.Services.Directory
         /// <param name="abbreviation">The state/province abbreviation</param>
         /// <param name="countryId">Country identifier; pass null to load the state regardless of a country</param>
         /// <returns>State/province</returns>
-        public virtual StateProvince GetStateProvinceByAbbreviation(string abbreviation, int? countryId = null)
+        public async virtual Task<StateProvince> GetStateProvinceByAbbreviation(string abbreviation, int? countryId = null)
         {
             if (string.IsNullOrEmpty(abbreviation))
                 return null;
 
             var key = string.Format(NopDirectoryDefaults.StateProvincesByAbbreviationCacheKey, abbreviation, countryId.HasValue ? countryId.Value : 0);
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async () =>
             {
                 var query = _stateProvinceRepository.Table.Where(state => state.Abbreviation == abbreviation);
 
@@ -89,7 +91,7 @@ namespace Nop.Services.Directory
                 if (countryId.HasValue)
                     query = query.Where(state => state.CountryId == countryId);
 
-                return query.FirstOrDefault();
+                return await query.FirstOrDefaultAsync();
             });
         }
 
@@ -100,17 +102,17 @@ namespace Nop.Services.Directory
         /// <param name="languageId">Language identifier. It's used to sort states by localized names (if specified); pass 0 to skip it</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>States</returns>
-        public virtual IList<StateProvince> GetStateProvincesByCountryId(int countryId, int languageId = 0, bool showHidden = false)
+        public async virtual Task<IList<StateProvince>> GetStateProvincesByCountryId(int countryId, int languageId = 0, bool showHidden = false)
         {
             var key = string.Format(NopDirectoryDefaults.StateProvincesAllCacheKey, countryId, languageId, showHidden);
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async () =>
             {
                 var query = from sp in _stateProvinceRepository.Table
                             orderby sp.DisplayOrder, sp.Name
                             where sp.CountryId == countryId &&
                             (showHidden || sp.Published)
                             select sp;
-                var stateProvinces = query.ToList();
+                var stateProvinces = await query.ToListAsync();
 
                 if (languageId > 0)
                 {
@@ -130,13 +132,13 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>States</returns>
-        public virtual IList<StateProvince> GetStateProvinces(bool showHidden = false)
+        public async virtual Task<IList<StateProvince>> GetStateProvinces(bool showHidden = false)
         {
             var query = from sp in _stateProvinceRepository.Table
                         orderby sp.CountryId, sp.DisplayOrder, sp.Name
                         where showHidden || sp.Published
                         select sp;
-            var stateProvinces = query.ToList();
+            var stateProvinces = await query.ToListAsync();
             return stateProvinces;
         }
 
@@ -144,12 +146,12 @@ namespace Nop.Services.Directory
         /// Inserts a state/province
         /// </summary>
         /// <param name="stateProvince">State/province</param>
-        public virtual void InsertStateProvince(StateProvince stateProvince)
+        public async virtual Task InsertStateProvince(StateProvince stateProvince)
         {
             if (stateProvince == null)
                 throw new ArgumentNullException(nameof(stateProvince));
 
-            _stateProvinceRepository.Insert(stateProvince);
+            await _stateProvinceRepository.Insert(stateProvince);
 
             _cacheManager.RemoveByPrefix(NopDirectoryDefaults.StateProvincesPrefixCacheKey);
 
@@ -161,12 +163,12 @@ namespace Nop.Services.Directory
         /// Updates a state/province
         /// </summary>
         /// <param name="stateProvince">State/province</param>
-        public virtual void UpdateStateProvince(StateProvince stateProvince)
+        public async virtual Task UpdateStateProvince(StateProvince stateProvince)
         {
             if (stateProvince == null)
                 throw new ArgumentNullException(nameof(stateProvince));
 
-            _stateProvinceRepository.Update(stateProvince);
+            await _stateProvinceRepository.Update(stateProvince);
 
             _cacheManager.RemoveByPrefix(NopDirectoryDefaults.StateProvincesPrefixCacheKey);
 
