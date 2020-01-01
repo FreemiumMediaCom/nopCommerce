@@ -81,7 +81,7 @@ namespace Nop.Web.Framework.Extensions
                 foreach (var locale in helper.ViewData.Model.Locales)
                 {
                     //languages
-                    var language = languageService.GetLanguageById(locale.LanguageId);
+                    var language = languageService.GetLanguageById(locale.LanguageId).Result;
                     if (language == null)
                         throw new Exception("Language cannot be loaded");
 

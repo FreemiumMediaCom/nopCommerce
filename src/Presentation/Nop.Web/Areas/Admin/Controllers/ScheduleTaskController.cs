@@ -47,12 +47,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageScheduleTasks))
                 return AccessDeniedView();
@@ -64,7 +64,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(ScheduleTaskSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(ScheduleTaskSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageScheduleTasks))
                 return AccessDeniedDataTablesJson();
@@ -76,7 +76,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult TaskUpdate(ScheduleTaskModel model)
+        public  async virtual Task<IActionResult> TaskUpdate(ScheduleTaskModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageScheduleTasks))
                 return AccessDeniedView();
@@ -99,7 +99,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult RunNow(int id)
+        public  async virtual Task<IActionResult> RunNow(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageScheduleTasks))
                 return AccessDeniedView();

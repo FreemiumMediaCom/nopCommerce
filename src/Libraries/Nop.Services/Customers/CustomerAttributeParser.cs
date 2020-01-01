@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -87,7 +87,7 @@ namespace Nop.Services.Customers
             var ids = ParseCustomerAttributeIds(attributesXml);
             foreach (var id in ids)
             {
-                var attribute = _customerAttributeService.GetCustomerAttributeById(id);
+                var attribute = _customerAttributeService.GetCustomerAttributeById(id).Result;
                 if (attribute != null)
                 {
                     result.Add(attribute);
@@ -123,7 +123,7 @@ namespace Nop.Services.Customers
                     if (!int.TryParse(valueStr, out var id)) 
                         continue;
 
-                    var value = _customerAttributeService.GetCustomerAttributeValueById(id);
+                    var value = _customerAttributeService.GetCustomerAttributeValueById(id).Result;
                     if (value != null)
                         values.Add(value);
                 }

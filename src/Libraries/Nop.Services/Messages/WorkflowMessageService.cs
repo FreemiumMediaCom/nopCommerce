@@ -111,7 +111,7 @@ namespace Nop.Services.Messages
         /// <returns>EmailAccount</returns>
         protected virtual EmailAccount GetEmailAccountOfMessageTemplate(MessageTemplate messageTemplate, int languageId)
         {
-            var emailAccountId = _localizationService.GetLocalized(messageTemplate, mt => mt.EmailAccountId, languageId);
+            var emailAccountId = _localizationService.GetLocalized(messageTemplate, mt => mt.EmailAccountId, languageId).Result;
             //some 0 validation (for localizable "Email account" dropdownlist which saves 0 if "Standard" value is chosen)
             if (emailAccountId == 0)
                 emailAccountId = messageTemplate.EmailAccountId;
@@ -130,18 +130,18 @@ namespace Nop.Services.Messages
         protected virtual int EnsureLanguageIsActive(int languageId, int storeId)
         {
             //load language by specified ID
-            var language = _languageService.GetLanguageById(languageId);
+            var language = _languageService.GetLanguageById(languageId).Result;
 
             if (language == null || !language.Published)
             {
                 //load any language from the specified store
-                language = _languageService.GetAllLanguages(storeId: storeId).FirstOrDefault();
+                language = _languageService.GetAllLanguages(storeId: storeId).Result.FirstOrDefault();
             }
 
             if (language == null || !language.Published)
             {
                 //load any language
-                language = _languageService.GetAllLanguages().FirstOrDefault();
+                language = _languageService.GetAllLanguages().Result.FirstOrDefault();
             }
 
             if (language == null)
@@ -458,7 +458,7 @@ namespace Nop.Services.Messages
             if (order == null)
                 throw new ArgumentNullException(nameof(order));
 
-            var affiliate = _affiliateService.GetAffiliateById(order.AffiliateId);
+            var affiliate = _affiliateService.GetAffiliateById(order.AffiliateId).Result;
 
             if (affiliate == null)
                 throw new ArgumentNullException(nameof(affiliate));
@@ -545,7 +545,7 @@ namespace Nop.Services.Messages
             if (order == null)
                 throw new ArgumentNullException(nameof(order));
 
-            var affiliate = _affiliateService.GetAffiliateById(order.AffiliateId);
+            var affiliate = _affiliateService.GetAffiliateById(order.AffiliateId).Result;
 
             if (affiliate == null)
                 throw new ArgumentNullException(nameof(affiliate));
@@ -2247,10 +2247,10 @@ namespace Nop.Services.Messages
                 throw new ArgumentNullException(nameof(emailAccount));
 
             //retrieve localized message template data
-            var bcc = _localizationService.GetLocalized(messageTemplate, mt => mt.BccEmailAddresses, languageId);
+            var bcc = _localizationService.GetLocalized(messageTemplate, mt => mt.BccEmailAddresses, languageId).Result;
             if (string.IsNullOrEmpty(subject))
-                subject = _localizationService.GetLocalized(messageTemplate, mt => mt.Subject, languageId);
-            var body = _localizationService.GetLocalized(messageTemplate, mt => mt.Body, languageId);
+                subject = _localizationService.GetLocalized(messageTemplate, mt => mt.Subject, languageId).Result;
+            var body = _localizationService.GetLocalized(messageTemplate, mt => mt.Body, languageId).Result;
 
             //Replace subject and body tokens 
             var subjectReplaced = _tokenizer.Replace(subject, tokens, false);

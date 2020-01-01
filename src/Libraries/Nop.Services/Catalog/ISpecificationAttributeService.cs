@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 
@@ -16,7 +17,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="specificationAttributeId">The specification attribute identifier</param>
         /// <returns>Specification attribute</returns>
-        SpecificationAttribute GetSpecificationAttributeById(int specificationAttributeId);
+        Task<SpecificationAttribute> GetSpecificationAttributeById(int specificationAttributeId);
 
         /// <summary>
         /// Gets specification attributes
@@ -59,7 +60,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="specificationAttributeOption">The specification attribute option</param>
         /// <returns>Specification attribute option</returns>
-        SpecificationAttributeOption GetSpecificationAttributeOptionById(int specificationAttributeOption);
+        Task<SpecificationAttributeOption> GetSpecificationAttributeOptionById(int specificationAttributeOption);
 
         /// <summary>
         /// Get specification attribute options by identifiers
@@ -126,7 +127,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productSpecificationAttributeId">Product specification attribute mapping identifier</param>
         /// <returns>Product specification attribute mapping</returns>
-        ProductSpecificationAttribute GetProductSpecificationAttributeById(int productSpecificationAttributeId);
+        Task<ProductSpecificationAttribute> GetProductSpecificationAttributeById(int productSpecificationAttributeId);
 
         /// <summary>
         /// Inserts a product specification attribute mapping

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -82,12 +83,12 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="attributeId">Attribute identifier</param>
         /// <returns>An attribute</returns>
-        public virtual GenericAttribute GetAttributeById(int attributeId)
+        public async virtual Task<GenericAttribute> GetAttributeById(int attributeId)
         {
             if (attributeId == 0)
                 return null;
 
-            return _genericAttributeRepository.GetById(attributeId);
+            return await _genericAttributeRepository.GetById(attributeId);
         }
 
         /// <summary>

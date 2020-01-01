@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
@@ -96,7 +96,7 @@ namespace Nop.Services.Gdpr
             if (gdprConsentId == 0)
                 return null;
 
-            return _gdprConsentRepository.GetById(gdprConsentId);
+            return _gdprConsentRepository.GetById(gdprConsentId).Result;
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Nop.Services.Gdpr
             if (gdprLogId == 0)
                 return null;
 
-            return _gdprLogRepository.GetById(gdprLogId);
+            return _gdprLogRepository.GetById(gdprLogId).Result;
         }
 
         /// <summary>

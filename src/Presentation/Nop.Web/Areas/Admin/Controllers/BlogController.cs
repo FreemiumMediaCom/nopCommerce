@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Blogs;
 using Nop.Services.Blogs;
@@ -95,12 +96,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Blog posts
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("BlogPosts");
         }
 
-        public virtual IActionResult BlogPosts(int? filterByBlogPostId)
+        public  async virtual Task<IActionResult> BlogPosts(int? filterByBlogPostId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -112,7 +113,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(BlogPostSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(BlogPostSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedDataTablesJson();
@@ -123,7 +124,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult BlogPostCreate()
+        public  async virtual Task<IActionResult> BlogPostCreate()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -135,7 +136,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult BlogPostCreate(BlogPostModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> BlogPostCreate(BlogPostModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -172,13 +173,13 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult BlogPostEdit(int id)
+        public async virtual Task<IActionResult> BlogPostEdit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
 
             //try to get a blog post with the specified id
-            var blogPost = _blogService.GetBlogPostById(id);
+            var blogPost = await _blogService.GetBlogPostById(id);
             if (blogPost == null)
                 return RedirectToAction("BlogPosts");
 
@@ -189,13 +190,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult BlogPostEdit(BlogPostModel model, bool continueEditing)
+        public async virtual Task<IActionResult> BlogPostEdit(BlogPostModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
 
             //try to get a blog post with the specified id
-            var blogPost = _blogService.GetBlogPostById(model.Id);
+            var blogPost = await _blogService.GetBlogPostById(model.Id);
             if (blogPost == null)
                 return RedirectToAction("BlogPosts");
 
@@ -231,13 +232,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
 
             //try to get a blog post with the specified id
-            var blogPost = _blogService.GetBlogPostById(id);
+            var blogPost = await _blogService.GetBlogPostById(id);
             if (blogPost == null)
                 return RedirectToAction("BlogPosts");
 
@@ -256,13 +257,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Comments
 
-        public virtual IActionResult BlogComments(int? filterByBlogPostId)
+        public async virtual Task<IActionResult> BlogComments(int? filterByBlogPostId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
 
             //try to get a blog post with the specified id
-            var blogPost = _blogService.GetBlogPostById(filterByBlogPostId ?? 0);
+            var blogPost = await _blogService.GetBlogPostById(filterByBlogPostId ?? 0);
             if (blogPost == null && filterByBlogPostId.HasValue)
                 return RedirectToAction("BlogComments");
 
@@ -273,7 +274,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Comments(BlogCommentSearchModel searchModel)
+        public  async virtual Task<IActionResult> Comments(BlogCommentSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedDataTablesJson();
@@ -285,13 +286,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CommentUpdate(BlogCommentModel model)
+        public async virtual Task<IActionResult> CommentUpdate(BlogCommentModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
 
             //try to get a blog comment with the specified id
-            var comment = _blogService.GetBlogCommentById(model.Id)
+            var comment = await _blogService.GetBlogCommentById(model.Id)
                 ?? throw new ArgumentException("No comment found with the specified id");
 
             var previousIsApproved = comment.IsApproved;
@@ -311,13 +312,13 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult CommentDelete(int id)
+        public async virtual Task<IActionResult> CommentDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
 
             //try to get a blog comment with the specified id
-            var comment = _blogService.GetBlogCommentById(id)
+            var comment = await _blogService.GetBlogCommentById(id)
                 ?? throw new ArgumentException("No comment found with the specified id", nameof(id));
 
             _blogService.DeleteBlogComment(comment);
@@ -330,7 +331,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteSelectedComments(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> DeleteSelectedComments(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -352,7 +353,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ApproveSelected(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> ApproveSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();
@@ -380,7 +381,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DisapproveSelected(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> DisapproveSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageBlog))
                 return AccessDeniedView();

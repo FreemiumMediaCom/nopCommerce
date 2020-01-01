@@ -127,7 +127,7 @@ namespace Nop.Services.Messages
             if (emailAccountId == 0)
                 return null;
 
-            return _emailAccountRepository.GetById(emailAccountId);
+            return _emailAccountRepository.GetById(emailAccountId).Result;
         }
 
         /// <summary>

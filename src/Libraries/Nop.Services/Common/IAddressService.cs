@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Common;
 
 namespace Nop.Services.Common
@@ -33,7 +34,7 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="addressId">Address identifier</param>
         /// <returns>Address</returns>
-        Address GetAddressById(int addressId);
+        Task<Address> GetAddressById(int addressId);
 
         /// <summary>
         /// Inserts an address

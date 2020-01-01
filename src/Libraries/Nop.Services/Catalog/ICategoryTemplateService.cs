@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Catalog;
 
 namespace Nop.Services.Catalog
@@ -25,7 +26,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="categoryTemplateId">Category template identifier</param>
         /// <returns>Category template</returns>
-        CategoryTemplate GetCategoryTemplateById(int categoryTemplateId);
+        Task<CategoryTemplate> GetCategoryTemplateById(int categoryTemplateId);
 
         /// <summary>
         /// Inserts category template

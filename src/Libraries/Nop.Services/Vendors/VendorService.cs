@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Vendors;
@@ -42,12 +43,12 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorId">Vendor identifier</param>
         /// <returns>Vendor</returns>
-        public virtual Vendor GetVendorById(int vendorId)
+        public async virtual Task<Vendor> GetVendorById(int vendorId)
         {
             if (vendorId == 0)
                 return null;
 
-            return _vendorRepository.GetById(vendorId);
+            return await _vendorRepository.GetById(vendorId);
         }
 
         /// <summary>
@@ -138,12 +139,12 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorNoteId">The vendor note identifier</param>
         /// <returns>Vendor note</returns>
-        public virtual VendorNote GetVendorNoteById(int vendorNoteId)
+        public async virtual Task<VendorNote> GetVendorNoteById(int vendorNoteId)
         {
             if (vendorNoteId == 0)
                 return null;
 
-            return _vendorNoteRepository.GetById(vendorNoteId);
+            return await _vendorNoteRepository.GetById(vendorNoteId);
         }
 
         /// <summary>

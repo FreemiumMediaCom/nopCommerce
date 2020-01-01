@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -224,10 +225,10 @@ namespace Nop.Web.Framework.Controllers
         /// <param name="languageService">Language service</param>
         /// <param name="locales">Locales</param>
         /// <param name="configure">Configure action</param>
-        protected virtual void AddLocales<TLocalizedModelLocal>(ILanguageService languageService, 
+        protected async virtual Task AddLocales<TLocalizedModelLocal>(ILanguageService languageService, 
             IList<TLocalizedModelLocal> locales, Action<TLocalizedModelLocal, int> configure) where TLocalizedModelLocal : ILocalizedLocaleModel
         {
-            foreach (var language in languageService.GetAllLanguages(true))
+            foreach (var language in await languageService.GetAllLanguages(true))
             {
                 var locale = Activator.CreateInstance<TLocalizedModelLocal>();
                 locale.LanguageId = language.Id;
@@ -248,7 +249,7 @@ namespace Nop.Web.Framework.Controllers
         /// Access denied view
         /// </summary>
         /// <returns>Access denied view</returns>
-        protected virtual IActionResult AccessDeniedView()
+        protected  virtual IActionResult AccessDeniedView()
         {
             var webHelper = EngineContext.Current.Resolve<IWebHelper>();
 

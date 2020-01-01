@@ -358,7 +358,7 @@ namespace Nop.Services.Seo
 
             var updatedOn = dateTimeUpdatedOn ?? DateTime.UtcNow;
             var languages = _localizationSettings.SeoFriendlyUrlsForLanguagesEnabled
-                ? _languageService.GetAllLanguages()
+                ? _languageService.GetAllLanguages().Result
                 : null;
 
             if (languages == null)

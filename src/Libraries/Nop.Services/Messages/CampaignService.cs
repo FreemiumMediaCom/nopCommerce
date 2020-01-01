@@ -107,7 +107,7 @@ namespace Nop.Services.Messages
             if (campaignId == 0)
                 return null;
 
-            return _campaignRepository.GetById(campaignId);
+            return _campaignRepository.GetById(campaignId).Result;
         }
 
         /// <summary>

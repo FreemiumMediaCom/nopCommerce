@@ -355,7 +355,7 @@ namespace Nop.Services.Catalog
                 return null;
 
             var key = string.Format(NopCatalogDefaults.CategoriesByIdCacheKey, categoryId);
-            return _cacheManager.Get(key, () => _categoryRepository.GetById(categoryId));
+            return _cacheManager.Get(key, () => _categoryRepository.GetById(categoryId).Result);
         }
 
         /// <summary>
@@ -562,7 +562,7 @@ namespace Nop.Services.Catalog
             if (productCategoryId == 0)
                 return null;
 
-            return _productCategoryRepository.GetById(productCategoryId);
+            return _productCategoryRepository.GetById(productCategoryId).Result;
         }
 
         /// <summary>
@@ -725,7 +725,7 @@ namespace Nop.Services.Catalog
             var breadcrumb = GetCategoryBreadCrumb(category, allCategories, true);
             for (var i = 0; i <= breadcrumb.Count - 1; i++)
             {
-                var categoryName = _localizationService.GetLocalized(breadcrumb[i], x => x.Name, languageId);
+                var categoryName = _localizationService.GetLocalized(breadcrumb[i], x => x.Name, languageId).Result;
                 result = string.IsNullOrEmpty(result) ? categoryName : $"{result} {separator} {categoryName}";
             }
 

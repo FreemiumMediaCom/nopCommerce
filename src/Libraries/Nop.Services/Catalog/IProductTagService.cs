@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Catalog;
 
 namespace Nop.Services.Catalog
@@ -32,7 +33,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productTagId">Product tag identifier</param>
         /// <returns>Product tag</returns>
-        ProductTag GetProductTagById(int productTagId);
+        Task<ProductTag> GetProductTagById(int productTagId);
         
         /// <summary>
         /// Gets product tag by name

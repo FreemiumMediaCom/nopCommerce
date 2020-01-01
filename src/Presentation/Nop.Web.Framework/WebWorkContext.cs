@@ -162,7 +162,7 @@ namespace Nop.Web.Framework
                 return null;
 
             //try to get language by culture name
-            var requestLanguage = _languageService.GetAllLanguages().FirstOrDefault(language =>
+            var requestLanguage = _languageService.GetAllLanguages().Result.FirstOrDefault(language =>
                 language.LanguageCulture.Equals(requestCulture.Culture.Name, StringComparison.InvariantCultureIgnoreCase));
 
             //check language availability
@@ -217,7 +217,7 @@ namespace Nop.Web.Framework
                         .GetAttribute<int?>(customer, NopCustomerDefaults.ImpersonatedCustomerIdAttribute);
                     if (impersonatedCustomerId.HasValue && impersonatedCustomerId.Value > 0)
                     {
-                        var impersonatedCustomer = _customerService.GetCustomerById(impersonatedCustomerId.Value);
+                        var impersonatedCustomer = _customerService.GetCustomerById(impersonatedCustomerId.Value).Result;
                         if (impersonatedCustomer != null && !impersonatedCustomer.Deleted && impersonatedCustomer.Active && !impersonatedCustomer.RequireReLogin)
                         {
                             //set impersonated customer
@@ -290,7 +290,7 @@ namespace Nop.Web.Framework
                     return null;
 
                 //try to get vendor
-                var vendor = _vendorService.GetVendorById(CurrentCustomer.VendorId);
+                var vendor = _vendorService.GetVendorById(CurrentCustomer.VendorId).Result;
 
                 //check vendor availability
                 if (vendor == null || vendor.Deleted || !vendor.Active)
@@ -359,7 +359,7 @@ namespace Nop.Web.Framework
                 var customerLanguageId = _genericAttributeService.GetAttribute<int>(CurrentCustomer,
                     NopCustomerDefaults.LanguageIdAttribute, _storeContext.CurrentStore.Id);
 
-                var allStoreLanguages = _languageService.GetAllLanguages(storeId: _storeContext.CurrentStore.Id);
+                var allStoreLanguages = _languageService.GetAllLanguages(storeId: _storeContext.CurrentStore.Id).Result;
 
                 //check customer language availability
                 var customerLanguage = allStoreLanguages.FirstOrDefault(language => language.Id == customerLanguageId);
@@ -375,7 +375,7 @@ namespace Nop.Web.Framework
 
                 //if there are no languages for the current store try to get the first one regardless of the store
                 if (customerLanguage == null)
-                    customerLanguage = _languageService.GetAllLanguages().FirstOrDefault();
+                    customerLanguage = _languageService.GetAllLanguages().Result.FirstOrDefault();
 
                 //cache the found language
                 _cachedLanguage = customerLanguage;
@@ -410,7 +410,7 @@ namespace Nop.Web.Framework
                 //return primary store currency when we're in admin area/mode
                 if (IsAdmin)
                 {
-                    var primaryStoreCurrency = _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId);
+                    var primaryStoreCurrency = _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId).Result;
                     if (primaryStoreCurrency != null)
                     {
                         _cachedCurrency = primaryStoreCurrency;

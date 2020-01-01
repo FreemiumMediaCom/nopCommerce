@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Topics;
 
 namespace Nop.Services.Topics
@@ -25,7 +26,7 @@ namespace Nop.Services.Topics
         /// </summary>
         /// <param name="topicTemplateId">Topic template identifier</param>
         /// <returns>Topic template</returns>
-        TopicTemplate GetTopicTemplateById(int topicTemplateId);
+        Task<TopicTemplate> GetTopicTemplateById(int topicTemplateId);
 
         /// <summary>
         /// Inserts topic template

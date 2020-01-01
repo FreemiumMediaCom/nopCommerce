@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Customers;
 
 namespace Nop.Services.Customers
@@ -25,7 +26,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerAttributeId">Customer attribute identifier</param>
         /// <returns>Customer attribute</returns>
-        CustomerAttribute GetCustomerAttributeById(int customerAttributeId);
+        Task<CustomerAttribute> GetCustomerAttributeById(int customerAttributeId);
 
         /// <summary>
         /// Inserts a customer attribute
@@ -57,7 +58,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerAttributeValueId">Customer attribute value identifier</param>
         /// <returns>Customer attribute value</returns>
-        CustomerAttributeValue GetCustomerAttributeValueById(int customerAttributeValueId);
+        Task<CustomerAttributeValue> GetCustomerAttributeValueById(int customerAttributeValueId);
 
         /// <summary>
         /// Inserts a customer attribute value

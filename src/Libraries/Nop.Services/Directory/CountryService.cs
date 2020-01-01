@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -141,13 +143,13 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="countryId">Country identifier</param>
         /// <returns>Country</returns>
-        public virtual Country GetCountryById(int countryId)
+        public async virtual Task<Country> GetCountryById(int countryId)
         {
             if (countryId == 0)
                 return null;
 
             var key = string.Format(NopDirectoryDefaults.CountriesByIdCacheKey, countryId);
-            return _cacheManager.Get(key, () => _countryRepository.GetById(countryId));
+            return await _cacheManager.Get(key, async () => await _countryRepository.GetById(countryId));
         }
 
         /// <summary>
@@ -181,18 +183,18 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="twoLetterIsoCode">Country two letter ISO code</param>
         /// <returns>Country</returns>
-        public virtual Country GetCountryByTwoLetterIsoCode(string twoLetterIsoCode)
+        public async virtual Task<Country> GetCountryByTwoLetterIsoCode(string twoLetterIsoCode)
         {
             if (string.IsNullOrEmpty(twoLetterIsoCode))
                 return null;
 
             var key = string.Format(NopDirectoryDefaults.CountriesByTwoLetterCodeCacheKey, twoLetterIsoCode);
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async () =>
             {
                 var query = from c in _countryRepository.Table
                             where c.TwoLetterIsoCode == twoLetterIsoCode
                             select c;
-                return query.FirstOrDefault();
+                return await query.FirstOrDefaultAsync();
             });
         }
 

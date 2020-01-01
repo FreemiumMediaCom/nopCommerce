@@ -119,7 +119,7 @@ namespace Nop.Services.Messages
             if (messageTemplateId == 0)
                 return null;
 
-            return _messageTemplateRepository.GetById(messageTemplateId);
+            return _messageTemplateRepository.GetById(messageTemplateId).Result;
         }
 
         /// <summary>
@@ -205,24 +205,24 @@ namespace Nop.Services.Messages
 
             InsertMessageTemplate(mtCopy);
 
-            var languages = _languageService.GetAllLanguages(true);
+            var languages = _languageService.GetAllLanguages(true).Result;
 
             //localization
             foreach (var lang in languages)
             {
-                var bccEmailAddresses = _localizationService.GetLocalized(messageTemplate, x => x.BccEmailAddresses, lang.Id, false, false);
+                var bccEmailAddresses = _localizationService.GetLocalized(messageTemplate, x => x.BccEmailAddresses, lang.Id, false, false).Result;
                 if (!string.IsNullOrEmpty(bccEmailAddresses))
                     _localizedEntityService.SaveLocalizedValue(mtCopy, x => x.BccEmailAddresses, bccEmailAddresses, lang.Id);
 
-                var subject = _localizationService.GetLocalized(messageTemplate, x => x.Subject, lang.Id, false, false);
+                var subject = _localizationService.GetLocalized(messageTemplate, x => x.Subject, lang.Id, false, false).Result;
                 if (!string.IsNullOrEmpty(subject))
                     _localizedEntityService.SaveLocalizedValue(mtCopy, x => x.Subject, subject, lang.Id);
 
-                var body = _localizationService.GetLocalized(messageTemplate, x => x.Body, lang.Id, false, false);
+                var body = _localizationService.GetLocalized(messageTemplate, x => x.Body, lang.Id, false, false).Result;
                 if (!string.IsNullOrEmpty(body))
                     _localizedEntityService.SaveLocalizedValue(mtCopy, x => x.Body, body, lang.Id);
 
-                var emailAccountId = _localizationService.GetLocalized(messageTemplate, x => x.EmailAccountId, lang.Id, false, false);
+                var emailAccountId = _localizationService.GetLocalized(messageTemplate, x => x.EmailAccountId, lang.Id, false, false).Result;
                 if (emailAccountId > 0)
                     _localizedEntityService.SaveLocalizedValue(mtCopy, x => x.EmailAccountId, emailAccountId, lang.Id);
             }

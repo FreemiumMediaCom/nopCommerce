@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Blogs;
 
@@ -23,7 +24,7 @@ namespace Nop.Services.Blogs
         /// </summary>
         /// <param name="blogPostId">Blog post identifier</param>
         /// <returns>Blog post</returns>
-        BlogPost GetBlogPostById(int blogPostId);
+        Task<BlogPost> GetBlogPostById(int blogPostId);
 
         /// <summary>
         /// Gets blog posts
@@ -129,7 +130,7 @@ namespace Nop.Services.Blogs
         /// </summary>
         /// <param name="blogCommentId">Blog comment identifier</param>
         /// <returns>Blog comment</returns>
-        BlogComment GetBlogCommentById(int blogCommentId);
+        Task<BlogComment> GetBlogCommentById(int blogCommentId);
 
         /// <summary>
         /// Get blog comments by identifiers

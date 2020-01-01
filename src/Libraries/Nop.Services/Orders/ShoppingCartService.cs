@@ -341,7 +341,7 @@ namespace Nop.Services.Orders
                     continue;
 
                 //prepare warning message
-                var requiredProductName = WebUtility.HtmlEncode(_localizationService.GetLocalized(requiredProduct, x => x.Name));
+                var requiredProductName = WebUtility.HtmlEncode(_localizationService.GetLocalized(requiredProduct, x => x.Name).Result);
                 var requiredProductWarning = _catalogSettings.UseLinksInRequiredProductWarnings
                     ? string.Format(warningLocale, $"<a href=\"{urlHelper.RouteUrl(nameof(Product), new { SeName = _urlRecordService.GetSeName(requiredProduct) })}\">{requiredProductName}</a>", requiredProductRequiredQuantity)
                     : string.Format(warningLocale, requiredProductName, requiredProductRequiredQuantity);
@@ -443,8 +443,8 @@ namespace Nop.Services.Orders
                 if (customerEnteredPrice < product.MinimumCustomerEnteredPrice ||
                     customerEnteredPrice > product.MaximumCustomerEnteredPrice)
                 {
-                    var minimumCustomerEnteredPrice = _currencyService.ConvertFromPrimaryStoreCurrency(product.MinimumCustomerEnteredPrice, _workContext.WorkingCurrency);
-                    var maximumCustomerEnteredPrice = _currencyService.ConvertFromPrimaryStoreCurrency(product.MaximumCustomerEnteredPrice, _workContext.WorkingCurrency);
+                    var minimumCustomerEnteredPrice = _currencyService.ConvertFromPrimaryStoreCurrency(product.MinimumCustomerEnteredPrice, _workContext.WorkingCurrency).Result;
+                    var maximumCustomerEnteredPrice = _currencyService.ConvertFromPrimaryStoreCurrency(product.MaximumCustomerEnteredPrice, _workContext.WorkingCurrency).Result;
                     warnings.Add(string.Format(_localizationService.GetResource("ShoppingCart.CustomerEnteredPrice.RangeError"),
                         _priceFormatter.FormatPrice(minimumCustomerEnteredPrice, false, false),
                         _priceFormatter.FormatPrice(maximumCustomerEnteredPrice, false, false)));
@@ -695,10 +695,10 @@ namespace Nop.Services.Orders
                     //if not found
                     if (!found)
                     {
-                        var textPrompt = _localizationService.GetLocalized(a2, x => x.TextPrompt);
+                        var textPrompt = _localizationService.GetLocalized(a2, x => x.TextPrompt).Result;
                         var notFoundWarning = !string.IsNullOrEmpty(textPrompt) ?
                             textPrompt :
-                            string.Format(_localizationService.GetResource("ShoppingCart.SelectAttribute"), _localizationService.GetLocalized(a2.ProductAttribute, a => a.Name));
+                            string.Format(_localizationService.GetResource("ShoppingCart.SelectAttribute"), _localizationService.GetLocalized(a2.ProductAttribute, a => a.Name).Result);
 
                         warnings.Add(notFoundWarning);
                     }
@@ -1048,10 +1048,10 @@ namespace Nop.Services.Orders
                     continue;
 
                 //if not found
-                warnings.Add(!string.IsNullOrEmpty(_localizationService.GetLocalized(a2, a => a.TextPrompt))
-                    ? _localizationService.GetLocalized(a2, a => a.TextPrompt)
+                warnings.Add(!string.IsNullOrEmpty(_localizationService.GetLocalized(a2, a => a.TextPrompt).Result)
+                    ? _localizationService.GetLocalized(a2, a => a.TextPrompt).Result
                     : string.Format(_localizationService.GetResource("ShoppingCart.SelectAttribute"),
-                        _localizationService.GetLocalized(a2, a => a.Name)));
+                        _localizationService.GetLocalized(a2, a => a.Name).Result));
             }
 
             //now validation rules

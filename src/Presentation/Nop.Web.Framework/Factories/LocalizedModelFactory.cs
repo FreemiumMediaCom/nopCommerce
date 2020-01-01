@@ -37,7 +37,7 @@ namespace Nop.Web.Framework.Factories
         public virtual IList<T> PrepareLocalizedModels<T>(Action<T, int> configure = null) where T : ILocalizedLocaleModel
         {
             //get all available languages
-            var availableLanguages = _languageService.GetAllLanguages(showHidden: true);
+            var availableLanguages = _languageService.GetAllLanguages(showHidden: true).Result;
 
             //prepare models
             var localizedModels = availableLanguages.Select(language =>

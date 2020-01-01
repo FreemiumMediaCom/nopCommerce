@@ -157,7 +157,7 @@ namespace Nop.Services.Shipping
             if (shippingMethodId == 0)
                 return null;
 
-            return _shippingMethodRepository.GetById(shippingMethodId);
+            return _shippingMethodRepository.GetById(shippingMethodId).Result;
         }
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace Nop.Services.Shipping
                 return null;
 
             var key = string.Format(NopShippingDefaults.WarehousesByIdCacheKey, warehouseId);
-            return _cacheManager.Get(key, () => _warehouseRepository.GetById(warehouseId));
+            return _cacheManager.Get(key, () => _warehouseRepository.GetById(warehouseId).Result);
         }
 
         /// <summary>
@@ -573,7 +573,7 @@ namespace Nop.Services.Shipping
             var matchedByCountry = new List<Warehouse>();
             foreach (var warehouse in warehouses)
             {
-                var warehouseAddress = _addressService.GetAddressById(warehouse.AddressId);
+                var warehouseAddress = _addressService.GetAddressById(warehouse.AddressId).Result;
                 if (warehouseAddress == null)
                     continue;
 
@@ -588,7 +588,7 @@ namespace Nop.Services.Shipping
             var matchedByState = new List<Warehouse>();
             foreach (var warehouse in matchedByCountry)
             {
-                var warehouseAddress = _addressService.GetAddressById(warehouse.AddressId);
+                var warehouseAddress = _addressService.GetAddressById(warehouse.AddressId).Result;
                 if (warehouseAddress == null)
                     continue;
 
@@ -694,14 +694,14 @@ namespace Nop.Services.Shipping
                     if (warehouse != null)
                     {
                         //warehouse address
-                        originAddress = _addressService.GetAddressById(warehouse.AddressId);
+                        originAddress = _addressService.GetAddressById(warehouse.AddressId).Result;
                         request.WarehouseFrom = warehouse;
                     }
 
                     if (originAddress == null)
                     {
                         //no warehouse address. in this case use the default shipping origin
-                        originAddress = _addressService.GetAddressById(_shippingSettings.ShippingOriginAddressId);
+                        originAddress = _addressService.GetAddressById(_shippingSettings.ShippingOriginAddressId).Result;
                     }
 
                     if (originAddress != null)

@@ -403,13 +403,13 @@ namespace Nop.Services.Orders
             var details = new PlaceOrderContainer
             {
                 //customer
-                Customer = _customerService.GetCustomerById(processPaymentRequest.CustomerId)
+                Customer = _customerService.GetCustomerById(processPaymentRequest.CustomerId).Result
             };
             if (details.Customer == null)
                 throw new ArgumentException("Customer is not set");
 
             //affiliate
-            var affiliate = _affiliateService.GetAffiliateById(details.Customer.AffiliateId);
+            var affiliate = _affiliateService.GetAffiliateById(details.Customer.AffiliateId).Result;
             if (affiliate != null && affiliate.Active && !affiliate.Deleted)
                 details.AffiliateId = affiliate.Id;
 
@@ -419,15 +419,15 @@ namespace Nop.Services.Orders
 
             //customer currency
             var currencyTmp = _currencyService.GetCurrencyById(
-                _genericAttributeService.GetAttribute<int>(details.Customer, NopCustomerDefaults.CurrencyIdAttribute, processPaymentRequest.StoreId));
+                _genericAttributeService.GetAttribute<int>(details.Customer, NopCustomerDefaults.CurrencyIdAttribute, processPaymentRequest.StoreId)).Result;
             var customerCurrency = currencyTmp != null && currencyTmp.Published ? currencyTmp : _workContext.WorkingCurrency;
-            var primaryStoreCurrency = _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId);
+            var primaryStoreCurrency = _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId).Result;
             details.CustomerCurrencyCode = customerCurrency.CurrencyCode;
             details.CustomerCurrencyRate = customerCurrency.Rate / primaryStoreCurrency.Rate;
 
             //customer language
             details.CustomerLanguage = _languageService.GetLanguageById(
-                _genericAttributeService.GetAttribute<int>(details.Customer, NopCustomerDefaults.LanguageIdAttribute, processPaymentRequest.StoreId));
+                _genericAttributeService.GetAttribute<int>(details.Customer, NopCustomerDefaults.LanguageIdAttribute, processPaymentRequest.StoreId)).Result;
             if (details.CustomerLanguage == null || !details.CustomerLanguage.Published)
                 details.CustomerLanguage = _workContext.WorkingLanguage;
 
@@ -470,14 +470,14 @@ namespace Nop.Services.Orders
             //min totals validation
             if (!ValidateMinOrderSubtotalAmount(details.Cart))
             {
-                var minOrderSubtotalAmount = _currencyService.ConvertFromPrimaryStoreCurrency(_orderSettings.MinOrderSubtotalAmount, _workContext.WorkingCurrency);
+                var minOrderSubtotalAmount = _currencyService.ConvertFromPrimaryStoreCurrency(_orderSettings.MinOrderSubtotalAmount, _workContext.WorkingCurrency).Result;
                 throw new NopException(string.Format(_localizationService.GetResource("Checkout.MinOrderSubtotalAmount"),
                     _priceFormatter.FormatPrice(minOrderSubtotalAmount, true, false)));
             }
 
             if (!ValidateMinOrderTotalAmount(details.Cart))
             {
-                var minOrderTotalAmount = _currencyService.ConvertFromPrimaryStoreCurrency(_orderSettings.MinOrderTotalAmount, _workContext.WorkingCurrency);
+                var minOrderTotalAmount = _currencyService.ConvertFromPrimaryStoreCurrency(_orderSettings.MinOrderTotalAmount, _workContext.WorkingCurrency).Result;
                 throw new NopException(string.Format(_localizationService.GetResource("Checkout.MinOrderTotalAmount"),
                     _priceFormatter.FormatPrice(minOrderTotalAmount, true, false)));
             }
@@ -511,7 +511,7 @@ namespace Nop.Services.Orders
                     NopCustomerDefaults.SelectedPickupPointAttribute, processPaymentRequest.StoreId);
                 if (_shippingSettings.AllowPickupInStore && pickupPoint != null)
                 {
-                    var country = _countryService.GetCountryByTwoLetterIsoCode(pickupPoint.CountryCode);
+                    var country = _countryService.GetCountryByTwoLetterIsoCode(pickupPoint.CountryCode).Result;
                     var state = _stateProvinceService.GetStateProvinceByAbbreviation(pickupPoint.StateAbbreviation, country?.Id);
 
                     details.PickupInStore = true;
@@ -641,12 +641,12 @@ namespace Nop.Services.Orders
             processPaymentRequest.PaymentMethodSystemName = details.InitialOrder.PaymentMethodSystemName;
 
             //customer
-            details.Customer = _customerService.GetCustomerById(processPaymentRequest.CustomerId);
+            details.Customer = _customerService.GetCustomerById(processPaymentRequest.CustomerId).Result;
             if (details.Customer == null)
                 throw new ArgumentException("Customer is not set");
 
             //affiliate
-            var affiliate = _affiliateService.GetAffiliateById(details.Customer.AffiliateId);
+            var affiliate = _affiliateService.GetAffiliateById(details.Customer.AffiliateId).Result;
             if (affiliate != null && affiliate.Active && !affiliate.Deleted)
                 details.AffiliateId = affiliate.Id;
 
@@ -654,12 +654,12 @@ namespace Nop.Services.Orders
             if (details.Customer.IsGuest() && !_orderSettings.AnonymousCheckoutAllowed)
                 throw new NopException("Anonymous checkout is not allowed");
 
-            //customer currency
+            //customer currencyv
             details.CustomerCurrencyCode = details.InitialOrder.CustomerCurrencyCode;
             details.CustomerCurrencyRate = details.InitialOrder.CurrencyRate;
 
             //customer language
-            details.CustomerLanguage = _languageService.GetLanguageById(details.InitialOrder.CustomerLanguageId);
+            details.CustomerLanguage = _languageService.GetLanguageById(details.InitialOrder.CustomerLanguageId).Result;
             if (details.CustomerLanguage == null || !details.CustomerLanguage.Published)
                 details.CustomerLanguage = _workContext.WorkingLanguage;
 
@@ -924,7 +924,7 @@ namespace Nop.Services.Orders
                 return;
 
             //get appropriate history entry
-            var rewardPointsHistoryEntry = _rewardPointService.GetRewardPointsHistoryEntryById(order.RewardPointsHistoryEntryId.Value);
+            var rewardPointsHistoryEntry = _rewardPointService.GetRewardPointsHistoryEntryById(order.RewardPointsHistoryEntryId.Value).Result;
             if (rewardPointsHistoryEntry != null && rewardPointsHistoryEntry.CreatedOnUtc > DateTime.UtcNow)
             {
                 //just delete the upcoming entry (points were not granted yet)
@@ -976,8 +976,8 @@ namespace Nop.Services.Orders
                         if (!string.IsNullOrEmpty(gc.RecipientEmail) &&
                             !string.IsNullOrEmpty(gc.SenderEmail))
                         {
-                            var customerLang = _languageService.GetLanguageById(order.CustomerLanguageId) ??
-                                               _languageService.GetAllLanguages().FirstOrDefault();
+                            var customerLang = _languageService.GetLanguageById(order.CustomerLanguageId).Result ??
+                                               _languageService.GetAllLanguages().Result.FirstOrDefault();
                             if (customerLang == null)
                                 throw new Exception("No languages could be loaded");
                             var queuedEmailIds = _workflowMessageService.SendGiftCardNotification(gc, customerLang.Id);
@@ -1194,7 +1194,7 @@ namespace Nop.Services.Orders
                     continue;
 
                 //not found. load by Id
-                vendor = _vendorService.GetVendorById(vendorId);
+                vendor = _vendorService.GetVendorById(vendorId).Result;
                 if (vendor != null && !vendor.Deleted && vendor.Active)
                 {
                     vendors.Add(vendor);
@@ -1599,7 +1599,7 @@ namespace Nop.Services.Orders
             //log errors
             var logError = result.Errors.Aggregate("Error while placing order. ",
                 (current, next) => $"{current}Error {result.Errors.IndexOf(next) + 1}: {next}. ");
-            var customer = _customerService.GetCustomerById(processPaymentRequest.CustomerId);
+            var customer = _customerService.GetCustomerById(processPaymentRequest.CustomerId).Result;
             _logger.Error(logError, customer: customer);
 
             return result;
@@ -1639,7 +1639,7 @@ namespace Nop.Services.Orders
                     Address1 = updateOrderParameters.PickupPoint.Address,
                     City = updateOrderParameters.PickupPoint.City,
                     County = updateOrderParameters.PickupPoint.County,
-                    Country = _countryService.GetCountryByTwoLetterIsoCode(updateOrderParameters.PickupPoint.CountryCode),
+                    Country = _countryService.GetCountryByTwoLetterIsoCode(updateOrderParameters.PickupPoint.CountryCode).Result,
                     ZipPostalCode = updateOrderParameters.PickupPoint.ZipPostalCode,
                     CreatedOnUtc = DateTime.UtcNow
                 };

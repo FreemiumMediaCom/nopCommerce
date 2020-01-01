@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Affiliates;
 
@@ -14,7 +15,7 @@ namespace Nop.Services.Affiliates
         /// </summary>
         /// <param name="affiliateId">Affiliate identifier</param>
         /// <returns>Affiliate</returns>
-        Affiliate GetAffiliateById(int affiliateId);
+        Task<Affiliate> GetAffiliateById(int affiliateId);
 
         /// <summary>
         /// Gets an affiliate by friendly URL name

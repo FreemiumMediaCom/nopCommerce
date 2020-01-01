@@ -301,7 +301,7 @@ namespace Nop.Data.Extensions
             if (!File.Exists(filePath))
                 return;
 
-            await context.ExecuteSqlScript(File.ReadAllText(filePath));
+            await context.ExecuteSqlScript(await File.ReadAllTextAsync(filePath));
         }
 
         #endregion

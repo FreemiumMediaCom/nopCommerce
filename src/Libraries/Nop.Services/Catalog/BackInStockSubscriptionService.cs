@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
@@ -128,12 +129,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="subscriptionId">Subscription identifier</param>
         /// <returns>Subscription</returns>
-        public virtual BackInStockSubscription GetSubscriptionById(int subscriptionId)
+        public async virtual Task<BackInStockSubscription> GetSubscriptionById(int subscriptionId)
         {
             if (subscriptionId == 0)
                 return null;
 
-            var subscription = _backInStockSubscriptionRepository.GetById(subscriptionId);
+            var subscription = await _backInStockSubscriptionRepository.GetById(subscriptionId);
             return subscription;
         }
 

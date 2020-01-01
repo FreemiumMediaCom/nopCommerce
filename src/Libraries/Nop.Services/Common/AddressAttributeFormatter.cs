@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Text;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -66,7 +66,7 @@ namespace Nop.Services.Common
                         if (attribute.AttributeControlType == AttributeControlType.MultilineTextbox)
                         {
                             //multiline textbox
-                            var attributeName = _localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id);
+                            var attributeName = _localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id).Result;
                             //encode (if required)
                             if (htmlEncode)
                                 attributeName = WebUtility.HtmlEncode(attributeName);

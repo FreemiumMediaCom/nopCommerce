@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -237,7 +237,7 @@ namespace Nop.Services.Configuration
             if (settingId == 0)
                 return null;
 
-            return _settingRepository.GetById(settingId);
+            return _settingRepository.GetById(settingId).Result;
         }
 
         /// <summary>

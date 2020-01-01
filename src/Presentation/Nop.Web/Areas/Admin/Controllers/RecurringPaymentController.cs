@@ -47,12 +47,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();
@@ -64,7 +64,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(RecurringPaymentSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(RecurringPaymentSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedDataTablesJson();
@@ -75,7 +75,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();
@@ -93,7 +93,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(RecurringPaymentModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Edit(RecurringPaymentModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();
@@ -124,7 +124,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();
@@ -142,7 +142,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult HistoryList(RecurringPaymentHistorySearchModel searchModel)
+        public  async virtual Task<IActionResult> HistoryList(RecurringPaymentHistorySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedDataTablesJson();
@@ -159,7 +159,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("processnextpayment")]
-        public virtual IActionResult ProcessNextPayment(int id)
+        public  async virtual Task<IActionResult> ProcessNextPayment(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();
@@ -201,7 +201,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("cancelpayment")]
-        public virtual IActionResult CancelRecurringPayment(int id)
+        public  async virtual Task<IActionResult> CancelRecurringPayment(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageRecurringPayments))
                 return AccessDeniedView();

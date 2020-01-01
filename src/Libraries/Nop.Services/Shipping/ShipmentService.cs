@@ -181,7 +181,7 @@ namespace Nop.Services.Shipping
             if (shipmentId == 0)
                 return null;
 
-            return _shipmentRepository.GetById(shipmentId);
+            return _shipmentRepository.GetById(shipmentId).Result;
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace Nop.Services.Shipping
             if (shipmentItemId == 0)
                 return null;
 
-            return _siRepository.GetById(shipmentItemId);
+            return _siRepository.GetById(shipmentItemId).Result;
         }
 
         /// <summary>

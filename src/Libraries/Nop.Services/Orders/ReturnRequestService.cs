@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
@@ -64,7 +64,7 @@ namespace Nop.Services.Orders
             if (returnRequestId == 0)
                 return null;
 
-            return _returnRequestRepository.GetById(returnRequestId);
+            return _returnRequestRepository.GetById(returnRequestId).Result;
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Nop.Services.Orders
             if (returnRequestActionId == 0)
                 return null;
 
-            return _returnRequestActionRepository.GetById(returnRequestActionId);
+            return _returnRequestActionRepository.GetById(returnRequestActionId).Result;
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace Nop.Services.Orders
             if (returnRequestReasonId == 0)
                 return null;
 
-            return _returnRequestReasonRepository.GetById(returnRequestReasonId);
+            return _returnRequestReasonRepository.GetById(returnRequestReasonId).Result;
         }
 
         /// <summary>

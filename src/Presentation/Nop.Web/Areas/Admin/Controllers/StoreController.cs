@@ -71,7 +71,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageStores))
                 return AccessDeniedView();
@@ -83,7 +83,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(StoreSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(StoreSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageStores))
                 return AccessDeniedDataTablesJson();
@@ -94,7 +94,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public  async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageStores))
                 return AccessDeniedView();
@@ -106,7 +106,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(StoreModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Create(StoreModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageStores))
                 return AccessDeniedView();
@@ -140,7 +140,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageStores))
                 return AccessDeniedView();
@@ -158,7 +158,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(StoreModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Edit(StoreModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageStores))
                 return AccessDeniedView();
@@ -198,7 +198,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageStores))
                 return AccessDeniedView();

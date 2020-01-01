@@ -48,12 +48,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Tax Providers
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             return RedirectToAction("Providers");
         }
 
-        public virtual IActionResult Providers()
+        public  async virtual Task<IActionResult> Providers()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();
@@ -65,7 +65,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Providers(TaxProviderSearchModel searchModel)
+        public  async virtual Task<IActionResult> Providers(TaxProviderSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedDataTablesJson();
@@ -76,7 +76,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult MarkAsPrimaryProvider(string systemName)
+        public  async virtual Task<IActionResult> MarkAsPrimaryProvider(string systemName)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();
@@ -98,7 +98,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Tax Categories
 
-        public virtual IActionResult Categories()
+        public  async virtual Task<IActionResult> Categories()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();
@@ -110,7 +110,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Categories(TaxCategorySearchModel searchModel)
+        public  async virtual Task<IActionResult> Categories(TaxCategorySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedDataTablesJson();
@@ -122,7 +122,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CategoryUpdate(TaxCategoryModel model)
+        public  async virtual Task<IActionResult> CategoryUpdate(TaxCategoryModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();
@@ -138,7 +138,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CategoryAdd(TaxCategoryModel model)
+        public  async virtual Task<IActionResult> CategoryAdd(TaxCategoryModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();
@@ -154,7 +154,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CategoryDelete(int id)
+        public  async virtual Task<IActionResult> CategoryDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();

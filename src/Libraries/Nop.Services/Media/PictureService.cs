@@ -667,7 +667,7 @@ namespace Nop.Services.Media
             if (pictureId == 0)
                 return null;
 
-            return _pictureRepository.GetById(pictureId);
+            return _pictureRepository.GetById(pictureId).Result;
         }
 
         /// <summary>

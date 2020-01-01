@@ -37,7 +37,7 @@ namespace Nop.Services.Localization
 
             //suppose that the first segment is the language code and try to get language
             var languageService = EngineContext.Current.Resolve<ILanguageService>();
-            language = languageService.GetAllLanguages()
+            language = languageService.GetAllLanguages().Result
                 .FirstOrDefault(urlLanguage => urlLanguage.UniqueSeoCode.Equals(firstSegment, StringComparison.InvariantCultureIgnoreCase));
 
             //if language exists and published passed URL is localized

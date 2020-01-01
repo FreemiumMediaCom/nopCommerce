@@ -45,12 +45,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageWidgets))
                 return AccessDeniedView();
@@ -62,7 +62,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(WidgetSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(WidgetSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageWidgets))
                 return AccessDeniedDataTablesJson();
@@ -74,7 +74,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult WidgetUpdate(WidgetModel model)
+        public  async virtual Task<IActionResult> WidgetUpdate(WidgetModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageWidgets))
                 return AccessDeniedView();

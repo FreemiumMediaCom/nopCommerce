@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
@@ -83,7 +84,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerId">Customer identifier</param>
         /// <returns>A customer</returns>
-        Customer GetCustomerById(int customerId);
+        Task<Customer> GetCustomerById(int customerId);
 
         /// <summary>
         /// Get customers by identifiers
@@ -253,7 +254,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerRoleId">Customer role identifier</param>
         /// <returns>Customer role</returns>
-        CustomerRole GetCustomerRoleById(int customerRoleId);
+        Task<CustomerRole> GetCustomerRoleById(int customerRoleId);
 
         /// <summary>
         /// Gets a customer role

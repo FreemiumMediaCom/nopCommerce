@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Directory;
@@ -194,12 +195,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Checkout attributes
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -211,7 +212,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(CheckoutAttributeSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(CheckoutAttributeSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedDataTablesJson();
@@ -222,7 +223,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public  async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -234,7 +235,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(CheckoutAttributeModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Create(CheckoutAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -269,7 +270,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -286,7 +287,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(CheckoutAttributeModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Edit(CheckoutAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -328,7 +329,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -354,7 +355,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Checkout attribute values
 
         [HttpPost]
-        public virtual IActionResult ValueList(CheckoutAttributeValueSearchModel searchModel)
+        public  async virtual Task<IActionResult> ValueList(CheckoutAttributeValueSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedDataTablesJson();
@@ -369,7 +370,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult ValueCreatePopup(int checkoutAttributeId)
+        public  async virtual Task<IActionResult> ValueCreatePopup(int checkoutAttributeId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -387,7 +388,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueCreatePopup(CheckoutAttributeValueModel model)
+        public async virtual Task<IActionResult> ValueCreatePopup(CheckoutAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -397,8 +398,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (checkoutAttribute == null)
                 return RedirectToAction("List");
 
-            model.PrimaryStoreCurrencyCode = _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId).CurrencyCode;
-            model.BaseWeightIn = _measureService.GetMeasureWeightById(_measureSettings.BaseWeightId).Name;
+            model.PrimaryStoreCurrencyCode = (await _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId)).CurrencyCode;
+            model.BaseWeightIn = (await _measureService.GetMeasureWeightById(_measureSettings.BaseWeightId)).Name;
 
             if (checkoutAttribute.AttributeControlType == AttributeControlType.ColorSquares)
             {
@@ -436,7 +437,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ValueEditPopup(int id)
+        public  async virtual Task<IActionResult> ValueEditPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -458,7 +459,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueEditPopup(CheckoutAttributeValueModel model)
+        public  async virtual Task<IActionResult> ValueEditPopup(CheckoutAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -513,7 +514,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueDelete(int id)
+        public  async virtual Task<IActionResult> ValueDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();

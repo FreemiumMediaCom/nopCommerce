@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -75,24 +76,24 @@ namespace Nop.Services.Directory
         /// <param name="currencyId">Currency identifier</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Currency</returns>
-        public virtual Currency GetCurrencyById(int currencyId, bool loadCacheableCopy = true)
+        public async virtual Task<Currency> GetCurrencyById(int currencyId, bool loadCacheableCopy = true)
         {
             if (currencyId == 0)
                 return null;
 
-            Currency loadCurrencyFunc()
+            async Task<Currency> loadCurrencyFunc()
             {
-                return _currencyRepository.GetById(currencyId);
+                return await _currencyRepository.GetById(currencyId);
             }
 
             if (!loadCacheableCopy)
-                return loadCurrencyFunc();
+                return await loadCurrencyFunc();
 
             //cacheable copy
             var key = string.Format(NopDirectoryDefaults.CurrenciesByIdCacheKey, currencyId);
-            return _cacheManager.Get(key, () =>
+            return await _cacheManager.Get(key, async () =>
             {
-                var currency = loadCurrencyFunc();
+                var currency = await loadCurrencyFunc();
                 if (currency == null)
                     return null;
                 return new CurrencyForCaching(currency);
@@ -209,13 +210,13 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="currencyCode">Currency code; pass null to use primary exchange rate currency</param>
         /// <returns>Exchange rates</returns>
-        public virtual IList<ExchangeRate> GetCurrencyLiveRates(string currencyCode = null)
+        public async virtual Task<IList<ExchangeRate>> GetCurrencyLiveRates(string currencyCode = null)
         {
             var exchangeRateProvider = _exchangeRatePluginManager.LoadPrimaryPlugin()
                 ?? throw new Exception("Active exchange rate provider cannot be loaded");
 
             currencyCode = currencyCode
-                ?? GetCurrencyById(_currencySettings.PrimaryExchangeRateCurrencyId)?.CurrencyCode
+                ?? (await GetCurrencyById(_currencySettings.PrimaryExchangeRateCurrencyId))?.CurrencyCode
                 ?? throw new NopException("Primary exchange rate currency is not set");
 
             return exchangeRateProvider.GetCurrencyLiveRates(currencyCode);
@@ -321,12 +322,12 @@ namespace Nop.Services.Directory
         /// <param name="amount">Amount</param>
         /// <param name="sourceCurrencyCode">Source currency code</param>
         /// <returns>Converted value</returns>
-        public virtual decimal ConvertToPrimaryStoreCurrency(decimal amount, Currency sourceCurrencyCode)
+        public async virtual Task<decimal> ConvertToPrimaryStoreCurrency(decimal amount, Currency sourceCurrencyCode)
         {
             if (sourceCurrencyCode == null)
                 throw new ArgumentNullException(nameof(sourceCurrencyCode));
 
-            var primaryStoreCurrency = GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId);
+            var primaryStoreCurrency = await GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId);
             var result = ConvertCurrency(amount, sourceCurrencyCode, primaryStoreCurrency);
             return result;
         }
@@ -337,9 +338,9 @@ namespace Nop.Services.Directory
         /// <param name="amount">Amount</param>
         /// <param name="targetCurrencyCode">Target currency code</param>
         /// <returns>Converted value</returns>
-        public virtual decimal ConvertFromPrimaryStoreCurrency(decimal amount, Currency targetCurrencyCode)
+        public async virtual Task<decimal> ConvertFromPrimaryStoreCurrency(decimal amount, Currency targetCurrencyCode)
         {
-            var primaryStoreCurrency = GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId);
+            var primaryStoreCurrency = await GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId);
             var result = ConvertCurrency(amount, primaryStoreCurrency, targetCurrencyCode);
             return result;
         }

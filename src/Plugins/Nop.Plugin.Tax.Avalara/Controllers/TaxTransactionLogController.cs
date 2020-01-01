@@ -50,7 +50,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
         #region Methods
 
         [HttpPost]
-        public virtual IActionResult LogList(TaxTransactionLogSearchModel searchModel)
+        public  async virtual Task<IActionResult> LogList(TaxTransactionLogSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedDataTablesJson();
@@ -82,7 +82,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteSelected(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();
@@ -93,7 +93,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
             return Json(new { Result = true });
         }
 
-        public virtual IActionResult View(int id)
+        public  async virtual Task<IActionResult> View(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();
@@ -119,7 +119,7 @@ namespace Nop.Plugin.Tax.Avalara.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageTaxSettings))
                 return AccessDeniedView();

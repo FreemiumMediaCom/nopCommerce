@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -50,12 +51,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="specificationAttributeId">The specification attribute identifier</param>
         /// <returns>Specification attribute</returns>
-        public virtual SpecificationAttribute GetSpecificationAttributeById(int specificationAttributeId)
+        public async virtual Task<SpecificationAttribute> GetSpecificationAttributeById(int specificationAttributeId)
         {
             if (specificationAttributeId == 0)
                 return null;
 
-            return _specificationAttributeRepository.GetById(specificationAttributeId);
+            return await _specificationAttributeRepository.GetById(specificationAttributeId);
         }
 
         /// <summary>
@@ -144,12 +145,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="specificationAttributeOptionId">The specification attribute option identifier</param>
         /// <returns>Specification attribute option</returns>
-        public virtual SpecificationAttributeOption GetSpecificationAttributeOptionById(int specificationAttributeOptionId)
+        public async virtual Task<SpecificationAttributeOption> GetSpecificationAttributeOptionById(int specificationAttributeOptionId)
         {
             if (specificationAttributeOptionId == 0)
                 return null;
 
-            return _specificationAttributeOptionRepository.GetById(specificationAttributeOptionId);
+            return await _specificationAttributeOptionRepository.GetById(specificationAttributeOptionId);
         }
 
         /// <summary>
@@ -320,12 +321,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productSpecificationAttributeId">Product specification attribute mapping identifier</param>
         /// <returns>Product specification attribute mapping</returns>
-        public virtual ProductSpecificationAttribute GetProductSpecificationAttributeById(int productSpecificationAttributeId)
+        public async virtual Task<ProductSpecificationAttribute> GetProductSpecificationAttributeById(int productSpecificationAttributeId)
         {
             if (productSpecificationAttributeId == 0)
                 return null;
 
-            return _productSpecificationAttributeRepository.GetById(productSpecificationAttributeId);
+            return await _productSpecificationAttributeRepository.GetById(productSpecificationAttributeId);
         }
 
         /// <summary>

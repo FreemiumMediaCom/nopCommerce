@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Vendors;
 
 namespace Nop.Services.Vendors
@@ -21,7 +22,7 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorAttributeId">Vendor attribute identifier</param>
         /// <returns>Vendor attribute</returns>
-        VendorAttribute GetVendorAttributeById(int vendorAttributeId);
+        Task<VendorAttribute> GetVendorAttributeById(int vendorAttributeId);
 
         /// <summary>
         /// Inserts a vendor attribute
@@ -57,7 +58,7 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorAttributeValueId">Vendor attribute value identifier</param>
         /// <returns>Vendor attribute value</returns>
-        VendorAttributeValue GetVendorAttributeValueById(int vendorAttributeValueId);
+        Task<VendorAttributeValue> GetVendorAttributeValueById(int vendorAttributeValueId);
 
         /// <summary>
         /// Inserts a vendor attribute value

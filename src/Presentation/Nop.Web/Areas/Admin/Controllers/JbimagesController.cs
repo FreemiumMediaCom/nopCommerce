@@ -44,7 +44,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Upload()
+        public  async virtual Task<IActionResult> Upload()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.HtmlEditorManagePictures))
             {

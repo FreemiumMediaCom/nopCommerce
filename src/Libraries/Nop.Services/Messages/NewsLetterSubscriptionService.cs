@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Nop.Core;
 using Nop.Core.Data;
@@ -171,7 +171,7 @@ namespace Nop.Services.Messages
         {
             if (newsLetterSubscriptionId == 0) return null;
 
-            return _subscriptionRepository.GetById(newsLetterSubscriptionId);
+            return _subscriptionRepository.GetById(newsLetterSubscriptionId).Result;
         }
 
         /// <summary>

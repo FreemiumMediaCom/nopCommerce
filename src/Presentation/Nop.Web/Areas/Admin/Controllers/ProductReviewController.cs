@@ -67,12 +67,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductReviews))
                 return AccessDeniedView();
@@ -84,7 +84,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(ProductReviewSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(ProductReviewSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductReviews))
                 return AccessDeniedDataTablesJson();
@@ -95,7 +95,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductReviews))
                 return AccessDeniedView();
@@ -116,7 +116,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(ProductReviewModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Edit(ProductReviewModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductReviews))
                 return AccessDeniedView();
@@ -186,7 +186,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductReviews))
                 return AccessDeniedView();
@@ -216,7 +216,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ApproveSelected(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> ApproveSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductReviews))
                 return AccessDeniedView();
@@ -246,7 +246,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DisapproveSelected(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> DisapproveSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductReviews))
                 return AccessDeniedView();
@@ -273,7 +273,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteSelected(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductReviews))
                 return AccessDeniedView();
@@ -299,7 +299,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(new { Result = true });
         }
 
-        public virtual IActionResult ProductSearchAutoComplete(string term)
+        public  async virtual Task<IActionResult> ProductSearchAutoComplete(string term)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductReviews))
                 return Content(string.Empty);
@@ -334,7 +334,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductReviewReviewTypeMappingList(ProductReviewReviewTypeMappingSearchModel searchModel)
+        public  async virtual Task<IActionResult> ProductReviewReviewTypeMappingList(ProductReviewReviewTypeMappingSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductReviews))
                 return AccessDeniedDataTablesJson();

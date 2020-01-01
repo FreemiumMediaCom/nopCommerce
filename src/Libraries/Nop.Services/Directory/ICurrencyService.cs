@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Nop.Core.Domain.Directory;
+using System.Threading.Tasks;
 
 namespace Nop.Services.Directory
 {
@@ -22,7 +23,7 @@ namespace Nop.Services.Directory
         /// <param name="currencyId">Currency identifier</param>
         /// <param name="loadCacheableCopy">A value indicating whether to load a copy that could be cached (workaround until Entity Framework supports 2-level caching)</param>
         /// <returns>Currency</returns>
-        Currency GetCurrencyById(int currencyId, bool loadCacheableCopy = true);
+        Task<Currency> GetCurrencyById(int currencyId, bool loadCacheableCopy = true);
 
         /// <summary>
         /// Gets a currency by code
@@ -62,7 +63,7 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="currencyCode">Currency code; pass null to use primary exchange rate currency</param>
         /// <returns>Exchange rates</returns>
-        IList<ExchangeRate> GetCurrencyLiveRates(string currencyCode = null);
+        Task<IList<ExchangeRate>> GetCurrencyLiveRates(string currencyCode = null);
 
         /// <summary>
         /// Converts currency
@@ -103,7 +104,7 @@ namespace Nop.Services.Directory
         /// <param name="amount">Amount</param>
         /// <param name="sourceCurrencyCode">Source currency code</param>
         /// <returns>Converted value</returns>
-        decimal ConvertToPrimaryStoreCurrency(decimal amount, Currency sourceCurrencyCode);
+        Task<decimal> ConvertToPrimaryStoreCurrency(decimal amount, Currency sourceCurrencyCode);
 
         /// <summary>
         /// Converts from primary store currency
@@ -111,7 +112,7 @@ namespace Nop.Services.Directory
         /// <param name="amount">Amount</param>
         /// <param name="targetCurrencyCode">Target currency code</param>
         /// <returns>Converted value</returns>
-        decimal ConvertFromPrimaryStoreCurrency(decimal amount, Currency targetCurrencyCode);
+        Task<decimal> ConvertFromPrimaryStoreCurrency(decimal amount, Currency targetCurrencyCode);
 
         #endregion
     }

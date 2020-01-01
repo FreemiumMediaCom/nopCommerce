@@ -51,7 +51,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -65,7 +65,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Weights
 
         [HttpPost]
-        public virtual IActionResult Weights(MeasureWeightSearchModel searchModel)
+        public  async virtual Task<IActionResult> Weights(MeasureWeightSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedDataTablesJson();
@@ -77,7 +77,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult WeightUpdate(MeasureWeightModel model)
+        public  async virtual Task<IActionResult> WeightUpdate(MeasureWeightModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -97,7 +97,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult WeightAdd(MeasureWeightModel model)
+        public  async virtual Task<IActionResult> WeightAdd(MeasureWeightModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -117,7 +117,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult WeightDelete(int id)
+        public  async virtual Task<IActionResult> WeightDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -141,7 +141,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult MarkAsPrimaryWeight(int id)
+        public  async virtual Task<IActionResult> MarkAsPrimaryWeight(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -161,7 +161,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Dimensions
 
         [HttpPost]
-        public virtual IActionResult Dimensions(MeasureDimensionSearchModel searchModel)
+        public  async virtual Task<IActionResult> Dimensions(MeasureDimensionSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedDataTablesJson();
@@ -173,7 +173,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DimensionUpdate(MeasureDimensionModel model)
+        public  async virtual Task<IActionResult> DimensionUpdate(MeasureDimensionModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -193,7 +193,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DimensionAdd(MeasureDimensionModel model)
+        public  async virtual Task<IActionResult> DimensionAdd(MeasureDimensionModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -213,7 +213,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DimensionDelete(int id)
+        public  async virtual Task<IActionResult> DimensionDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();
@@ -237,7 +237,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult MarkAsPrimaryDimension(int id)
+        public  async virtual Task<IActionResult> MarkAsPrimaryDimension(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
                 return AccessDeniedView();

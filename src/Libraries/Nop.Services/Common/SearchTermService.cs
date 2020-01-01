@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Common;
@@ -52,12 +53,12 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="searchTermId">Search term identifier</param>
         /// <returns>Search term</returns>
-        public virtual SearchTerm GetSearchTermById(int searchTermId)
+        public async virtual Task<SearchTerm> GetSearchTermById(int searchTermId)
         {
             if (searchTermId == 0)
                 return null;
 
-            return _searchTermRepository.GetById(searchTermId);
+            return await _searchTermRepository.GetById(searchTermId);
         }
 
         /// <summary>

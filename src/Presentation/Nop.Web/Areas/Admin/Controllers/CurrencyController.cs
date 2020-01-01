@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
@@ -105,12 +106,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List(bool liveRates = false)
+        public  async virtual Task<IActionResult> List(bool liveRates = false)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrencies))
                 return AccessDeniedView();
@@ -132,7 +133,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult List(CurrencySearchModel model)
+        public  async virtual Task<IActionResult> List(CurrencySearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrencies))
                 return AccessDeniedView();
@@ -145,7 +146,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ListGrid(CurrencySearchModel searchModel)
+        public  async virtual Task<IActionResult> ListGrid(CurrencySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrencies))
                 return AccessDeniedDataTablesJson();
@@ -157,7 +158,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ApplyRates(IEnumerable<CurrencyExchangeRateModel> rateModels)
+        public  async virtual Task<IActionResult> ApplyRates(IEnumerable<CurrencyExchangeRateModel> rateModels)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrencies))
                 return AccessDeniedView();
@@ -177,7 +178,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult MarkAsPrimaryExchangeRateCurrency(int id)
+        public  async virtual Task<IActionResult> MarkAsPrimaryExchangeRateCurrency(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrencies))
                 return AccessDeniedView();
@@ -189,7 +190,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult MarkAsPrimaryStoreCurrency(int id)
+        public  async virtual Task<IActionResult> MarkAsPrimaryStoreCurrency(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrencies))
                 return AccessDeniedView();
@@ -204,7 +205,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Create / Edit / Delete
 
-        public virtual IActionResult Create()
+        public  async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrencies))
                 return AccessDeniedView();
@@ -216,7 +217,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(CurrencyModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Create(CurrencyModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrencies))
                 return AccessDeniedView();
@@ -253,13 +254,13 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrencies))
                 return AccessDeniedView();
 
             //try to get a currency with the specified id
-            var currency = _currencyService.GetCurrencyById(id, false);
+            var currency = await _currencyService.GetCurrencyById(id, false);
             if (currency == null)
                 return RedirectToAction("List");
 
@@ -270,13 +271,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(CurrencyModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(CurrencyModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrencies))
                 return AccessDeniedView();
 
             //try to get a currency with the specified id
-            var currency = _currencyService.GetCurrencyById(model.Id, false);
+            var currency = await _currencyService.GetCurrencyById(model.Id, false);
             if (currency == null)
                 return RedirectToAction("List");
 
@@ -320,13 +321,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCurrencies))
                 return AccessDeniedView();
 
             //try to get a currency with the specified id
-            var currency = _currencyService.GetCurrencyById(id, false);
+            var currency = await _currencyService.GetCurrencyById(id, false);
             if (currency == null)
                 return RedirectToAction("List");
 

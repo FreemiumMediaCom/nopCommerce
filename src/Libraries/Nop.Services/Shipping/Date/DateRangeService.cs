@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Data;
@@ -47,7 +47,7 @@ namespace Nop.Services.Shipping.Date
             if (deliveryDateId == 0)
                 return null;
 
-            return _deliveryDateRepository.GetById(deliveryDateId);
+            return _deliveryDateRepository.GetById(deliveryDateId).Result;
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Nop.Services.Shipping.Date
         /// <returns>Product availability range</returns>
         public virtual ProductAvailabilityRange GetProductAvailabilityRangeById(int productAvailabilityRangeId)
         {
-            return productAvailabilityRangeId != 0 ? _productAvailabilityRangeRepository.GetById(productAvailabilityRangeId) : null;
+            return productAvailabilityRangeId != 0 ? _productAvailabilityRangeRepository.GetById(productAvailabilityRangeId).Result : null;
         }
 
         /// <summary>

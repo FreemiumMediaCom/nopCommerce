@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Customers;
@@ -244,12 +245,12 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="rewardPointsHistoryId">Reward point history entry identifier</param>
         /// <returns>Reward point history entry</returns>
-        public virtual RewardPointsHistory GetRewardPointsHistoryEntryById(int rewardPointsHistoryId)
+        public async  virtual Task<RewardPointsHistory> GetRewardPointsHistoryEntryById(int rewardPointsHistoryId)
         {
             if (rewardPointsHistoryId == 0)
                 return null;
 
-            return _rewardPointsHistoryRepository.GetById(rewardPointsHistoryId);
+            return await _rewardPointsHistoryRepository.GetById(rewardPointsHistoryId);
         }
 
         /// <summary>

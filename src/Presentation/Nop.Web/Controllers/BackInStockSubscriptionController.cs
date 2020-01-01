@@ -53,7 +53,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         // Product details page > back in stock subscribe
-        public virtual IActionResult SubscribePopup(int productId)
+        public  async virtual Task<IActionResult> SubscribePopup(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null || product.Deleted)
@@ -84,7 +84,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult SubscribePopupPOST(int productId)
+        public  async virtual Task<IActionResult> SubscribePopupPOST(int productId)
         {
             var product = _productService.GetProductById(productId);
             if (product == null || product.Deleted)
@@ -144,7 +144,7 @@ namespace Nop.Web.Controllers
         }
 
         // My account / Back in stock subscriptions
-        public virtual IActionResult CustomerSubscriptions(int? pageNumber)
+        public  async virtual Task<IActionResult> CustomerSubscriptions(int? pageNumber)
         {
             if (_customerSettings.HideBackInStockSubscriptionsTab)
             {
@@ -196,7 +196,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost, ActionName("CustomerSubscriptions")]
-        public virtual IActionResult CustomerSubscriptionsPOST(IFormCollection formCollection)
+        public  async virtual Task<IActionResult> CustomerSubscriptionsPOST(IFormCollection formCollection)
         {
             foreach (var key in formCollection.Keys)
             {

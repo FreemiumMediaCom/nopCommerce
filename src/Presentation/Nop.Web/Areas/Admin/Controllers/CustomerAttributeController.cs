@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Customers;
 using Nop.Services.Customers;
@@ -77,12 +78,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Customer attributes
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -95,7 +96,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(CustomerAttributeSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(CustomerAttributeSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedDataTablesJson();
@@ -106,7 +107,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public  async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -118,7 +119,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(CustomerAttributeModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Create(CustomerAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -151,13 +152,13 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
 
             //try to get a customer attribute with the specified id
-            var customerAttribute = _customerAttributeService.GetCustomerAttributeById(id);
+            var customerAttribute = await _customerAttributeService.GetCustomerAttributeById(id);
             if (customerAttribute == null)
                 return RedirectToAction("List");
 
@@ -168,12 +169,12 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(CustomerAttributeModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(CustomerAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
 
-            var customerAttribute = _customerAttributeService.GetCustomerAttributeById(model.Id);
+            var customerAttribute = await _customerAttributeService.GetCustomerAttributeById(model.Id);
             if (customerAttribute == null)
                 //no customer attribute found with the specified id
                 return RedirectToAction("List");
@@ -202,12 +203,12 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
 
-            var customerAttribute = _customerAttributeService.GetCustomerAttributeById(id);
+            var customerAttribute = await _customerAttributeService.GetCustomerAttributeById(id);
             _customerAttributeService.DeleteCustomerAttribute(customerAttribute);
 
             //activity log
@@ -224,13 +225,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Customer attribute values
 
         [HttpPost]
-        public virtual IActionResult ValueList(CustomerAttributeValueSearchModel searchModel)
+        public async virtual Task<IActionResult> ValueList(CustomerAttributeValueSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedDataTablesJson();
 
             //try to get a customer attribute with the specified id
-            var customerAttribute = _customerAttributeService.GetCustomerAttributeById(searchModel.CustomerAttributeId)
+            var customerAttribute = await _customerAttributeService.GetCustomerAttributeById(searchModel.CustomerAttributeId)
                 ?? throw new ArgumentException("No customer attribute found with the specified id");
 
             //prepare model
@@ -239,13 +240,13 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult ValueCreatePopup(int customerAttributeId)
+        public async virtual Task<IActionResult> ValueCreatePopup(int customerAttributeId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
 
             //try to get a customer attribute with the specified id
-            var customerAttribute = _customerAttributeService.GetCustomerAttributeById(customerAttributeId);
+            var customerAttribute = await _customerAttributeService.GetCustomerAttributeById(customerAttributeId);
             if (customerAttribute == null)
                 return RedirectToAction("List");
 
@@ -257,13 +258,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueCreatePopup(CustomerAttributeValueModel model)
+        public async virtual Task<IActionResult> ValueCreatePopup(CustomerAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
 
             //try to get a customer attribute with the specified id
-            var customerAttribute = _customerAttributeService.GetCustomerAttributeById(model.CustomerAttributeId);
+            var customerAttribute = await _customerAttributeService.GetCustomerAttributeById(model.CustomerAttributeId);
             if (customerAttribute == null)
                 return RedirectToAction("List");
 
@@ -290,18 +291,18 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ValueEditPopup(int id)
+        public async virtual Task<IActionResult> ValueEditPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
 
             //try to get a customer attribute value with the specified id
-            var customerAttributeValue = _customerAttributeService.GetCustomerAttributeValueById(id);
+            var customerAttributeValue = await _customerAttributeService.GetCustomerAttributeValueById(id);
             if (customerAttributeValue == null)
                 return RedirectToAction("List");
 
             //try to get a customer attribute with the specified id
-            var customerAttribute = _customerAttributeService.GetCustomerAttributeById(customerAttributeValue.CustomerAttributeId);
+            var customerAttribute = await _customerAttributeService.GetCustomerAttributeById(customerAttributeValue.CustomerAttributeId);
             if (customerAttribute == null)
                 return RedirectToAction("List");
 
@@ -312,18 +313,18 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueEditPopup(CustomerAttributeValueModel model)
+        public async virtual Task<IActionResult> ValueEditPopup(CustomerAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
 
             //try to get a customer attribute value with the specified id
-            var customerAttributeValue = _customerAttributeService.GetCustomerAttributeValueById(model.Id);
+            var customerAttributeValue = await _customerAttributeService.GetCustomerAttributeValueById(model.Id);
             if (customerAttributeValue == null)
                 return RedirectToAction("List");
 
             //try to get a customer attribute with the specified id
-            var customerAttribute = _customerAttributeService.GetCustomerAttributeById(customerAttributeValue.CustomerAttributeId);
+            var customerAttribute = await _customerAttributeService.GetCustomerAttributeById(customerAttributeValue.CustomerAttributeId);
             if (customerAttribute == null)
                 return RedirectToAction("List");
 
@@ -352,13 +353,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueDelete(int id)
+        public async virtual Task<IActionResult> ValueDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
 
             //try to get a customer attribute value with the specified id
-            var customerAttributeValue = _customerAttributeService.GetCustomerAttributeValueById(id)
+            var customerAttributeValue = await _customerAttributeService.GetCustomerAttributeValueById(id)
                 ?? throw new ArgumentException("No customer attribute value found with the specified id", nameof(id));
 
             _customerAttributeService.DeleteCustomerAttributeValue(customerAttributeValue);

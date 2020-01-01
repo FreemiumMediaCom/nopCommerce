@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core.Data;
 using Nop.Core.Domain.Topics;
 using Nop.Services.Events;
@@ -66,12 +67,12 @@ namespace Nop.Services.Topics
         /// </summary>
         /// <param name="topicTemplateId">Topic template identifier</param>
         /// <returns>Topic template</returns>
-        public virtual TopicTemplate GetTopicTemplateById(int topicTemplateId)
+        public async virtual Task<TopicTemplate> GetTopicTemplateById(int topicTemplateId)
         {
             if (topicTemplateId == 0)
                 return null;
 
-            return _topicTemplateRepository.GetById(topicTemplateId);
+            return await _topicTemplateRepository.GetById(topicTemplateId);
         }
 
         /// <summary>

@@ -346,7 +346,7 @@ namespace Nop.Services.Catalog
                 return null;
 
             var key = string.Format(NopCatalogDefaults.ProductsByIdCacheKey, productId);
-            return _cacheManager.Get(key, () => _productRepository.GetById(productId));
+            return _cacheManager.Get(key, () => _productRepository.GetById(productId).Result);
         }
 
         /// <summary>
@@ -628,7 +628,7 @@ namespace Nop.Services.Catalog
                 else
                 {
                     //ensure that we have at least two published languages
-                    var totalPublishedLanguages = _languageService.GetAllLanguages().Count;
+                    var totalPublishedLanguages = _languageService.GetAllLanguages().Result.Count;
                     searchLocalizedValue = totalPublishedLanguages >= 2;
                 }
             }
@@ -1727,7 +1727,7 @@ namespace Nop.Services.Catalog
             if (relatedProductId == 0)
                 return null;
 
-            return _relatedProductRepository.GetById(relatedProductId);
+            return _relatedProductRepository.GetById(relatedProductId).Result;
         }
 
         /// <summary>
@@ -1837,7 +1837,7 @@ namespace Nop.Services.Catalog
             if (crossSellProductId == 0)
                 return null;
 
-            return _crossSellProductRepository.GetById(crossSellProductId);
+            return _crossSellProductRepository.GetById(crossSellProductId).Result;
         }
 
         /// <summary>
@@ -1963,7 +1963,7 @@ namespace Nop.Services.Catalog
             if (tierPriceId == 0)
                 return null;
 
-            return _tierPriceRepository.GetById(tierPriceId);
+            return _tierPriceRepository.GetById(tierPriceId).Result;
         }
 
         /// <summary>
@@ -2069,7 +2069,7 @@ namespace Nop.Services.Catalog
             if (productPictureId == 0)
                 return null;
 
-            return _productPictureRepository.GetById(productPictureId);
+            return _productPictureRepository.GetById(productPictureId).Result;
         }
 
         /// <summary>
@@ -2190,7 +2190,7 @@ namespace Nop.Services.Catalog
             if (productReviewId == 0)
                 return null;
 
-            return _productReviewRepository.GetById(productReviewId);
+            return _productReviewRepository.GetById(productReviewId).Result;
         }
 
         /// <summary>

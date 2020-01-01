@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Orders;
@@ -57,7 +58,7 @@ namespace Nop.Services.Orders
         /// </summary>
         /// <param name="rewardPointsHistoryId">Reward point history entry identifier</param>
         /// <returns>Reward point history entry</returns>
-        RewardPointsHistory GetRewardPointsHistoryEntryById(int rewardPointsHistoryId);
+        Task<RewardPointsHistory> GetRewardPointsHistoryEntryById(int rewardPointsHistoryId);
 
         /// <summary>
         /// Insert the reward point history entry

@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 
@@ -30,7 +31,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productAttributeId">Product attribute identifier</param>
         /// <returns>Product attribute </returns>
-        ProductAttribute GetProductAttributeById(int productAttributeId);
+        Task<ProductAttribute> GetProductAttributeById(int productAttributeId);
 
         /// <summary>
         /// Inserts a product attribute
@@ -73,7 +74,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productAttributeMappingId">Product attribute mapping identifier</param>
         /// <returns>Product attribute mapping</returns>
-        ProductAttributeMapping GetProductAttributeMappingById(int productAttributeMappingId);
+        Task<ProductAttributeMapping> GetProductAttributeMappingById(int productAttributeMappingId);
 
         /// <summary>
         /// Inserts a product attribute mapping
@@ -109,7 +110,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productAttributeValueId">Product attribute value identifier</param>
         /// <returns>Product attribute value</returns>
-        ProductAttributeValue GetProductAttributeValueById(int productAttributeValueId);
+        Task<ProductAttributeValue> GetProductAttributeValueById(int productAttributeValueId);
 
         /// <summary>
         /// Inserts a product attribute value
@@ -145,7 +146,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="id">Predefined product attribute value identifier</param>
         /// <returns>Predefined product attribute value</returns>
-        PredefinedProductAttributeValue GetPredefinedProductAttributeValueById(int id);
+        Task<PredefinedProductAttributeValue> GetPredefinedProductAttributeValueById(int id);
 
         /// <summary>
         /// Inserts a predefined product attribute value
@@ -181,7 +182,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productAttributeCombinationId">Product attribute combination identifier</param>
         /// <returns>Product attribute combination</returns>
-        ProductAttributeCombination GetProductAttributeCombinationById(int productAttributeCombinationId);
+        Task<ProductAttributeCombination> GetProductAttributeCombinationById(int productAttributeCombinationId);
 
         /// <summary>
         /// Gets a product attribute combination by SKU

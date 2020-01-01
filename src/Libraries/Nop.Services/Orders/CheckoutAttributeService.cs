@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Caching;
@@ -105,7 +105,7 @@ namespace Nop.Services.Orders
                 return null;
 
             var key = string.Format(NopOrderDefaults.CheckoutAttributesByIdCacheKey, checkoutAttributeId);
-            return _cacheManager.Get(key, () => _checkoutAttributeRepository.GetById(checkoutAttributeId));
+            return _cacheManager.Get(key, () => _checkoutAttributeRepository.GetById(checkoutAttributeId).Result);
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace Nop.Services.Orders
                 return null;
 
             var key = string.Format(NopOrderDefaults.CheckoutAttributeValuesByIdCacheKey, checkoutAttributeValueId);
-            return _cacheManager.Get(key, () => _checkoutAttributeValueRepository.GetById(checkoutAttributeValueId));
+            return _cacheManager.Get(key, () => _checkoutAttributeValueRepository.GetById(checkoutAttributeValueId).Result);
         }
 
         /// <summary>

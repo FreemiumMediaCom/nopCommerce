@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Text;
 using Nop.Core;
@@ -104,7 +104,7 @@ namespace Nop.Services.Orders
                         if (attribute.AttributeControlType == AttributeControlType.MultilineTextbox)
                         {
                             //multiline textbox
-                            var attributeName = _localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id);
+                            var attributeName = _localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id).Result;
                             //encode (if required)
                             if (htmlEncode)
                                 attributeName = WebUtility.HtmlEncode(attributeName);
@@ -136,7 +136,7 @@ namespace Nop.Services.Orders
                                     attributeText = fileName;
                                 }
 
-                                var attributeName = _localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id);
+                                var attributeName = _localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id).Result;
                                 //encode (if required)
                                 if (htmlEncode)
                                     attributeName = WebUtility.HtmlEncode(attributeName);
@@ -164,7 +164,7 @@ namespace Nop.Services.Orders
                                 if (renderPrices)
                                 {
                                     var priceAdjustmentBase = _taxService.GetCheckoutAttributePrice(attributeValue, customer);
-                                    var priceAdjustment = _currencyService.ConvertFromPrimaryStoreCurrency(priceAdjustmentBase, _workContext.WorkingCurrency);
+                                    var priceAdjustment = _currencyService.ConvertFromPrimaryStoreCurrency(priceAdjustmentBase, _workContext.WorkingCurrency).Result;
                                     if (priceAdjustmentBase > 0)
                                     {
                                         formattedAttribute += string.Format(

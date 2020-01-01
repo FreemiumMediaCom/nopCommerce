@@ -77,17 +77,17 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Address attributes
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult ListBlock()
+        public  async virtual Task<IActionResult> ListBlock()
         {
             return PartialView("ListBlock");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -100,7 +100,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(AddressAttributeSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(AddressAttributeSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedDataTablesJson();
@@ -111,7 +111,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public  async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -123,7 +123,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(AddressAttributeModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Create(AddressAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -156,7 +156,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -173,7 +173,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(AddressAttributeModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Edit(AddressAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -212,7 +212,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -239,7 +239,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Address attribute values
 
         [HttpPost]
-        public virtual IActionResult ValueList(AddressAttributeValueSearchModel searchModel)
+        public  async virtual Task<IActionResult> ValueList(AddressAttributeValueSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedDataTablesJson();
@@ -254,7 +254,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult ValueCreatePopup(int addressAttributeId)
+        public  async virtual Task<IActionResult> ValueCreatePopup(int addressAttributeId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -272,7 +272,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueCreatePopup(AddressAttributeValueModel model)
+        public  async virtual Task<IActionResult> ValueCreatePopup(AddressAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -306,7 +306,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ValueEditPopup(int id)
+        public  async virtual Task<IActionResult> ValueEditPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -328,7 +328,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueEditPopup(AddressAttributeValueModel model)
+        public  async virtual Task<IActionResult> ValueEditPopup(AddressAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();
@@ -368,7 +368,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ValueDelete(int id)
+        public  async virtual Task<IActionResult> ValueDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
                 return AccessDeniedView();

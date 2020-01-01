@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Caching;
@@ -80,7 +80,7 @@ namespace Nop.Services.Tax
                 return null;
 
             var key = string.Format(NopTaxDefaults.TaxCategoriesByIdCacheKey, taxCategoryId);
-            return _cacheManager.Get(key, () => _taxCategoryRepository.GetById(taxCategoryId));
+            return _cacheManager.Get(key, () => _taxCategoryRepository.GetById(taxCategoryId).Result);
         }
 
         /// <summary>

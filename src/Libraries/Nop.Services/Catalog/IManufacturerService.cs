@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 
@@ -35,7 +36,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="manufacturerId">Manufacturer identifier</param>
         /// <returns>Manufacturer</returns>
-        Manufacturer GetManufacturerById(int manufacturerId);
+        Task<Manufacturer> GetManufacturerById(int manufacturerId);
 
         /// <summary>
         /// Inserts a manufacturer
@@ -79,7 +80,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productManufacturerId">Product manufacturer mapping identifier</param>
         /// <returns>Product manufacturer mapping</returns>
-        ProductManufacturer GetProductManufacturerById(int productManufacturerId);
+        Task<ProductManufacturer> GetProductManufacturerById(int productManufacturerId);
 
         /// <summary>
         /// Inserts a product manufacturer mapping

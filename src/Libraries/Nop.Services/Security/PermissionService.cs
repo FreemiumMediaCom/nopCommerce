@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
@@ -123,7 +123,7 @@ namespace Nop.Services.Security
             if (permissionId == 0)
                 return null;
 
-            return _permissionRecordRepository.GetById(permissionId);
+            return _permissionRecordRepository.GetById(permissionId).Result;
         }
 
         /// <summary>

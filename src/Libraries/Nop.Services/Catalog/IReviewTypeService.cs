@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Catalog;
 
 namespace Nop.Services.Catalog
@@ -27,7 +28,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="reviewTypeId">Review type identifier</param>
         /// <returns>Review type</returns>
-        ReviewType GetReviewTypeById(int reviewTypeId);
+        Task<ReviewType> GetReviewTypeById(int reviewTypeId);
 
         /// <summary>
         /// Insert the review type

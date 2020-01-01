@@ -1243,7 +1243,7 @@ namespace Nop.Services.Seo
             if (urlRecordId == 0)
                 return null;
 
-            return _urlRecordRepository.GetById(urlRecordId);
+            return _urlRecordRepository.GetById(urlRecordId).Result;
         }
 
         /// <summary>
@@ -1548,7 +1548,7 @@ namespace Nop.Services.Seo
                 var loadLocalizedValue = true;
                 if (ensureTwoPublishedLanguages)
                 {
-                    var totalPublishedLanguages = _languageService.GetAllLanguages().Count;
+                    var totalPublishedLanguages = _languageService.GetAllLanguages().Result.Count;
                     loadLocalizedValue = totalPublishedLanguages >= 2;
                 }
 
@@ -1675,7 +1675,7 @@ namespace Nop.Services.Seo
                 //and it's not in the list of reserved slugs
                 var reserved2 = _seoSettings.ReservedUrlRecordSlugs.Contains(tempSeName, StringComparer.InvariantCultureIgnoreCase);
                 //and it's not equal to a language code
-                var reserved3 = _languageService.GetAllLanguages(true).Any(language => language.UniqueSeoCode.Equals(tempSeName, StringComparison.InvariantCultureIgnoreCase));
+                var reserved3 = _languageService.GetAllLanguages(true).Result.Any(language => language.UniqueSeoCode.Equals(tempSeName, StringComparison.InvariantCultureIgnoreCase));
                 if (!reserved1 && !reserved2 && !reserved3)
                     break;
 

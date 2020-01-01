@@ -90,7 +90,7 @@ namespace Nop.Services.Topics
                 return null;
 
             var key = string.Format(NopTopicDefaults.TopicsByIdCacheKey, topicId);
-            return _cacheManager.Get(key, () => _topicRepository.GetById(topicId));
+            return _cacheManager.Get(key, () => _topicRepository.GetById(topicId).Result);
         }
 
         /// <summary>

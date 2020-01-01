@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -100,13 +101,13 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productAttributeId">Product attribute identifier</param>
         /// <returns>Product attribute </returns>
-        public virtual ProductAttribute GetProductAttributeById(int productAttributeId)
+        public async virtual Task<ProductAttribute> GetProductAttributeById(int productAttributeId)
         {
             if (productAttributeId == 0)
                 return null;
 
             var key = string.Format(NopCatalogDefaults.ProductAttributesByIdCacheKey, productAttributeId);
-            return _cacheManager.Get(key, () => _productAttributeRepository.GetById(productAttributeId));
+            return await  _cacheManager.Get(key, async () => await _productAttributeRepository.GetById(productAttributeId));
         }
 
         /// <summary>
@@ -247,13 +248,13 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productAttributeMappingId">Product attribute mapping identifier</param>
         /// <returns>Product attribute mapping</returns>
-        public virtual ProductAttributeMapping GetProductAttributeMappingById(int productAttributeMappingId)
+        public async virtual Task<ProductAttributeMapping> GetProductAttributeMappingById(int productAttributeMappingId)
         {
             if (productAttributeMappingId == 0)
                 return null;
 
             var key = string.Format(NopCatalogDefaults.ProductAttributeMappingsByIdCacheKey, productAttributeMappingId);
-            return _cacheManager.Get(key, () => _productAttributeMappingRepository.GetById(productAttributeMappingId));
+            return await _cacheManager.Get(key, async () => await _productAttributeMappingRepository.GetById(productAttributeMappingId));
         }
 
         /// <summary>
@@ -350,13 +351,13 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productAttributeValueId">Product attribute value identifier</param>
         /// <returns>Product attribute value</returns>
-        public virtual ProductAttributeValue GetProductAttributeValueById(int productAttributeValueId)
+        public async virtual Task<ProductAttributeValue> GetProductAttributeValueById(int productAttributeValueId)
         {
             if (productAttributeValueId == 0)
                 return null;
 
             var key = string.Format(NopCatalogDefaults.ProductAttributeValuesByIdCacheKey, productAttributeValueId);
-            return _cacheManager.Get(key, () => _productAttributeValueRepository.GetById(productAttributeValueId));
+            return await _cacheManager.Get(key, async () => await _productAttributeValueRepository.GetById(productAttributeValueId));
         }
 
         /// <summary>
@@ -449,12 +450,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="id">Predefined product attribute value identifier</param>
         /// <returns>Predefined product attribute value</returns>
-        public virtual PredefinedProductAttributeValue GetPredefinedProductAttributeValueById(int id)
+        public async virtual Task<PredefinedProductAttributeValue> GetPredefinedProductAttributeValueById(int id)
         {
             if (id == 0)
                 return null;
 
-            return _predefinedProductAttributeValueRepository.GetById(id);
+            return await _predefinedProductAttributeValueRepository.GetById(id);
         }
 
         /// <summary>
@@ -555,12 +556,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productAttributeCombinationId">Product attribute combination identifier</param>
         /// <returns>Product attribute combination</returns>
-        public virtual ProductAttributeCombination GetProductAttributeCombinationById(int productAttributeCombinationId)
+        public async virtual Task<ProductAttributeCombination> GetProductAttributeCombinationById(int productAttributeCombinationId)
         {
             if (productAttributeCombinationId == 0)
                 return null;
 
-            return _productAttributeCombinationRepository.GetById(productAttributeCombinationId);
+            return await _productAttributeCombinationRepository.GetById(productAttributeCombinationId);
         }
 
         /// <summary>

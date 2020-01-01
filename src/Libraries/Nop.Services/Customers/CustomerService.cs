@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 using Nop.Core;
 using Nop.Core.Caching;
@@ -352,12 +353,12 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerId">Customer identifier</param>
         /// <returns>A customer</returns>
-        public virtual Customer GetCustomerById(int customerId)
+        public async virtual Task<Customer> GetCustomerById(int customerId)
         {
             if (customerId == 0)
                 return null;
 
-            return _customerRepository.GetById(customerId);
+            return await _customerRepository.GetById(customerId);
         }
 
         /// <summary>
@@ -951,7 +952,7 @@ namespace Nop.Services.Customers
             //get applied coupon codes
             var existingCouponCodes = ParseAppliedGiftCardCouponCodes(customer);
 
-            //clear them
+            //clear themC:\projects\freemiummedia\nopCommerce\src\Libraries\Nop.Services\Forums\
             _genericAttributeService.SaveAttribute<string>(customer, NopCustomerDefaults.GiftCardCouponCodesAttribute, null);
 
             //save again except removed one
@@ -989,12 +990,12 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerRoleId">Customer role identifier</param>
         /// <returns>Customer role</returns>
-        public virtual CustomerRole GetCustomerRoleById(int customerRoleId)
+        public async virtual Task<CustomerRole> GetCustomerRoleById(int customerRoleId)
         {
             if (customerRoleId == 0)
                 return null;
 
-            return _customerRoleRepository.GetById(customerRoleId);
+            return await _customerRoleRepository.GetById(customerRoleId);
         }
 
         /// <summary>
@@ -1058,7 +1059,7 @@ namespace Nop.Services.Customers
         /// <summary>
         /// Updates the customer role
         /// </summary>
-        /// <param name="customerRole">Customer role</param>
+        /// <para                                                                   m name="customerRole">Customer role</param>
         public virtual void UpdateCustomerRole(CustomerRole customerRole)
         {
             if (customerRole == null)

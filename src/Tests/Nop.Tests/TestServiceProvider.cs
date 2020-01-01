@@ -34,7 +34,7 @@ namespace Nop.Tests
             WorkContext.Setup(w => w.WorkingCurrency).Returns(new Currency { RoundingType = RoundingType.Rounding001 });
 
             CurrencyService = new Mock<ICurrencyService>();
-            CurrencyService.Setup(x => x.GetCurrencyById(1, true)).Returns(new Currency {Id = 1, RoundingTypeId = 0});
+            CurrencyService.Setup(x => x.GetCurrencyById(1, true).Result).Returns(new Currency {Id = 1, RoundingTypeId = 0});
 
             GenericAttributeService.Setup(p => p.GetAttribute<bool>(It.IsAny<Customer>(), "product-advanced-mode", It.IsAny<int>(), false))
                 .Returns(true);

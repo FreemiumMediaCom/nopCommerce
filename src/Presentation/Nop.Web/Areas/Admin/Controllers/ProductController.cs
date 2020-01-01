@@ -725,12 +725,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Product list / create / edit / delete
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -742,7 +742,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductList(ProductSearchModel searchModel)
+        public  async virtual Task<IActionResult> ProductList(ProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -755,7 +755,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("go-to-product-by-sku")]
-        public virtual IActionResult GoToSku(ProductSearchModel searchModel)
+        public  async virtual Task<IActionResult> GoToSku(ProductSearchModel searchModel)
         {
             //try to load a product entity, if not found, then try to load a product attribute combination
             var product = _productService.GetProductBySku(searchModel.GoDirectlyToSku)
@@ -768,7 +768,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return List();
         }
 
-        public virtual IActionResult Create()
+        public  async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -789,7 +789,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(ProductModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Create(ProductModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -870,7 +870,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -891,7 +891,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(ProductModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Edit(ProductModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1050,7 +1050,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1076,7 +1076,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteSelected(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1090,7 +1090,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CopyProduct(ProductModel model)
+        public  async virtual Task<IActionResult> CopyProduct(ProductModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1118,7 +1118,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         //action displaying notification (warning) to a store owner that entered SKU already exists
-        public virtual IActionResult SkuReservedWarning(int productId, string sku)
+        public  async virtual Task<IActionResult> SkuReservedWarning(int productId, string sku)
         {
             string message;
 
@@ -1147,7 +1147,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Required products
 
         [HttpPost]
-        public virtual IActionResult LoadProductFriendlyNames(string productIds)
+        public  async virtual Task<IActionResult> LoadProductFriendlyNames(string productIds)
         {
             var result = string.Empty;
 
@@ -1180,7 +1180,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(new { Text = result });
         }
 
-        public virtual IActionResult RequiredProductAddPopup()
+        public  async virtual Task<IActionResult> RequiredProductAddPopup()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1192,7 +1192,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult RequiredProductAddPopupList(AddRequiredProductSearchModel searchModel)
+        public  async virtual Task<IActionResult> RequiredProductAddPopupList(AddRequiredProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -1208,7 +1208,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Related products
 
         [HttpPost]
-        public virtual IActionResult RelatedProductList(RelatedProductSearchModel searchModel)
+        public  async virtual Task<IActionResult> RelatedProductList(RelatedProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -1228,7 +1228,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult RelatedProductUpdate(RelatedProductModel model)
+        public  async virtual Task<IActionResult> RelatedProductUpdate(RelatedProductModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1252,7 +1252,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult RelatedProductDelete(int id)
+        public  async virtual Task<IActionResult> RelatedProductDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1276,7 +1276,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult RelatedProductAddPopup(int productId)
+        public  async virtual Task<IActionResult> RelatedProductAddPopup(int productId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1288,7 +1288,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult RelatedProductAddPopupList(AddRelatedProductSearchModel searchModel)
+        public  async virtual Task<IActionResult> RelatedProductAddPopupList(AddRelatedProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -1301,7 +1301,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult RelatedProductAddPopup(AddRelatedProductModel model)
+        public  async virtual Task<IActionResult> RelatedProductAddPopup(AddRelatedProductModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1338,7 +1338,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Cross-sell products
 
         [HttpPost]
-        public virtual IActionResult CrossSellProductList(CrossSellProductSearchModel searchModel)
+        public  async virtual Task<IActionResult> CrossSellProductList(CrossSellProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -1358,7 +1358,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CrossSellProductDelete(int id)
+        public  async virtual Task<IActionResult> CrossSellProductDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1380,7 +1380,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult CrossSellProductAddPopup(int productId)
+        public  async virtual Task<IActionResult> CrossSellProductAddPopup(int productId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1392,7 +1392,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CrossSellProductAddPopupList(AddCrossSellProductSearchModel searchModel)
+        public  async virtual Task<IActionResult> CrossSellProductAddPopupList(AddCrossSellProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -1405,7 +1405,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult CrossSellProductAddPopup(AddCrossSellProductModel model)
+        public  async virtual Task<IActionResult> CrossSellProductAddPopup(AddCrossSellProductModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1441,7 +1441,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Associated products
 
         [HttpPost]
-        public virtual IActionResult AssociatedProductList(AssociatedProductSearchModel searchModel)
+        public  async virtual Task<IActionResult> AssociatedProductList(AssociatedProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -1461,7 +1461,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AssociatedProductUpdate(AssociatedProductModel model)
+        public  async virtual Task<IActionResult> AssociatedProductUpdate(AssociatedProductModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1481,7 +1481,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AssociatedProductDelete(int id)
+        public  async virtual Task<IActionResult> AssociatedProductDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1500,7 +1500,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult AssociatedProductAddPopup(int productId)
+        public  async virtual Task<IActionResult> AssociatedProductAddPopup(int productId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1512,7 +1512,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AssociatedProductAddPopupList(AddAssociatedProductSearchModel searchModel)
+        public  async virtual Task<IActionResult> AssociatedProductAddPopupList(AddAssociatedProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -1525,7 +1525,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult AssociatedProductAddPopup(AddAssociatedProductModel model)
+        public  async virtual Task<IActionResult> AssociatedProductAddPopup(AddAssociatedProductModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1576,7 +1576,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Product pictures
 
-        public virtual IActionResult ProductPictureAdd(int pictureId, int displayOrder,
+        public  async virtual Task<IActionResult> ProductPictureAdd(int pictureId, int displayOrder,
             string overrideAltAttribute, string overrideTitleAttribute, int productId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
@@ -1620,7 +1620,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductPictureList(ProductPictureSearchModel searchModel)
+        public  async virtual Task<IActionResult> ProductPictureList(ProductPictureSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -1640,7 +1640,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductPictureUpdate(ProductPictureModel model)
+        public  async virtual Task<IActionResult> ProductPictureUpdate(ProductPictureModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1675,7 +1675,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductPictureDelete(int id)
+        public  async virtual Task<IActionResult> ProductPictureDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1709,7 +1709,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Product specification attributes
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult ProductSpecificationAttributeAdd(AddSpecificationAttributeModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> ProductSpecificationAttributeAdd(AddSpecificationAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1788,7 +1788,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductSpecAttrList(ProductSpecificationAttributeSearchModel searchModel)
+        public  async virtual Task<IActionResult> ProductSpecAttrList(ProductSpecificationAttributeSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -1808,7 +1808,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult ProductSpecAttrUpdate(AddSpecificationAttributeModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> ProductSpecAttrUpdate(AddSpecificationAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1880,7 +1880,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("Edit", new { id = psa.ProductId });
         }
 
-        public virtual IActionResult ProductSpecAttributeAddOrEdit(int productId, int? specificationId)
+        public  async virtual Task<IActionResult> ProductSpecAttributeAddOrEdit(int productId, int? specificationId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1908,7 +1908,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductSpecAttrDelete(AddSpecificationAttributeModel model)
+        public  async virtual Task<IActionResult> ProductSpecAttrDelete(AddSpecificationAttributeModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -1941,7 +1941,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Product tags
 
-        public virtual IActionResult ProductTags()
+        public  async virtual Task<IActionResult> ProductTags()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductTags))
                 return AccessDeniedView();
@@ -1953,7 +1953,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductTags(ProductTagSearchModel searchModel)
+        public  async virtual Task<IActionResult> ProductTags(ProductTagSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductTags))
                 return AccessDeniedDataTablesJson();
@@ -1965,7 +1965,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductTagDelete(int id)
+        public  async virtual Task<IActionResult> ProductTagDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductTags))
                 return AccessDeniedView();
@@ -1979,7 +1979,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult EditProductTag(int id)
+        public  async virtual Task<IActionResult> EditProductTag(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductTags))
                 return AccessDeniedView();
@@ -1996,7 +1996,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult EditProductTag(ProductTagModel model)
+        public  async virtual Task<IActionResult> EditProductTag(ProductTagModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProductTags))
                 return AccessDeniedView();
@@ -2030,7 +2030,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Purchased with order
 
         [HttpPost]
-        public virtual IActionResult PurchasedWithOrders(ProductOrderSearchModel searchModel)
+        public  async virtual Task<IActionResult> PurchasedWithOrders(ProductOrderSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -2055,7 +2055,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("download-catalog-pdf")]
-        public virtual IActionResult DownloadCatalogAsPdf(ProductSearchModel model)
+        public  async virtual Task<IActionResult> DownloadCatalogAsPdf(ProductSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2111,7 +2111,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("exportxml-all")]
-        public virtual IActionResult ExportXmlAll(ProductSearchModel model)
+        public  async virtual Task<IActionResult> ExportXmlAll(ProductSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2161,7 +2161,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ExportXmlSelected(string selectedIds)
+        public  async virtual Task<IActionResult> ExportXmlSelected(string selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2188,7 +2188,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("exportexcel-all")]
-        public virtual IActionResult ExportExcelAll(ProductSearchModel model)
+        public  async virtual Task<IActionResult> ExportExcelAll(ProductSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2238,7 +2238,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ExportExcelSelected(string selectedIds)
+        public  async virtual Task<IActionResult> ExportExcelSelected(string selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2264,7 +2264,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ImportExcel(IFormFile importexcelfile)
+        public  async virtual Task<IActionResult> ImportExcel(IFormFile importexcelfile)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2300,7 +2300,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Tier prices
 
         [HttpPost]
-        public virtual IActionResult TierPriceList(TierPriceSearchModel searchModel)
+        public  async virtual Task<IActionResult> TierPriceList(TierPriceSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -2319,7 +2319,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult TierPriceCreatePopup(int productId)
+        public  async virtual Task<IActionResult> TierPriceCreatePopup(int productId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2336,7 +2336,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult TierPriceCreatePopup(TierPriceModel model)
+        public  async virtual Task<IActionResult> TierPriceCreatePopup(TierPriceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2373,7 +2373,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult TierPriceEditPopup(int id)
+        public  async virtual Task<IActionResult> TierPriceEditPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2398,7 +2398,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult TierPriceEditPopup(TierPriceModel model)
+        public  async virtual Task<IActionResult> TierPriceEditPopup(TierPriceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2436,7 +2436,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult TierPriceDelete(int id)
+        public  async virtual Task<IActionResult> TierPriceDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2466,7 +2466,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Product attributes
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeMappingList(ProductAttributeMappingSearchModel searchModel)
+        public  async virtual Task<IActionResult> ProductAttributeMappingList(ProductAttributeMappingSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -2485,7 +2485,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult ProductAttributeMappingCreate(int productId)
+        public  async virtual Task<IActionResult> ProductAttributeMappingCreate(int productId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2508,7 +2508,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult ProductAttributeMappingCreate(ProductAttributeMappingModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> ProductAttributeMappingCreate(ProductAttributeMappingModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2584,7 +2584,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("ProductAttributeMappingEdit", new { id = productAttributeMapping.Id });
         }
 
-        public virtual IActionResult ProductAttributeMappingEdit(int id)
+        public  async virtual Task<IActionResult> ProductAttributeMappingEdit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2611,7 +2611,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult ProductAttributeMappingEdit(ProductAttributeMappingModel model, bool continueEditing, IFormCollection form)
+        public  async virtual Task<IActionResult> ProductAttributeMappingEdit(ProductAttributeMappingModel model, bool continueEditing, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2664,7 +2664,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeMappingDelete(int id)
+        public  async virtual Task<IActionResult> ProductAttributeMappingDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2691,7 +2691,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeValueList(ProductAttributeValueSearchModel searchModel)
+        public  async virtual Task<IActionResult> ProductAttributeValueList(ProductAttributeValueSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -2714,7 +2714,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult ProductAttributeValueCreatePopup(int productAttributeMappingId)
+        public  async virtual Task<IActionResult> ProductAttributeValueCreatePopup(int productAttributeMappingId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2738,7 +2738,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeValueCreatePopup(ProductAttributeValueModel model)
+        public  async virtual Task<IActionResult> ProductAttributeValueCreatePopup(ProductAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2800,7 +2800,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ProductAttributeValueEditPopup(int id)
+        public  async virtual Task<IActionResult> ProductAttributeValueEditPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2830,7 +2830,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeValueEditPopup(ProductAttributeValueModel model)
+        public  async virtual Task<IActionResult> ProductAttributeValueEditPopup(ProductAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2897,7 +2897,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeValueDelete(int id)
+        public  async virtual Task<IActionResult> ProductAttributeValueDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2923,7 +2923,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult AssociateProductToAttributeValuePopup()
+        public  async virtual Task<IActionResult> AssociateProductToAttributeValuePopup()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2935,7 +2935,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AssociateProductToAttributeValuePopupList(AssociateProductToAttributeValueSearchModel searchModel)
+        public  async virtual Task<IActionResult> AssociateProductToAttributeValuePopupList(AssociateProductToAttributeValueSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -2948,7 +2948,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult AssociateProductToAttributeValuePopup([Bind(Prefix = nameof(AssociateProductToAttributeValueModel))] AssociateProductToAttributeValueModel model)
+        public  async virtual Task<IActionResult> AssociateProductToAttributeValuePopup([Bind(Prefix = nameof(AssociateProductToAttributeValueModel))] AssociateProductToAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -2970,7 +2970,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         //action displaying notification (warning) to a store owner when associating some product
-        public virtual IActionResult AssociatedProductGetWarnings(int productId)
+        public  async virtual Task<IActionResult> AssociatedProductGetWarnings(int productId)
         {
             var associatedProduct = _productService.GetProductById(productId);
             if (associatedProduct == null)
@@ -3005,7 +3005,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Product attribute combinations
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeCombinationList(ProductAttributeCombinationSearchModel searchModel)
+        public  async virtual Task<IActionResult> ProductAttributeCombinationList(ProductAttributeCombinationSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();
@@ -3025,7 +3025,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeCombinationDelete(int id)
+        public  async virtual Task<IActionResult> ProductAttributeCombinationDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -3047,7 +3047,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult ProductAttributeCombinationCreatePopup(int productId)
+        public  async virtual Task<IActionResult> ProductAttributeCombinationCreatePopup(int productId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -3068,7 +3068,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeCombinationCreatePopup(int productId, ProductAttributeCombinationModel model, IFormCollection form)
+        public  async virtual Task<IActionResult> ProductAttributeCombinationCreatePopup(int productId, ProductAttributeCombinationModel model, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -3125,7 +3125,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ProductAttributeCombinationGeneratePopup(int productId)
+        public  async virtual Task<IActionResult> ProductAttributeCombinationGeneratePopup(int productId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -3146,7 +3146,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeCombinationGeneratePopup(IFormCollection form, ProductAttributeCombinationModel model)
+        public  async virtual Task<IActionResult> ProductAttributeCombinationGeneratePopup(IFormCollection form, ProductAttributeCombinationModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -3184,7 +3184,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(new ProductAttributeCombinationModel());
         }
 
-        public virtual IActionResult ProductAttributeCombinationEditPopup(int id)
+        public  async virtual Task<IActionResult> ProductAttributeCombinationEditPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -3210,7 +3210,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ProductAttributeCombinationEditPopup(ProductAttributeCombinationModel model, IFormCollection form)
+        public  async virtual Task<IActionResult> ProductAttributeCombinationEditPopup(ProductAttributeCombinationModel model, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -3274,7 +3274,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult GenerateAllAttributeCombinations(int productId)
+        public  async virtual Task<IActionResult> GenerateAllAttributeCombinations(int productId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -3297,7 +3297,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Product editor settings
 
         [HttpPost]
-        public virtual IActionResult SaveProductEditorSettings(ProductModel model, string returnUrl = "")
+        public  async virtual Task<IActionResult> SaveProductEditorSettings(ProductModel model, string returnUrl = "")
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedView();
@@ -3326,7 +3326,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Stock quantity history
 
         [HttpPost]
-        public virtual IActionResult StockQuantityHistory(StockQuantityHistorySearchModel searchModel)
+        public  async virtual Task<IActionResult> StockQuantityHistory(StockQuantityHistorySearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
                 return AccessDeniedDataTablesJson();

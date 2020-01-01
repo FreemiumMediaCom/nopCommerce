@@ -644,7 +644,7 @@ namespace Nop.Services.ExportImport
                 _productAttributeService.UpdateProductAttributeMapping(productAttributeMapping);
             }
 
-            var pav = _productAttributeService.GetProductAttributeValueById(productAttributeValueId);
+            var pav = _productAttributeService.GetProductAttributeValueById(productAttributeValueId).Result;
 
             var attributeControlType = (AttributeControlType)attributeControlTypeId;
 
@@ -1949,7 +1949,7 @@ namespace Nop.Services.ExportImport
 
                     manager.ReadFromXlsx(worksheet, iRow);
 
-                    var manufacturer = _manufacturerService.GetManufacturerById(manager.GetProperty("Id").IntValue);
+                    var manufacturer = _manufacturerService.GetManufacturerById(manager.GetProperty("Id").IntValue).Result;
 
                     var isNew = manufacturer == null;
 

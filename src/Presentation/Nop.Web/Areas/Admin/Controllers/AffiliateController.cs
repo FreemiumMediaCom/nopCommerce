@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Affiliates;
 using Nop.Core.Domain.Common;
@@ -49,12 +50,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
@@ -66,7 +67,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(AffiliateSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(AffiliateSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedDataTablesJson();
@@ -77,7 +78,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public  async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
@@ -90,7 +91,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Create(AffiliateModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Create(AffiliateModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
@@ -130,13 +131,13 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
 
             //try to get an affiliate with the specified id
-            var affiliate = _affiliateService.GetAffiliateById(id);
+            var affiliate = await _affiliateService.GetAffiliateById(id);
             if (affiliate == null || affiliate.Deleted)
                 return RedirectToAction("List");
 
@@ -147,13 +148,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(AffiliateModel model, bool continueEditing)
+        public async virtual Task<IActionResult> Edit(AffiliateModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
 
             //try to get an affiliate with the specified id
-            var affiliate = _affiliateService.GetAffiliateById(model.Id);
+            var affiliate = await _affiliateService.GetAffiliateById(model.Id);
             if (affiliate == null || affiliate.Deleted)
                 return RedirectToAction("List");
 
@@ -196,13 +197,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         //delete
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedView();
 
             //try to get an affiliate with the specified id
-            var affiliate = _affiliateService.GetAffiliateById(id);
+            var affiliate = await _affiliateService.GetAffiliateById(id);
             if (affiliate == null)
                 return RedirectToAction("List");
 
@@ -218,13 +219,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AffiliatedOrderListGrid(AffiliatedOrderSearchModel searchModel)
+        public async virtual Task<IActionResult> AffiliatedOrderListGrid(AffiliatedOrderSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedDataTablesJson();
 
             //try to get an affiliate with the specified id
-            var affiliate = _affiliateService.GetAffiliateById(searchModel.AffliateId)
+            var affiliate = await _affiliateService.GetAffiliateById(searchModel.AffliateId)
                 ?? throw new ArgumentException("No affiliate found with the specified id");
 
             //prepare model
@@ -234,13 +235,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AffiliatedCustomerList(AffiliatedCustomerSearchModel searchModel)
+        public async virtual Task<IActionResult> AffiliatedCustomerList(AffiliatedCustomerSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAffiliates))
                 return AccessDeniedDataTablesJson();
 
             //try to get an affiliate with the specified id
-            var affiliate = _affiliateService.GetAffiliateById(searchModel.AffliateId)
+            var affiliate = await _affiliateService.GetAffiliateById(searchModel.AffliateId)
                 ?? throw new ArgumentException("No affiliate found with the specified id");
 
             //prepare model

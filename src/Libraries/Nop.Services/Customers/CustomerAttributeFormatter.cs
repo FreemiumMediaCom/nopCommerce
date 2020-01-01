@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Text;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -64,7 +64,7 @@ namespace Nop.Services.Customers
                         if (attribute.AttributeControlType == AttributeControlType.MultilineTextbox)
                         {
                             //multiline textbox
-                            var attributeName = _localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id);
+                            var attributeName = _localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id).Result;
                             //encode (if required)
                             if (htmlEncode)
                                 attributeName = WebUtility.HtmlEncode(attributeName);
@@ -89,10 +89,10 @@ namespace Nop.Services.Customers
                     {
                         if (int.TryParse(valueStr, out var attributeValueId))
                         {
-                            var attributeValue = _customerAttributeService.GetCustomerAttributeValueById(attributeValueId);
+                            var attributeValue = _customerAttributeService.GetCustomerAttributeValueById(attributeValueId).Result;
                             if (attributeValue != null)
                             {
-                                formattedAttribute = $"{_localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id)}: {_localizationService.GetLocalized(attributeValue, a => a.Name, _workContext.WorkingLanguage.Id)}";
+                                formattedAttribute = $"{_localizationService.GetLocalized(attribute, a => a.Name, _workContext.WorkingLanguage.Id).Result}: {_localizationService.GetLocalized(attributeValue, a => a.Name, _workContext.WorkingLanguage.Id)}";
                             }
                             //encode (if required)
                             if (htmlEncode)

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Domain.Catalog;
@@ -146,7 +146,7 @@ namespace Nop.Services.Catalog
             //all product attribute mapping copies
             var productAttributeMappingCopies = new Dictionary<int, ProductAttributeMapping>();
 
-            var languages = _languageService.GetAllLanguages(true);
+            var languages = _languageService.GetAllLanguages(true).Result;
 
             foreach (var productAttributeMapping in _productAttributeService.GetProductAttributeMappingsByProductId(product.Id))
             {
@@ -168,7 +168,7 @@ namespace Nop.Services.Catalog
                 //localization
                 foreach (var lang in languages)
                 {
-                    var textPrompt = _localizationService.GetLocalized(productAttributeMapping, x => x.TextPrompt, lang.Id, false, false);
+                    var textPrompt = _localizationService.GetLocalized(productAttributeMapping, x => x.TextPrompt, lang.Id, false, false).Result;
                     if (!string.IsNullOrEmpty(textPrompt))
                         _localizedEntityService.SaveLocalizedValue(productAttributeMappingCopy, x => x.TextPrompt, textPrompt,
                             lang.Id);
@@ -237,7 +237,7 @@ namespace Nop.Services.Catalog
                     //localization
                     foreach (var lang in languages)
                     {
-                        var name = _localizationService.GetLocalized(productAttributeValue, x => x.Name, lang.Id, false, false);
+                        var name = _localizationService.GetLocalized(productAttributeValue, x => x.Name, lang.Id, false, false).Result;
                         if (!string.IsNullOrEmpty(name))
                             _localizedEntityService.SaveLocalizedValue(attributeValueCopy, x => x.Name, name, lang.Id);
                     }
@@ -289,7 +289,7 @@ namespace Nop.Services.Catalog
                     if (!associatedAttributes.ContainsKey(oldAttribute.Id)) 
                         continue;
 
-                    var newAttribute = _productAttributeService.GetProductAttributeMappingById(associatedAttributes[oldAttribute.Id]);
+                    var newAttribute = _productAttributeService.GetProductAttributeMappingById(associatedAttributes[oldAttribute.Id]).Result;
 
                     if (newAttribute == null) 
                         continue;
@@ -520,32 +520,32 @@ namespace Nop.Services.Catalog
         /// <param name="productCopy">New product</param>
         protected virtual void CopyLocalizationData(Product product, Product productCopy)
         {
-            var languages = _languageService.GetAllLanguages(true);
+            var languages = _languageService.GetAllLanguages(true).Result;
 
             //localization
             foreach (var lang in languages)
             {
-                var name = _localizationService.GetLocalized(product, x => x.Name, lang.Id, false, false);
+                var name = _localizationService.GetLocalized(product, x => x.Name, lang.Id, false, false).Result;
                 if (!string.IsNullOrEmpty(name))
                     _localizedEntityService.SaveLocalizedValue(productCopy, x => x.Name, name, lang.Id);
 
-                var shortDescription = _localizationService.GetLocalized(product, x => x.ShortDescription, lang.Id, false, false);
+                var shortDescription = _localizationService.GetLocalized(product, x => x.ShortDescription, lang.Id, false, false).Result;
                 if (!string.IsNullOrEmpty(shortDescription))
                     _localizedEntityService.SaveLocalizedValue(productCopy, x => x.ShortDescription, shortDescription, lang.Id);
 
-                var fullDescription = _localizationService.GetLocalized(product, x => x.FullDescription, lang.Id, false, false);
+                var fullDescription = _localizationService.GetLocalized(product, x => x.FullDescription, lang.Id, false, false).Result;
                 if (!string.IsNullOrEmpty(fullDescription))
                     _localizedEntityService.SaveLocalizedValue(productCopy, x => x.FullDescription, fullDescription, lang.Id);
 
-                var metaKeywords = _localizationService.GetLocalized(product, x => x.MetaKeywords, lang.Id, false, false);
+                var metaKeywords = _localizationService.GetLocalized(product, x => x.MetaKeywords, lang.Id, false, false).Result;
                 if (!string.IsNullOrEmpty(metaKeywords))
                     _localizedEntityService.SaveLocalizedValue(productCopy, x => x.MetaKeywords, metaKeywords, lang.Id);
 
-                var metaDescription = _localizationService.GetLocalized(product, x => x.MetaDescription, lang.Id, false, false);
+                var metaDescription = _localizationService.GetLocalized(product, x => x.MetaDescription, lang.Id, false, false).Result;
                 if (!string.IsNullOrEmpty(metaDescription))
                     _localizedEntityService.SaveLocalizedValue(productCopy, x => x.MetaDescription, metaDescription, lang.Id);
 
-                var metaTitle = _localizationService.GetLocalized(product, x => x.MetaTitle, lang.Id, false, false);
+                var metaTitle = _localizationService.GetLocalized(product, x => x.MetaTitle, lang.Id, false, false).Result;
                 if (!string.IsNullOrEmpty(metaTitle))
                     _localizedEntityService.SaveLocalizedValue(productCopy, x => x.MetaTitle, metaTitle, lang.Id);
 

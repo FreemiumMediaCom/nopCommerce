@@ -88,7 +88,7 @@ namespace Nop.Web.Controllers
 
         #region Methods
 
-        public virtual IActionResult List(BlogPagingFilteringModel command)
+        public  async virtual Task<IActionResult> List(BlogPagingFilteringModel command)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -97,7 +97,7 @@ namespace Nop.Web.Controllers
             return View("List", model);
         }
 
-        public virtual IActionResult BlogByTag(BlogPagingFilteringModel command)
+        public  async virtual Task<IActionResult> BlogByTag(BlogPagingFilteringModel command)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -106,7 +106,7 @@ namespace Nop.Web.Controllers
             return View("List", model);
         }
 
-        public virtual IActionResult BlogByMonth(BlogPagingFilteringModel command)
+        public  async virtual Task<IActionResult> BlogByMonth(BlogPagingFilteringModel command)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -115,7 +115,7 @@ namespace Nop.Web.Controllers
             return View("List", model);
         }
 
-        public virtual IActionResult ListRss(int languageId)
+        public  async virtual Task<IActionResult> ListRss(int languageId)
         {
             var feed = new RssFeed(
                 $"{_localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name)}: Blog",
@@ -138,7 +138,7 @@ namespace Nop.Web.Controllers
             return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
         }
 
-        public virtual IActionResult BlogPost(int blogPostId)
+        public  async virtual Task<IActionResult> BlogPost(int blogPostId)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -172,7 +172,7 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         [FormValueRequired("add-comment")]
         [ValidateCaptcha]
-        public virtual IActionResult BlogCommentAdd(int blogPostId, BlogPostModel model, bool captchaValid)
+        public  async virtual Task<IActionResult> BlogCommentAdd(int blogPostId, BlogPostModel model, bool captchaValid)
         {
             if (!_blogSettings.Enabled)
                 return RedirectToRoute("Homepage");

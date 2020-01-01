@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Common;
@@ -107,13 +108,13 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="addressId">Address identifier</param>
         /// <returns>Address</returns>
-        public virtual Address GetAddressById(int addressId)
+        public async virtual Task<Address> GetAddressById(int addressId)
         {
             if (addressId == 0)
                 return null;
 
             var key = string.Format(NopCommonDefaults.AddressesByIdCacheKey, addressId);
-            return _cacheManager.Get(key, () => _addressRepository.GetById(addressId));
+            return await _cacheManager.Get(key, async () => await _addressRepository.GetById(addressId));
         }
 
         /// <summary>

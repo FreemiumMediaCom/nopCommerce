@@ -308,7 +308,7 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                     return;
 
                 //prepare supported cultures
-                var cultures = EngineContext.Current.Resolve<ILanguageService>().GetAllLanguages()
+                var cultures = EngineContext.Current.Resolve<ILanguageService>().GetAllLanguages().Result
                     .OrderBy(language => language.DisplayOrder)
                     .Select(language => new CultureInfo(language.LanguageCulture)).ToList();
                 options.SupportedCultures = cultures;

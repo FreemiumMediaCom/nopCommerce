@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Blogs;
@@ -66,12 +67,12 @@ namespace Nop.Services.Blogs
         /// </summary>
         /// <param name="blogPostId">Blog post identifier</param>
         /// <returns>Blog post</returns>
-        public virtual BlogPost GetBlogPostById(int blogPostId)
+        public async virtual Task<BlogPost> GetBlogPostById(int blogPostId)
         {
             if (blogPostId == 0)
                 return null;
 
-            return _blogPostRepository.GetById(blogPostId);
+            return await _blogPostRepository.GetById(blogPostId);
         }
 
         /// <summary>
@@ -336,12 +337,12 @@ namespace Nop.Services.Blogs
         /// </summary>
         /// <param name="blogCommentId">Blog comment identifier</param>
         /// <returns>Blog comment</returns>
-        public virtual BlogComment GetBlogCommentById(int blogCommentId)
+        public async virtual Task<BlogComment> GetBlogCommentById(int blogCommentId)
         {
             if (blogCommentId == 0)
                 return null;
 
-            return _blogCommentRepository.GetById(blogCommentId);
+            return await _blogCommentRepository.GetById(blogCommentId);
         }
 
         /// <summary>

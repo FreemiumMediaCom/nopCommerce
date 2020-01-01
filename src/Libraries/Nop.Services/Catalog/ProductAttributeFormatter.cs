@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Text;
 using Nop.Core;
@@ -108,7 +108,7 @@ namespace Nop.Services.Catalog
                             if (attribute.AttributeControlType == AttributeControlType.MultilineTextbox)
                             {
                                 //multiline textbox
-                                var attributeName = _localizationService.GetLocalized(attribute.ProductAttribute, a => a.Name, _workContext.WorkingLanguage.Id);
+                                var attributeName = _localizationService.GetLocalized(attribute.ProductAttribute, a => a.Name, _workContext.WorkingLanguage.Id).Result;
 
                                 //encode (if required)
                                 if (htmlEncode)
@@ -134,7 +134,7 @@ namespace Nop.Services.Catalog
                                     var attributeText = allowHyperlinks ? $"<a href=\"{_webHelper.GetStoreLocation(false)}download/getfileupload/?downloadId={download.DownloadGuid}\" class=\"fileuploadattribute\">{fileName}</a>"
                                         : fileName;
 
-                                    var attributeName = _localizationService.GetLocalized(attribute.ProductAttribute, a => a.Name, _workContext.WorkingLanguage.Id);
+                                    var attributeName = _localizationService.GetLocalized(attribute.ProductAttribute, a => a.Name, _workContext.WorkingLanguage.Id).Result;
 
                                     //encode (if required)
                                     if (htmlEncode)
@@ -189,7 +189,7 @@ namespace Nop.Services.Catalog
                                 {
                                     var attributeValuePriceAdjustment = _priceCalculationService.GetProductAttributeValuePriceAdjustment(attributeValue, customer);
                                     var priceAdjustmentBase = _taxService.GetProductPrice(product, attributeValuePriceAdjustment, customer, out var _);
-                                    var priceAdjustment = _currencyService.ConvertFromPrimaryStoreCurrency(priceAdjustmentBase, _workContext.WorkingCurrency);
+                                    var priceAdjustment = _currencyService.ConvertFromPrimaryStoreCurrency(priceAdjustmentBase, _workContext.WorkingCurrency).Result;
 
                                     if (priceAdjustmentBase > decimal.Zero)
                                     {

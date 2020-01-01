@@ -780,7 +780,7 @@ namespace Nop.Services.Common
                 pAttribTable.DefaultCell.Border = Rectangle.NO_BORDER;
 
                 //product name
-                var name = _localizationService.GetLocalized(p, x => x.Name, lang.Id);
+                var name = _localizationService.GetLocalized(p, x => x.Name, lang.Id).Result;
                 pAttribTable.AddCell(new Paragraph(name, font));
                 cellProductItem.AddElement(new Paragraph(name, font));
                 //attributes
@@ -953,7 +953,7 @@ namespace Nop.Services.Common
                     {
                         var addressLine = $"{indent}{order.ShippingAddress.City}, " +
                             $"{(!string.IsNullOrEmpty(order.ShippingAddress.County) ? $"{order.ShippingAddress.County}, " : string.Empty)}" +
-                            $"{(order.ShippingAddress.StateProvince != null ? _localizationService.GetLocalized(order.ShippingAddress.StateProvince, x => x.Name, lang.Id) : string.Empty)} " +
+                            $"{(order.ShippingAddress.StateProvince != null ? _localizationService.GetLocalized(order.ShippingAddress.StateProvince, x => x.Name, lang.Id).Result : string.Empty)} " +
                             $"{order.ShippingAddress.ZipPostalCode}";
                         shippingAddress.AddCell(new Paragraph(addressLine, font));
                     }
@@ -1038,7 +1038,7 @@ namespace Nop.Services.Common
             {
                 var addressLine = $"{indent}{order.BillingAddress.City}, " +
                     $"{(!string.IsNullOrEmpty(order.BillingAddress.County) ? $"{order.BillingAddress.County}, " : string.Empty)}" +
-                    $"{(order.BillingAddress.StateProvince != null ? _localizationService.GetLocalized(order.BillingAddress.StateProvince, x => x.Name, lang.Id) : string.Empty)} " +
+                    $"{(order.BillingAddress.StateProvince != null ? _localizationService.GetLocalized(order.BillingAddress.StateProvince, x => x.Name, lang.Id).Result : string.Empty)} " +
                     $"{order.BillingAddress.ZipPostalCode}";
                 billingAddress.AddCell(new Paragraph(addressLine, font));
             }
@@ -1224,7 +1224,7 @@ namespace Nop.Services.Common
                 //so let's load it based on a store of the current order
                 var pdfSettingsByStore = _settingService.LoadSetting<PdfSettings>(order.StoreId);
 
-                var lang = _languageService.GetLanguageById(languageId == 0 ? order.CustomerLanguageId : languageId);
+                var lang = _languageService.GetLanguageById(languageId == 0 ? order.CustomerLanguageId : languageId).Result;
                 if (lang == null || !lang.Published)
                     lang = _workContext.WorkingLanguage;
 
@@ -1299,7 +1299,7 @@ namespace Nop.Services.Common
             {
                 var order = shipment.Order;
 
-                var lang = _languageService.GetLanguageById(languageId == 0 ? order.CustomerLanguageId : languageId);
+                var lang = _languageService.GetLanguageById(languageId == 0 ? order.CustomerLanguageId : languageId).Result;
                 if (lang == null || !lang.Published)
                     lang = _workContext.WorkingLanguage;
 
@@ -1334,13 +1334,13 @@ namespace Nop.Services.Common
                     {
                         var addressLine = $"{order.ShippingAddress.City}, " +
                             $"{(!string.IsNullOrEmpty(order.ShippingAddress.County) ? $"{order.ShippingAddress.County}, " : string.Empty)}" +
-                            $"{(order.ShippingAddress.StateProvince != null ? _localizationService.GetLocalized(order.ShippingAddress.StateProvince, x => x.Name, lang.Id) : string.Empty)} " +
+                            $"{(order.ShippingAddress.StateProvince != null ? _localizationService.GetLocalized(order.ShippingAddress.StateProvince, x => x.Name, lang.Id).Result : string.Empty)} " +
                             $"{order.ShippingAddress.ZipPostalCode}";
                         addressTable.AddCell(new Paragraph(addressLine, font));
                     }
 
                     if (_addressSettings.CountryEnabled && order.ShippingAddress.Country != null)
-                        addressTable.AddCell(new Paragraph(_localizationService.GetLocalized(order.ShippingAddress.Country, x => x.Name, lang.Id), font));
+                        addressTable.AddCell(new Paragraph(_localizationService.GetLocalized(order.ShippingAddress.Country, x => x.Name, lang.Id).Result, font));
 
                     //custom attributes
                     var customShippingAddressAttributes = _addressAttributeFormatter.FormatAttributes(order.ShippingAddress.CustomAttributes);
@@ -1414,7 +1414,7 @@ namespace Nop.Services.Common
                         continue;
 
                     var p = orderItem.Product;
-                    var name = _localizationService.GetLocalized(p, x => x.Name, lang.Id);
+                    var name = _localizationService.GetLocalized(p, x => x.Name, lang.Id).Result;
                     productAttribTable.AddCell(new Paragraph(name, font));
                     //attributes
                     if (!string.IsNullOrEmpty(orderItem.AttributeDescription))
@@ -1501,7 +1501,7 @@ namespace Nop.Services.Common
             foreach (var product in products)
             {
                 var productName = _localizationService.GetLocalized(product, x => x.Name, lang.Id);
-                var productDescription = _localizationService.GetLocalized(product, x => x.FullDescription, lang.Id);
+                var productDescription = _localizationService.GetLocalized(product, x => x.FullDescription, lang.Id).Result;
 
                 var productTable = new PdfPTable(1) { WidthPercentage = 100f };
                 productTable.DefaultCell.Border = Rectangle.NO_BORDER;
@@ -1519,14 +1519,14 @@ namespace Nop.Services.Common
                 {
                     //simple product
                     //render its properties such as price, weight, etc
-                    var priceStr = $"{product.Price:0.00} {_currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId).CurrencyCode}";
+                    var priceStr = $"{product.Price:0.00} {_currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId).Result.CurrencyCode}";
                     if (product.IsRental)
                         priceStr = _priceFormatter.FormatRentalProductPeriod(product, priceStr);
                     productTable.AddCell(new Paragraph($"{_localizationService.GetResource("PDFProductCatalog.Price", lang.Id)}: {priceStr}", font));
                     productTable.AddCell(new Paragraph($"{_localizationService.GetResource("PDFProductCatalog.SKU", lang.Id)}: {product.Sku}", font));
 
                     if (product.IsShipEnabled && product.Weight > decimal.Zero)
-                        productTable.AddCell(new Paragraph($"{_localizationService.GetResource("PDFProductCatalog.Weight", lang.Id)}: {product.Weight:0.00} {_measureService.GetMeasureWeightById(_measureSettings.BaseWeightId).Name}", font));
+                        productTable.AddCell(new Paragraph($"{_localizationService.GetResource("PDFProductCatalog.Weight", lang.Id)}: {product.Weight:0.00} {_measureService.GetMeasureWeightById(_measureSettings.BaseWeightId).Result.Name}", font));
 
                     if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock)
                         productTable.AddCell(new Paragraph($"{_localizationService.GetResource("PDFProductCatalog.StockQuantity", lang.Id)}: {_productService.GetTotalStockQuantity(product)}", font));
@@ -1600,11 +1600,11 @@ namespace Nop.Services.Common
                         //    }
                         //}
 
-                        productTable.AddCell(new Paragraph($"{_localizationService.GetResource("PDFProductCatalog.Price", lang.Id)}: {associatedProduct.Price:0.00} {_currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId).CurrencyCode}", font));
+                        productTable.AddCell(new Paragraph($"{_localizationService.GetResource("PDFProductCatalog.Price", lang.Id)}: {associatedProduct.Price:0.00} {_currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId).Result.CurrencyCode}", font));
                         productTable.AddCell(new Paragraph($"{_localizationService.GetResource("PDFProductCatalog.SKU", lang.Id)}: {associatedProduct.Sku}", font));
 
                         if (associatedProduct.IsShipEnabled && associatedProduct.Weight > decimal.Zero)
-                            productTable.AddCell(new Paragraph($"{_localizationService.GetResource("PDFProductCatalog.Weight", lang.Id)}: {associatedProduct.Weight:0.00} {_measureService.GetMeasureWeightById(_measureSettings.BaseWeightId).Name}", font));
+                            productTable.AddCell(new Paragraph($"{_localizationService.GetResource("PDFProductCatalog.Weight", lang.Id)}: {associatedProduct.Weight:0.00} {_measureService.GetMeasureWeightById(_measureSettings.BaseWeightId).Result.Name}", font));
 
                         if (associatedProduct.ManageInventoryMethod == ManageInventoryMethod.ManageStock)
                             productTable.AddCell(new Paragraph($"{_localizationService.GetResource("PDFProductCatalog.StockQuantity", lang.Id)}: {_productService.GetTotalStockQuantity(associatedProduct)}", font));

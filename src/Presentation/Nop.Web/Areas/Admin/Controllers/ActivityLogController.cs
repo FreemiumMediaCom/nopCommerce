@@ -43,7 +43,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult ActivityTypes()
+        public  async virtual Task<IActionResult> ActivityTypes()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedView();
@@ -55,7 +55,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ActionName("SaveTypes")]
-        public virtual IActionResult SaveTypes(IFormCollection form)
+        public  async virtual Task<IActionResult> SaveTypes(IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedView();
@@ -82,7 +82,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("ActivityTypes");
         }
 
-        public virtual IActionResult ActivityLogs()
+        public  async virtual Task<IActionResult> ActivityLogs()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedView();
@@ -94,7 +94,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ListLogs(ActivityLogSearchModel searchModel)
+        public  async virtual Task<IActionResult> ListLogs(ActivityLogSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedDataTablesJson();
@@ -106,7 +106,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ActivityLogDelete(int id)
+        public  async virtual Task<IActionResult> ActivityLogDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedView();
@@ -124,7 +124,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual IActionResult ClearAll()
+        public  async virtual Task<IActionResult> ClearAll()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageActivityLog))
                 return AccessDeniedView();

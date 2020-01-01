@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Data;
 using Nop.Core.Domain.Affiliates;
@@ -52,12 +53,12 @@ namespace Nop.Services.Affiliates
         /// </summary>
         /// <param name="affiliateId">Affiliate identifier</param>
         /// <returns>Affiliate</returns>
-        public virtual Affiliate GetAffiliateById(int affiliateId)
+        public async virtual Task<Affiliate> GetAffiliateById(int affiliateId)
         {
             if (affiliateId == 0)
                 return null;
 
-            return _affiliateRepository.GetById(affiliateId);
+            return await _affiliateRepository.GetById(affiliateId);
         }
 
         /// <summary>

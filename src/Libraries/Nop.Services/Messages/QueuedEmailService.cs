@@ -111,7 +111,7 @@ namespace Nop.Services.Messages
             if (queuedEmailId == 0)
                 return null;
 
-            return _queuedEmailRepository.GetById(queuedEmailId);
+            return _queuedEmailRepository.GetById(queuedEmailId).Result;
         }
 
         /// <summary>

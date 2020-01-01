@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
 using Nop.Services.Events;
@@ -66,12 +67,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productTemplateId">Product template identifier</param>
         /// <returns>Product template</returns>
-        public virtual ProductTemplate GetProductTemplateById(int productTemplateId)
+        public async virtual Task<ProductTemplate> GetProductTemplateById(int productTemplateId)
         {
             if (productTemplateId == 0)
                 return null;
 
-            return _productTemplateRepository.GetById(productTemplateId);
+            return await _productTemplateRepository.GetById(productTemplateId);
         }
 
         /// <summary>

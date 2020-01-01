@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Nop.Core;
 using Nop.Core.Data;
@@ -56,7 +56,7 @@ namespace Nop.Services.Polls
             if (pollId == 0)
                 return null;
 
-            return _pollRepository.GetById(pollId);
+            return _pollRepository.GetById(pollId).Result;
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace Nop.Services.Polls
             if (pollAnswerId == 0)
                 return null;
 
-            return _pollAnswerRepository.GetById(pollAnswerId);
+            return _pollAnswerRepository.GetById(pollAnswerId).Result;
         }
 
         /// <summary>

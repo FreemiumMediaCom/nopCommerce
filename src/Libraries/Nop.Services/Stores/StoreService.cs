@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Caching;
@@ -101,7 +101,7 @@ namespace Nop.Services.Stores
 
             Store LoadStoreFunc()
             {
-                return _storeRepository.GetById(storeId);
+                return _storeRepository.GetById(storeId).Result;
             }
 
             if (!loadCacheableCopy) 

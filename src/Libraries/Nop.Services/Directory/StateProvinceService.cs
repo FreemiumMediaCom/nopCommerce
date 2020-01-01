@@ -6,6 +6,7 @@ using Nop.Core.Data;
 using Nop.Core.Domain.Directory;
 using Nop.Services.Events;
 using Nop.Services.Localization;
+using System.Threading.Tasks;
 
 namespace Nop.Services.Directory
 {
@@ -61,12 +62,12 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="stateProvinceId">The state/province identifier</param>
         /// <returns>State/province</returns>
-        public virtual StateProvince GetStateProvinceById(int stateProvinceId)
+        public async virtual Task<StateProvince> GetStateProvinceById(int stateProvinceId)
         {
             if (stateProvinceId == 0)
                 return null;
 
-            return _stateProvinceRepository.GetById(stateProvinceId);
+            return await _stateProvinceRepository.GetById(stateProvinceId);
         }
 
         /// <summary>

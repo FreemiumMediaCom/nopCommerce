@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Vendors;
@@ -60,13 +61,13 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorAttributeId">Vendor attribute identifier</param>
         /// <returns>Vendor attribute</returns>
-        public virtual VendorAttribute GetVendorAttributeById(int vendorAttributeId)
+        public async virtual Task<VendorAttribute> GetVendorAttributeById(int vendorAttributeId)
         {
             if (vendorAttributeId == 0)
                 return null;
 
             var key = string.Format(NopVendorsServiceDefaults.VendorAttributesByIdCacheKey, vendorAttributeId);
-            return _cacheManager.Get(key, () => _vendorAttributeRepository.GetById(vendorAttributeId));
+            return await _cacheManager.Get(key, async () => await _vendorAttributeRepository.GetById(vendorAttributeId));
         }
 
         /// <summary>
@@ -149,13 +150,13 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorAttributeValueId">Vendor attribute value identifier</param>
         /// <returns>Vendor attribute value</returns>
-        public virtual VendorAttributeValue GetVendorAttributeValueById(int vendorAttributeValueId)
+        public async virtual Task<VendorAttributeValue> GetVendorAttributeValueById(int vendorAttributeValueId)
         {
             if (vendorAttributeValueId == 0)
                 return null;
 
             var key = string.Format(NopVendorsServiceDefaults.VendorAttributeValuesByIdCacheKey, vendorAttributeValueId);
-            return _cacheManager.Get(key, () => _vendorAttributeValueRepository.GetById(vendorAttributeValueId));
+            return await _cacheManager.Get(key, async () => await _vendorAttributeValueRepository.GetById(vendorAttributeValueId));
         }
 
         /// <summary>

@@ -535,7 +535,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        protected virtual IActionResult GetProductToCartDetails(List<string> addToCartWarnings, ShoppingCartType cartType,
+        protected  async virtual Task<IActionResult> GetProductToCartDetails(List<string> addToCartWarnings, ShoppingCartType cartType,
             Product product)
         {
             if (addToCartWarnings.Any())
@@ -629,7 +629,7 @@ namespace Nop.Web.Controllers
         //add product to cart using AJAX
         //currently we use this method on catalog pages (category/manufacturer/etc)
         [HttpPost]
-        public virtual IActionResult AddProductToCart_Catalog(int productId, int shoppingCartTypeId,
+        public  async virtual Task<IActionResult> AddProductToCart_Catalog(int productId, int shoppingCartTypeId,
             int quantity, bool forceredirection = false)
         {
             var cartType = (ShoppingCartType)shoppingCartTypeId;
@@ -825,7 +825,7 @@ namespace Nop.Web.Controllers
         //add product to cart using AJAX
         //currently we use this method on the product details pages
         [HttpPost]
-        public virtual IActionResult AddProductToCart_Details(int productId, int shoppingCartTypeId, IFormCollection form)
+        public  async virtual Task<IActionResult> AddProductToCart_Details(int productId, int shoppingCartTypeId, IFormCollection form)
         {
             var product = _productService.GetProductById(productId);
             if (product == null)
@@ -931,7 +931,7 @@ namespace Nop.Web.Controllers
         //handle product attribute selection event. this way we return new price, overridden gtin/sku/mpn
         //currently we use this method on the product details pages
         [HttpPost]
-        public virtual IActionResult ProductDetails_AttributeChange(int productId, bool validateAttributeConditions,
+        public  async virtual Task<IActionResult> ProductDetails_AttributeChange(int productId, bool validateAttributeConditions,
             bool loadPicture, IFormCollection form)
         {
             var product = _productService.GetProductById(productId);
@@ -1078,7 +1078,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult CheckoutAttributeChange(IFormCollection form, bool isEditable)
+        public  async virtual Task<IActionResult> CheckoutAttributeChange(IFormCollection form, bool isEditable)
         {
             var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
 
@@ -1123,7 +1123,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult UploadFileProductAttribute(int attributeId)
+        public  async virtual Task<IActionResult> UploadFileProductAttribute(int attributeId)
         {
             var attribute = _productAttributeService.GetProductAttributeMappingById(attributeId);
             if (attribute == null || attribute.AttributeControlType != AttributeControlType.FileUpload)
@@ -1204,7 +1204,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult UploadFileCheckoutAttribute(int attributeId)
+        public  async virtual Task<IActionResult> UploadFileCheckoutAttribute(int attributeId)
         {
             var attribute = _checkoutAttributeService.GetCheckoutAttributeById(attributeId);
             if (attribute == null || attribute.AttributeControlType != AttributeControlType.FileUpload)
@@ -1285,7 +1285,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult Cart()
+        public  async virtual Task<IActionResult> Cart()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart))
                 return RedirectToRoute("Homepage");
@@ -1298,7 +1298,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("Cart")]
         [FormValueRequired("updatecart")]
-        public virtual IActionResult UpdateCart(IFormCollection form)
+        public  async virtual Task<IActionResult> UpdateCart(IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart))
                 return RedirectToRoute("Homepage");
@@ -1361,7 +1361,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("Cart")]
         [FormValueRequired("continueshopping")]
-        public virtual IActionResult ContinueShopping()
+        public  async virtual Task<IActionResult> ContinueShopping()
         {
             var returnUrl = _genericAttributeService.GetAttribute<string>(_workContext.CurrentCustomer, NopCustomerDefaults.LastContinueShoppingPageAttribute, _storeContext.CurrentStore.Id);
             if (!string.IsNullOrEmpty(returnUrl))
@@ -1373,7 +1373,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("Cart")]
         [FormValueRequired("checkout")]
-        public virtual IActionResult StartCheckout(IFormCollection form)
+        public  async virtual Task<IActionResult> StartCheckout(IFormCollection form)
         {
             var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
 
@@ -1412,7 +1412,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("Cart")]
         [FormValueRequired("applydiscountcouponcode")]
-        public virtual IActionResult ApplyDiscountCoupon(string discountcouponcode, IFormCollection form)
+        public  async virtual Task<IActionResult> ApplyDiscountCoupon(string discountcouponcode, IFormCollection form)
         {
             //trim
             if (discountcouponcode != null)
@@ -1474,7 +1474,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("Cart")]
         [FormValueRequired("applygiftcardcouponcode")]
-        public virtual IActionResult ApplyGiftCard(string giftcardcouponcode, IFormCollection form)
+        public  async virtual Task<IActionResult> ApplyGiftCard(string giftcardcouponcode, IFormCollection form)
         {
             //trim
             if (giftcardcouponcode != null)
@@ -1523,7 +1523,7 @@ namespace Nop.Web.Controllers
 
         [PublicAntiForgery]
         [HttpPost]
-        public virtual IActionResult GetEstimateShipping(int? countryId, int? stateProvinceId, string zipPostalCode, IFormCollection form)
+        public  async virtual Task<IActionResult> GetEstimateShipping(int? countryId, int? stateProvinceId, string zipPostalCode, IFormCollection form)
         {
             var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, ShoppingCartType.ShoppingCart, _storeContext.CurrentStore.Id);
 
@@ -1556,7 +1556,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("Cart")]
         [FormValueRequired(FormValueRequirement.StartsWith, "removediscount-")]
-        public virtual IActionResult RemoveDiscountCoupon(IFormCollection form)
+        public  async virtual Task<IActionResult> RemoveDiscountCoupon(IFormCollection form)
         {
             var model = new ShoppingCartModel();
 
@@ -1577,7 +1577,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("Cart")]
         [FormValueRequired(FormValueRequirement.StartsWith, "removegiftcard-")]
-        public virtual IActionResult RemoveGiftCardCode(IFormCollection form)
+        public  async virtual Task<IActionResult> RemoveGiftCardCode(IFormCollection form)
         {
             var model = new ShoppingCartModel();
 
@@ -1601,7 +1601,7 @@ namespace Nop.Web.Controllers
         #region Wishlist
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult Wishlist(Guid? customerGuid)
+        public  async virtual Task<IActionResult> Wishlist(Guid? customerGuid)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableWishlist))
                 return RedirectToRoute("Homepage");
@@ -1621,7 +1621,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("Wishlist")]
         [FormValueRequired("updatecart")]
-        public virtual IActionResult UpdateWishlist(IFormCollection form)
+        public  async virtual Task<IActionResult> UpdateWishlist(IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableWishlist))
                 return RedirectToRoute("Homepage");
@@ -1682,7 +1682,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("Wishlist")]
         [FormValueRequired("addtocartbutton")]
-        public virtual IActionResult AddItemsToCartFromWishlist(Guid? customerGuid, IFormCollection form)
+        public  async virtual Task<IActionResult> AddItemsToCartFromWishlist(Guid? customerGuid, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart))
                 return RedirectToRoute("Homepage");
@@ -1751,7 +1751,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpsRequirement(SslRequirement.Yes)]
-        public virtual IActionResult EmailWishlist()
+        public  async virtual Task<IActionResult> EmailWishlist()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableWishlist) || !_shoppingCartSettings.EmailWishlistEnabled)
                 return RedirectToRoute("Homepage");
@@ -1770,7 +1770,7 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         [FormValueRequired("send-email")]
         [ValidateCaptcha]
-        public virtual IActionResult EmailWishlistSend(WishlistEmailAFriendModel model, bool captchaValid)
+        public  async virtual Task<IActionResult> EmailWishlistSend(WishlistEmailAFriendModel model, bool captchaValid)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.EnableWishlist) || !_shoppingCartSettings.EmailWishlistEnabled)
                 return RedirectToRoute("Homepage");

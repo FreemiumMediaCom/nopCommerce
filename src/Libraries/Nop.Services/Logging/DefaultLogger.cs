@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
@@ -161,7 +161,7 @@ namespace Nop.Services.Logging
             if (logId == 0)
                 return null;
 
-            return _logRepository.GetById(logId);
+            return _logRepository.GetById(logId).Result;
         }
 
         /// <summary>

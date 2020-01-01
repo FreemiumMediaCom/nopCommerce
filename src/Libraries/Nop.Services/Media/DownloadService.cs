@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -46,7 +46,7 @@ namespace Nop.Services.Media
             if (downloadId == 0)
                 return null;
 
-            return _downloadRepository.GetById(downloadId);
+            return _downloadRepository.GetById(downloadId).Result;
         }
 
         /// <summary>

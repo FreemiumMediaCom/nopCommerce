@@ -168,7 +168,7 @@ namespace Nop.Web.Controllers
 
         #region Methods (common)
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -235,7 +235,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoute("CheckoutBillingAddress");
         }
 
-        public virtual IActionResult Completed(int? orderId)
+        public  async virtual Task<IActionResult> Completed(int? orderId)
         {
             //validation
             if (_workContext.CurrentCustomer.IsGuest() && !_orderSettings.AnonymousCheckoutAllowed)
@@ -273,7 +273,7 @@ namespace Nop.Web.Controllers
 
         #region Methods (multistep checkout)
 
-        public virtual IActionResult BillingAddress(IFormCollection form)
+        public  async virtual Task<IActionResult> BillingAddress(IFormCollection form)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -310,7 +310,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult SelectBillingAddress(int addressId, bool shipToSameAddress = false)
+        public  async virtual Task<IActionResult> SelectBillingAddress(int addressId, bool shipToSameAddress = false)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -344,7 +344,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("BillingAddress")]
         [FormValueRequired("nextstep")]
-        public virtual IActionResult NewBillingAddress(CheckoutBillingAddressModel model, IFormCollection form)
+        public  async virtual Task<IActionResult> NewBillingAddress(CheckoutBillingAddressModel model, IFormCollection form)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -419,7 +419,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ShippingAddress()
+        public  async virtual Task<IActionResult> ShippingAddress()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -448,7 +448,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult SelectShippingAddress(int addressId)
+        public  async virtual Task<IActionResult> SelectShippingAddress(int addressId)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -472,7 +472,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("ShippingAddress")]
         [FormValueRequired("nextstep")]
-        public virtual IActionResult NewShippingAddress(CheckoutShippingAddressModel model, IFormCollection form)
+        public  async virtual Task<IActionResult> NewShippingAddress(CheckoutShippingAddressModel model, IFormCollection form)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -575,7 +575,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ShippingMethod()
+        public  async virtual Task<IActionResult> ShippingMethod()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -618,7 +618,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("ShippingMethod")]
         [FormValueRequired("nextstep")]
-        public virtual IActionResult SelectShippingMethod(string shippingoption)
+        public  async virtual Task<IActionResult> SelectShippingMethod(string shippingoption)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -679,7 +679,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoute("CheckoutPaymentMethod");
         }
 
-        public virtual IActionResult PaymentMethod()
+        public  async virtual Task<IActionResult> PaymentMethod()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -736,7 +736,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("PaymentMethod")]
         [FormValueRequired("nextstep")]
-        public virtual IActionResult SelectPaymentMethod(string paymentmethod, CheckoutPaymentMethodModel model)
+        public  async virtual Task<IActionResult> SelectPaymentMethod(string paymentmethod, CheckoutPaymentMethodModel model)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -783,7 +783,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoute("CheckoutPaymentInfo");
         }
 
-        public virtual IActionResult PaymentInfo()
+        public  async virtual Task<IActionResult> PaymentInfo()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -834,7 +834,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost, ActionName("PaymentInfo")]
         [FormValueRequired("nextstep")]
-        public virtual IActionResult EnterPaymentInfo(IFormCollection form)
+        public  async virtual Task<IActionResult> EnterPaymentInfo(IFormCollection form)
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -886,7 +886,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Confirm()
+        public  async virtual Task<IActionResult> Confirm()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -909,7 +909,7 @@ namespace Nop.Web.Controllers
         }
 
         [HttpPost, ActionName("Confirm")]
-        public virtual IActionResult ConfirmOrder()
+        public  async virtual Task<IActionResult> ConfirmOrder()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -1115,7 +1115,7 @@ namespace Nop.Web.Controllers
             });
         }
 
-        public virtual IActionResult OnePageCheckout()
+        public  async virtual Task<IActionResult> OnePageCheckout()
         {
             //validation
             if (_orderSettings.CheckoutDisabled)
@@ -1136,7 +1136,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult OpcSaveBilling(CheckoutBillingAddressModel model, IFormCollection form)
+        public  async virtual Task<IActionResult> OpcSaveBilling(CheckoutBillingAddressModel model, IFormCollection form)
         {
             try
             {
@@ -1276,7 +1276,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcSaveShipping(CheckoutShippingAddressModel model, IFormCollection form)
+        public  async virtual Task<IActionResult> OpcSaveShipping(CheckoutShippingAddressModel model, IFormCollection form)
         {
             try
             {
@@ -1416,7 +1416,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcSaveShippingMethod(string shippingoption)
+        public  async virtual Task<IActionResult> OpcSaveShippingMethod(string shippingoption)
         {
             try
             {
@@ -1482,7 +1482,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcSavePaymentMethod(string paymentmethod, CheckoutPaymentMethodModel model)
+        public  async virtual Task<IActionResult> OpcSavePaymentMethod(string paymentmethod, CheckoutPaymentMethodModel model)
         {
             try
             {
@@ -1551,7 +1551,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcSavePaymentInfo(IFormCollection form)
+        public  async virtual Task<IActionResult> OpcSavePaymentInfo(IFormCollection form)
         {
             try
             {
@@ -1618,7 +1618,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcConfirmOrder()
+        public  async virtual Task<IActionResult> OpcConfirmOrder()
         {
             try
             {
@@ -1713,7 +1713,7 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual IActionResult OpcCompleteRedirectionPayment()
+        public  async virtual Task<IActionResult> OpcCompleteRedirectionPayment()
         {
             try
             {

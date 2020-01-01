@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Data;
@@ -50,7 +50,7 @@ namespace Nop.Services.Tasks
             if (taskId == 0)
                 return null;
 
-            return _taskRepository.GetById(taskId);
+            return _taskRepository.GetById(taskId).Result;
         }
 
         /// <summary>

@@ -45,7 +45,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Methods()
+        public  async virtual Task<IActionResult> Methods()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageExternalAuthenticationMethods))
                 return AccessDeniedView();
@@ -58,7 +58,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Methods(ExternalAuthenticationMethodSearchModel searchModel)
+        public  async virtual Task<IActionResult> Methods(ExternalAuthenticationMethodSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageExternalAuthenticationMethods))
                 return AccessDeniedDataTablesJson();
@@ -70,7 +70,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult MethodUpdate(ExternalAuthenticationMethodModel model)
+        public  async virtual Task<IActionResult> MethodUpdate(ExternalAuthenticationMethodModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageExternalAuthenticationMethods))
                 return AccessDeniedView();

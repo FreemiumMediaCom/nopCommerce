@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Common;
 
@@ -26,7 +27,7 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="attributeId">Attribute identifier</param>
         /// <returns>An attribute</returns>
-        GenericAttribute GetAttributeById(int attributeId);
+        Task<GenericAttribute> GetAttributeById(int attributeId);
 
         /// <summary>
         /// Inserts an attribute

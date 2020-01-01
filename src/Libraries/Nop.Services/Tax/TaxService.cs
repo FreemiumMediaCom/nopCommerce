@@ -14,6 +14,7 @@ using Nop.Services.Common;
 using Nop.Services.Directory;
 using Nop.Services.Logging;
 using Nop.Services.Catalog;
+using System.Threading.Tasks;
 
 namespace Nop.Services.Tax
 {
@@ -86,7 +87,7 @@ namespace Nop.Services.Tax
         /// </summary>
         /// <param name="customer">Customer</param>
         /// <returns>Result</returns>
-        protected virtual bool IsEuConsumer(Customer customer)
+        protected async virtual Task<bool> IsEuConsumer(Customer customer)
         {
             if (customer == null)
                 throw new ArgumentNullException(nameof(customer));
@@ -101,7 +102,7 @@ namespace Nop.Services.Tax
             if (country == null && _customerSettings.CountryEnabled)
             {
                 var countryId = _genericAttributeService.GetAttribute<int>(customer, NopCustomerDefaults.CountryIdAttribute);
-                country = _countryService.GetCountryById(countryId);
+                country = await _countryService.GetCountryById(countryId);
             }
 
             //get country by IP address
@@ -109,7 +110,7 @@ namespace Nop.Services.Tax
             {
                 var ipAddress = _webHelper.GetCurrentIpAddress();
                 var countryIsoCode = _geoLookupService.LookupCountryIsoCode(ipAddress);
-                country = _countryService.GetCountryByTwoLetterIsoCode(countryIsoCode);
+                country = await _countryService.GetCountryByTwoLetterIsoCode(countryIsoCode);
             }
 
             //we cannot detect country
@@ -135,15 +136,15 @@ namespace Nop.Services.Tax
         /// Gets a default tax address
         /// </summary>
         /// <returns>Address</returns>
-        protected virtual CalculateTaxRequest.TaxAddress LoadDefaultTaxAddress()
+        protected async virtual Task<CalculateTaxRequest.TaxAddress> LoadDefaultTaxAddress()
         {
             var addressId = _taxSettings.DefaultTaxAddressId;
 
             //cache result so this address is not loaded for each HTTP request
             var cacheKey = string.Format(NopTaxDefaults.TaxAddressByAddressIdCacheKey, addressId);
-            return _cacheManager.Get(cacheKey, () =>
+            return await _cacheManager.Get(cacheKey, async () =>
             {
-                return PrepareTaxAddress(_addressService.GetAddressById(addressId));
+                return PrepareTaxAddress(await _addressService.GetAddressById(addressId));
             });
         }
 
@@ -202,7 +203,7 @@ namespace Nop.Services.Tax
         /// <param name="customer">Customer</param>
         /// <param name="price">Price</param>
         /// <returns>Package for tax calculation</returns>
-        protected virtual CalculateTaxRequest CreateCalculateTaxRequest(Product product,
+        protected async virtual Task<CalculateTaxRequest> CreateCalculateTaxRequest(Product product,
             int taxCategoryId, Customer customer, decimal price)
         {
             if (customer == null)
@@ -229,7 +230,7 @@ namespace Nop.Services.Tax
                 //January 1st 2015 passed? Yes, not required anymore
                 //DateTime.UtcNow > new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) &&
                 //Europe Union consumer?
-                IsEuConsumer(customer);
+                await IsEuConsumer(customer);
             if (overriddenBasedOn)
             {
                 //We must charge VAT in the EU country where the customer belongs (not where the business is based)
@@ -264,7 +265,7 @@ namespace Nop.Services.Tax
                     break;
                 case TaxBasedOn.DefaultAddress:
                 default:
-                    calculateTaxRequest.Address = LoadDefaultTaxAddress();
+                    calculateTaxRequest.Address = await LoadDefaultTaxAddress();
                     break;
             }
 
@@ -317,7 +318,7 @@ namespace Nop.Services.Tax
                 return;
 
             //tax request
-            var calculateTaxRequest = CreateCalculateTaxRequest(product, taxCategoryId, customer, price);
+            var calculateTaxRequest = CreateCalculateTaxRequest(product, taxCategoryId, customer, price).Result;
 
             //tax exempt
             if (IsTaxExempt(product, calculateTaxRequest.Customer))
@@ -328,7 +329,7 @@ namespace Nop.Services.Tax
             //make EU VAT exempt validation (the European Union Value Added Tax)
             if (isTaxable &&
                 _taxSettings.EuVatEnabled &&
-                IsVatExempt(calculateTaxRequest.Address, calculateTaxRequest.Customer))
+                IsVatExempt(calculateTaxRequest.Address, calculateTaxRequest.Customer).Result)
             {
                 //VAT is not chargeable
                 isTaxable = false;
@@ -830,7 +831,7 @@ namespace Nop.Services.Tax
         /// <param name="address">Address</param>
         /// <param name="customer">Customer</param>
         /// <returns>Result</returns>
-        public virtual bool IsVatExempt(CalculateTaxRequest.TaxAddress address, Customer customer)
+        public async virtual Task<bool> IsVatExempt(CalculateTaxRequest.TaxAddress address, Customer customer)
         {
             if (!_taxSettings.EuVatEnabled)
                 return false;
@@ -838,7 +839,7 @@ namespace Nop.Services.Tax
             if (customer == null || address == null)
                 return false;
 
-            var country = _countryService.GetCountryById(address.CountryId ?? 0);
+            var country = await _countryService.GetCountryById(address.CountryId ?? 0);
             if (country == null)
                 return false;
 

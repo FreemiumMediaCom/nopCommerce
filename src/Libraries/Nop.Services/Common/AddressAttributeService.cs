@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Caching;
@@ -83,7 +83,7 @@ namespace Nop.Services.Common
                 return null;
 
             var key = string.Format(NopCommonDefaults.AddressAttributesByIdCacheKey, addressAttributeId);
-            return _cacheManager.Get(key, () => _addressAttributeRepository.GetById(addressAttributeId));
+            return _cacheManager.Get(key, () => _addressAttributeRepository.GetById(addressAttributeId).Result);
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace Nop.Services.Common
                 return null;
 
             var key = string.Format(NopCommonDefaults.AddressAttributeValuesByIdCacheKey, addressAttributeValueId);
-            return _cacheManager.Get(key, () => _addressAttributeValueRepository.GetById(addressAttributeValueId));
+            return _cacheManager.Get(key, () => _addressAttributeValueRepository.GetById(addressAttributeValueId).Result);
         }
 
         /// <summary>

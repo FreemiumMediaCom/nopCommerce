@@ -45,12 +45,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSystemLog))
                 return AccessDeniedView();
@@ -62,7 +62,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult LogList(LogSearchModel searchModel)
+        public  async virtual Task<IActionResult> LogList(LogSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSystemLog))
                 return AccessDeniedDataTablesJson();
@@ -75,7 +75,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("clearall")]
-        public virtual IActionResult ClearAll()
+        public  async virtual Task<IActionResult> ClearAll()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSystemLog))
                 return AccessDeniedView();
@@ -90,7 +90,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult View(int id)
+        public  async virtual Task<IActionResult> View(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSystemLog))
                 return AccessDeniedView();
@@ -107,7 +107,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSystemLog))
                 return AccessDeniedView();
@@ -128,7 +128,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteSelected(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSystemLog))
                 return AccessDeniedView();

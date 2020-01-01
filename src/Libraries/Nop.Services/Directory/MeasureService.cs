@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -67,13 +68,13 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="measureDimensionId">Measure dimension identifier</param>
         /// <returns>Measure dimension</returns>
-        public virtual MeasureDimension GetMeasureDimensionById(int measureDimensionId)
+        public async virtual Task<MeasureDimension> GetMeasureDimensionById(int measureDimensionId)
         {
             if (measureDimensionId == 0)
                 return null;
 
             var key = string.Format(NopDirectoryDefaults.MeasureDimensionsByIdCacheKey, measureDimensionId);
-            return _cacheManager.Get(key, () => _measureDimensionRepository.GetById(measureDimensionId));
+            return await _cacheManager.Get(key, async () => await _measureDimensionRepository.GetById(measureDimensionId));
         }
 
         /// <summary>
@@ -249,13 +250,13 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="measureWeightId">Measure weight identifier</param>
         /// <returns>Measure weight</returns>
-        public virtual MeasureWeight GetMeasureWeightById(int measureWeightId)
+        public async virtual Task<MeasureWeight> GetMeasureWeightById(int measureWeightId)
         {
             if (measureWeightId == 0)
                 return null;
 
             var key = string.Format(NopDirectoryDefaults.MeasureWeightsByIdCacheKey, measureWeightId);
-            return _cacheManager.Get(key, () => _measureWeightRepository.GetById(measureWeightId));
+            return await _cacheManager.Get(key, async () => await _measureWeightRepository.GetById(measureWeightId));
         }
 
         /// <summary>

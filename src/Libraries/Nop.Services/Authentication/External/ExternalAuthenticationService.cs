@@ -90,7 +90,7 @@ namespace Nop.Services.Authentication.External
         /// <param name="currentLoggedInUser">Current logged-in user</param>
         /// <param name="returnUrl">URL to which the user will return after authentication</param>
         /// <returns>Result of an authentication</returns>
-        protected virtual IActionResult AuthenticateExistingUser(Customer associatedUser, Customer currentLoggedInUser, string returnUrl)
+        protected  async virtual Task<IActionResult> AuthenticateExistingUser(Customer associatedUser, Customer currentLoggedInUser, string returnUrl)
         {
             //log in guest user
             if (currentLoggedInUser == null)
@@ -112,7 +112,7 @@ namespace Nop.Services.Authentication.External
         /// <param name="parameters">Authentication parameters received from external authentication method</param>
         /// <param name="returnUrl">URL to which the user will return after authentication</param>
         /// <returns>Result of an authentication</returns>
-        protected virtual IActionResult AuthenticateNewUser(Customer currentLoggedInUser, ExternalAuthenticationParameters parameters, string returnUrl)
+        protected  async virtual Task<IActionResult> AuthenticateNewUser(Customer currentLoggedInUser, ExternalAuthenticationParameters parameters, string returnUrl)
         {
             //associate external account with logged-in user
             if (currentLoggedInUser != null)
@@ -135,7 +135,7 @@ namespace Nop.Services.Authentication.External
         /// <param name="parameters">Authentication parameters received from external authentication method</param>
         /// <param name="returnUrl">URL to which the user will return after authentication</param>
         /// <returns>Result of an authentication</returns>
-        protected virtual IActionResult RegisterNewUser(ExternalAuthenticationParameters parameters, string returnUrl)
+        protected  async virtual Task<IActionResult> RegisterNewUser(ExternalAuthenticationParameters parameters, string returnUrl)
         {
             //check whether the specified email has been already registered
             if (_customerService.GetCustomerByEmail(parameters.Email) != null)
@@ -207,7 +207,7 @@ namespace Nop.Services.Authentication.External
         /// <param name="user">User to login</param>
         /// <param name="returnUrl">URL to which the user will return after authentication</param>
         /// <returns>Result of an authentication</returns>
-        protected virtual IActionResult LoginUser(Customer user, string returnUrl)
+        protected  async virtual Task<IActionResult> LoginUser(Customer user, string returnUrl)
         {
             //migrate shopping cart
             _shoppingCartService.MigrateShoppingCart(_workContext.CurrentCustomer, user, true);
@@ -231,7 +231,7 @@ namespace Nop.Services.Authentication.External
         /// <param name="errors">Collection of errors</param>
         /// <param name="returnUrl">URL to which the user will return after authentication</param>
         /// <returns>Result of an authentication</returns>
-        protected virtual IActionResult ErrorAuthentication(IEnumerable<string> errors, string returnUrl)
+        protected  async virtual Task<IActionResult> ErrorAuthentication(IEnumerable<string> errors, string returnUrl)
         {
             foreach (var error in errors)
                 ExternalAuthorizerHelper.AddErrorsToDisplay(error);
@@ -244,7 +244,7 @@ namespace Nop.Services.Authentication.External
         /// </summary>
         /// <param name="returnUrl">URL to which the user will return after authentication</param>
         /// <returns>Result of an authentication</returns>
-        protected virtual IActionResult SuccessfulAuthentication(string returnUrl)
+        protected  async virtual Task<IActionResult> SuccessfulAuthentication(string returnUrl)
         {
             //redirect to the return URL if it's specified
             if (!string.IsNullOrEmpty(returnUrl))
@@ -265,7 +265,7 @@ namespace Nop.Services.Authentication.External
         /// <param name="parameters">External authentication parameters</param>
         /// <param name="returnUrl">URL to which the user will return after authentication</param>
         /// <returns>Result of an authentication</returns>
-        public virtual IActionResult Authenticate(ExternalAuthenticationParameters parameters, string returnUrl = null)
+        public  async virtual Task<IActionResult> Authenticate(ExternalAuthenticationParameters parameters, string returnUrl = null)
         {
             if (parameters == null)
                 throw new ArgumentNullException(nameof(parameters));
@@ -325,7 +325,7 @@ namespace Nop.Services.Authentication.External
             if (associationRecord == null)
                 return null;
 
-            return _customerService.GetCustomerById(associationRecord.CustomerId);
+            return _customerService.GetCustomerById(associationRecord.CustomerId).Result;
         }
 
         /// <summary>

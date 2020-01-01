@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using Nop.Core;
 using Nop.Core.Caching;
@@ -160,12 +161,12 @@ namespace Nop.Services.Localization
         /// </summary>
         /// <param name="localeStringResourceId">Locale string resource identifier</param>
         /// <returns>Locale string resource</returns>
-        public virtual LocaleStringResource GetLocaleStringResourceById(int localeStringResourceId)
+        public async virtual Task<LocaleStringResource> GetLocaleStringResourceById(int localeStringResourceId)
         {
             if (localeStringResourceId == 0)
                 return null;
 
-            return _lsrRepository.GetById(localeStringResourceId);
+            return await _lsrRepository.GetById(localeStringResourceId);
         }
 
         /// <summary>
@@ -459,7 +460,7 @@ namespace Nop.Services.Localization
         /// <param name="returnDefaultValue">A value indicating whether to return default value (if localized is not found)</param>
         /// <param name="ensureTwoPublishedLanguages">A value indicating whether to ensure that we have at least two published languages; otherwise, load only default value</param>
         /// <returns>Localized property</returns>
-        public virtual TPropType GetLocalized<TEntity, TPropType>(TEntity entity, Expression<Func<TEntity, TPropType>> keySelector,
+        public async virtual Task<TPropType> GetLocalized<TEntity, TPropType>(TEntity entity, Expression<Func<TEntity, TPropType>> keySelector,
             int? languageId = null, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
             where TEntity : BaseEntity, ILocalizedEntity
         {
@@ -487,7 +488,7 @@ namespace Nop.Services.Localization
                 var loadLocalizedValue = true;
                 if (ensureTwoPublishedLanguages)
                 {
-                    var totalPublishedLanguages = _languageService.GetAllLanguages().Count;
+                    var totalPublishedLanguages = (await _languageService.GetAllLanguages()).Count;
                     loadLocalizedValue = totalPublishedLanguages >= 2;
                 }
 
@@ -521,7 +522,7 @@ namespace Nop.Services.Localization
         /// <param name="returnDefaultValue">A value indicating whether to return default value (if localized is not found)</param>
         /// <param name="ensureTwoPublishedLanguages">A value indicating whether to ensure that we have at least two published languages; otherwise, load only default value</param>
         /// <returns>Localized property</returns>
-        public virtual string GetLocalizedSetting<TSettings>(TSettings settings, Expression<Func<TSettings, string>> keySelector,
+        public async virtual Task<string> GetLocalizedSetting<TSettings>(TSettings settings, Expression<Func<TSettings, string>> keySelector,
             int languageId, int storeId, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
             where TSettings : ISettings, new()
         {
@@ -532,7 +533,7 @@ namespace Nop.Services.Localization
             if (setting == null)
                 return null;
 
-            return GetLocalized(setting, x => x.Value, languageId, returnDefaultValue, ensureTwoPublishedLanguages);
+            return await GetLocalized(setting, x => x.Value, languageId, returnDefaultValue, ensureTwoPublishedLanguages);
         }
 
         /// <summary>
@@ -607,7 +608,7 @@ namespace Nop.Services.Localization
         /// Save localized name of a permission
         /// </summary>
         /// <param name="permissionRecord">Permission record</param>
-        public virtual void SaveLocalizedPermissionName(PermissionRecord permissionRecord)
+        public async virtual Task SaveLocalizedPermissionName(PermissionRecord permissionRecord)
         {
             if (permissionRecord == null)
                 throw new ArgumentNullException(nameof(permissionRecord));
@@ -615,7 +616,7 @@ namespace Nop.Services.Localization
             var resourceName = $"{NopLocalizationDefaults.PermissionLocaleStringResourcesPrefix}{permissionRecord.SystemName}";
             var resourceValue = permissionRecord.Name;
 
-            foreach (var lang in _languageService.GetAllLanguages(true))
+            foreach (var lang in await _languageService.GetAllLanguages(true))
             {
                 var lsr = GetLocaleStringResourceByName(resourceName, lang.Id, false);
                 if (lsr == null)
@@ -640,13 +641,13 @@ namespace Nop.Services.Localization
         /// Delete a localized name of a permission
         /// </summary>
         /// <param name="permissionRecord">Permission record</param>
-        public virtual void DeleteLocalizedPermissionName(PermissionRecord permissionRecord)
+        public async virtual Task DeleteLocalizedPermissionName(PermissionRecord permissionRecord)
         {
             if (permissionRecord == null)
                 throw new ArgumentNullException(nameof(permissionRecord));
 
             var resourceName = $"{NopLocalizationDefaults.PermissionLocaleStringResourcesPrefix}{permissionRecord.SystemName}";
-            foreach (var lang in _languageService.GetAllLanguages(true))
+            foreach (var lang in await _languageService.GetAllLanguages(true))
             {
                 var lsr = GetLocaleStringResourceByName(resourceName, lang.Id, false);
                 if (lsr != null)
@@ -660,9 +661,9 @@ namespace Nop.Services.Localization
         /// <param name="resourceName">Resource name</param>
         /// <param name="resourceValue">Resource value</param>
         /// <param name="languageCulture">Language culture code. If null or empty, then a resource will be added for all languages</param>
-        public virtual void AddOrUpdatePluginLocaleResource(string resourceName, string resourceValue, string languageCulture = null)
+        public async virtual Task AddOrUpdatePluginLocaleResource(string resourceName, string resourceValue, string languageCulture = null)
         {
-            foreach (var lang in _languageService.GetAllLanguages(true))
+            foreach (var lang in await _languageService.GetAllLanguages(true))
             {
                 if (!string.IsNullOrEmpty(languageCulture) && !languageCulture.Equals(lang.LanguageCulture))
                     continue;
@@ -690,9 +691,9 @@ namespace Nop.Services.Localization
         /// Delete a locale resource
         /// </summary>
         /// <param name="resourceName">Resource name</param>
-        public virtual void DeletePluginLocaleResource(string resourceName)
+        public async virtual Task DeletePluginLocaleResource(string resourceName)
         {
-            foreach (var lang in _languageService.GetAllLanguages(true))
+            foreach (var lang in await _languageService.GetAllLanguages(true))
             {
                 var lsr = GetLocaleStringResourceByName(resourceName, lang.Id, false);
                 if (lsr != null)

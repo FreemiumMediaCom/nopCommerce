@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Configuration;
 using Nop.Core.Domain.Localization;
@@ -26,7 +27,7 @@ namespace Nop.Services.Localization
         /// </summary>
         /// <param name="localeStringResourceId">Locale string resource identifier</param>
         /// <returns>Locale string resource</returns>
-        LocaleStringResource GetLocaleStringResourceById(int localeStringResourceId);
+        Task<LocaleStringResource> GetLocaleStringResourceById(int localeStringResourceId);
 
         /// <summary>
         /// Gets a locale string resource
@@ -117,7 +118,7 @@ namespace Nop.Services.Localization
         /// <param name="returnDefaultValue">A value indicating whether to return default value (if localized is not found)</param>
         /// <param name="ensureTwoPublishedLanguages">A value indicating whether to ensure that we have at least two published languages; otherwise, load only default value</param>
         /// <returns>Localized property</returns>
-        TPropType GetLocalized<TEntity, TPropType>(TEntity entity, Expression<Func<TEntity, TPropType>> keySelector,
+        Task<TPropType> GetLocalized<TEntity, TPropType>(TEntity entity, Expression<Func<TEntity, TPropType>> keySelector,
             int? languageId = null, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
             where TEntity : BaseEntity, ILocalizedEntity;
 
@@ -132,7 +133,7 @@ namespace Nop.Services.Localization
         /// <param name="returnDefaultValue">A value indicating whether to return default value (if localized is not found)</param>
         /// <param name="ensureTwoPublishedLanguages">A value indicating whether to ensure that we have at least two published languages; otherwise, load only default value</param>
         /// <returns>Localized property</returns>
-        string GetLocalizedSetting<TSettings>(TSettings settings, Expression<Func<TSettings, string>> keySelector,
+        Task<string> GetLocalizedSetting<TSettings>(TSettings settings, Expression<Func<TSettings, string>> keySelector,
             int languageId, int storeId, bool returnDefaultValue = true, bool ensureTwoPublishedLanguages = true)
             where TSettings : ISettings, new();
 
@@ -170,13 +171,13 @@ namespace Nop.Services.Localization
         /// Save localized name of a permission
         /// </summary>
         /// <param name="permissionRecord">Permission record</param>
-        void SaveLocalizedPermissionName(PermissionRecord permissionRecord);
+        Task SaveLocalizedPermissionName(PermissionRecord permissionRecord);
 
         /// <summary>
         /// Delete a localized name of a permission
         /// </summary>
         /// <param name="permissionRecord">Permission record</param>
-        void DeleteLocalizedPermissionName(PermissionRecord permissionRecord);
+        Task DeleteLocalizedPermissionName(PermissionRecord permissionRecord);
 
         /// <summary>
         /// Add a locale resource (if new) or update an existing one
@@ -184,13 +185,13 @@ namespace Nop.Services.Localization
         /// <param name="resourceName">Resource name</param>
         /// <param name="resourceValue">Resource value</param>
         /// <param name="languageCulture">Language culture code. If null or empty, then a resource will be added for all languages</param>
-        void AddOrUpdatePluginLocaleResource(string resourceName, string resourceValue, string languageCulture = null);
+        Task AddOrUpdatePluginLocaleResource(string resourceName, string resourceValue, string languageCulture = null);
 
         /// <summary>
         /// Delete a locale resource
         /// </summary>
         /// <param name="resourceName">Resource name</param>
-        void DeletePluginLocaleResource(string resourceName);
+        Task DeletePluginLocaleResource(string resourceName);
 
         /// <summary>
         /// Get localized friendly name of a plugin

@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
 using Nop.Services.Events;
@@ -66,12 +67,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="categoryTemplateId">Category template identifier</param>
         /// <returns>Category template</returns>
-        public virtual CategoryTemplate GetCategoryTemplateById(int categoryTemplateId)
+        public async virtual Task<CategoryTemplate> GetCategoryTemplateById(int categoryTemplateId)
         {
             if (categoryTemplateId == 0)
                 return null;
 
-            return _categoryTemplateRepository.GetById(categoryTemplateId);
+            return await _categoryTemplateRepository.GetById(categoryTemplateId);
         }
 
         /// <summary>

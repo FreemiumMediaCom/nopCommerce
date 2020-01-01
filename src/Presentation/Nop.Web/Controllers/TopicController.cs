@@ -45,7 +45,7 @@ namespace Nop.Web.Controllers
         #region Methods
 
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult TopicDetails(int topicId)
+        public  async virtual Task<IActionResult> TopicDetails(int topicId)
         {
             //allow administrators to preview any topic
             var hasAdminAccess = _permissionService.Authorize(StandardPermissionProvider.AccessAdminPanel) && _permissionService.Authorize(StandardPermissionProvider.ManageTopics);
@@ -63,7 +63,7 @@ namespace Nop.Web.Controllers
             return View(templateViewPath, model);
         }
 
-        public virtual IActionResult TopicDetailsPopup(string systemName)
+        public  async virtual Task<IActionResult> TopicDetailsPopup(string systemName)
         {
             var model = _topicModelFactory.PrepareTopicModelBySystemName(systemName);
             if (model == null)
@@ -78,7 +78,7 @@ namespace Nop.Web.Controllers
 
         [HttpPost]
         [PublicAntiForgery]
-        public virtual IActionResult Authenticate(int id, string password)
+        public  async virtual Task<IActionResult> Authenticate(int id, string password)
         {
             var authResult = false;
             var title = string.Empty;

@@ -49,12 +49,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -66,7 +66,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult QueuedEmailList(QueuedEmailSearchModel searchModel)
+        public  async virtual Task<IActionResult> QueuedEmailList(QueuedEmailSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedDataTablesJson();
@@ -79,7 +79,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("go-to-email-by-number")]
-        public virtual IActionResult GoToEmailByNumber(QueuedEmailSearchModel model)
+        public  async virtual Task<IActionResult> GoToEmailByNumber(QueuedEmailSearchModel model)
         {
             //try to get a queued email with the specified id
             var queuedEmail = _queuedEmailService.GetQueuedEmailById(model.GoDirectlyToNumber);
@@ -89,7 +89,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("Edit", "QueuedEmail", new { id = queuedEmail.Id });
         }
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -108,7 +108,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         [HttpPost, ActionName("Edit")]
         [ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(QueuedEmailModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Edit(QueuedEmailModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -138,7 +138,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ActionName("Edit"), FormValueRequired("requeue")]
-        public virtual IActionResult Requeue(QueuedEmailModel queuedEmailModel)
+        public  async virtual Task<IActionResult> Requeue(QueuedEmailModel queuedEmailModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -177,7 +177,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -195,7 +195,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteSelected(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();
@@ -208,7 +208,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("delete-all")]
-        public virtual IActionResult DeleteAll()
+        public  async virtual Task<IActionResult> DeleteAll()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageMessageQueue))
                 return AccessDeniedView();

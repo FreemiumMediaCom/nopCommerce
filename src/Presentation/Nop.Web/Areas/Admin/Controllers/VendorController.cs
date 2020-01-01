@@ -204,12 +204,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Vendors
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -221,7 +221,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(VendorSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(VendorSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedDataTablesJson();
@@ -232,7 +232,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public  async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -245,7 +245,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Create(VendorModel model, bool continueEditing, IFormCollection form)
+        public  async virtual Task<IActionResult> Create(VendorModel model, bool continueEditing, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -305,7 +305,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -322,7 +322,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(VendorModel model, bool continueEditing, IFormCollection form)
+        public  async virtual Task<IActionResult> Edit(VendorModel model, bool continueEditing, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -413,7 +413,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -448,7 +448,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Vendor notes
 
         [HttpPost]
-        public virtual IActionResult VendorNotesSelect(VendorNoteSearchModel searchModel)
+        public  async virtual Task<IActionResult> VendorNotesSelect(VendorNoteSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedDataTablesJson();
@@ -463,7 +463,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult VendorNoteAdd(int vendorId, string message)
+        public  async virtual Task<IActionResult> VendorNoteAdd(int vendorId, string message)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();
@@ -488,7 +488,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult VendorNoteDelete(int id, int vendorId)
+        public  async virtual Task<IActionResult> VendorNoteDelete(int id, int vendorId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageVendors))
                 return AccessDeniedView();

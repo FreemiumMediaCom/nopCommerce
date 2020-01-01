@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -156,12 +157,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productTagId">Product tag identifier</param>
         /// <returns>Product tag</returns>
-        public virtual ProductTag GetProductTagById(int productTagId)
+        public async virtual Task<ProductTag> GetProductTagById(int productTagId)
         {
             if (productTagId == 0)
                 return null;
 
-            return _productTagRepository.GetById(productTagId);
+            return await _productTagRepository.GetById(productTagId);
         }
 
         /// <summary>

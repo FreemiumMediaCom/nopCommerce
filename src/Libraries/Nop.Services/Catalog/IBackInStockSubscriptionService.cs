@@ -1,3 +1,4 @@
+﻿using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 
@@ -50,7 +51,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="subscriptionId">Subscription identifier</param>
         /// <returns>Subscription</returns>
-        BackInStockSubscription GetSubscriptionById(int subscriptionId);
+        Task<BackInStockSubscription> GetSubscriptionById(int subscriptionId);
 
         /// <summary>
         /// Inserts subscription

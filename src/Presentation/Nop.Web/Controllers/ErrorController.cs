@@ -7,7 +7,7 @@ namespace Nop.Web.Controllers
     //they can create guest account(s), etc
     public partial class ErrorController : Controller
     {
-        public virtual IActionResult Error()
+        public  async virtual Task<IActionResult> Error()
         {
             Response.StatusCode = StatusCodes.Status500InternalServerError;
             return File("errorpage.htm", "text/html");

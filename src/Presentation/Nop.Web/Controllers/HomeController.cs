@@ -7,7 +7,7 @@ namespace Nop.Web.Controllers
     public partial class HomeController : BasePublicController
     {
         [HttpsRequirement(SslRequirement.No)]
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return View();
         }

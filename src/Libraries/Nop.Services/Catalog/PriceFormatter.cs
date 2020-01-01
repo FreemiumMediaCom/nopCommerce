@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -435,11 +435,11 @@ namespace Nop.Services.Catalog
             if (productAmount == 0)
                 return null;
             var referenceAmount = product.BasepriceBaseAmount;
-            var productUnit = _measureService.GetMeasureWeightById(product.BasepriceUnitId);
+            var productUnit = _measureService.GetMeasureWeightById(product.BasepriceUnitId).Result;
             //measure weight cannot be loaded
             if (productUnit == null)
                 return null;
-            var referenceUnit = _measureService.GetMeasureWeightById(product.BasepriceBaseUnitId);
+            var referenceUnit = _measureService.GetMeasureWeightById(product.BasepriceBaseUnitId).Result;
             //measure weight cannot be loaded
             if (referenceUnit == null)
                 return null;
@@ -450,7 +450,7 @@ namespace Nop.Services.Catalog
                 //do not round. otherwise, it can cause issues
                 _measureService.ConvertWeight(productAmount, productUnit, referenceUnit, false) *
                 referenceAmount;
-            var basePriceInCurrentCurrency = _currencyService.ConvertFromPrimaryStoreCurrency(basePrice, _workContext.WorkingCurrency);
+            var basePriceInCurrentCurrency = _currencyService.ConvertFromPrimaryStoreCurrency(basePrice, _workContext.WorkingCurrency).Result;
             var basePriceStr = FormatPrice(basePriceInCurrentCurrency, true, false);
 
             var result = string.Format(_localizationService.GetResource("Products.BasePrice"),

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
@@ -66,7 +66,7 @@ namespace Nop.Services.Orders
             if (giftCardId == 0)
                 return null;
 
-            return _giftCardRepository.GetById(giftCardId);
+            return _giftCardRepository.GetById(giftCardId).Result;
         }
 
         /// <summary>

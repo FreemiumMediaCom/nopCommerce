@@ -166,7 +166,7 @@ namespace Nop.Services.Catalog
             var ids = ParseProductAttributeMappingIds(attributesXml);
             foreach (var id in ids)
             {
-                var attribute = _productAttributeService.GetProductAttributeMappingById(id);
+                var attribute = _productAttributeService.GetProductAttributeMappingById(id).Result;
                 if (attribute != null)
                 {
                     result.Add(attribute);
@@ -204,7 +204,7 @@ namespace Nop.Services.Catalog
                     if (string.IsNullOrEmpty(attributeValue.Item1) || !int.TryParse(attributeValue.Item1, out var attributeValueId)) 
                         continue;
 
-                    var value = _productAttributeService.GetProductAttributeValueById(attributeValueId);
+                    var value = _productAttributeService.GetProductAttributeValueById(attributeValueId).Result;
                     if (value == null) 
                         continue;
 

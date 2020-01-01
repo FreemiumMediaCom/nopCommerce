@@ -61,7 +61,7 @@ namespace Nop.Web.Controllers
 
         #region Methods
 
-        public virtual IActionResult GeneralRedirect()
+        public  async virtual Task<IActionResult> GeneralRedirect()
         {
             // use Request.RawUrl, for instance to parse out what was invoked
             // this regex will extract anything between a "/" and a ".aspx"
@@ -160,7 +160,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoute("Homepage");
         }
 
-        public virtual IActionResult RedirectProduct(string id, bool idIncludesSename = true)
+        public  async virtual Task<IActionResult> RedirectProduct(string id, bool idIncludesSename = true)
         {
             //we can't use dash in MVC
             var productId = idIncludesSename ? Convert.ToInt32(id.Split(new[] { '-' })[0]) : Convert.ToInt32(id);
@@ -171,7 +171,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoutePermanent("Product", new { SeName = _urlRecordService.GetSeName(product) });
         }
 
-        public virtual IActionResult RedirectCategory(string id, bool idIncludesSename = true)
+        public  async virtual Task<IActionResult> RedirectCategory(string id, bool idIncludesSename = true)
         {
             //we can't use dash in MVC
             var categoryid = idIncludesSename ? Convert.ToInt32(id.Split(new[] { '-' })[0]) : Convert.ToInt32(id);
@@ -182,7 +182,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoutePermanent("Category", new { SeName = _urlRecordService.GetSeName(category) });
         }
 
-        public virtual IActionResult RedirectManufacturer(string id, bool idIncludesSename = true)
+        public  async virtual Task<IActionResult> RedirectManufacturer(string id, bool idIncludesSename = true)
         {
             //we can't use dash in MVC
             var manufacturerId = idIncludesSename ? Convert.ToInt32(id.Split(new[] { '-' })[0]) : Convert.ToInt32(id);
@@ -193,7 +193,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoutePermanent("Manufacturer", new { SeName = _urlRecordService.GetSeName(manufacturer) });
         }
 
-        public virtual IActionResult RedirectProductTag(string id, bool idIncludesSename = true)
+        public  async virtual Task<IActionResult> RedirectProductTag(string id, bool idIncludesSename = true)
         {
             //we can't use dash in MVC
             var tagId = idIncludesSename ? Convert.ToInt32(id.Split(new[] { '-' })[0]) : Convert.ToInt32(id);
@@ -204,7 +204,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoutePermanent("ProductsByTag", new { productTagId = tag.Id });
         }
 
-        public virtual IActionResult RedirectNewsItem(string id, bool idIncludesSename = true)
+        public  async virtual Task<IActionResult> RedirectNewsItem(string id, bool idIncludesSename = true)
         {
             //we can't use dash in MVC
             var newsId = idIncludesSename ? Convert.ToInt32(id.Split(new[] { '-' })[0]) : Convert.ToInt32(id);
@@ -215,7 +215,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoutePermanent("NewsItem", new { newsItemId = newsItem.Id, SeName = _urlRecordService.GetSeName(newsItem, newsItem.LanguageId, ensureTwoPublishedLanguages: false) });
         }
 
-        public virtual IActionResult RedirectBlogPost(string id, bool idIncludesSename = true)
+        public  async virtual Task<IActionResult> RedirectBlogPost(string id, bool idIncludesSename = true)
         {
             //we can't use dash in MVC
             var blogPostId = idIncludesSename ? Convert.ToInt32(id.Split(new[] { '-' })[0]) : Convert.ToInt32(id);
@@ -226,7 +226,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoutePermanent("BlogPost", new { blogPostId = blogPost.Id, SeName = _urlRecordService.GetSeName(blogPost, blogPost.LanguageId, ensureTwoPublishedLanguages: false) });
         }
 
-        public virtual IActionResult RedirectTopic(string id, bool idIncludesSename = true)
+        public  async virtual Task<IActionResult> RedirectTopic(string id, bool idIncludesSename = true)
         {
             //we can't use dash in MVC
             var topicid = idIncludesSename ? Convert.ToInt32(id.Split(new[] { '-' })[0]) : Convert.ToInt32(id);
@@ -237,7 +237,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoutePermanent("Topic", new { SeName = _urlRecordService.GetSeName(topic) });
         }
 
-        public virtual IActionResult RedirectForumGroup(string id, bool idIncludesSename = true)
+        public  async virtual Task<IActionResult> RedirectForumGroup(string id, bool idIncludesSename = true)
         {
             //we can't use dash in MVC
             var forumGroupId = idIncludesSename ? Convert.ToInt32(id.Split(new[] { '-' })[0]) : Convert.ToInt32(id);
@@ -248,7 +248,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoutePermanent("ForumGroupSlug", new { id = forumGroup.Id, slug = _forumService.GetForumGroupSeName(forumGroup) });
         }
 
-        public virtual IActionResult RedirectForum(string id, bool idIncludesSename = true)
+        public  async virtual Task<IActionResult> RedirectForum(string id, bool idIncludesSename = true)
         {
             //we can't use dash in MVC
             var forumId = idIncludesSename ? Convert.ToInt32(id.Split(new[] { '-' })[0]) : Convert.ToInt32(id);
@@ -259,7 +259,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoutePermanent("ForumSlug", new { id = forum.Id, slug = _forumService.GetForumSeName(forum) });
         }
 
-        public virtual IActionResult RedirectForumTopic(string id, bool idIncludesSename = true)
+        public  async virtual Task<IActionResult> RedirectForumTopic(string id, bool idIncludesSename = true)
         {
             //we can't use dash in MVC
             var forumTopicId = idIncludesSename ? Convert.ToInt32(id.Split(new[] { '-' })[0]) : Convert.ToInt32(id);
@@ -270,7 +270,7 @@ namespace Nop.Web.Controllers
             return RedirectToRoutePermanent("TopicSlug", new { id = topic.Id, slug = _forumService.GetTopicSeName(topic) });
         }
 
-        public virtual IActionResult RedirectUserProfile(string id)
+        public  async virtual Task<IActionResult> RedirectUserProfile(string id)
         {
             //we can't use dash in MVC
             var userId = Convert.ToInt32(id);

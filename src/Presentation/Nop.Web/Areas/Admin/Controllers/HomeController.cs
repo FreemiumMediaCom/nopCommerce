@@ -48,7 +48,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             //display a warning to a store owner if there are some error
             if (_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
@@ -71,7 +71,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult NopCommerceNewsHideAdv()
+        public  async virtual Task<IActionResult> NopCommerceNewsHideAdv()
         {
             _adminAreaSettings.HideAdvertisementsOnAdminArea = !_adminAreaSettings.HideAdvertisementsOnAdminArea;
             _settingService.SaveSetting(_adminAreaSettings);

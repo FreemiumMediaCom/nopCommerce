@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
@@ -136,13 +137,13 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="manufacturerId">Manufacturer identifier</param>
         /// <returns>Manufacturer</returns>
-        public virtual Manufacturer GetManufacturerById(int manufacturerId)
+        public async virtual Task<Manufacturer> GetManufacturerById(int manufacturerId)
         {
             if (manufacturerId == 0)
                 return null;
 
             var key = string.Format(NopCatalogDefaults.ManufacturersByIdCacheKey, manufacturerId);
-            return _cacheManager.Get(key, () => _manufacturerRepository.GetById(manufacturerId));
+            return await _cacheManager.Get(key, async () => await _manufacturerRepository.GetById(manufacturerId));
         }
 
         /// <summary>
@@ -326,12 +327,12 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="productManufacturerId">Product manufacturer mapping identifier</param>
         /// <returns>Product manufacturer mapping</returns>
-        public virtual ProductManufacturer GetProductManufacturerById(int productManufacturerId)
+        public async virtual Task<ProductManufacturer> GetProductManufacturerById(int productManufacturerId)
         {
             if (productManufacturerId == 0)
                 return null;
 
-            return _productManufacturerRepository.GetById(productManufacturerId);
+            return await _productManufacturerRepository.GetById(productManufacturerId);
         }
 
         /// <summary>

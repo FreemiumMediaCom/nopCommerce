@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Nop.Core;
 using Nop.Core.Data;
-
+using System.Threading.Tasks;
 namespace Nop.Data
 {
     /// <summary>
@@ -80,9 +80,9 @@ namespace Nop.Data
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns>Entity</returns>
-        public virtual TEntity GetById(object id)
+        public async virtual Task<TEntity> GetById(object id)
         {
-            return Entities.Find(id);
+            return await Entities.FindAsync(id);
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
@@ -74,7 +74,7 @@ namespace Nop.Services.Security
             if (aclRecordId == 0)
                 return null;
 
-            return _aclRecordRepository.GetById(aclRecordId);
+            return _aclRecordRepository.GetById(aclRecordId).Result;
         }
 
         /// <summary>

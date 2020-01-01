@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
@@ -56,12 +57,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
@@ -73,7 +74,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(CustomerRoleSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(CustomerRoleSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedDataTablesJson();
@@ -84,7 +85,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public  async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
@@ -96,7 +97,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(CustomerRoleModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Create(CustomerRoleModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
@@ -122,13 +123,13 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
 
             //try to get a customer role with the specified id
-            var customerRole = _customerService.GetCustomerRoleById(id);
+            var customerRole = await _customerService.GetCustomerRoleById(id);
             if (customerRole == null)
                 return RedirectToAction("List");
 
@@ -139,13 +140,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(CustomerRoleModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Edit(CustomerRoleModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
 
             //try to get a customer role with the specified id
-            var customerRole = _customerService.GetCustomerRoleById(model.Id);
+            var customerRole = await _customerService.GetCustomerRoleById(model.Id);
             if (customerRole == null)
                 return RedirectToAction("List");
 
@@ -189,13 +190,13 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
 
             //try to get a customer role with the specified id
-            var customerRole = _customerService.GetCustomerRoleById(id);
+            var customerRole = await _customerService.GetCustomerRoleById(id);
             if (customerRole == null)
                 return RedirectToAction("List");
 
@@ -218,7 +219,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
-        public virtual IActionResult AssociateProductToCustomerRolePopup()
+        public  async virtual Task<IActionResult> AssociateProductToCustomerRolePopup()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();
@@ -230,7 +231,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AssociateProductToCustomerRolePopupList(CustomerRoleProductSearchModel searchModel)
+        public  async virtual Task<IActionResult> AssociateProductToCustomerRolePopupList(CustomerRoleProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedDataTablesJson();
@@ -243,7 +244,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("save")]
-        public virtual IActionResult AssociateProductToCustomerRolePopup([Bind(Prefix = nameof(AddProductToCustomerRoleModel))] AddProductToCustomerRoleModel model)
+        public  async virtual Task<IActionResult> AssociateProductToCustomerRolePopup([Bind(Prefix = nameof(AddProductToCustomerRoleModel))] AddProductToCustomerRoleModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers) || !_permissionService.Authorize(StandardPermissionProvider.ManageAcl))
                 return AccessDeniedView();

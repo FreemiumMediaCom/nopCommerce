@@ -80,12 +80,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Methods
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -97,7 +97,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(CampaignSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(CampaignSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedDataTablesJson();
@@ -108,7 +108,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public  async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -120,7 +120,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(CampaignModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Create(CampaignModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -151,7 +151,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -170,7 +170,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         [HttpPost]
         [ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult Edit(CampaignModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Edit(CampaignModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -207,7 +207,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("send-test-email")]
-        public virtual IActionResult SendTestEmail(CampaignModel model)
+        public  async virtual Task<IActionResult> SendTestEmail(CampaignModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -261,7 +261,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("send-mass-email")]
-        public virtual IActionResult SendMassEmail(CampaignModel model)
+        public  async virtual Task<IActionResult> SendMassEmail(CampaignModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();
@@ -302,7 +302,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCampaigns))
                 return AccessDeniedView();

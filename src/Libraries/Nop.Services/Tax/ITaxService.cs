@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
@@ -235,7 +236,7 @@ namespace Nop.Services.Tax
         /// <param name="address">Address</param>
         /// <param name="customer">Customer</param>
         /// <returns>Result</returns>
-        bool IsVatExempt(CalculateTaxRequest.TaxAddress address, Customer customer);
+        Task<bool> IsVatExempt(CalculateTaxRequest.TaxAddress address, Customer customer);
 
         #endregion
     }

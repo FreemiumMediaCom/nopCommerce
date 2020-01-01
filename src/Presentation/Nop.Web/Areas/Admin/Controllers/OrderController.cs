@@ -414,12 +414,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Order list
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List(List<int> orderStatuses = null, List<int> paymentStatuses = null, List<int> shippingStatuses = null)
+        public  async virtual Task<IActionResult> List(List<int> orderStatuses = null, List<int> paymentStatuses = null, List<int> shippingStatuses = null)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -436,7 +436,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult OrderList(OrderSearchModel searchModel)
+        public  async virtual Task<IActionResult> OrderList(OrderSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -448,7 +448,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ReportAggregates(OrderSearchModel searchModel)
+        public  async virtual Task<IActionResult> ReportAggregates(OrderSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -461,7 +461,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("go-to-order-by-number")]
-        public virtual IActionResult GoToOrderId(OrderSearchModel model)
+        public  async virtual Task<IActionResult> GoToOrderId(OrderSearchModel model)
         {
             var order = _orderService.GetOrderByCustomOrderNumber(model.GoDirectlyToCustomOrderNumber);
 
@@ -471,7 +471,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("Edit", "Order", new { id = order.Id });
         }
 
-        public virtual IActionResult ProductSearchAutoComplete(string term)
+        public  async virtual Task<IActionResult> ProductSearchAutoComplete(string term)
         {
             const int searchTermMinimumLength = 3;
             if (string.IsNullOrWhiteSpace(term) || term.Length < searchTermMinimumLength)
@@ -507,7 +507,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("exportxml-all")]
-        public virtual IActionResult ExportXmlAll(OrderSearchModel model)
+        public  async virtual Task<IActionResult> ExportXmlAll(OrderSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -570,7 +570,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ExportXmlSelected(string selectedIds)
+        public  async virtual Task<IActionResult> ExportXmlSelected(string selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -592,7 +592,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("exportexcel-all")]
-        public virtual IActionResult ExportExcelAll(OrderSearchModel model)
+        public  async virtual Task<IActionResult> ExportExcelAll(OrderSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -654,7 +654,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ExportExcelSelected(string selectedIds)
+        public  async virtual Task<IActionResult> ExportExcelSelected(string selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -689,7 +689,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("cancelorder")]
-        public virtual IActionResult CancelOrder(int id)
+        public  async virtual Task<IActionResult> CancelOrder(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -725,7 +725,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("captureorder")]
-        public virtual IActionResult CaptureOrder(int id)
+        public  async virtual Task<IActionResult> CaptureOrder(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -764,7 +764,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("markorderaspaid")]
-        public virtual IActionResult MarkOrderAsPaid(int id)
+        public  async virtual Task<IActionResult> MarkOrderAsPaid(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -800,7 +800,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("refundorder")]
-        public virtual IActionResult RefundOrder(int id)
+        public  async virtual Task<IActionResult> RefundOrder(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -839,7 +839,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("refundorderoffline")]
-        public virtual IActionResult RefundOrderOffline(int id)
+        public  async virtual Task<IActionResult> RefundOrderOffline(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -875,7 +875,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("voidorder")]
-        public virtual IActionResult VoidOrder(int id)
+        public  async virtual Task<IActionResult> VoidOrder(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -914,7 +914,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("voidorderoffline")]
-        public virtual IActionResult VoidOrderOffline(int id)
+        public  async virtual Task<IActionResult> VoidOrderOffline(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -948,7 +948,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
-        public virtual IActionResult PartiallyRefundOrderPopup(int id, bool online)
+        public  async virtual Task<IActionResult> PartiallyRefundOrderPopup(int id, bool online)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -970,7 +970,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("partialrefundorder")]
-        public virtual IActionResult PartiallyRefundOrderPopup(int id, bool online, OrderModel model)
+        public  async virtual Task<IActionResult> PartiallyRefundOrderPopup(int id, bool online, OrderModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1033,7 +1033,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("btnSaveOrderStatus")]
-        public virtual IActionResult ChangeOrderStatus(int id, OrderModel model)
+        public  async virtual Task<IActionResult> ChangeOrderStatus(int id, OrderModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1081,7 +1081,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Edit, delete
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1102,7 +1102,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1125,7 +1125,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult PdfInvoice(int orderId)
+        public  async virtual Task<IActionResult> PdfInvoice(int orderId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1155,7 +1155,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("List")]
         [FormValueRequired("pdf-invoice-all")]
-        public virtual IActionResult PdfInvoiceAll(OrderSearchModel model)
+        public  async virtual Task<IActionResult> PdfInvoiceAll(OrderSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1215,7 +1215,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PdfInvoiceSelected(string selectedIds)
+        public  async virtual Task<IActionResult> PdfInvoiceSelected(string selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1257,7 +1257,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         //currently we use this method on the add product to order details pages
         [HttpPost]
-        public virtual IActionResult ProductDetails_AttributeChange(int productId, bool validateAttributeConditions, IFormCollection form)
+        public  async virtual Task<IActionResult> ProductDetails_AttributeChange(int productId, bool validateAttributeConditions, IFormCollection form)
         {
             var product = _productService.GetProductById(productId);
             if (product == null)
@@ -1295,7 +1295,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("btnSaveCC")]
-        public virtual IActionResult EditCreditCardInfo(int id, OrderModel model)
+        public  async virtual Task<IActionResult> EditCreditCardInfo(int id, OrderModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1346,7 +1346,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("btnSaveOrderTotals")]
-        public virtual IActionResult EditOrderTotals(int id, OrderModel model)
+        public  async virtual Task<IActionResult> EditOrderTotals(int id, OrderModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1392,7 +1392,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired("save-shipping-method")]
-        public virtual IActionResult EditShippingMethod(int id, OrderModel model)
+        public  async virtual Task<IActionResult> EditShippingMethod(int id, OrderModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1430,7 +1430,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired(FormValueRequirement.StartsWith, "btnSaveOrderItem")]
-        public virtual IActionResult EditOrderItem(int id, IFormCollection form)
+        public  async virtual Task<IActionResult> EditOrderItem(int id, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1535,7 +1535,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired(FormValueRequirement.StartsWith, "btnDeleteOrderItem")]
-        public virtual IActionResult DeleteOrderItem(int id, IFormCollection form)
+        public  async virtual Task<IActionResult> DeleteOrderItem(int id, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1611,7 +1611,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired(FormValueRequirement.StartsWith, "btnResetDownloadCount")]
-        public virtual IActionResult ResetDownloadCount(int id, IFormCollection form)
+        public  async virtual Task<IActionResult> ResetDownloadCount(int id, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1649,7 +1649,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [FormValueRequired(FormValueRequirement.StartsWith, "btnPvActivateDownload")]
-        public virtual IActionResult ActivateDownloadItem(int id, IFormCollection form)
+        public  async virtual Task<IActionResult> ActivateDownloadItem(int id, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1684,7 +1684,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult UploadLicenseFilePopup(int id, int orderItemId)
+        public  async virtual Task<IActionResult> UploadLicenseFilePopup(int id, int orderItemId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1713,7 +1713,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost]
         [FormValueRequired("uploadlicense")]
-        public virtual IActionResult UploadLicenseFilePopup(UploadLicenseModel model)
+        public  async virtual Task<IActionResult> UploadLicenseFilePopup(UploadLicenseModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1746,7 +1746,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("UploadLicenseFilePopup")]
         [FormValueRequired("deletelicense")]
-        public virtual IActionResult DeleteLicenseFilePopup(UploadLicenseModel model)
+        public  async virtual Task<IActionResult> DeleteLicenseFilePopup(UploadLicenseModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1774,7 +1774,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult AddProductToOrder(int orderId)
+        public  async virtual Task<IActionResult> AddProductToOrder(int orderId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1795,7 +1795,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AddProductToOrder(AddProductToOrderSearchModel searchModel)
+        public  async virtual Task<IActionResult> AddProductToOrder(AddProductToOrderSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -1814,7 +1814,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult AddProductToOrderDetails(int orderId, int productId)
+        public  async virtual Task<IActionResult> AddProductToOrderDetails(int orderId, int productId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1838,7 +1838,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AddProductToOrderDetails(int orderId, int productId, IFormCollection form)
+        public  async virtual Task<IActionResult> AddProductToOrderDetails(int orderId, int productId, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -1990,7 +1990,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Addresses
 
-        public virtual IActionResult AddressEdit(int addressId, int orderId)
+        public  async virtual Task<IActionResult> AddressEdit(int addressId, int orderId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2015,7 +2015,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult AddressEdit(OrderAddressModel model, IFormCollection form)
+        public  async virtual Task<IActionResult> AddressEdit(OrderAddressModel model, IFormCollection form)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2071,7 +2071,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Shipments
 
-        public virtual IActionResult ShipmentList()
+        public  async virtual Task<IActionResult> ShipmentList()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2083,7 +2083,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ShipmentListSelect(ShipmentSearchModel searchModel)
+        public  async virtual Task<IActionResult> ShipmentListSelect(ShipmentSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -2095,7 +2095,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ShipmentsByOrder(OrderShipmentSearchModel searchModel)
+        public  async virtual Task<IActionResult> ShipmentsByOrder(OrderShipmentSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -2115,7 +2115,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult ShipmentsItemsByShipmentId(ShipmentItemSearchModel searchModel)
+        public  async virtual Task<IActionResult> ShipmentsItemsByShipmentId(ShipmentItemSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -2143,7 +2143,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult AddShipment(int id)
+        public  async virtual Task<IActionResult> AddShipment(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2165,7 +2165,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult AddShipment(ShipmentModel model, IFormCollection form, bool continueEditing)
+        public  async virtual Task<IActionResult> AddShipment(ShipmentModel model, IFormCollection form, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2300,7 +2300,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return RedirectToAction("AddShipment", model);
         }
 
-        public virtual IActionResult ShipmentDetails(int id)
+        public  async virtual Task<IActionResult> ShipmentDetails(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2321,7 +2321,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult DeleteShipment(int id)
+        public  async virtual Task<IActionResult> DeleteShipment(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2365,7 +2365,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("ShipmentDetails")]
         [FormValueRequired("settrackingnumber")]
-        public virtual IActionResult SetTrackingNumber(ShipmentModel model)
+        public  async virtual Task<IActionResult> SetTrackingNumber(ShipmentModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2387,7 +2387,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("ShipmentDetails")]
         [FormValueRequired("setadmincomment")]
-        public virtual IActionResult SetShipmentAdminComment(ShipmentModel model)
+        public  async virtual Task<IActionResult> SetShipmentAdminComment(ShipmentModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2409,7 +2409,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("ShipmentDetails")]
         [FormValueRequired("setasshipped")]
-        public virtual IActionResult SetAsShipped(int id)
+        public  async virtual Task<IActionResult> SetAsShipped(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2439,7 +2439,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("ShipmentDetails")]
         [FormValueRequired("saveshippeddate")]
-        public virtual IActionResult EditShippedDate(ShipmentModel model)
+        public  async virtual Task<IActionResult> EditShippedDate(ShipmentModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2474,7 +2474,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("ShipmentDetails")]
         [FormValueRequired("setasdelivered")]
-        public virtual IActionResult SetAsDelivered(int id)
+        public  async virtual Task<IActionResult> SetAsDelivered(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2504,7 +2504,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("ShipmentDetails")]
         [FormValueRequired("savedeliverydate")]
-        public virtual IActionResult EditDeliveryDate(ShipmentModel model)
+        public  async virtual Task<IActionResult> EditDeliveryDate(ShipmentModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2537,7 +2537,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
-        public virtual IActionResult PdfPackagingSlip(int shipmentId)
+        public  async virtual Task<IActionResult> PdfPackagingSlip(int shipmentId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2568,7 +2568,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("ShipmentList")]
         [FormValueRequired("exportpackagingslips-all")]
-        public virtual IActionResult PdfPackagingSlipAll(ShipmentSearchModel model)
+        public  async virtual Task<IActionResult> PdfPackagingSlipAll(ShipmentSearchModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2614,7 +2614,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PdfPackagingSlipSelected(string selectedIds)
+        public  async virtual Task<IActionResult> PdfPackagingSlipSelected(string selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2652,7 +2652,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult SetAsShippedSelected(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> SetAsShippedSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2684,7 +2684,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult SetAsDeliveredSelected(ICollection<int> selectedIds)
+        public  async virtual Task<IActionResult> SetAsDeliveredSelected(ICollection<int> selectedIds)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2720,7 +2720,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Order notes
 
         [HttpPost]
-        public virtual IActionResult OrderNotesSelect(OrderNoteSearchModel searchModel)
+        public  async virtual Task<IActionResult> OrderNotesSelect(OrderNoteSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -2739,7 +2739,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult OrderNoteAdd(int orderId, int downloadId, bool displayToCustomer, string message)
+        public  async virtual Task<IActionResult> OrderNoteAdd(int orderId, int downloadId, bool displayToCustomer, string message)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2778,7 +2778,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult OrderNoteDelete(int id, int orderId)
+        public  async virtual Task<IActionResult> OrderNoteDelete(int id, int orderId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
@@ -2805,7 +2805,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Reports
 
         [HttpPost]
-        public virtual IActionResult BestsellersBriefReportByQuantityList(BestsellerBriefSearchModel searchModel)
+        public  async virtual Task<IActionResult> BestsellersBriefReportByQuantityList(BestsellerBriefSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -2817,7 +2817,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult BestsellersBriefReportByAmountList(BestsellerBriefSearchModel searchModel)
+        public  async virtual Task<IActionResult> BestsellersBriefReportByAmountList(BestsellerBriefSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -2829,7 +2829,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult OrderAverageReportList(OrderAverageReportSearchModel searchModel)
+        public  async virtual Task<IActionResult> OrderAverageReportList(OrderAverageReportSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -2845,7 +2845,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult OrderIncompleteReportList(OrderIncompleteReportSearchModel searchModel)
+        public  async virtual Task<IActionResult> OrderIncompleteReportList(OrderIncompleteReportSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedDataTablesJson();
@@ -2860,7 +2860,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult LoadOrderStatistics(string period)
+        public  async virtual Task<IActionResult> LoadOrderStatistics(string period)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return Content(string.Empty);

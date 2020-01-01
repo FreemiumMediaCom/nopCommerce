@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Customers;
@@ -77,13 +78,13 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerAttributeId">Customer attribute identifier</param>
         /// <returns>Customer attribute</returns>
-        public virtual CustomerAttribute GetCustomerAttributeById(int customerAttributeId)
+        public async virtual Task<CustomerAttribute> GetCustomerAttributeById(int customerAttributeId)
         {
             if (customerAttributeId == 0)
                 return null;
 
             var key = string.Format(NopCustomerServiceDefaults.CustomerAttributesByIdCacheKey, customerAttributeId);
-            return _cacheManager.Get(key, () => _customerAttributeRepository.GetById(customerAttributeId));
+            return await _cacheManager.Get(key, async () => await _customerAttributeRepository.GetById(customerAttributeId));
         }
 
         /// <summary>
@@ -164,13 +165,13 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerAttributeValueId">Customer attribute value identifier</param>
         /// <returns>Customer attribute value</returns>
-        public virtual CustomerAttributeValue GetCustomerAttributeValueById(int customerAttributeValueId)
+        public async virtual Task<CustomerAttributeValue> GetCustomerAttributeValueById(int customerAttributeValueId)
         {
             if (customerAttributeValueId == 0)
                 return null;
 
             var key = string.Format(NopCustomerServiceDefaults.CustomerAttributeValuesByIdCacheKey, customerAttributeValueId);
-            return _cacheManager.Get(key, () => _customerAttributeValueRepository.GetById(customerAttributeValueId));
+            return await _cacheManager.Get(key, async () => await _customerAttributeValueRepository.GetById(customerAttributeValueId));
         }
 
         /// <summary>

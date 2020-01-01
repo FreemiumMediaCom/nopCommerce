@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Vendors;
 
@@ -14,7 +15,7 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorId">Vendor identifier</param>
         /// <returns>Vendor</returns>
-        Vendor GetVendorById(int vendorId);
+        Task<Vendor> GetVendorById(int vendorId);
 
         /// <summary>
         /// Delete a vendor
@@ -56,7 +57,7 @@ namespace Nop.Services.Vendors
         /// </summary>
         /// <param name="vendorNoteId">The vendor note identifier</param>
         /// <returns>Vendor note</returns>
-        VendorNote GetVendorNoteById(int vendorNoteId);
+        Task<VendorNote> GetVendorNoteById(int vendorNoteId);
 
         /// <summary>
         /// Deletes a vendor note

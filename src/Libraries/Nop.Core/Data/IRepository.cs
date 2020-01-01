@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Nop.Core.Data
 {
@@ -16,7 +17,7 @@ namespace Nop.Core.Data
         /// </summary>
         /// <param name="id">Identifier</param>
         /// <returns>Entity</returns>
-        TEntity GetById(object id);
+        Task<TEntity> GetById(object id);
 
         /// <summary>
         /// Insert entity

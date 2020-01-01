@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Nop.Core.Caching;
 using Nop.Core.Data;
 using Nop.Core.Domain.Catalog;
@@ -60,13 +61,13 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="reviewTypeId">Review type identifier</param>
         /// <returns>Review type</returns>
-        public virtual ReviewType GetReviewTypeById(int reviewTypeId)
+        public async virtual Task<ReviewType> GetReviewTypeById(int reviewTypeId)
         {
             if (reviewTypeId == 0)
                 return null;
 
             var key = string.Format(NopCatalogDefaults.ReviewTypeByIdKey, reviewTypeId);
-            return _cacheManager.Get(key, () => _reviewTypeRepository.GetById(reviewTypeId));
+            return await _cacheManager.Get(key, async () => await _reviewTypeRepository.GetById(reviewTypeId));
         }
 
         /// <summary>

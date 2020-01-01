@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Directory;
 
 namespace Nop.Services.Directory
@@ -43,7 +44,7 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="countryId">Country identifier</param>
         /// <returns>Country</returns>
-        Country GetCountryById(int countryId);
+        Task<Country> GetCountryById(int countryId);
 
         /// <summary>
         /// Get countries by identifiers
@@ -57,7 +58,7 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="twoLetterIsoCode">Country two letter ISO code</param>
         /// <returns>Country</returns>
-        Country GetCountryByTwoLetterIsoCode(string twoLetterIsoCode);
+        Task<Country> GetCountryByTwoLetterIsoCode(string twoLetterIsoCode);
 
         /// <summary>
         /// Gets a country by three letter ISO code

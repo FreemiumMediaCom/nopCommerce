@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -64,7 +64,7 @@ namespace Nop.Services.Orders
             if (orderId == 0)
                 return null;
 
-            return _orderRepository.GetById(orderId);
+            return _orderRepository.GetById(orderId).Result;
         }
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace Nop.Services.Orders
             if (orderItemId == 0)
                 return null;
 
-            return _orderItemRepository.GetById(orderItemId);
+            return _orderItemRepository.GetById(orderItemId).Result;
         }
 
         /// <summary>
@@ -629,7 +629,7 @@ namespace Nop.Services.Orders
             if (orderNoteId == 0)
                 return null;
 
-            return _orderNoteRepository.GetById(orderNoteId);
+            return _orderNoteRepository.GetById(orderNoteId).Result;
         }
 
         /// <summary>
@@ -697,7 +697,7 @@ namespace Nop.Services.Orders
             if (recurringPaymentId == 0)
                 return null;
 
-            return _recurringPaymentRepository.GetById(recurringPaymentId);
+            return _recurringPaymentRepository.GetById(recurringPaymentId).Result;
         }
 
         /// <summary>

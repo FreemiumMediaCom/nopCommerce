@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Catalog;
 
 namespace Nop.Services.Catalog
@@ -25,7 +26,7 @@ namespace Nop.Services.Catalog
         /// </summary>
         /// <param name="manufacturerTemplateId">Manufacturer template identifier</param>
         /// <returns>Manufacturer template</returns>
-        ManufacturerTemplate GetManufacturerTemplateById(int manufacturerTemplateId);
+        Task<ManufacturerTemplate> GetManufacturerTemplateById(int manufacturerTemplateId);
 
         /// <summary>
         /// Inserts manufacturer template

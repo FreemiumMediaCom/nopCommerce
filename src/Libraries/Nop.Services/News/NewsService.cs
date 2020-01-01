@@ -71,7 +71,7 @@ namespace Nop.Services.News
             if (newsId == 0)
                 return null;
 
-            return _newsItemRepository.GetById(newsId);
+            return _newsItemRepository.GetById(newsId).Result;
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace Nop.Services.News
             if (newsCommentId == 0)
                 return null;
 
-            return _newsCommentRepository.GetById(newsCommentId);
+            return _newsCommentRepository.GetById(newsCommentId).Result;
         }
 
         /// <summary>

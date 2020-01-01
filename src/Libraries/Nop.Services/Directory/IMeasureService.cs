@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Nop.Core.Domain.Directory;
 
 namespace Nop.Services.Directory
@@ -19,7 +20,7 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="measureDimensionId">Measure dimension identifier</param>
         /// <returns>Measure dimension</returns>
-        MeasureDimension GetMeasureDimensionById(int measureDimensionId);
+        Task<MeasureDimension> GetMeasureDimensionById(int measureDimensionId);
 
         /// <summary>
         /// Gets a measure dimension by system keyword
@@ -86,7 +87,7 @@ namespace Nop.Services.Directory
         /// </summary>
         /// <param name="measureWeightId">Measure weight identifier</param>
         /// <returns>Measure weight</returns>
-        MeasureWeight GetMeasureWeightById(int measureWeightId);
+        Task<MeasureWeight> GetMeasureWeightById(int measureWeightId);
 
         /// <summary>
         /// Gets a measure weight by system keyword

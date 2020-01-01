@@ -214,7 +214,7 @@ namespace Nop.Services.Forums
                 return;
             }
 
-            var customer = _customerService.GetCustomerById(customerId);
+            var customer = _customerService.GetCustomerById(customerId).Result;
 
             if (customer == null)
             {
@@ -265,7 +265,7 @@ namespace Nop.Services.Forums
                 return null;
             }
 
-            return _forumGroupRepository.GetById(forumGroupId);
+            return _forumGroupRepository.GetById(forumGroupId).Result;
         }
 
         /// <summary>
@@ -381,7 +381,7 @@ namespace Nop.Services.Forums
             if (forumId == 0)
                 return null;
 
-            return _forumRepository.GetById(forumId);
+            return _forumRepository.GetById(forumId).Result;
         }
 
         /// <summary>
@@ -504,7 +504,7 @@ namespace Nop.Services.Forums
             if (forumTopicId == 0)
                 return null;
 
-            var forumTopic = _forumTopicRepository.GetById(forumTopicId);
+            var forumTopic = _forumTopicRepository.GetById(forumTopicId).Result;
             if (forumTopic == null)
                 return null;
 
@@ -747,7 +747,7 @@ namespace Nop.Services.Forums
             if (forumPostId == 0)
                 return null;
 
-            return _forumPostRepository.GetById(forumPostId);
+            return _forumPostRepository.GetById(forumPostId).Result;
         }
 
         /// <summary>
@@ -910,7 +910,7 @@ namespace Nop.Services.Forums
             if (privateMessageId == 0)
                 return null;
 
-            return _forumPrivateMessageRepository.GetById(privateMessageId);
+            return _forumPrivateMessageRepository.GetById(privateMessageId).Result;
         }
 
         /// <summary>
@@ -972,7 +972,7 @@ namespace Nop.Services.Forums
             //event notification
             _eventPublisher.EntityInserted(privateMessage);
 
-            var customerTo = _customerService.GetCustomerById(privateMessage.ToCustomerId);
+            var customerTo = _customerService.GetCustomerById(privateMessage.ToCustomerId).Result;
             if (customerTo == null)
             {
                 throw new NopException("Recipient could not be loaded");
@@ -1038,7 +1038,7 @@ namespace Nop.Services.Forums
             if (forumSubscriptionId == 0)
                 return null;
 
-            return _forumSubscriptionRepository.GetById(forumSubscriptionId);
+            return _forumSubscriptionRepository.GetById(forumSubscriptionId).Result;
         }
 
         /// <summary>

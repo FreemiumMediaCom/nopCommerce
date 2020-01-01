@@ -1,3 +1,4 @@
+﻿using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Common;
 
@@ -19,7 +20,7 @@ namespace Nop.Services.Common
         /// </summary>
         /// <param name="searchTermId">Search term identifier</param>
         /// <returns>Search term</returns>
-        SearchTerm GetSearchTermById(int searchTermId);
+        Task<SearchTerm> GetSearchTermById(int searchTermId);
 
         /// <summary>
         /// Gets a search term record by keyword

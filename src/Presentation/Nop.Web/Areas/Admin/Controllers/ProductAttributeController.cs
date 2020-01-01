@@ -84,12 +84,12 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Attribute list / create / edit / delete
 
-        public virtual IActionResult Index()
+        public  async virtual Task<IActionResult> Index()
         {
             return RedirectToAction("List");
         }
 
-        public virtual IActionResult List()
+        public  async virtual Task<IActionResult> List()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -101,7 +101,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult List(ProductAttributeSearchModel searchModel)
+        public  async virtual Task<IActionResult> List(ProductAttributeSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedDataTablesJson();
@@ -112,7 +112,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult Create()
+        public  async virtual Task<IActionResult> Create()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -124,7 +124,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Create(ProductAttributeModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Create(ProductAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -154,7 +154,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult Edit(int id)
+        public  async virtual Task<IActionResult> Edit(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -171,7 +171,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public virtual IActionResult Edit(ProductAttributeModel model, bool continueEditing)
+        public  async virtual Task<IActionResult> Edit(ProductAttributeModel model, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -208,7 +208,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult Delete(int id)
+        public  async virtual Task<IActionResult> Delete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -234,7 +234,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Used by products
 
         [HttpPost]
-        public virtual IActionResult UsedByProducts(ProductAttributeProductSearchModel searchModel)
+        public  async virtual Task<IActionResult> UsedByProducts(ProductAttributeProductSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedDataTablesJson();
@@ -254,7 +254,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         #region Predefined values
 
         [HttpPost]
-        public virtual IActionResult PredefinedProductAttributeValueList(PredefinedProductAttributeValueSearchModel searchModel)
+        public  async virtual Task<IActionResult> PredefinedProductAttributeValueList(PredefinedProductAttributeValueSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedDataTablesJson();
@@ -269,7 +269,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult PredefinedProductAttributeValueCreatePopup(int productAttributeId)
+        public  async virtual Task<IActionResult> PredefinedProductAttributeValueCreatePopup(int productAttributeId)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -286,7 +286,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PredefinedProductAttributeValueCreatePopup(PredefinedProductAttributeValueModel model)
+        public  async virtual Task<IActionResult> PredefinedProductAttributeValueCreatePopup(PredefinedProductAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -315,7 +315,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public virtual IActionResult PredefinedProductAttributeValueEditPopup(int id)
+        public  async virtual Task<IActionResult> PredefinedProductAttributeValueEditPopup(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -335,7 +335,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PredefinedProductAttributeValueEditPopup(PredefinedProductAttributeValueModel model)
+        public  async virtual Task<IActionResult> PredefinedProductAttributeValueEditPopup(PredefinedProductAttributeValueModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();
@@ -368,7 +368,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual IActionResult PredefinedProductAttributeValueDelete(int id)
+        public  async virtual Task<IActionResult> PredefinedProductAttributeValueDelete(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageAttributes))
                 return AccessDeniedView();

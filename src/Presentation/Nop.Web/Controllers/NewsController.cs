@@ -88,7 +88,7 @@ namespace Nop.Web.Controllers
 
         #region Methods
 
-        public virtual IActionResult List(NewsPagingFilteringModel command)
+        public  async virtual Task<IActionResult> List(NewsPagingFilteringModel command)
         {
             if (!_newsSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -97,7 +97,7 @@ namespace Nop.Web.Controllers
             return View(model);
         }
 
-        public virtual IActionResult ListRss(int languageId)
+        public  async virtual Task<IActionResult> ListRss(int languageId)
         {
             var feed = new RssFeed(
                 $"{_localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name)}: News",
@@ -119,7 +119,7 @@ namespace Nop.Web.Controllers
             return new RssActionResult(feed, _webHelper.GetThisPageUrl(false));
         }
 
-        public virtual IActionResult NewsItem(int newsItemId)
+        public  async virtual Task<IActionResult> NewsItem(int newsItemId)
         {
             if (!_newsSettings.Enabled)
                 return RedirectToRoute("Homepage");
@@ -155,7 +155,7 @@ namespace Nop.Web.Controllers
         [PublicAntiForgery]
         [FormValueRequired("add-comment")]
         [ValidateCaptcha]
-        public virtual IActionResult NewsCommentAdd(int newsItemId, NewsItemModel model, bool captchaValid)
+        public  async virtual Task<IActionResult> NewsCommentAdd(int newsItemId, NewsItemModel model, bool captchaValid)
         {
             if (!_newsSettings.Enabled)
                 return RedirectToRoute("Homepage");
