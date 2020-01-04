@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Widgets",
+  "FriendlyName": "Tawk.IO",
+  "SystemName": "FreemiumMedia.Nop.Plugin.Widgets.TawkIO",
+  "Version": "2020.01.04",
+  "SupportedVersions": [ "4.20", "4.30" ],
+  "Author": "FreemiumMedia.com",
+  "DisplayOrder": 1,
+  "FileName": "FreemiumMedia.Nop.Plugin.Widgets.TawkIO.dll",
+  "Description": "This plugin enables Tawk.IO integration to be displayed on your website."
+}
