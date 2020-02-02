@@ -24,6 +24,10 @@
                 {
                     <li><a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a></li>
                 }
+                @if (Model.DisplayServicesFooterItem)
+                {
+                    <li><a href="@Url.RouteUrl("Services")">@T("Services")</a></li>
+                }
             </ul>
         </div>
         <div class="footer-block customer-service">

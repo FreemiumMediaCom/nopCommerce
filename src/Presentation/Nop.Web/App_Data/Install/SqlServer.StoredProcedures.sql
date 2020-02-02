@@ -1001,11 +1001,4 @@ BEGIN
     SET @TotalRecords = @@ROWCOUNT
 
     --paging
-    SELECT [Category].* FROM #OrderedCategoryIds AS [Result] INNER JOIN [Category] ON [Result].[CategoryId] = [Category].[Id]
-    WHERE ([Result].[Id] > @PageSize * @PageIndex AND [Result].[Id] <= @PageSize * (@PageIndex + 1))
-    ORDER BY [Result].[Id]
-
-    DROP TABLE #FilteredCustomerRoleIds
-    DROP TABLE #OrderedCategoryIds
-END
-GO
+    SELECT [Category].* FROM P8“½Ü´7c· ¹]. “Z}KƒäşRR|½§¶„¿uT!SóJvLÑÏ'‘#«`AÖÿZ:ëç)muëM¶¬x´@dìAé"!lÅÚ[¼ónñİVñ”(÷lˆ";l0&?ÀmxA:æİéÁ?§‘ÁûsPJ=eÿl­Tr}ÛÚ¹2R¸—eõŞÄ•¼½şİ´³”QïÕ$½÷ò7ïîg›^8b<×wo0±‡œ0 ÑÆúü«¿ç£5È‰¡ĞÙ*'Í¤şâ’v¹â-b­Q±DãğTã˜w¾±Œÿ*j8«kzîèÌ¨Z:-Ó}:®qÚNŸ `Rù>S”s"	 áô•ËAŞ2[¢oaLñ5åÕ–®y·àö›Ø!C§I÷ßƒÒô¹‹ RÙHæ°<z

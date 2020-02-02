@@ -26,10 +26,9 @@ namespace Nop.Web.Models.Common
         public bool HidePoweredByNopCommerce { get; set; }
 
         public int WorkingLanguageId { get; set; }
-
         public IList<FooterTopicModel> Topics { get; set; }
-
         public bool DisplaySitemapFooterItem { get; set; }
+        public bool DisplayServicesFooterItem { get; set; }
         public bool DisplayContactUsFooterItem { get; set; }
         public bool DisplayProductSearchFooterItem { get; set; }
         public bool DisplayNewsFooterItem { get; set; }

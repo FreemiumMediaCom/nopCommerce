@@ -1,6 +1,9 @@
 ﻿@model TopMenuModel.CategoryLineModel
 <li>
-    <a href="@Url.RouteUrl("Category", new { SeName = Model.Category.SeName })">@Model.Category.Name
+    <a href="@Url.RouteUrl("Category", new { SeName = Model.Category.SeName })">
+        @if (Model.Category.HaveSubCategories && Model.Category.Name.Equals("Categories"))
+        {<i class="fas fa-cube"></i>}
+        @Model.Category.Name
         @if (Model.Category.NumberOfProducts.HasValue)
         {
             <text> </text>@T("Categories.TotalProducts", Model.Category.NumberOfProducts.Value)

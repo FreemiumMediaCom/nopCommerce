@@ -1,7 +1,8 @@
 ﻿@model TopMenuModel
 
 <!-- NON RESPONSVIE-->
-    <ul class="top-menu notmobile">
+    <ul class="topmenu top-menu notmobile" style="padding-top: 8px">
+        
         @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderMenuBefore })
         @if (Model.DisplayHomepageMenuItem)
         {
@@ -62,7 +63,7 @@
     var rootCategoriesResponsive = Model.Categories.ToList();
     //name it "Categories" if we have only categories. Otherwise, "Menu"
     var responsiveMenuTitle = Model.HasOnlyCategories ? T("Categories") : T("Menu");
-    <div class="menu-toggle">@responsiveMenuTitle</div>
+    <div class="menu-toggle"><span id="menu-title">MENU &nbsp;</span> <i class="fa fa-bars"></i></div>
     <ul class="top-menu mobile">
         @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.MobHeaderMenuBefore })
         @if (Model.DisplayHomepageMenuItem)
