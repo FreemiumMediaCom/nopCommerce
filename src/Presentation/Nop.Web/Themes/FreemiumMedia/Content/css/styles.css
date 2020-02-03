@@ -7852,6 +7852,7 @@ img {
     .flyout-cart {
       position: absolute;
       z-index: 100;
+      right: 200px;
       width: 300px;
       box-shadow: 0 0 2px rgba(0,0,0,0.25);
       background-color: #fff;
