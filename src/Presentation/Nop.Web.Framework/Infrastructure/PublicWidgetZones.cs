@@ -4,6 +4,11 @@
     {
         public static string AccountNavigationAfter => "account_navigation_after";
         public static string AccountNavigationBefore => "account_navigation_before";
+
+        public static string AdvertisingHeader => "advertising_header";
+        public static string AdvertisingFooter => "advertising_footer";
+        public static string AdvertisingSide => "advertising_side";
+
         public static string ApplyVendorBottom => "applyvendor_bottom";
         public static string ApplyVendorTop => "applyvendor_top";
         public static string BlogListPageAfterPost => "bloglist_page_after_post";

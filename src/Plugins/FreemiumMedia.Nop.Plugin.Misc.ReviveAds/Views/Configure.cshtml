@@ -1,0 +1,49 @@
+﻿@using FreemiumMedia.Nop.Plugin.Widgets.ReviveAds
+
+@model ReviveAdsSettings
+
+@{
+    Layout = "_ConfigurePlugin";
+}
+
+<form asp-controller="ReviveAds" asp-action="Configure" method="post">
+
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="LeaderboardFooterReviveZoneId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="LeaderboardFooterReviveZoneId" />
+                        <span asp-validation-for="LeaderboardFooterReviveZoneId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="LeaderboardHeaderReviveZoneId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="LeaderboardHeaderReviveZoneId" />
+                        <span asp-validation-for="LeaderboardHeaderReviveZoneId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-label asp-for="SkyscraperReviveZoneId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="SkyscraperReviveZoneId" />
+                        <span asp-validation-for="SkyscraperReviveZoneId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <input type="submit" name="save" class="btn bg-blue" value="@T("Admin.Common.Save")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

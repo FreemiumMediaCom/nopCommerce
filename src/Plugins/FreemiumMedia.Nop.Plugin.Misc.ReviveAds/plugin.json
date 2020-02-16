@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Widgets",
+  "FriendlyName": "ReviveAds",
+  "SystemName": "FreemiumMedia.Nop.Plugin.Widgets.ReviveAds",
+  "Version": "2020.02.15",
+  "SupportedVersions": [ "4.20", "4.30" ],
+  "Author": "FreemiumMedia.com",
+  "DisplayOrder": 1,
+  "FileName": "FreemiumMedia.Nop.Plugin.Widgets.ReviveAds.dll",
+  "Description": "This plugin enables ReviveAds integration to be displayed on your website."
+}

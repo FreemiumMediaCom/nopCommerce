@@ -15,21 +15,28 @@
         };
         AjaxCart.init(false, '.header-links .cart-qty', '.header-links .wishlist-qty', '#flyout-cart', localized_data);
         </script>
-        <div class="header-menu-slim">
-        </div>
-        <div class="master-wrapper-content">
-            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContentBefore })
-
-            @if (IsSectionDefined("Breadcrumb"))
-            {
-                @RenderSection("Breadcrumb")
-            }
-            <div class="master-column-wrapper">
-                @RenderBody()
+        <div id="content">
+            <div class="header-menu-slim">
+                @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.AdvertisingHeader })
             </div>
-            @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContentAfter })
+            <div class="master-wrapper-content">
+                @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContentBefore })
+
+                @if (IsSectionDefined("Breadcrumb"))
+                {
+                    @RenderSection("Breadcrumb")
+                }
+                <div class="master-column-wrapper">
+                    <div style="float:left; width:90%">
+                        @RenderBody()
+                    </div>
+                    <div style="float:right; width:10%">
+                        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.AdvertisingSide })
+                    </div>
+                </div>
+                @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContentAfter })
+            </div>
         </div>
-        @*@await Component.InvokeAsync("Footer")*@
         @await Component.InvokeAsync("FreemiumMedia_Footer")
     </div>
 @await Component.InvokeAsync("EuCookieLaw")

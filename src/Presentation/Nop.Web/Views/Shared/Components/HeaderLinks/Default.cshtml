@@ -9,12 +9,13 @@
                 @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeaderLinksBefore })
                 @if (Model.ShoppingCartEnabled)
                 {
-                    <li id="topcartlink">
-                        <a href="@Url.RouteUrl("ShoppingCart")">
-                            <i class="fas fa-shopping-cart"></i>
-                            <span class="cart-qty">@T("ShoppingCart.HeaderQuantity", Model.ShoppingCartItems)</span>
-                        </a>
-                    </li>
+                <li id="topcartlink">
+                    <a href="@Url.RouteUrl("ShoppingCart")">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-qty">@T("ShoppingCart.HeaderQuantity", Model.ShoppingCartItems)</span>
+                    </a>
+                    @await Component.InvokeAsync("FreemiumMedia_FlyoutShoppingCart")
+                </li>
                 }
                 @if (Model.WishlistEnabled)
                 {
