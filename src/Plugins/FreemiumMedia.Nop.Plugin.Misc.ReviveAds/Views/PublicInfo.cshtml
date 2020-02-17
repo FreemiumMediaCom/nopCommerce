@@ -7,20 +7,26 @@
 
     var zoneId = string.Empty;
 
-    if (!string.IsNullOrEmpty(Model.Zone)) {
-        if (Model.Zone.Equals("advertising_footer")) {
+    if (!string.IsNullOrEmpty(Model.Zone))
+    {
+        if (Model.Zone.Equals("advertising_footer"))
+        {
             zoneId = Model.LeaderboardFooterReviveZoneId;
         }
-        if (Model.Zone.Equals("advertising_header")) {
+        if (Model.Zone.Equals("advertising_header"))
+        {
             zoneId = Model.LeaderboardHeaderReviveZoneId;
         }
-        if (Model.Zone.Equals("advertising_side")) {
+        if (Model.Zone.Equals("advertising_side"))
+        {
             zoneId = Model.SkyscraperReviveZoneId;
         }
     }
 }
-@if (!string.IsNullOrEmpty(Model.Zone)) {
-<!-- FreemiumAdvertising.com Asynchronous JS Tag - Generated with Revive Adserver v5.0.2 -->
-<ins data-revive-zoneid="@zoneId" data-revive-id="a3dbd8c39244d69383b43b19258a40bb"></ins>
-<script async src="//ads.freemiumadvertising.com/www/delivery/asyncjs.php"></script>
+@if (!string.IsNullOrEmpty(Model.Zone))
+{
+    <div style="margin:auto; text-align:center">
+        <ins data-revive-zoneid="@zoneId" data-revive-id="a3dbd8c39244d69383b43b19258a40bb"></ins>
+        <script async src="//ads.freemiumadvertising.com/www/delivery/asyncjs.php"></script>
+    </div>
 }

@@ -157,7 +157,7 @@ label, label + * {
 .master-wrapper-content {
   position: relative;
   z-index: 0;
-  width: 90%;
+  width: 98%;
   margin: 0 auto;
 }
 
@@ -6453,7 +6453,7 @@ img {
 
 @media (min-width: 1011px) {
   .header-content {
-    padding-left: 10px;
+    padding-left: 15px;
     display: flex;
     margin: auto;
   }
@@ -7016,9 +7016,6 @@ img {
     left: 100% !important;
   }
 
-
-
-
   /*** GLOBAL STYLES ***/
   .topmenu {
     float: left;
@@ -7064,16 +7061,13 @@ img {
       clear: both;
     }
 
-
   /*** HEADER ***/
 
 
   .header-selectors-wrapper > div {
   }
 
-
   /*** FOOTER ***/
-
 
   .footer-block {
     display: inline-block;
@@ -7224,8 +7218,6 @@ img {
 
 
   /*** PRODUCT PAGE ***/
-
-
   .gallery {
     width: 550px;
   }
@@ -7855,7 +7847,6 @@ img {
   .flyout-cart {
     position: absolute;
     z-index: 100;
-    right: 200px;
     width: 300px;
     box-shadow: 0 0 2px rgba(0,0,0,0.25);
     background-color: #fff;
@@ -8587,3 +8578,16 @@ img {
     max-width: 100%;
   }
 }
+
+/* The sticky class is added to the header with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #fafafa;
+}
+
+  /* Add some top padding to the page content to prevent sudden quick movement (as the header gets a new position at the top of the page (position:fixed and top:0) */
+  .sticky + #content {
+    padding-top: 102px;
+  }

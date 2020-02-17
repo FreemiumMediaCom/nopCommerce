@@ -6956,7 +6956,7 @@ img {
       .header-menu > ul > li:first-child {
         border-left: none;
       }
-
+      
       .header-menu > ul > li > a {
         display: block;
         line-height: 20px;
@@ -7013,14 +7013,14 @@ img {
       left: 100% !important;
     }
 
-
-
-
     /*** GLOBAL STYLES ***/
     .topmenu {
       float: left;
     }
     /**** GLOBAL ***/
+
+
+
 
 
     .master-wrapper-content {
@@ -7070,7 +7070,6 @@ img {
 
 
     /*** FOOTER ***/
-
 
     .footer-block {
       display: inline-block;
@@ -7221,8 +7220,6 @@ img {
 
 
     /*** PRODUCT PAGE ***/
-
-
     .gallery {
       width: 550px;
     }
