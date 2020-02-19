@@ -10,7 +10,7 @@ using Nop.Web.Framework.Infrastructure;
 
 namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense
 {
-    public class TawkIOPlugin : BasePlugin, IWidgetPlugin
+    public class AdsensePlugin : BasePlugin, IWidgetPlugin
     {
         #region Fields
 
@@ -22,7 +22,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense
 
         #region Ctor
 
-        public TawkIOPlugin(ILocalizationService localizationService,
+        public AdsensePlugin(ILocalizationService localizationService,
             ISettingService settingService,
             IWebHelper webHelper)
         {
@@ -41,7 +41,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense
         /// <returns>Widget zones</returns>
         public IList<string> GetWidgetZones()
         {
-            return new List<string> { PublicWidgetZones.HomepageBottom, PublicWidgetZones.BlogPostPageBottom, PublicWidgetZones.ContactUsBottom };
+            return new List<string> { PublicWidgetZones.HeadHtmlTag };
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense
         /// </summary>
         public override string GetConfigurationPageUrl()
         {
-            return $"{_webHelper.GetStoreLocation()}Admin/TawkIO/Configure";
+            return $"{_webHelper.GetStoreLocation()}Admin/Adsense/Configure";
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense
         /// <returns>View component name</returns>
         public string GetWidgetViewComponentName(string widgetZone)
         {
-            return TawkIODefaults.VIEW_COMPONENT_NAME;
+            return AdsenseDefaults.VIEW_COMPONENT_NAME;
         }
 
         /// <summary>
@@ -67,11 +67,11 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense
         public override void Install()
         {
             //settings
-            _settingService.SaveSetting(new TawkIOSettings());
+            _settingService.SaveSetting(new AdsenseSettings());
 
             //locales
-            _localizationService.AddOrUpdatePluginLocaleResource("FreemiumMedia.Nop.Plugin.Widgets.TawkIO.WidgetCode", "Widget Code");
-            _localizationService.AddOrUpdatePluginLocaleResource("FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Instructions", "<p>To configure Tawk.IO, please follow these steps:<br/><br/><ol><li>Copy and Paste your 'Widget code' from Tawk.IO and save</li></ol><br/><br/></p>");
+            _localizationService.AddOrUpdatePluginLocaleResource("FreemiumMedia.Nop.Plugin.Widgets.Adsense.AdsenseUrl", "Adsense Url");
+            _localizationService.AddOrUpdatePluginLocaleResource("FreemiumMedia.Nop.Plugin.Widgets.Adsense.Instructions", "<p>To configure Adsense, please follow these steps:<br/><br/><ol><li>Copy and Paste your 'Adsense Url' and save</li></ol><br/><br/></p>");
 
             base.Install();
         }
@@ -82,11 +82,11 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense
         public override void Uninstall()
         {
             //settings
-            _settingService.DeleteSetting<TawkIOSettings>();
+            _settingService.DeleteSetting<AdsenseSettings>();
 
             //locales
-            _localizationService.DeletePluginLocaleResource("FreemiumMedia.Nop.Plugin.Widgets.TawkIO.WidgetCode");
-            _localizationService.DeletePluginLocaleResource("FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Instructions");
+            _localizationService.DeletePluginLocaleResource("FreemiumMedia.Nop.Plugin.Widgets.Adsense.AdsenseUrl");
+            _localizationService.DeletePluginLocaleResource("FreemiumMedia.Nop.Plugin.Widgets.Adsense.Instructions");
 
             base.Uninstall();
         }

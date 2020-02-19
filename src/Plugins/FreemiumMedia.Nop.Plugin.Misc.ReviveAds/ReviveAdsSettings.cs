@@ -7,6 +7,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.ReviveAds
 {
     public class ReviveAdsSettings : ISettings
     {
+        public string MobileBannerReviveZoneId { get; set; }
         public string LeaderboardHeaderReviveZoneId { get; set; }
         public string LeaderboardFooterReviveZoneId { get; set; }
         public string SkyscraperReviveZoneId { get; set; }

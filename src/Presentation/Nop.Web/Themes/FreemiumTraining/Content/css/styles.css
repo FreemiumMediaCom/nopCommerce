@@ -6460,6 +6460,18 @@ img {
 }
 
 @media (max-width: 768px) {
+  #desktopads {
+    display: none;
+  }
+
+  #sideads {
+    display: none;
+  }
+
+  #contentdetails {
+    width: 100% !important;
+  }
+
   .top-menu > li {
     position: relative;
     margin: 1px 0;
@@ -6924,6 +6936,10 @@ img {
 }
 
 @media all and (min-width: 769px) {
+
+  #mobileads {
+    display: none;
+  }
 
   /*** NAVIGATION ***/
 
@@ -7701,8 +7717,14 @@ img {
 }
 
 @media all and (min-width: 1011px) {
+  #contentdetails {
+    width: 80%
+  }
 
-
+  #sideads {
+    width: 20%;
+    float: right;
+  }
 
   .master-wrapper-content {
     margin: auto;
@@ -8579,6 +8601,17 @@ img {
   }
 }
 
+@media all and (min-width: 1400px) {
+  #contentdetails {
+    width: 90%
+  }
+
+  #sideads {
+    width: 10%;
+    float: right;
+  }
+}
+
 /* The sticky class is added to the header with JS when it reaches its scroll position */
 .sticky {
   position: fixed;
@@ -8591,3 +8624,17 @@ img {
   .sticky + #content {
     padding-top: 102px;
   }
+
+#desktopads {
+  margin: auto;
+  text-align: center;
+}
+
+#mobileads {
+  margin: auto;
+  text-align: center;
+}
+
+#contentdetails {
+  float: left;
+}

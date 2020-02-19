@@ -5,11 +5,11 @@ using Nop.Web.Framework.Mvc.ModelBinding;
 
 namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense.Models
 {
-    public class TawkIOModel : BaseNopModel
+    public class AdsenseModel : BaseNopModel
     {
         #region Ctor
 
-        public TawkIOModel()
+        public AdsenseModel()
         {
         }
 
@@ -17,10 +17,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense.Models
 
         #region Properties
 
-        /// <summary>
-        /// Gets or sets Widget Code
-        /// </summary>
-        public string WidgetCode { get; set; }
+        public string AdsenseUrl { get; set; }
 
         #endregion
     }

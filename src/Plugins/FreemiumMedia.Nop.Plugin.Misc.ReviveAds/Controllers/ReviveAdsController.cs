@@ -59,7 +59,8 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.ReviveAds.Controllers
             {
                 SkyscraperReviveZoneId = _settings.SkyscraperReviveZoneId,
                 LeaderboardFooterReviveZoneId = _settings.LeaderboardFooterReviveZoneId,
-                LeaderboardHeaderReviveZoneId = _settings.LeaderboardHeaderReviveZoneId
+                LeaderboardHeaderReviveZoneId = _settings.LeaderboardHeaderReviveZoneId,
+                MobileBannerReviveZoneId = _settings.MobileBannerReviveZoneId
             };
 
             return View("~/Plugins/FreemiumMedia.Nop.Plugin.Widgets.ReviveAds/Views/Configure.cshtml", model);
@@ -80,6 +81,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.ReviveAds.Controllers
             _settings.LeaderboardFooterReviveZoneId = model.LeaderboardFooterReviveZoneId;
             _settings.LeaderboardHeaderReviveZoneId = model.LeaderboardHeaderReviveZoneId;
             _settings.SkyscraperReviveZoneId = model.SkyscraperReviveZoneId;
+            _settings.MobileBannerReviveZoneId = model.MobileBannerReviveZoneId;
 
             _settingService.SaveSetting(_settings);
 

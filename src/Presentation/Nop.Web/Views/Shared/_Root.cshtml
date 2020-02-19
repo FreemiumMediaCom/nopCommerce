@@ -27,10 +27,10 @@
                     @RenderSection("Breadcrumb")
                 }
                 <div class="master-column-wrapper">
-                    <div style="float:left; width:90%">
+                    <div id="contentdetails">
                         @RenderBody()
                     </div>
-                    <div style="float:right; width:10%">
+                    <div id="sideads">
                         @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.AdvertisingSide })
                     </div>
                 </div>

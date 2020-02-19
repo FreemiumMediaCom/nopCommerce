@@ -8,14 +8,14 @@ using Nop.Web.Framework.Components;
 
 namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense.Components
 {
-    [ViewComponent(Name = TawkIODefaults.VIEW_COMPONENT_NAME)]
-    public class WidgetsTawkIOComponent : NopViewComponent
+    [ViewComponent(Name = AdsenseDefaults.VIEW_COMPONENT_NAME)]
+    public class WidgetsAdsenseComponent : NopViewComponent
     {
         private readonly IStoreContext _storeContext;
         private readonly IWorkContext _workContext;
         private readonly ISettingService _settingService;
 
-        public WidgetsTawkIOComponent(IStoreContext storeContext, 
+        public WidgetsAdsenseComponent(IStoreContext storeContext, 
             ISettingService settingService, 
             IWorkContext workContext)
         {
@@ -32,9 +32,9 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense.Components
         /// <returns>View component result</returns>
         public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
-            var tawkIOSettings = _settingService.LoadSetting<TawkIOSettings>(_storeContext.CurrentStore.Id);
+            var settings = _settingService.LoadSetting<AdsenseSettings>(_storeContext.CurrentStore.Id);
             
-            return View("~/Plugins/FreemiumMedia.Nop.Plugin.Widgets.TawkIO/Views/PublicInfo.cshtml", tawkIOSettings);
+            return View("~/Plugins/FreemiumMedia.Nop.Plugin.Widgets.Adsense/Views/PublicInfo.cshtml", settings);
         }
     }
 }

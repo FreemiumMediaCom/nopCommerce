@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Widgets",
+  "FriendlyName": "Adsense",
+  "SystemName": "FreemiumMedia.Nop.Plugin.Widgets.Adsense",
+  "Version": "2020.01.04",
+  "SupportedVersions": [ "4.20", "4.30" ],
+  "Author": "FreemiumMedia.com",
+  "DisplayOrder": 1,
+  "FileName": "FreemiumMedia.Nop.Plugin.Widgets.Adsense.dll",
+  "Description": "This plugin enables Adsense integration to be displayed on your website."
+}

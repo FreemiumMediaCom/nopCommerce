@@ -25,8 +25,12 @@
 }
 @if (!string.IsNullOrEmpty(Model.Zone))
 {
-    <div style="margin:auto; text-align:center">
+    <div id="desktopads">
         <ins data-revive-zoneid="@zoneId" data-revive-id="a3dbd8c39244d69383b43b19258a40bb"></ins>
+        <script async src="//ads.freemiumadvertising.com/www/delivery/asyncjs.php"></script>
+    </div>
+    <div id="mobileads">
+        <ins data-revive-zoneid="@Model.MobileBannerReviveZoneId" data-revive-id="a3dbd8c39244d69383b43b19258a40bb"></ins>
         <script async src="//ads.freemiumadvertising.com/www/delivery/asyncjs.php"></script>
     </div>
 }

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Nop.Web.Framework.Infrastructure.Extensions;
 
 namespace Nop.Web
@@ -45,6 +48,12 @@ namespace Nop.Web
         public void Configure(IApplicationBuilder application)
         {
             application.ConfigureRequestPipeline();
+            application.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @".well-known")),
+                RequestPath = new PathString("/.well-known"),
+                ServeUnknownFileTypes = true // serve extensionless file
+            });
         }
     }
 }

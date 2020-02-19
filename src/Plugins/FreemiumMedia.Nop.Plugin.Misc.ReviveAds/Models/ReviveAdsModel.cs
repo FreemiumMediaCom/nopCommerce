@@ -16,7 +16,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.ReviveAds.Models
         #endregion
 
         #region Properties
-
+        public string MobileBannerReviveZoneId { get; set; }
         public string LeaderboardFooterReviveZoneId { get; set; }
         public string LeaderboardHeaderReviveZoneId { get; set; }
         public string SkyscraperReviveZoneId { get; set; }
