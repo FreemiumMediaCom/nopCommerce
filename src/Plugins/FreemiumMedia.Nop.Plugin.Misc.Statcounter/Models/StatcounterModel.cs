@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
 
-namespace FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Models
+namespace FreemiumMedia.Nop.Plugin.Widgets.Statcounter.Models
 {
-    public class TawkIOModel : BaseNopModel
+    public class StatcounterModel : BaseNopModel
     {
         #region Ctor
 
-        public TawkIOModel()
+        public StatcounterModel()
         {
         }
 
@@ -17,10 +17,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Models
 
         #region Properties
 
-        /// <summary>
-        /// Gets or sets Widget Code
-        /// </summary>
-        public string WidgetCode { get; set; }
+        public string StatcounterCode { get; set; }
 
         #endregion
     }

@@ -1,21 +1,21 @@
 ﻿using System.Threading.Tasks;
-using FreemiumMedia.Nop.Plugin.Widgets.TawkIO;
+using FreemiumMedia.Nop.Plugin.Widgets.Statcounter;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Services.Configuration;
 using Nop.Services.Media;
 using Nop.Web.Framework.Components;
 
-namespace FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Components
+namespace FreemiumMedia.Nop.Plugin.Widgets.Statcounter.Components
 {
-    [ViewComponent(Name = TawkIODefaults.VIEW_COMPONENT_NAME)]
-    public class WidgetsTawkIOComponent : NopViewComponent
+    [ViewComponent(Name = StatcounterDefaults.VIEW_COMPONENT_NAME)]
+    public class WidgetsStatcounterComponent : NopViewComponent
     {
         private readonly IStoreContext _storeContext;
         private readonly IWorkContext _workContext;
         private readonly ISettingService _settingService;
 
-        public WidgetsTawkIOComponent(IStoreContext storeContext, 
+        public WidgetsStatcounterComponent(IStoreContext storeContext, 
             ISettingService settingService, 
             IWorkContext workContext)
         {
@@ -32,9 +32,9 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Components
         /// <returns>View component result</returns>
         public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
-            var tawkIOSettings = _settingService.LoadSetting<TawkIOSettings>(_storeContext.CurrentStore.Id);
+            var settings = _settingService.LoadSetting<StatcounterSettings>(_storeContext.CurrentStore.Id);
             
-            return View("~/Plugins/FreemiumMedia.Nop.Plugin.Widgets.TawkIO/Views/PublicInfo.cshtml", tawkIOSettings);
+            return View("~/Plugins/FreemiumMedia.Nop.Plugin.Widgets.Statcounter/Views/PublicInfo.cshtml", settings);
         }
     }
 }

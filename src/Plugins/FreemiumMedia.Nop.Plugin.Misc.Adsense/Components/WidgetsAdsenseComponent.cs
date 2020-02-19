@@ -32,9 +32,9 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense.Components
         /// <returns>View component result</returns>
         public async Task<IViewComponentResult> InvokeAsync(string widgetZone, object additionalData)
         {
-            var settings = _settingService.LoadSetting<AdsenseSettings>(_storeContext.CurrentStore.Id);
+            var tawkIOSettings = _settingService.LoadSetting<AdsenseSettings>(_storeContext.CurrentStore.Id);
             
-            return View("~/Plugins/FreemiumMedia.Nop.Plugin.Widgets.Adsense/Views/PublicInfo.cshtml", settings);
+            return View("~/Plugins/FreemiumMedia.Nop.Plugin.Widgets.Adsense/Views/PublicInfo.cshtml", tawkIOSettings);
         }
     }
 }

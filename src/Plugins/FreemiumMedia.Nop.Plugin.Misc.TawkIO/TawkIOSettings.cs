@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense
+namespace FreemiumMedia.Nop.Plugin.Widgets.TawkIO
 {
     public class TawkIOSettings : ISettings
     {

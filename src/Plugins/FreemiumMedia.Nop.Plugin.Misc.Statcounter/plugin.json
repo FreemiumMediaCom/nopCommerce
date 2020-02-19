@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Widgets",
+  "FriendlyName": "Statcounter",
+  "SystemName": "FreemiumMedia.Nop.Plugin.Widgets.Statcounter",
+  "Version": "2020.01.04",
+  "SupportedVersions": [ "4.20", "4.30" ],
+  "Author": "FreemiumMedia.com",
+  "DisplayOrder": 1,
+  "FileName": "FreemiumMedia.Nop.Plugin.Widgets.Statcounter.dll",
+  "Description": "This plugin enables Statcounter integration to be displayed on your website."
+}

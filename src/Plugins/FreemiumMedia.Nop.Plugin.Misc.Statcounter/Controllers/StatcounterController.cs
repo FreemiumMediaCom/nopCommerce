@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Nop.Services;
+﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Services.Messages;
@@ -13,11 +7,11 @@ using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
 
-namespace FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Controllers
+namespace FreemiumMedia.Nop.Plugin.Widgets.Statcounter.Controllers
 {
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public class TawkIOController : BasePluginController
+    public class StatcounterController : BasePluginController
     {
         #region Fields
 
@@ -25,17 +19,17 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Controllers
         private readonly INotificationService _notificationService;
         private readonly IPermissionService _permissionService;
         private readonly ISettingService _settingService;
-        private readonly TawkIOSettings _settings;
+        private readonly StatcounterSettings _settings;
 
         #endregion
 
         #region Ctor
 
-        public TawkIOController(ILocalizationService localizationService,
+        public StatcounterController(ILocalizationService localizationService,
             INotificationService notificationService,
             IPermissionService permissionService,
             ISettingService settingService,
-            TawkIOSettings settings)
+            StatcounterSettings settings)
         {
             _localizationService = localizationService;
             _notificationService = notificationService;
@@ -55,17 +49,17 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Controllers
                 return AccessDeniedView();
 
             //prepare common model
-            var model = new TawkIOSettings
+            var model = new StatcounterSettings
             {
-                WidgetCode = _settings.WidgetCode
+                StatcounterCode = _settings.StatcounterCode
             };
 
-            return View("~/Plugins/FreemiumMedia.Nop.Plugin.Widgets.TawkIO/Views/Configure.cshtml", model);
+            return View("~/Plugins/FreemiumMedia.Nop.Plugin.Widgets.Statcounter/Views/Configure.cshtml", model);
         }
 
         [HttpPost]
         [AdminAntiForgery]
-        public IActionResult Configure(TawkIOSettings model)
+        public IActionResult Configure(StatcounterSettings model)
         {
             //whether user has the authority to manage configuration
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageShippingSettings))
@@ -75,7 +69,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Controllers
                 return Configure();
 
             //save settings
-            _settings.WidgetCode = model.WidgetCode;
+            _settings.StatcounterCode = model.StatcounterCode;
 
             _settingService.SaveSetting(_settings);
 
