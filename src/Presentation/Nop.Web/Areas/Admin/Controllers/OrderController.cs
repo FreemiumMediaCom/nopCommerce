@@ -13,6 +13,7 @@ using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
+using Nop.Services.Customers;
 using Nop.Services.ExportImport;
 using Nop.Services.Helpers;
 using Nop.Services.Localization;
@@ -40,6 +41,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IAddressAttributeParser _addressAttributeParser;
         private readonly IAddressService _addressService;
         private readonly ICustomerActivityService _customerActivityService;
+        private readonly ICustomerService _customerService;
         private readonly IDateTimeHelper _dateTimeHelper;
         private readonly IDownloadService _downloadService;
         private readonly IEncryptionService _encryptionService;
@@ -72,6 +74,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         public OrderController(IAddressAttributeParser addressAttributeParser,
             IAddressService addressService,
             ICustomerActivityService customerActivityService,
+            ICustomerService customerService,
             IDateTimeHelper dateTimeHelper,
             IDownloadService downloadService,
             IEncryptionService encryptionService,
@@ -100,6 +103,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _addressAttributeParser = addressAttributeParser;
             _addressService = addressService;
             _customerActivityService = customerActivityService;
+            _customerService = customerService;
             _dateTimeHelper = dateTimeHelper;
             _downloadService = downloadService;
             _encryptionService = encryptionService;
@@ -132,31 +136,38 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         protected virtual bool HasAccessToOrder(Order order)
         {
-            if (order == null)
-                throw new ArgumentNullException(nameof(order));
+            return order != null && HasAccessToOrder(order.Id);
+        }
+
+        protected virtual bool HasAccessToOrder(int orderId)
+        {
+            if (orderId == 0)
+                return false;
 
             if (_workContext.CurrentVendor == null)
                 //not a vendor; has access
                 return true;
 
             var vendorId = _workContext.CurrentVendor.Id;
-            var hasVendorProducts = order.OrderItems.Any(orderItem => orderItem.Product.VendorId == vendorId);
+            var hasVendorProducts = _orderService.GetOrderItems(orderId, vendorId: vendorId).Any();
+
             return hasVendorProducts;
         }
-
-        protected virtual bool HasAccessToOrderItem(OrderItem orderItem)
+        
+        protected virtual bool HasAccessToProduct(OrderItem orderItem)
         {
-            if (orderItem == null)
-                throw new ArgumentNullException(nameof(orderItem));
+            if (orderItem == null || orderItem.ProductId == 0)
+                return false;
 
             if (_workContext.CurrentVendor == null)
                 //not a vendor; has access
                 return true;
 
             var vendorId = _workContext.CurrentVendor.Id;
-            return orderItem.Product.VendorId == vendorId;
-        }
 
+            return _productService.GetProductById(orderItem.ProductId)?.VendorId == vendorId;
+        }
+        
         protected virtual bool HasAccessToShipment(Shipment shipment)
         {
             if (shipment == null)
@@ -166,19 +177,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //not a vendor; has access
                 return true;
 
-            var hasVendorProducts = false;
-            var vendorId = _workContext.CurrentVendor.Id;
-            foreach (var shipmentItem in shipment.ShipmentItems)
-            {
-                var orderItem = _orderService.GetOrderItemById(shipmentItem.OrderItemId);
-                if (orderItem == null || orderItem.Product.VendorId != vendorId)
-                    continue;
-
-                hasVendorProducts = true;
-                break;
-            }
-
-            return hasVendorProducts;
+            return HasAccessToOrder(shipment.OrderId);
         }
 
         /// <summary>
@@ -290,6 +289,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                         }
                         catch
                         {
+                            // ignored
                         }
 
                         if (selectedDate.HasValue)
@@ -348,6 +348,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
             catch
             {
+                // ignored
             }
         }
 
@@ -505,7 +506,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Export / Import
 
-        [HttpPost, ActionName("List")]
+        [HttpPost, ActionName("ExportXml")]
         [FormValueRequired("exportxml-all")]
         public virtual IActionResult ExportXmlAll(OrderSearchModel model)
         {
@@ -590,7 +591,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return File(Encoding.UTF8.GetBytes(xml), MimeTypes.ApplicationXml, "orders.xml");
         }
 
-        [HttpPost, ActionName("List")]
+        [HttpPost, ActionName("ExportExcel")]
         [FormValueRequired("exportexcel-all")]
         public virtual IActionResult ExportExcelAll(OrderSearchModel model)
         {
@@ -1053,13 +1054,14 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _orderService.UpdateOrder(order);
 
                 //add a note
-                order.OrderNotes.Add(new OrderNote
+                _orderService.InsertOrderNote(new OrderNote
                 {
+                    OrderId = order.Id,
                     Note = $"Order status has been edited. New status: {_localizationService.GetLocalizedEnum(order.OrderStatus)}",
                     DisplayToCustomer = false,
                     CreatedOnUtc = DateTime.UtcNow
                 });
-                _orderService.UpdateOrder(order);
+
                 LogEditOrder(order.Id);
 
                 //prepare model
@@ -1153,7 +1155,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             return File(bytes, MimeTypes.ApplicationPdf, $"order_{order.Id}.pdf");
         }
 
-        [HttpPost, ActionName("List")]
+        [HttpPost, ActionName("PdfInvoice")]
         [FormValueRequired("pdf-invoice-all")]
         public virtual IActionResult PdfInvoiceAll(OrderSearchModel model)
         {
@@ -1329,13 +1331,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
 
             //add a note
-            order.OrderNotes.Add(new OrderNote
+            _orderService.InsertOrderNote(new OrderNote
             {
+                OrderId = order.Id,
                 Note = "Credit card info has been edited",
                 DisplayToCustomer = false,
                 CreatedOnUtc = DateTime.UtcNow
             });
-            _orderService.UpdateOrder(order);
+
             LogEditOrder(order.Id);
 
             //prepare model
@@ -1375,13 +1378,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _orderService.UpdateOrder(order);
 
             //add a note
-            order.OrderNotes.Add(new OrderNote
+            _orderService.InsertOrderNote(new OrderNote
             {
+                OrderId = order.Id,
                 Note = "Order totals have been edited",
                 DisplayToCustomer = false,
                 CreatedOnUtc = DateTime.UtcNow
             });
-            _orderService.UpdateOrder(order);
+
             LogEditOrder(order.Id);
 
             //prepare model
@@ -1410,13 +1414,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _orderService.UpdateOrder(order);
 
             //add a note
-            order.OrderNotes.Add(new OrderNote
+            _orderService.InsertOrderNote(new OrderNote
             {
+                OrderId = order.Id,
                 Note = "Shipping method has been edited",
                 DisplayToCustomer = false,
                 CreatedOnUtc = DateTime.UtcNow
             });
-            _orderService.UpdateOrder(order);
+
             LogEditOrder(order.Id);
 
             //prepare model
@@ -1450,7 +1455,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 if (formValue.StartsWith("btnSaveOrderItem", StringComparison.InvariantCultureIgnoreCase))
                     orderItemId = Convert.ToInt32(formValue.Substring("btnSaveOrderItem".Length));
 
-            var orderItem = order.OrderItems.FirstOrDefault(x => x.Id == orderItemId)
+            var orderItem = _orderService.GetOrderItemById(orderItemId)
                 ?? throw new ArgumentException("No order item found with the specified id");
 
             if (!decimal.TryParse(form["pvUnitPriceInclTax" + orderItemId], out var unitPriceInclTax))
@@ -1468,6 +1473,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (!decimal.TryParse(form["pvPriceExclTax" + orderItemId], out var priceExclTax))
                 priceExclTax = orderItem.PriceExclTax;
 
+            var product = _productService.GetProductById(orderItem.ProductId);
+
             if (quantity > 0)
             {
                 var qtyDifference = orderItem.Quantity - quantity;
@@ -1481,17 +1488,17 @@ namespace Nop.Web.Areas.Admin.Controllers
                     orderItem.DiscountAmountExclTax = discountExclTax;
                     orderItem.PriceInclTax = priceInclTax;
                     orderItem.PriceExclTax = priceExclTax;
-                    _orderService.UpdateOrder(order);
+                    _orderService.UpdateOrderItem(orderItem);
                 }
 
                 //adjust inventory
-                _productService.AdjustInventory(orderItem.Product, qtyDifference, orderItem.AttributesXml,
+                _productService.AdjustInventory(product, qtyDifference, orderItem.AttributesXml,
                     string.Format(_localizationService.GetResource("Admin.StockQuantityHistory.Messages.EditOrder"), order.Id));
             }
             else
             {
                 //adjust inventory
-                _productService.AdjustInventory(orderItem.Product, orderItem.Quantity, orderItem.AttributesXml,
+                _productService.AdjustInventory(product, orderItem.Quantity, orderItem.AttributesXml,
                     string.Format(_localizationService.GetResource("Admin.StockQuantityHistory.Messages.DeleteOrderItem"), order.Id));
 
                 //delete item
@@ -1499,10 +1506,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
 
             //update order totals
-            var updateOrderParameters = new UpdateOrderParameters
+            var updateOrderParameters = new UpdateOrderParameters(order, orderItem)
             {
-                UpdatedOrder = order,
-                UpdatedOrderItem = orderItem,
                 PriceInclTax = unitPriceInclTax,
                 PriceExclTax = unitPriceExclTax,
                 DiscountAmountInclTax = discountInclTax,
@@ -1514,13 +1519,14 @@ namespace Nop.Web.Areas.Admin.Controllers
             _orderProcessingService.UpdateOrderTotals(updateOrderParameters);
 
             //add a note
-            order.OrderNotes.Add(new OrderNote
+            _orderService.InsertOrderNote(new OrderNote
             {
+                OrderId = order.Id,
                 Note = "Order item has been edited",
                 DisplayToCustomer = false,
                 CreatedOnUtc = DateTime.UtcNow
             });
-            _orderService.UpdateOrder(order);
+
             LogEditOrder(order.Id);
 
             //prepare model
@@ -1557,7 +1563,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 if (formValue.StartsWith("btnDeleteOrderItem", StringComparison.InvariantCultureIgnoreCase))
                     orderItemId = Convert.ToInt32(formValue.Substring("btnDeleteOrderItem".Length));
 
-            var orderItem = order.OrderItems.FirstOrDefault(x => x.Id == orderItemId)
+            var orderItem = _orderService.GetOrderItemById(orderItemId)
                 ?? throw new ArgumentException("No order item found with the specified id");
 
             if (_giftCardService.GetGiftCardsByPurchasedWithOrderItemId(orderItem.Id).Any())
@@ -1577,29 +1583,28 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
             else
             {
+                var product = _productService.GetProductById(orderItem.ProductId);
+
                 //adjust inventory
-                _productService.AdjustInventory(orderItem.Product, orderItem.Quantity, orderItem.AttributesXml,
+                _productService.AdjustInventory(product, orderItem.Quantity, orderItem.AttributesXml,
                     string.Format(_localizationService.GetResource("Admin.StockQuantityHistory.Messages.DeleteOrderItem"), order.Id));
 
                 //delete item
                 _orderService.DeleteOrderItem(orderItem);
 
                 //update order totals
-                var updateOrderParameters = new UpdateOrderParameters
-                {
-                    UpdatedOrder = order,
-                    UpdatedOrderItem = orderItem
-                };
+                var updateOrderParameters = new UpdateOrderParameters(order, orderItem);
                 _orderProcessingService.UpdateOrderTotals(updateOrderParameters);
 
                 //add a note
-                order.OrderNotes.Add(new OrderNote
+                _orderService.InsertOrderNote(new OrderNote
                 {
+                    OrderId = order.Id,
                     Note = "Order item has been deleted",
                     DisplayToCustomer = false,
                     CreatedOnUtc = DateTime.UtcNow
                 });
-                _orderService.UpdateOrder(order);
+
                 LogEditOrder(order.Id);
 
                 //prepare model
@@ -1633,15 +1638,15 @@ namespace Nop.Web.Areas.Admin.Controllers
                 if (formValue.StartsWith("btnResetDownloadCount", StringComparison.InvariantCultureIgnoreCase))
                     orderItemId = Convert.ToInt32(formValue.Substring("btnResetDownloadCount".Length));
 
-            var orderItem = order.OrderItems.FirstOrDefault(x => x.Id == orderItemId)
+            var orderItem = _orderService.GetOrderItemById(orderItemId)
                 ?? throw new ArgumentException("No order item found with the specified id");
 
             //ensure a vendor has access only to his products 
-            if (_workContext.CurrentVendor != null && !HasAccessToOrderItem(orderItem))
+            if (_workContext.CurrentVendor != null && !HasAccessToProduct(orderItem))
                 return RedirectToAction("List");
 
             orderItem.DownloadCount = 0;
-            _orderService.UpdateOrder(order);
+            _orderService.UpdateOrderItem(orderItem);
             LogEditOrder(order.Id);
 
             //prepare model
@@ -1671,15 +1676,16 @@ namespace Nop.Web.Areas.Admin.Controllers
                 if (formValue.StartsWith("btnPvActivateDownload", StringComparison.InvariantCultureIgnoreCase))
                     orderItemId = Convert.ToInt32(formValue.Substring("btnPvActivateDownload".Length));
 
-            var orderItem = order.OrderItems.FirstOrDefault(x => x.Id == orderItemId)
+            var orderItem = _orderService.GetOrderItemById(orderItemId)
                 ?? throw new ArgumentException("No order item found with the specified id");
 
             //ensure a vendor has access only to his products 
-            if (_workContext.CurrentVendor != null && !HasAccessToOrderItem(orderItem))
+            if (_workContext.CurrentVendor != null && !HasAccessToProduct(orderItem))
                 return RedirectToAction("List");
 
             orderItem.IsDownloadActivated = !orderItem.IsDownloadActivated;
-            _orderService.UpdateOrder(order);
+            _orderService.UpdateOrderItem(orderItem);
+
             LogEditOrder(order.Id);
 
             //prepare model
@@ -1701,14 +1707,17 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return RedirectToAction("List");
 
             //try to get an order item with the specified id
-            var orderItem = order.OrderItems.FirstOrDefault(x => x.Id == orderItemId)
+            var orderItem = _orderService.GetOrderItemById(orderItemId)
                 ?? throw new ArgumentException("No order item found with the specified id");
 
-            if (!orderItem.Product.IsDownload)
+            var product = _productService.GetProductById(orderItem.ProductId)
+                ?? throw new ArgumentException("No product found with the specified order item id");
+
+            if (!product.IsDownload)
                 throw new ArgumentException("Product is not downloadable");
 
             //ensure a vendor has access only to his products 
-            if (_workContext.CurrentVendor != null && !HasAccessToOrderItem(orderItem))
+            if (_workContext.CurrentVendor != null && !HasAccessToProduct(orderItem))
                 return RedirectToAction("List");
 
             //prepare model
@@ -1729,11 +1738,11 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (order == null)
                 return RedirectToAction("List");
 
-            var orderItem = order.OrderItems.FirstOrDefault(x => x.Id == model.OrderItemId)
+            var orderItem = _orderService.GetOrderItemById(model.OrderItemId)
                 ?? throw new ArgumentException("No order item found with the specified id");
 
             //ensure a vendor has access only to his products 
-            if (_workContext.CurrentVendor != null && !HasAccessToOrderItem(orderItem))
+            if (_workContext.CurrentVendor != null && !HasAccessToProduct(orderItem))
                 return RedirectToAction("List");
 
             //attach license
@@ -1741,7 +1750,9 @@ namespace Nop.Web.Areas.Admin.Controllers
                 orderItem.LicenseDownloadId = model.LicenseDownloadId;
             else
                 orderItem.LicenseDownloadId = null;
-            _orderService.UpdateOrder(order);
+
+            _orderService.UpdateOrderItem(orderItem);
+
             LogEditOrder(order.Id);
 
             //success
@@ -1762,16 +1773,18 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (order == null)
                 return RedirectToAction("List");
 
-            var orderItem = order.OrderItems.FirstOrDefault(x => x.Id == model.OrderItemId)
+            var orderItem = _orderService.GetOrderItemById(model.OrderItemId)
                 ?? throw new ArgumentException("No order item found with the specified id");
 
             //ensure a vendor has access only to his products 
-            if (_workContext.CurrentVendor != null && !HasAccessToOrderItem(orderItem))
+            if (_workContext.CurrentVendor != null && !HasAccessToProduct(orderItem))
                 return RedirectToAction("List");
 
             //attach license
             orderItem.LicenseDownloadId = null;
-            _orderService.UpdateOrder(order);
+
+            _orderService.UpdateOrderItem(orderItem);
+
             LogEditOrder(order.Id);
 
             //success
@@ -1861,6 +1874,10 @@ namespace Nop.Web.Areas.Admin.Controllers
             var product = _productService.GetProductById(productId)
                 ?? throw new ArgumentException("No product found with the specified id");
 
+            //try to get a customer with the specified id
+            var customer = _customerService.GetCustomerById(order.CustomerId)
+                ?? throw new ArgumentException("No customer found with the specified id");
+
             //basic properties
             decimal.TryParse(form["UnitPriceInclTax"], out var unitPriceInclTax);
             decimal.TryParse(form["UnitPriceExclTax"], out var unitPriceExclTax);
@@ -1886,7 +1903,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
 
             //warnings
-            warnings.AddRange(_shoppingCartService.GetShoppingCartItemAttributeWarnings(order.Customer, ShoppingCartType.ShoppingCart, product, quantity, attributesXml));
+            warnings.AddRange(_shoppingCartService.GetShoppingCartItemAttributeWarnings(customer, ShoppingCartType.ShoppingCart, product, quantity, attributesXml));
             warnings.AddRange(_shoppingCartService.GetShoppingCartItemGiftCardWarnings(ShoppingCartType.ShoppingCart, product, attributesXml));
             warnings.AddRange(_shoppingCartService.GetRentalProductWarnings(product, rentalStartDate, rentalEndDate));
             if (!warnings.Any())
@@ -1894,7 +1911,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //no errors
 
                 //attributes
-                var attributeDescription = _productAttributeFormatter.FormatAttributes(product, attributesXml, order.Customer);
+                var attributeDescription = _productAttributeFormatter.FormatAttributes(product, attributesXml, customer);
 
                 //weight
                 var itemWeight = _shippingService.GetShoppingCartItemWeight(product, attributesXml);
@@ -1903,7 +1920,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 var orderItem = new OrderItem
                 {
                     OrderItemGuid = Guid.NewGuid(),
-                    Order = order,
+                    OrderId = order.Id,
                     ProductId = product.Id,
                     UnitPriceInclTax = unitPriceInclTax,
                     UnitPriceExclTax = unitPriceExclTax,
@@ -1922,18 +1939,16 @@ namespace Nop.Web.Areas.Admin.Controllers
                     RentalStartDateUtc = rentalStartDate,
                     RentalEndDateUtc = rentalEndDate
                 };
-                order.OrderItems.Add(orderItem);
-                _orderService.UpdateOrder(order);
+
+                _orderService.InsertOrderItem(orderItem);                
 
                 //adjust inventory
-                _productService.AdjustInventory(orderItem.Product, -orderItem.Quantity, orderItem.AttributesXml,
+                _productService.AdjustInventory(product, -orderItem.Quantity, orderItem.AttributesXml,
                     string.Format(_localizationService.GetResource("Admin.StockQuantityHistory.Messages.EditOrder"), order.Id));
 
                 //update order totals
-                var updateOrderParameters = new UpdateOrderParameters
+                var updateOrderParameters = new UpdateOrderParameters(order, orderItem)
                 {
-                    UpdatedOrder = order,
-                    UpdatedOrderItem = orderItem,
                     PriceInclTax = unitPriceInclTax,
                     PriceExclTax = unitPriceExclTax,
                     SubTotalInclTax = priceInclTax,
@@ -1943,13 +1958,14 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _orderProcessingService.UpdateOrderTotals(updateOrderParameters);
 
                 //add a note
-                order.OrderNotes.Add(new OrderNote
+                _orderService.InsertOrderNote(new OrderNote
                 {
+                    OrderId = order.Id,
                     Note = "A new order item has been added",
                     DisplayToCustomer = false,
                     CreatedOnUtc = DateTime.UtcNow
                 });
-                _orderService.UpdateOrder(order);
+
                 LogEditOrder(order.Id);
 
                 //gift cards
@@ -1960,7 +1976,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                         var gc = new GiftCard
                         {
                             GiftCardType = product.GiftCardType,
-                            PurchasedWithOrderItem = orderItem,
+                            PurchasedWithOrderItemId = orderItem.Id,
                             Amount = unitPriceExclTax,
                             IsGiftCardActivated = false,
                             GiftCardCouponCode = _giftCardService.GenerateGiftCardCode(),
@@ -2056,13 +2072,14 @@ namespace Nop.Web.Areas.Admin.Controllers
                 _addressService.UpdateAddress(address);
 
                 //add a note
-                order.OrderNotes.Add(new OrderNote
+                _orderService.InsertOrderNote(new OrderNote
                 {
+                    OrderId = order.Id,
                     Note = "Address has been edited",
                     DisplayToCustomer = false,
                     CreatedOnUtc = DateTime.UtcNow
                 });
-                _orderService.UpdateOrder(order);
+
                 LogEditOrder(order.Id);
 
                 return RedirectToAction("AddressEdit", new { addressId = model.Address.Id, orderId = model.OrderId });
@@ -2151,13 +2168,13 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(model);
         }
 
-        public virtual IActionResult AddShipment(int orderId)
+        public virtual IActionResult AddShipment(int id)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
 
             //try to get an order with the specified id
-            var order = _orderService.GetOrderById(orderId);
+            var order = _orderService.GetOrderById(id);
             if (order == null)
                 return RedirectToAction("List");
 
@@ -2173,13 +2190,13 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
         [FormValueRequired("save", "save-continue")]
-        public virtual IActionResult AddShipment(int orderId, IFormCollection form, bool continueEditing)
+        public virtual IActionResult AddShipment(ShipmentModel model, IFormCollection form, bool continueEditing)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageOrders))
                 return AccessDeniedView();
 
             //try to get an order with the specified id
-            var order = _orderService.GetOrderById(orderId);
+            var order = _orderService.GetOrderById(model.OrderId);
             if (order == null)
                 return RedirectToAction("List");
 
@@ -2187,20 +2204,31 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (_workContext.CurrentVendor != null && !HasAccessToOrder(order))
                 return RedirectToAction("List");
 
-            var orderItems = order.OrderItems;
+            var orderItems = _orderService.GetOrderItems(order.Id, isShipEnabled: true);
             //a vendor should have access only to his products
             if (_workContext.CurrentVendor != null)
             {
-                orderItems = orderItems.Where(HasAccessToOrderItem).ToList();
+                orderItems = orderItems.Where(HasAccessToProduct).ToList();
             }
 
-            Shipment shipment = null;
+            var shipment = new Shipment
+            {
+                OrderId = order.Id,
+                TrackingNumber = model.TrackingNumber,
+                TotalWeight = null,
+                ShippedDateUtc = model.CanShip ? DateTime.UtcNow : default(DateTime?),
+                DeliveryDateUtc = (model.CanShip && model.CanDeliver) ? DateTime.UtcNow : default(DateTime?),
+                AdminComment = model.AdminComment,
+                CreatedOnUtc = DateTime.UtcNow
+            };
+
+            var shipmentItems = new List<ShipmentItem>();
+
             decimal? totalWeight = null;
+
             foreach (var orderItem in orderItems)
             {
-                //is shippable
-                if (!orderItem.Product.IsShipEnabled)
-                    continue;
+                var product = _productService.GetProductById(orderItem.ProductId);
 
                 //ensure that this product can be shipped (have at least one item to ship)
                 var maxQtyToAdd = _orderService.GetTotalNumberOfItemsCanBeAddedToShipment(orderItem);
@@ -2216,8 +2244,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                     }
 
                 var warehouseId = 0;
-                if (orderItem.Product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
-                    orderItem.Product.UseMultipleWarehouses)
+                if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
+                    product.UseMultipleWarehouses)
                 {
                     //multiple warehouses supported
                     //warehouse is chosen by a store owner
@@ -2231,15 +2259,8 @@ namespace Nop.Web.Areas.Admin.Controllers
                 else
                 {
                     //multiple warehouses are not supported
-                    warehouseId = orderItem.Product.WarehouseId;
+                    warehouseId = product.WarehouseId;
                 }
-
-                foreach (var formKey in form.Keys)
-                    if (formKey.Equals($"qtyToAdd{orderItem.Id}", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        int.TryParse(form[formKey], out qtyToAdd);
-                        break;
-                    }
 
                 //validate quantity
                 if (qtyToAdd <= 0)
@@ -2257,57 +2278,58 @@ namespace Nop.Web.Areas.Admin.Controllers
                     totalWeight += orderItemTotalWeight.Value;
                 }
 
-                if (shipment == null)
-                {
-                    var trackingNumber = form["TrackingNumber"];
-                    var adminComment = form["AdminComment"];
-                    shipment = new Shipment
-                    {
-                        OrderId = order.Id,
-                        TrackingNumber = trackingNumber,
-                        TotalWeight = null,
-                        ShippedDateUtc = null,
-                        DeliveryDateUtc = null,
-                        AdminComment = adminComment,
-                        CreatedOnUtc = DateTime.UtcNow
-                    };
-                }
-
                 //create a shipment item
-                var shipmentItem = new ShipmentItem
+                shipmentItems.Add(new ShipmentItem
                 {
                     OrderItemId = orderItem.Id,
                     Quantity = qtyToAdd,
                     WarehouseId = warehouseId
-                };
-                shipment.ShipmentItems.Add(shipmentItem);
+                });
+
+                var quantityWithReserved = _productService.GetTotalStockQuantity(product, true, warehouseId);
+                var quantityTotal = _productService.GetTotalStockQuantity(product, false, warehouseId);
+
+                //currently reserved in current stock
+                var quantityReserved = quantityTotal - quantityWithReserved;
+
+                //If the quantity of the reserve product in the warehouse does not coincide with the total quantity of goods in the basket, 
+                //it is necessary to redistribute the reserve to the warehouse
+                if (!(quantityReserved == qtyToAdd && quantityReserved == maxQtyToAdd))
+                    _productService.BalanceInventory(product, warehouseId, qtyToAdd);
             }
 
             //if we have at least one item in the shipment, then save it
-            if (shipment != null && shipment.ShipmentItems.Any())
+            if (shipmentItems.Any())
             {
                 shipment.TotalWeight = totalWeight;
                 _shipmentService.InsertShipment(shipment);
 
-                //add a note
-                order.OrderNotes.Add(new OrderNote
+                foreach (var shipmentItem in shipmentItems)
                 {
+                    shipmentItem.ShipmentId = shipment.Id;
+                    _shipmentService.InsertShipmentItem(shipmentItem);
+                }
+
+                //add a note
+                _orderService.InsertOrderNote(new OrderNote
+                {
+                    OrderId = order.Id,
                     Note = "A shipment has been added",
                     DisplayToCustomer = false,
                     CreatedOnUtc = DateTime.UtcNow
                 });
-                _orderService.UpdateOrder(order);
+
                 LogEditOrder(order.Id);
 
                 _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Orders.Shipments.Added"));
                 return continueEditing
                            ? RedirectToAction("ShipmentDetails", new { id = shipment.Id })
-                           : RedirectToAction("Edit", new { id = orderId });
+                           : RedirectToAction("Edit", new { id = model.OrderId });
             }
 
             _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Orders.Shipments.NoProductsSelected"));
 
-            return RedirectToAction("AddShipment", new { orderId });
+            return RedirectToAction("AddShipment", model);
         }
 
         public virtual IActionResult ShipmentDetails(int id)
@@ -2344,14 +2366,16 @@ namespace Nop.Web.Areas.Admin.Controllers
             //a vendor should have access only to his products
             if (_workContext.CurrentVendor != null && !HasAccessToShipment(shipment))
                 return RedirectToAction("List");
-
-            foreach (var shipmentItem in shipment.ShipmentItems)
+            
+            foreach (var shipmentItem in _shipmentService.GetShipmentItemsByShipmentId(shipment.Id))
             {
                 var orderItem = _orderService.GetOrderItemById(shipmentItem.OrderItemId);
                 if (orderItem == null)
                     continue;
 
-                _productService.ReverseBookedInventory(orderItem.Product, shipmentItem,
+                var product = _productService.GetProductById(orderItem.ProductId);
+
+                _productService.ReverseBookedInventory(product, shipmentItem,
                     string.Format(_localizationService.GetResource("Admin.StockQuantityHistory.Messages.DeleteShipment"), shipment.OrderId));
             }
 
@@ -2360,13 +2384,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             var order = _orderService.GetOrderById(orderId);
             //add a note
-            order.OrderNotes.Add(new OrderNote
+            _orderService.InsertOrderNote(new OrderNote
             {
+                OrderId = order.Id,
                 Note = "A shipment has been deleted",
                 DisplayToCustomer = false,
                 CreatedOnUtc = DateTime.UtcNow
             });
-            _orderService.UpdateOrder(order);
+
             LogEditOrder(order.Id);
 
             _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Orders.Shipments.Deleted"));
@@ -2756,7 +2781,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             if (string.IsNullOrEmpty(message))
                 return ErrorJson(_localizationService.GetResource("Admin.Orders.OrderNotes.Fields.Note.Validation"));
-            
+
             //try to get an order with the specified id
             var order = _orderService.GetOrderById(orderId);
             if (order == null)
@@ -2768,14 +2793,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             var orderNote = new OrderNote
             {
+                OrderId = order.Id,
                 DisplayToCustomer = displayToCustomer,
                 Note = message,
                 DownloadId = downloadId,
                 CreatedOnUtc = DateTime.UtcNow
             };
 
-            order.OrderNotes.Add(orderNote);
-            _orderService.UpdateOrder(order);
+            _orderService.InsertOrderNote(orderNote);
 
             //new order notification
             if (displayToCustomer)
@@ -2794,7 +2819,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return AccessDeniedView();
 
             //try to get an order with the specified id
-            var order = _orderService.GetOrderById(orderId)
+            _ = _orderService.GetOrderById(orderId)
                 ?? throw new ArgumentException("No order found with the specified id");
 
             //a vendor does not have access to this functionality
@@ -2802,7 +2827,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return RedirectToAction("Edit", "Order", new { id = orderId });
 
             //try to get an order note with the specified id
-            var orderNote = order.OrderNotes.FirstOrDefault(on => on.Id == id)
+            var orderNote = _orderService.GetOrderNoteById(id)
                 ?? throw new ArgumentException("No order note found with the specified id");
 
             _orderService.DeleteOrderNote(orderNote);

@@ -1720,7 +1720,7 @@
     <Value>Tax category</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Attributes.CheckoutAttributes.Fields.TaxCategory.Hint">
-    <Value>The tax classification for this attribute (used to calculate tax). You can manage tax categories by selecting Configuration : Tax : Tax Categories.</Value>
+    <Value>The tax classification for this attribute (used to calculate tax). You can manage tax categories by selecting Configuration &gt; Tax &gt; Tax Categories.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Attributes.CheckoutAttributes.Fields.TextPrompt">
     <Value>Text prompt</Value>
@@ -2620,7 +2620,7 @@
     <Value>Customer roles</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.AclCustomerRoles.Hint">
-    <Value>Choose one or several customer roles i.e. administrators, vendors, guests, who will be able to see this product in catalog. If you don't need this option just leave this field empty. In order to use this functionality, you have to disable the following setting: Configuration &gt; Catalog settings &gt; Ignore ACL rules (sitewide).</Value>
+    <Value>Choose one or several customer roles i.e. administrators, vendors, guests, who will be able to see this product in catalog. If you don't need this option just leave this field empty. In order to use this functionality, you have to disable the following setting: Configuration &gt; Settings &gt; Catalog &gt; Ignore ACL rules (sitewide).</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.Fields.AdditionalShippingCharge">
     <Value>Additional shipping charge</Value>
@@ -3417,6 +3417,9 @@
   <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Alert.FailedGenerate">
     <Value>Error while generating attribute combinations.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.Alert.FailedValue">
+    <Value>Error while save attribute combinations. Attribute value not specified.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.ProductAttributes.AttributeCombinations.AlreadyExists">
     <Value>The same combination already exists</Value>
   </LocaleResource>
@@ -3865,7 +3868,7 @@
     <Value>Attribute</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.SpecificationAttributes.Fields.SpecificationAttribute.Hint">
-    <Value>Choose a product specification attribute. You can manage specification attributes from Catalog : Attributes : Product Specifications.</Value>
+    <Value>Choose a product specification attribute. You can manage specification attributes from Catalog &gt; Attributes &gt; Product Specifications.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.SpecificationAttributes.Fields.SpecificationAttributeOption">
     <Value>Attribute option</Value>
@@ -3877,7 +3880,10 @@
     <Value>Value</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.SpecificationAttributes.Hint">
-    <Value>Specification attributes are product features i.e, screen size, number of USB-ports, visible on product details page. Specification attributes can be used for filtering products on the category details page.  Unlike product attributes, specification attributes are used for information purposes only.</Value>
+    <Value>
+      Specification attributes are product features i.e, screen size, number of USB-ports, visible on product details page. Specification attributes can be used for filtering products on the category details page.  Unlike product attributes, specification attributes are used for information purposes only.
+      You can add attribute for your product using existing list of attributes, or if you need to create a new one go to Catalog &gt; Attributes &gt; Specification attributes.
+    </Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Products.SpecificationAttributes.NoAttributeOptions">
     <Value>First, please create at least one specification attribute option</Value>
@@ -4858,7 +4864,7 @@
     <Value>Configure</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Payment.Methods.DownloadMorePlugins">
-    <Value><![CDATA[You can download more plugins in our <a href="https://www.nopcommerce.com/marketplace.aspx?category=2&utm_source=admin-panel&utm_medium=payment-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[You can download more plugins in our <a href="https://www.nopcommerce.com/extensions?category=payment-modules&utm_source=admin-panel&utm_medium=payment-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Payment.Methods.Fields.DisplayOrder">
     <Value>Display order</Value>
@@ -4912,7 +4918,7 @@
     <Value>Manual plugin installation</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Plugins.Description.DownloadMorePlugins">
-    <Value><![CDATA[You can download more nopCommerce plugins in our <a href="https://www.nopcommerce.com/marketplace.aspx?utm_source=admin-panel&utm_medium=plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[You can download more nopCommerce plugins in our <a href="https://www.nopcommerce.com/marketplace?utm_source=admin-panel&utm_medium=plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Plugins.Description.Step1">
     <Value>Upload the plugin to the /plugins folder in your nopCommerce directory.</Value>
@@ -5047,7 +5053,7 @@
     <Value>Download</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Plugins.OfficialFeed.Instructions">
-    <Value><![CDATA[Here you can find third-party extensions and themes which are developed by our community and partners. They are also available in our <a href="https://www.nopcommerce.com/marketplace.aspx?utm_source=admin-panel&utm_medium=official-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[Here you can find third-party extensions and themes which are developed by our community and partners. They are also available in our <a href="https://www.nopcommerce.com/marketplace?utm_source=admin-panel&utm_medium=official-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Plugins.OfficialFeed.Name">
     <Value>Name</Value>
@@ -5546,9 +5552,15 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductSearchAutoCompleteEnabled">
     <Value>Search autocomplete enabled</Value>
-  </LocaleResource>
+  </LocaleResource>  
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductSearchAutoCompleteEnabled.Hint">
     <Value>Check to enabled autocomplete in the search box.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductSearchEnabled">
+    <Value>Search enabled</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductSearchEnabled.Hint">
+    <Value>Check to enabled the search box.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Catalog.ProductSearchAutoCompleteNumberOfProducts">
     <Value>Number of 'autocomplete' products to display</Value>
@@ -6009,6 +6021,18 @@
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.FaxRequired.Hint">
     <Value>Check if 'Fax number' is required.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.FirstNameEnabled">
+    <Value>'First name' enabled</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.FirstNameEnabled.Hint">
+    <Value>Set if 'First name' is enabled.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.FirstNameRequired">
+    <Value>'First name' required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.FirstNameRequired.Hint">
+    <Value>Check if 'First name' is required.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.GenderEnabled">
     <Value>'Gender' enabled</Value>
   </LocaleResource>
@@ -6032,6 +6056,18 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.HideNewsletterBlock.Hint">
     <Value>Check if you want to hide the newsletter subscription box.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.LastNameEnabled">
+    <Value>'Last name' enabled</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.LastNameEnabled.Hint">
+    <Value>Set if 'Last name' is enabled.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.LastNameRequired">
+    <Value>'Last name' required</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.LastNameRequired.Hint">
+    <Value>Check if 'Last name' is required.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.NewsletterBlockAllowToUnsubscribe">
     <Value>Newsletter box. Allow to unsubscribe</Value>
@@ -6621,6 +6657,12 @@
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.CaptchaShowOnForgotPasswordPage.Hint">
     <Value>Check to show CAPTCHA on forgot password page when restore password.</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.CaptchaShowOnForum">
+    <Value>Show on forum</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.CaptchaShowOnForum.Hint">
+    <Value>Check to show CAPTCHA on forum, when editing and creating a topic or post.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.ConvertNonWesternChars">
     <Value>Convert non-western chars</Value>
   </LocaleResource>
@@ -6649,7 +6691,7 @@
     <Value>Default store theme</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DefaultStoreTheme.GetMore">
-    <Value><![CDATA[You can get more themes in our <a href="https://www.nopcommerce.com/marketplace.aspx?category=4&utm_source=admin-panel&utm_medium=theme-settings&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[You can get more themes in our <a href="https://www.nopcommerce.com/themes?utm_source=admin-panel&utm_medium=theme-settings&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.DefaultStoreTheme.Hint">
     <Value>The public store theme. You can download themes from the extensions page at www.nopcommerce.com.</Value>
@@ -6820,23 +6862,11 @@
     <Value>Enable to combine (bundle) multiple JavaScript files into a single file. Currently it doesn't support web farms. And please note it could take up to two minutes for changes to existing files to be applied (when enabled).</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.EnableHtmlMinification">
-    <Value>Html minification</Value>
+    <Value>HTML minification</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.EnableHtmlMinification.Hint">
     <Value>Allows you to minify HTML pages as well as compress them, thereby increasing the download speed. Please note that after applying this setting, you need to restart the application.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.EnableXSRFProtectionForAdminArea">
-    <Value>Enable XSRF protection for admin area</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.EnableXSRFProtectionForAdminArea.Hint">
-    <Value>Check to enable XSRF protection for admin area.</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.EnableXSRFProtectionForPublicStore">
-    <Value>Enable XSRF protection for public store</Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.EnableXSRFProtectionForPublicStore.Hint">
-    <Value>Check to enable XSRF protection for public store.</Value>
-  </LocaleResource>
+  </LocaleResource>  
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.EncryptionKey">
     <Value>Encryption private key</Value>
   </LocaleResource>
@@ -6868,7 +6898,7 @@
     <Value>Upload icons archive</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.UploadIconsArchive.Hint">
-    <Value>Upload archive with favicon and app icons for different operating systems and devices. You can see an example of the favicon and app icons archive in /icons/samples in the root of the site. Your favicon and app icons path is "icons/icons_{0}"</Value>
+    <Value>Upload archive with favicon and app icons for different operating systems and devices. You can see an example of the favicon and app icons archive in /icons/samples in the root of the site. Your favicon and app icons path is "/icons/icons_{0}"</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.ForceSslForAllPages">
     <Value>Force SSL for all site pages</Value>
@@ -6954,11 +6984,26 @@
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.LoadAllUrlRecordsOnStartup.Hint">
     <Value>When enabled, all slugs (search engine friendly names) will be loaded on application startup. The application start will be slower, but then all pages could be opened much faster. Not recommended to enable when you have a large catalog (several thousand entities).</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.LocalePattern.SuccessUpload">
+    <Value>Localization patterns for the current culture loaded successfully.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.Localization.Description">
+    <Value><![CDATA[Sets the <a href="http://cldr.unicode.org/" target="_blank">CLDR</a> pattern for localization of client-side validation according to the current culture]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.Localization.UploadLocalePattern">
+    <Value>Set CLDR for current culture</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.Logo">
     <Value>Logo</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.Logo.Hint">
     <Value>Upload your store logo. If not uploaded, then the default one will be used.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.Microdata">
+    <Value>Microdata tags</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.Microdata.Hint">
+    <Value>Check to generate Microdata tags on the product details page.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.OpenGraphMetaTags">
     <Value>Open Graph META tags</Value>
@@ -8242,7 +8287,7 @@
     <Value>Default tax category</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Tax.DefaultTaxCategory.Hint">
-    <Value>Select default tax category for products.</Value>
+    <Value>Select default tax category for products. It'll be pre-selected on the "Add new product" page.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.Tax.DisplayTaxRates">
     <Value>Display all applied tax rates</Value>
@@ -8719,7 +8764,7 @@
     <Value>Configure</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Shipping.Providers.DownloadMorePlugins">
-    <Value><![CDATA[You can download more plugins in our <a href="https://www.nopcommerce.com/marketplace.aspx?category=3&utm_source=admin-panel&utm_medium=shipping-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[You can download more plugins in our <a href="https://www.nopcommerce.com/extensions?category=shipping-delivery&utm_source=admin-panel&utm_medium=shipping-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Shipping.Providers.Fields.DisplayOrder">
     <Value>Display order</Value>
@@ -8929,7 +8974,7 @@
     <Value>Configure</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Tax.Providers.DownloadMorePlugins">
-    <Value><![CDATA[You can download more plugins in our <a href="https://www.nopcommerce.com/marketplace.aspx?category=11&utm_source=admin-panel&utm_medium=tax-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
+    <Value><![CDATA[You can download more plugins in our <a href="https://www.nopcommerce.com/extensions?category=taxes&utm_source=admin-panel&utm_medium=tax-plugins&utm_campaign=admin-panel" target="_blank">marketplace</a>]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Tax.Providers.Fields.FriendlyName">
     <Value>Friendly name</Value>
@@ -9394,7 +9439,7 @@
     <Value><![CDATA[This message template is used to notify a store owner that the vendor changed some vendor's details. You can allow vendors to change info about themselves in Configuration - Setting - Vendor settings by ticking the checkbox <strong>Allow vendors to edit info</strong>.]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.MessageTemplates.Description.Wishlist.EmailAFriend">
-    <Value>This message template is used when a customer wants to share some product from the wishlist with a friend by sending an email. You can set up this option by ticking the checkbox Allow customers to email their wishlists in Configuration - Settings - Shopping cart settings.</Value>
+    <Value><![CDATA[This message template is used when a customer wants to share some product from the wishlist with a friend by sending an email. You can set up this option by ticking the checkbox Allow customers to email their wishlists in Configuration - Settings - Shopping cart settings.]]></Value>
   </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.MessageTemplates.EditMessageTemplateDetails">
     <Value>Edit message template details</Value>
@@ -10507,7 +10552,7 @@
     <Value>Newsletter</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Customers.Customers.Fields.Newsletter.Hint">
-    <Value>Check to subscribe to newsletter.</Value>
+    <Value>Choose stores to subscribe to newsletter.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Customers.Customers.Fields.Password">
     <Value>Password</Value>
@@ -11533,7 +11578,7 @@
     <Value>Order discount</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Orders.Fields.OrderTotalDiscount.Hint">
-    <Value>The total discount applied to this order. Manage your discounts from Promotions : Discounts.</Value>
+    <Value>The total discount applied to this order. Manage your discounts from Promotions &gt; Discounts.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Orders.Fields.PartialRefund">
     <Value>Partial refund</Value>
@@ -11557,7 +11602,7 @@
     <Value>Payment method</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Orders.Fields.PaymentMethod.Hint">
-    <Value>The payment method used for this transaction. You can manage Payment Methods from Configuration : Payment : Payment Methods.</Value>
+    <Value>The payment method used for this transaction. You can manage Payment Methods from Configuration &gt; Payment &gt; Payment Methods.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Orders.Fields.PaymentMethodAdditionalFee">
     <Value>Payment method additional fee</Value>
@@ -11638,7 +11683,7 @@
     <Value>Shipping method</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Orders.Fields.ShippingMethod.Hint">
-    <Value>The customers chosen shipping method for this order. You can manage shipping methods from Configuration : Shipping : Shipping Methods.</Value>
+    <Value>The customers chosen shipping method for this order. You can manage shipping methods from Configuration &gt; Shipping &gt; Shipping Methods.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Orders.Fields.ShippingStatus">
     <Value>Shipping status</Value>
@@ -11662,7 +11707,7 @@
     <Value>Order tax</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Orders.Fields.Tax.Hint">
-    <Value>Total tax applied to this order. Manage your tax settings from Configuration : Tax.</Value>
+    <Value>Total tax applied to this order. Manage your tax settings from Configuration &gt; Tax.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Orders.Fields.UsedDiscounts">
     <Value>Used discounts</Value>
@@ -12006,6 +12051,18 @@
   <LocaleResource Name="Admin.Orders.Shipments.BackToOrder">
     <Value>back to order details</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Orders.Shipments.CanDeliver">
+    <Value>Delivered</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Orders.Shipments.CanDeliver.Hint">
+    <Value>Check to apply current date to delivery.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Orders.Shipments.CanShip">
+    <Value>Shipped</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Orders.Shipments.CanShip.Hint">
+    <Value>Check to apply current date to shipment.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Orders.Shipments.CustomOrderNumber">
     <Value>Order #</Value>
   </LocaleResource>
@@ -12068,6 +12125,12 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Orders.Shipments.List.LoadNotShipped.Hint">
     <Value>Load only not shipped shipments.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Orders.Shipments.List.LoadNotDelivered">
+    <Value>Load not delivered</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Orders.Shipments.List.LoadNotDelivered.Hint">
+    <Value>Load only undelivered shipments</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Orders.Shipments.List.StartDate">
     <Value>Start date</Value>
@@ -12402,6 +12465,12 @@
   <LocaleResource Name="Admin.Promotions.Discounts.EditDiscountDetails">
     <Value>Edit discount details</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Promotions.Discounts.Fields.AdminComment">
+    <Value>Admin comment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Promotions.Discounts.Fields.AdminComment.Hint">
+    <Value>This comment is for internal use only, not visible for customers.</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Promotions.Discounts.Fields.AppliedToCategories">
     <Value>Assigned to categories</Value>
   </LocaleResource>
@@ -12425,7 +12494,7 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Promotions.Discounts.Fields.Discount">
     <Value>Discount</Value>
-  </LocaleResource>
+  </LocaleResource>  
   <LocaleResource Name="Admin.Promotions.Discounts.Fields.DiscountAmount">
     <Value>Discount amount</Value>
   </LocaleResource>
@@ -14499,6 +14568,9 @@
   <LocaleResource Name="Admin.Vendors.VendorNotes.Fields.Note.Validation">
     <Value>Vendor note can not be empty.</Value>
   </LocaleResource>
+  <LocaleResource Name="AjaxCart.Failure">
+    <Value>Failed to add the product. Please refresh the page and try one more time.</Value>
+  </LocaleResource>
   <LocaleResource Name="BackInStockSubscriptions.AlreadySubscribed">
     <Value>You're already subscribed for this product back in stock notification</Value>
   </LocaleResource>
@@ -14735,6 +14807,9 @@
   </LocaleResource>
   <LocaleResource Name="Checkout.Progress.Shipping">
     <Value>Shipping</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.RedirectMessage">
+    <Value>Redirected</Value>
   </LocaleResource>
   <LocaleResource Name="Checkout.SelectBillingAddress">
     <Value>Select billing address</Value>
@@ -15935,7 +16010,10 @@
   </LocaleResource>
   <LocaleResource Name="Languages.Selector.Label">
     <Value>Languages selector</Value>
-  </LocaleResource>    
+  </LocaleResource>
+  <LocaleResource Name="MainMenu.AjaxFailure">
+    <Value>Failed to open menu. Please refresh the page and try one more time.</Value>
+  </LocaleResource>
   <LocaleResource Name="Manufacturers">
     <Value>Manufacturers</Value>
   </LocaleResource>
@@ -16542,6 +16620,12 @@
   <LocaleResource Name="Payment.SelectCreditCard">
     <Value>Select credit card</Value>
   </LocaleResource>
+  <LocaleResource Name="PaymentMethod.NotAvailableMethodsError">
+    <Value>Your order cannot be completed at this time as there is no payment methods available for it.</Value>
+  </LocaleResource>
+  <LocaleResource Name="PaymentMethod.SpecifyMethodError">
+    <Value>Please specify payment method.</Value>
+  </LocaleResource>
   <LocaleResource Name="PDFInvoice.Address">
     <Value>Address: {0}</Value>
   </LocaleResource>
@@ -16875,6 +16959,9 @@
   <LocaleResource Name="PrivateMessages.Inbox.MarkAsUnread">
     <Value>Mark selected as unread</Value>
   </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Inbox.NoItems">
+    <Value>No inbox messages</Value>
+  </LocaleResource>
   <LocaleResource Name="PrivateMessages.Inbox.SubjectColumn">
     <Value>Subject</Value>
   </LocaleResource>
@@ -16916,6 +17003,9 @@
   </LocaleResource>
   <LocaleResource Name="PrivateMessages.Sent.DeleteSelected">
     <Value>Delete selected</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Sent.NoItems">
+    <Value>No sent messages</Value>
   </LocaleResource>
   <LocaleResource Name="PrivateMessages.Sent.SubjectColumn">
     <Value>Subject</Value>
@@ -17198,6 +17288,9 @@
   </LocaleResource>
   <LocaleResource Name="Products.Qty">
     <Value>Qty</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.Qty.AriaLabel">
+    <Value>Enter a quantity</Value>
   </LocaleResource>
   <LocaleResource Name="Products.RecentlyViewedProducts">
     <Value>Recently viewed products</Value>
@@ -17535,6 +17628,12 @@
   <LocaleResource Name="Search.Vendor">
     <Value>Vendor</Value>
   </LocaleResource>
+  <LocaleResource Name="ShippingMethod.NotAvailableMethodsError">
+    <Value>Your order cannot be completed at this time as there is no shipping methods available for it. Please make necessary changes in your shipping address.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShippingMethod.SpecifyMethodError">
+    <Value>Please specify shipping method.</Value>
+  </LocaleResource>
   <LocaleResource Name="ShoppingCart">
     <Value>Shopping cart</Value>
   </LocaleResource>
@@ -17616,9 +17715,15 @@
   <LocaleResource Name="ShoppingCart.DiscountCouponCode.Button">
     <Value>Apply coupon</Value>
   </LocaleResource>
+  <LocaleResource Name="ShoppingCart.DiscountCouponCode.CannotBeFound">
+    <Value>The coupon code cannot be found</Value>
+  </LocaleResource>
   <LocaleResource Name="ShoppingCart.DiscountCouponCode.CurrentCode">
     <Value>Entered coupon code - {0}</Value>
   </LocaleResource>
+  <LocaleResource Name="ShoppingCart.DiscountCouponCode.Empty">
+    <Value>The coupon code is empty</Value>
+ </LocaleResource>
   <LocaleResource Name="ShoppingCart.DiscountCouponCode.Invalid">
     <Value>This coupon code ({0}) is invalid or no longer available.</Value>
   </LocaleResource>

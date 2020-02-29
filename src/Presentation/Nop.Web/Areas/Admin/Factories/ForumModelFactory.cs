@@ -3,7 +3,6 @@ using System.Linq;
 using Nop.Core.Domain.Forums;
 using Nop.Services.Forums;
 using Nop.Services.Helpers;
-using Nop.Services.Localization;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
 using Nop.Web.Areas.Admin.Models.Forums;
 using Nop.Web.Framework.Models.Extensions;
@@ -19,19 +18,15 @@ namespace Nop.Web.Areas.Admin.Factories
 
         private readonly IDateTimeHelper _dateTimeHelper;
         private readonly IForumService _forumService;
-        private readonly ILocalizationService _localizationService;
 
         #endregion
 
         #region Ctor
 
-        public ForumModelFactory(IDateTimeHelper dateTimeHelper,
-            IForumService forumService,
-            ILocalizationService localizationService)
+        public ForumModelFactory(IDateTimeHelper dateTimeHelper, IForumService forumService)
         {
             _dateTimeHelper = dateTimeHelper;
             _forumService = forumService;
-            _localizationService = localizationService;
         }
 
         #endregion
@@ -141,9 +136,9 @@ namespace Nop.Web.Areas.Admin.Factories
 
             if (forumGroup == null)
                 throw new ArgumentNullException(nameof(forumGroup));
-
+            
             //get forums
-            var forums = forumGroup.Forums.ToList().ToPagedList(searchModel);
+            var forums = _forumService.GetAllForumsByGroupId(forumGroup.Id).ToPagedList(searchModel);
 
             //prepare list model
             var model = new ForumListModel().PrepareToGrid(searchModel, forums, () =>
