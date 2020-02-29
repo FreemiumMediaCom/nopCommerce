@@ -17,6 +17,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.ReviveAds.Controllers
 {
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
+    [AutoValidateAntiforgeryToken]
     public class ReviveAdsController : BasePluginController
     {
         #region Fields
@@ -67,7 +68,6 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.ReviveAds.Controllers
         }
 
         [HttpPost]
-        [AdminAntiForgery]
         public IActionResult Configure(ReviveAdsSettings model)
         {
             //whether user has the authority to manage configuration

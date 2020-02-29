@@ -17,6 +17,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Controllers
 {
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
+    [AutoValidateAntiforgeryToken]
     public class TawkIOController : BasePluginController
     {
         #region Fields
@@ -64,7 +65,6 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.TawkIO.Controllers
         }
 
         [HttpPost]
-        [AdminAntiForgery]
         public IActionResult Configure(TawkIOSettings model)
         {
             //whether user has the authority to manage configuration

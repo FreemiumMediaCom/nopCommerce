@@ -17,6 +17,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense.Controllers
 {
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
+    [AutoValidateAntiforgeryToken]
     public class AdsenseController : BasePluginController
     {
         #region Fields
@@ -64,7 +65,6 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Adsense.Controllers
         }
 
         [HttpPost]
-        [AdminAntiForgery]
         public IActionResult Configure(AdsenseSettings model)
         {
             //whether user has the authority to manage configuration

@@ -18,6 +18,7 @@ namespace FreemiumMedia.Nop.Plugin.Misc.Meetup.Controllers
 {
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
+    [AutoValidateAntiforgeryToken]
     public class MeetupController : BasePluginController
     {
         #region Fields
@@ -69,7 +70,6 @@ namespace FreemiumMedia.Nop.Plugin.Misc.Meetup.Controllers
         }
 
         [HttpPost]
-        [AdminAntiForgery]
         public IActionResult Configure(MeetupSettings model)
         {
             //whether user has the authority to manage configuration
