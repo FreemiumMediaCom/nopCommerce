@@ -11,6 +11,7 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Statcounter.Controllers
 {
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
+    [AutoValidateAntiforgeryToken]
     public class StatcounterController : BasePluginController
     {
         #region Fields
@@ -58,7 +59,6 @@ namespace FreemiumMedia.Nop.Plugin.Widgets.Statcounter.Controllers
         }
 
         [HttpPost]
-        [AdminAntiForgery]
         public IActionResult Configure(StatcounterSettings model)
         {
             //whether user has the authority to manage configuration

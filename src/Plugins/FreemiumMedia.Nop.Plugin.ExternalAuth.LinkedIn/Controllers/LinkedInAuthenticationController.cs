@@ -16,6 +16,7 @@ using FreemiumMedia.Nop.Plugin.ExternalAuth.LinkedIn.Models;
 
 namespace FreemiumMedia.Nop.Plugin.ExternalAuth.LinkedIn.Controllers
 {
+    [AutoValidateAntiforgeryToken]
     public class LinkedInAuthenticationController : BasePluginController
     {
         #region Fields
@@ -67,7 +68,6 @@ namespace FreemiumMedia.Nop.Plugin.ExternalAuth.LinkedIn.Controllers
         }
 
         [HttpPost]
-        [AdminAntiForgery]
         [AuthorizeAdmin]
         [Area(AreaNames.Admin)]
         public IActionResult Configure(ConfigurationModel model)
